@@ -346,7 +346,7 @@ export default function SoftwareDevelopmentWebsite() {
                 >
                   <div key={1} className="bg-orange-500/10 rounded-[14px] border border-orange-200 p-0.5">
                     <Button size="lg" className="rounded-xl px-5 text-base bg-orange-500 hover:bg-orange-600">
-                      <span className="text-nowrap">Get Free Consultation</span>
+                      <span className="text-nowrap">Inscreva-se grátis</span>
                     </Button>
                   </div>
                 </AnimatedGroup>
