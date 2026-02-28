@@ -470,11 +470,15 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="@container mx-auto max-w-5xl px-6">
             <div className="text-center">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-                Why Choose <span className="text-orange-500">DevSolutions</span>
+                Comunidade <span className="text-orange-500">SOMMA</span>
               </h2>
-              <p className="mt-4 text-muted-foreground">
-                We deliver high-quality software solutions that help your business grow and succeed in the digital
-                world.
+              <p className="mt-2 text-muted-foreground">
+                Running Club
+              </p>
+              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+                O SOMMA é mais que um clube de corrida, é uma comunidade que acredita no poder da união e da constância.
+                Somos 100% democráticos, abertos a todos que desejam correr, melhorar sua saúde ou simplesmente compartilhar momentos ao ar livre.
+                Localizado em Brasília, nosso ponto de encontro é no Parque da Cidade, Estacionamento 10, sempre aos sábados, às 7h da manhã.
               </p>
             </div>
             <Card className="@min-4xl:max-w-full @min-4xl:grid-cols-3 @min-4xl:divide-x @min-4xl:divide-y-0 mx-auto mt-8 grid max-w-sm divide-y overflow-hidden shadow-zinc-950/5 border-orange-200 *:text-center md:mt-16">
@@ -484,12 +488,12 @@ export default function SoftwareDevelopmentWebsite() {
                     <Zap className="size-6 text-orange-500" aria-hidden />
                   </CardDecorator>
 
-                  <h3 className="mt-6 font-medium">Fast Development</h3>
+                  <h3 className="mt-6 font-medium">100%</h3>
                 </CardHeader>
 
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Rapid prototyping and agile development process to get your software to market quickly.
+                    Democrático
                   </p>
                 </CardContent>
               </div>
@@ -500,12 +504,12 @@ export default function SoftwareDevelopmentWebsite() {
                     <Settings2 className="size-6 text-orange-500" aria-hidden />
                   </CardDecorator>
 
-                  <h3 className="mt-6 font-medium">Scalable Solutions</h3>
+                  <h3 className="mt-6 font-medium">7h</h3>
                 </CardHeader>
 
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Built to grow with your business, our solutions scale seamlessly as your needs evolve.
+                    Sábados
                   </p>
                 </CardContent>
               </div>
@@ -516,12 +520,12 @@ export default function SoftwareDevelopmentWebsite() {
                     <Sparkles className="size-6 text-orange-500" aria-hidden />
                   </CardDecorator>
 
-                  <h3 className="mt-6 font-medium">Modern Technology</h3>
+                  <h3 className="mt-6 font-medium">BSB</h3>
                 </CardHeader>
 
                 <CardContent>
                   <p className="text-sm text-muted-foreground">
-                    Using the latest technologies and best practices to ensure your software is future-proof.
+                    Brasília
                   </p>
                 </CardContent>
               </div>
