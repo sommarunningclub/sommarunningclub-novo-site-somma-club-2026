@@ -234,7 +234,7 @@ const Logo = ({ className }: { className?: string }) => {
       <img 
         src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png?v=1772322941" 
         alt="SOMMA Logo"
-        className="h-28 w-auto"
+        className="h-10 w-auto"
       />
     </div>
   )
