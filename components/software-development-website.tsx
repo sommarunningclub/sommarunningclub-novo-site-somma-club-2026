@@ -3,7 +3,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-import { ArrowRight, ChevronRight, Menu, X, Code, Zap, Settings2, Sparkles } from "lucide-react"
+import { ArrowRight, ChevronRight, Menu, X, Code, Zap, Settings2, Sparkles, Users, Clock, MapPin, Heart, Lightbulb } from "lucide-react"
 import { motion, type Variants } from "framer-motion"
 import { GridMotion } from "./ui/grid-motion"
 
@@ -469,68 +469,135 @@ export default function SoftwareDevelopmentWebsite() {
 
         <section className="bg-muted/50 py-16 md:py-32 dark:bg-transparent">
           <div className="@container mx-auto max-w-5xl px-6">
-            <div className="text-center">
+            {/* Header Section */}
+            <div className="text-center mb-16">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
                 Comunidade <span className="text-orange-500">SOMMA</span>
               </h2>
-              <p className="mt-2 text-muted-foreground">
+              <p className="mt-4 text-lg text-orange-500 font-medium">
                 Running Club
               </p>
-              <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-                O SOMMA é mais que um clube de corrida, é uma comunidade que acredita no poder da união e da constância.
-                Somos 100% democráticos, abertos a todos que desejam correr, melhorar sua saúde ou simplesmente compartilhar momentos ao ar livre.
-                Localizado em Brasília, nosso ponto de encontro é no Parque da Cidade, Estacionamento 10, sempre aos sábados, às 7h da manhã.
+              <p className="mt-6 text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+                O SOMMA é <span className="font-semibold text-foreground">muito mais que um clube de corrida</span>. Somos uma comunidade que acredita no poder da união, constância e inclusão. Abertos a todos que desejam correr, melhorar sua saúde ou simplesmente compartilhar momentos significativos.
               </p>
             </div>
-            <Card className="@min-4xl:max-w-full @min-4xl:grid-cols-3 @min-4xl:divide-x @min-4xl:divide-y-0 mx-auto mt-8 grid max-w-sm divide-y overflow-hidden shadow-zinc-950/5 border-orange-200 *:text-center md:mt-16">
-              <div className="group shadow-zinc-950/5">
-                <CardHeader className="pb-3">
-                  <CardDecorator>
-                    <Zap className="size-6 text-orange-500" aria-hidden />
-                  </CardDecorator>
 
-                  <h3 className="mt-6 font-medium">100%</h3>
+            {/* Info Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-16">
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-orange-500/10 p-3 rounded-lg">
+                      <Users className="size-6 text-orange-500" aria-hidden />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">100%</h3>
+                      <p className="text-sm text-muted-foreground">Democrático</p>
+                    </div>
+                  </div>
                 </CardHeader>
-
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Democrático
-                  </p>
+                  <p className="text-sm text-muted-foreground">Todos têm voz e vez em nossas decisões</p>
                 </CardContent>
-              </div>
+              </Card>
 
-              <div className="group shadow-zinc-950/5">
-                <CardHeader className="pb-3">
-                  <CardDecorator>
-                    <Settings2 className="size-6 text-orange-500" aria-hidden />
-                  </CardDecorator>
-
-                  <h3 className="mt-6 font-medium">7h</h3>
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-orange-500/10 p-3 rounded-lg">
+                      <Clock className="size-6 text-orange-500" aria-hidden />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">7h</h3>
+                      <p className="text-sm text-muted-foreground">Todo Sábado</p>
+                    </div>
+                  </div>
                 </CardHeader>
-
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Sábados
-                  </p>
+                  <p className="text-sm text-muted-foreground">Encontros matinais para começar bem o fim de semana</p>
                 </CardContent>
-              </div>
+              </Card>
 
-              <div className="group shadow-zinc-950/5">
-                <CardHeader className="pb-3">
-                  <CardDecorator>
-                    <Sparkles className="size-6 text-orange-500" aria-hidden />
-                  </CardDecorator>
-
-                  <h3 className="mt-6 font-medium">BSB</h3>
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader className="pb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-orange-500/10 p-3 rounded-lg">
+                      <MapPin className="size-6 text-orange-500" aria-hidden />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg">BSB</h3>
+                      <p className="text-sm text-muted-foreground">Brasília</p>
+                    </div>
+                  </div>
                 </CardHeader>
-
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Brasília
-                  </p>
+                  <p className="text-sm text-muted-foreground">Parque da Cidade, Estacionamento 10</p>
                 </CardContent>
+              </Card>
+            </div>
+
+            {/* Why Join Section */}
+            <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 md:p-12">
+              <h3 className="text-2xl font-semibold mb-8 text-center">Por que fazer parte do SOMMA?</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-orange-500/10">
+                      <Heart className="h-6 w-6 text-orange-500" aria-hidden />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Saúde em Primeiro Lugar</h4>
+                    <p className="text-sm text-muted-foreground">Melhore sua forma física e bem-estar físico e mental</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-orange-500/10">
+                      <Users className="h-6 w-6 text-orange-500" aria-hidden />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Comunidade Acolhedora</h4>
+                    <p className="text-sm text-muted-foreground">Faça amizades duradouras com pessoas apaixonadas por corrida</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-orange-500/10">
+                      <Zap className="h-6 w-6 text-orange-500" aria-hidden />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Motivação Constante</h4>
+                    <p className="text-sm text-muted-foreground">Treinar em grupo aumenta o compromisso e diversão</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-orange-500/10">
+                      <Lightbulb className="h-6 w-6 text-orange-500" aria-hidden />
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Sem Compromisso</h4>
+                    <p className="text-sm text-muted-foreground">Venha quando quiser, na sua velocidade, sem pressão</p>
+                  </div>
+                </div>
               </div>
-            </Card>
+            </div>
+
+            {/* CTA Section */}
+            <div className="text-center mt-12">
+              <p className="text-muted-foreground mb-6">Pronto para se juntar à comunidade SOMMA?</p>
+              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                Inscreva-se grátis
+              </Button>
+            </div>
           </div>
         </section>
       </main>
