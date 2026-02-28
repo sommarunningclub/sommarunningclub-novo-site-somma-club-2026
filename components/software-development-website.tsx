@@ -130,10 +130,10 @@ const transitionVariants = {
 }
 
 const menuItems = [
-  { name: "Services", href: "#services" },
-  { name: "Solutions", href: "#solutions" },
-  { name: "About", href: "#about" },
-  { name: "Contact", href: "#contact" },
+  { name: "Home", href: "#home" },
+  { name: "Assessoria", href: "#assessoria" },
+  { name: "Loja", href: "#loja" },
+  { name: "Eventos", href: "#eventos" },
 ]
 
 const HeroHeader = () => {
@@ -217,7 +217,7 @@ const HeroHeader = () => {
                       : "hidden bg-orange-500 hover:bg-orange-600",
                   )}
                 >
-                  <span>Get Started</span>
+                  <span>Inscreva-se</span>
                 </Button>
               </div>
             </div>
@@ -322,15 +322,12 @@ export default function SoftwareDevelopmentWebsite() {
                   </a>
 
                   <h1 className="mt-8 max-w-4xl mx-auto text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem]">
-                    Transform Your Business with{" "}
+                    Mais que um clube,{" "}
                     <span className="inline-block text-orange-500 text-6xl md:text-7xl xl:text-[5.25rem] font-semibold">
-                      Custom Software
+                      uma comunidade
                     </span>
                   </h1>
-                  <p className="mx-auto mt-8 max-w-2xl text-balance text-lg text-muted-foreground">
-                    We build scalable, efficient software solutions tailored to your business needs. From web
-                    applications to mobile apps, we help small businesses grow with technology.
-                  </p>
+
                 </AnimatedGroup>
 
                 <AnimatedGroup
@@ -352,9 +349,6 @@ export default function SoftwareDevelopmentWebsite() {
                       <span className="text-nowrap">Get Free Consultation</span>
                     </Button>
                   </div>
-                  <Button key={2} size="lg" variant="ghost" className="h-10.5 rounded-xl px-5 hover:text-orange-500">
-                    <span className="text-nowrap">View Our Work</span>
-                  </Button>
                 </AnimatedGroup>
               </div>
             </div>
