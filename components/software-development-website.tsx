@@ -231,10 +231,11 @@ const HeroHeader = () => {
 const Logo = ({ className }: { className?: string }) => {
   return (
     <div className={cn("flex items-center space-x-2", className)}>
-      <div className="bg-orange-500 rounded-lg p-2">
-        <Code className="h-6 w-6 text-white" />
-      </div>
-      <span className="text-xl font-bold">BBros</span>
+      <img 
+        src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/02.2026_-_LOGOS_EM_VETOR_-_SOMMA.svg?v=1771962169" 
+        alt="SOMMA Logo"
+        className="h-8 w-auto"
+      />
     </div>
   )
 }
