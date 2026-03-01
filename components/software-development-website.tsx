@@ -526,7 +526,7 @@ export default function SoftwareDevelopmentWebsite() {
                 </Button>
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-96 flex items-center justify-center">
-                <img src="/placeholder.svg?height=400&width=500" alt="Strava Community" className="w-full h-full object-cover" />
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757" alt="Strava Community" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>
