@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { ArrowRight, ChevronRight, Menu, X, Code, Zap, Settings2, Sparkles, Users, Clock, MapPin, Heart, Lightbulb } from "lucide-react"
 import { motion, type Variants } from "framer-motion"
 import { GridMotion } from "./ui/grid-motion"
+import RotatingText from "./ui/RotatingText"
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ")
@@ -304,10 +305,18 @@ export default function SoftwareDevelopmentWebsite() {
               <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
                 <AnimatedGroup variants={transitionVariants}>
                   <h1 className="mt-8 max-w-4xl mx-auto text-balance text-3xl sm:text-4xl md:text-6xl lg:text-7xl lg:mt-16 xl:text-[5.25rem] leading-tight">
-                    Mais que um clube,{" "}
-                    <span className="inline-block text-orange-500 text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.25rem] font-semibold">
-                      uma comunidade
-                    </span>
+                    <RotatingText
+                      texts={["Somma Club", "Comunidade", "Energia", "Corrida"]}
+                      mainClassName="text-orange-500 font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4"
+                      staggerFrom="last"
+                      initial={{ y: "100%" }}
+                      animate={{ y: 0 }}
+                      exit={{ y: "-120%" }}
+                      staggerDuration={0.025}
+                      splitLevelClassName="overflow-hidden pb-1"
+                      transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                      rotationInterval={2000}
+                    />
                   </h1>
 
                 </AnimatedGroup>
@@ -657,7 +666,7 @@ export default function SoftwareDevelopmentWebsite() {
                 <div>
                   <h3 className="font-semibold mb-1">Uniforme bem-vindo, não obrigatório</h3>
                   <p className="text-sm text-muted-foreground">
-                    Não é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
+                    N��o é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
                   </p>
                 </div>
               </div>
