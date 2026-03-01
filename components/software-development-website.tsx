@@ -937,6 +937,24 @@ export default function SoftwareDevelopmentWebsite() {
                       required
                     />
                   </div>
+
+                  {/* Sexo */}
+                  <div>
+                    <label htmlFor="sexo" className="block text-sm font-medium mb-2">
+                      Sexo <span className="text-red-500">*</span>
+                    </label>
+                    <select
+                      id="sexo"
+                      className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      required
+                    >
+                      <option value="">Selecione uma opção</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="feminino">Feminino</option>
+                      <option value="outro">Outro</option>
+                      <option value="prefiro-nao-dizer">Prefiro não dizer</option>
+                    </select>
+                  </div>
                 </div>
               </div>
 
