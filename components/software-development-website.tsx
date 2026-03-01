@@ -212,16 +212,18 @@ const HeroHeader = () => {
                     <span>Login</span>
                   </Button>
                 </a>
-                <Button
-                  size="sm"
-                  className={cn(
-                    isScrolled
-                      ? "lg:inline-flex bg-orange-500 hover:bg-orange-600"
-                      : "hidden bg-orange-500 hover:bg-orange-600",
-                  )}
-                >
-                  <span>Inscreva-se</span>
-                </Button>
+                <a href="#inscricao">
+                  <Button
+                    size="lg"
+                    className={cn(
+                      isScrolled
+                        ? "lg:inline-flex bg-orange-500 hover:bg-orange-600"
+                        : "hidden bg-orange-500 hover:bg-orange-600",
+                    )}
+                  >
+                    <span>Inscreva-se</span>
+                  </Button>
+                </a>
               </div>
             </div>
           </div>
@@ -458,9 +460,11 @@ export default function SoftwareDevelopmentWebsite() {
             {/* CTA Section */}
             <div className="text-center mt-12">
               <p className="text-muted-foreground mb-6">Pronto para se juntar à comunidade SOMMA?</p>
-              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
-                Inscreva-se grátis
-              </Button>
+              <a href="#inscricao">
+                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                  Inscreva-se grátis
+                </Button>
+              </a>
             </div>
           </div>
         </section>
@@ -677,7 +681,7 @@ export default function SoftwareDevelopmentWebsite() {
         </section>
 
         {/* Seção 8 - Formulário de Cadastro */}
-        <section className="py-16 md:py-32 bg-muted/50">
+        <section className="py-16 md:py-32 bg-muted/50" id="inscricao">
           <div className="mx-auto max-w-3xl px-6">
             <div className="text-center mb-12">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
