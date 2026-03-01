@@ -478,16 +478,16 @@ export default function SoftwareDevelopmentWebsite() {
             {/* Grid de imagens de placeholder */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
               <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
-                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Running" className="w-full h-full object-cover" />
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/PDCSK21FEV-1794.jpg?v=1772326323" alt="SOMMA Running" className="w-full h-full object-cover" />
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
-                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Community" className="w-full h-full object-cover" />
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/PDCSK217JAN-2433.jpg?v=1772326445" alt="SOMMA Community" className="w-full h-full object-cover" />
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
                 <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/SMSPD-372.jpg?v=1772324753" alt="SOMMA Events" className="w-full h-full object-cover" />
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
-                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Moments" className="w-full h-full object-cover" />
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Designsemnome_16.png?v=1771901186" alt="SOMMA Moments" className="w-full h-full object-cover" />
               </div>
             </div>
 
