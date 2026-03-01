@@ -542,7 +542,7 @@ export default function SoftwareDevelopmentWebsite() {
                 <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Community" className="w-full h-full object-cover" />
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
-                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Events" className="w-full h-full object-cover" />
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/SMSPD-372.jpg?v=1772324753" alt="SOMMA Events" className="w-full h-full object-cover" />
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
                 <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Moments" className="w-full h-full object-cover" />
