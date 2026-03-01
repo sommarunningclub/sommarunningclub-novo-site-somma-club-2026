@@ -522,7 +522,11 @@ export default function SoftwareDevelopmentWebsite() {
                   O SOMMA Running Club nasceu para somar passos, histórias e amizades. Nossa comunidade no Strava conecta corredores de todos os níveis em Brasília, com encontros semanais cheios de energia e motivação.
                 </p>
                 <a href="https://www.strava.com/clubs/1608501?share_sig=D8C84ECD1759146345&_branch_match_id=1315308772546708809&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXLy4pSixL1EcsKNDLyczL1jcxdsmPCgmrNA5Psq8rSk1LLSrKzEuPTyrKLy9OLbJ1zijKz00FAFnkwLM9AAAA" target="_blank" rel="noopener noreferrer">
-                  <Button size="lg" className="text-white" style={{ backgroundColor: "#fb4c00" }}>
+                  <Button size="lg" className="text-white gap-2" style={{ backgroundColor: "#fb4c00" }}>
+                    <svg className="w-6 h-6" aria-hidden="true" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <polygon points="226.172,26.001 90.149,288.345 170.29,288.345 226.172,184.036 281.605,288.345 361.116,288.345" fill="currentColor"></polygon>
+                      <polygon points="361.116,288.345 321.675,367.586 281.605,288.345 220.871,288.345 321.675,485.999 421.851,288.345" fill="currentColor"></polygon>
+                    </svg>
                     Junte-se no Strava
                   </Button>
                 </a>
