@@ -65,23 +65,23 @@ export function CheckInForm() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-orange-500/5 via-background to-background flex items-center justify-center p-6">
+    <main className="min-h-screen bg-black flex items-center justify-center p-6">
       <div className="max-w-xl w-full">
         {/* Header com Logo e Título */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-balance mb-2">
+          <h1 className="text-4xl font-bold text-balance mb-2 text-white">
             Bem-vindo ao <span className="text-orange-500">Check-in</span>
           </h1>
-          <p className="text-muted-foreground">Junte-se à comunidade SOMMA em 3 passos simples</p>
+          <p className="text-gray-400">Junte-se à comunidade SOMMA em 3 passos simples</p>
         </div>
 
         {/* Progress Bar com Animação */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
-            <p className="text-sm font-semibold text-foreground">Progresso</p>
+            <p className="text-sm font-semibold text-white">Progresso</p>
             <p className="text-sm font-medium text-orange-500">{step} de 3</p>
           </div>
-          <div className="relative h-2 bg-muted rounded-full overflow-hidden">
+          <div className="relative h-2 bg-zinc-700 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all duration-500 ease-out shadow-lg"
               style={{ width: `${(step / 3) * 100}%` }}
@@ -97,7 +97,7 @@ export function CheckInForm() {
               className={`flex-1 h-2 rounded-full transition-all duration-500 ${
                 s <= step
                   ? 'bg-gradient-to-r from-orange-400 to-orange-500 shadow-md'
-                  : 'bg-muted'
+                  : 'bg-zinc-700'
               }`}
             />
           ))}
@@ -108,9 +108,9 @@ export function CheckInForm() {
           {/* Step 1: Nome */}
           {step === 1 && (
             <div>
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-orange-200/50 shadow-lg">
+              <div className="bg-zinc-900 rounded-2xl p-8 border-2 border-orange-500 shadow-lg">
                 <div className="mb-6">
-                  <label className="block text-sm font-semibold text-foreground mb-4">
+                  <label className="block text-sm font-semibold text-white mb-4">
                     Qual é seu nome completo?
                   </label>
                   <input
@@ -120,11 +120,11 @@ export function CheckInForm() {
                     onChange={handleInputChange}
                     placeholder="Ex: João Silva Santos"
                     autoFocus
-                    className="w-full px-6 py-4 border-2 border-orange-200 rounded-xl text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 bg-background placeholder:text-muted-foreground"
+                    className="w-full px-6 py-4 border-2 border-orange-500 rounded-xl text-lg focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-500/30 transition-all duration-300 bg-black text-white placeholder:text-gray-500"
                   />
                 </div>
 
-                <div className="text-sm text-muted-foreground space-y-1 mb-8">
+                <div className="text-sm text-gray-400 space-y-1 mb-8">
                   <p>✓ Seu nome será usado para identificação</p>
                   <p>✓ Certifique-se de usar seu nome completo</p>
                 </div>
@@ -152,39 +152,39 @@ export function CheckInForm() {
           {/* Step 2: Dados de Contato */}
           {step === 2 && (
             <div>
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-orange-200/50 shadow-lg">
+              <div className="bg-zinc-900 rounded-2xl p-8 border-2 border-orange-500 shadow-lg">
                 <div className="space-y-6 mb-8">
                   <div>
-                    <label className="block text-sm font-medium mb-3">Telefone</label>
+                    <label className="block text-sm font-medium text-white mb-3">Telefone</label>
                     <input
                       type="text"
                       name="telefone"
                       value={formatPhone(formData.telefone)}
                       onChange={(e) => setFormData(prev => ({ ...prev, telefone: e.target.value.replace(/\D/g, '') }))}
                       placeholder="(61) 99999-9999"
-                      className="w-full px-6 py-4 border-2 border-orange-200 rounded-xl text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 bg-background"
+                      className="w-full px-6 py-4 border-2 border-orange-500 rounded-xl text-lg focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-500/30 transition-all duration-300 bg-black text-white placeholder:text-gray-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-3">CPF</label>
+                    <label className="block text-sm font-medium text-white mb-3">CPF</label>
                     <input
                       type="text"
                       name="cpf"
                       value={formatCPF(formData.cpf)}
                       onChange={(e) => setFormData(prev => ({ ...prev, cpf: e.target.value.replace(/\D/g, '') }))}
                       placeholder="000.000.000-00"
-                      className="w-full px-6 py-4 border-2 border-orange-200 rounded-xl text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 bg-background"
+                      className="w-full px-6 py-4 border-2 border-orange-500 rounded-xl text-lg focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-500/30 transition-all duration-300 bg-black text-white placeholder:text-gray-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-3">Sexo</label>
+                    <label className="block text-sm font-medium text-white mb-3">Sexo</label>
                     <select
                       name="sexo"
                       value={formData.sexo}
                       onChange={handleInputChange}
-                      className="w-full px-6 py-4 border-2 border-orange-200 rounded-xl text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all duration-300 bg-background"
+                      className="w-full px-6 py-4 border-2 border-orange-500 rounded-xl text-lg focus:outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-500/30 transition-all duration-300 bg-black text-white"
                     >
                       <option value="">Selecione uma opção</option>
                       <option value="masculino">Masculino</option>
@@ -195,7 +195,7 @@ export function CheckInForm() {
                   </div>
                 </div>
 
-                <div className="text-sm text-muted-foreground space-y-2 mb-8">
+                <div className="text-sm text-gray-400 space-y-2 mb-8">
                   <p>✓ Seu telefone será usado para contato</p>
                   <p>✓ Seu CPF é necessário para validação</p>
                   <p>✓ Essa informação ajuda a melhorar nossa comunidade</p>
@@ -226,28 +226,28 @@ export function CheckInForm() {
           {/* Step 3: Confirmação */}
           {step === 3 && (
             <div>
-              <div className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-orange-200/50 shadow-lg">
-                <h2 className="text-2xl font-bold mb-6">Revise seus dados</h2>
+              <div className="bg-zinc-900 rounded-2xl p-8 border-2 border-orange-500 shadow-lg">
+                <h2 className="text-2xl font-bold mb-6 text-white">Revise seus dados</h2>
 
                 <div className="space-y-4 mb-8">
-                  <div className="bg-muted/50 rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:scale-105">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Nome</p>
-                    <p className="text-lg font-semibold">{formData.nome || '—'}</p>
+                  <div className="bg-black rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:shadow-orange-500/50 hover:scale-105">
+                    <p className="text-xs font-semibold text-orange-500 uppercase tracking-wide mb-1">Nome</p>
+                    <p className="text-lg font-semibold text-white">{formData.nome || '—'}</p>
                   </div>
 
-                  <div className="bg-muted/50 rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:scale-105">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Telefone</p>
-                    <p className="text-lg font-semibold">{formatPhone(formData.telefone) || '—'}</p>
+                  <div className="bg-black rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:shadow-orange-500/50 hover:scale-105">
+                    <p className="text-xs font-semibold text-orange-500 uppercase tracking-wide mb-1">Telefone</p>
+                    <p className="text-lg font-semibold text-white">{formatPhone(formData.telefone) || '—'}</p>
                   </div>
 
-                  <div className="bg-muted/50 rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:scale-105">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">CPF</p>
-                    <p className="text-lg font-semibold font-mono">{formatCPF(formData.cpf) || '—'}</p>
+                  <div className="bg-black rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:shadow-orange-500/50 hover:scale-105">
+                    <p className="text-xs font-semibold text-orange-500 uppercase tracking-wide mb-1">CPF</p>
+                    <p className="text-lg font-semibold font-mono text-white">{formatCPF(formData.cpf) || '—'}</p>
                   </div>
 
-                  <div className="bg-muted/50 rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:scale-105">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Sexo</p>
-                    <p className="text-lg font-semibold capitalize">
+                  <div className="bg-black rounded-xl p-4 border-l-4 border-orange-500 transition-all duration-300 hover:shadow-md hover:shadow-orange-500/50 hover:scale-105">
+                    <p className="text-xs font-semibold text-orange-500 uppercase tracking-wide mb-1">Sexo</p>
+                    <p className="text-lg font-semibold capitalize text-white">
                       {formData.sexo 
                         ? formData.sexo.replace('-', ' ') 
                         : '—'
@@ -256,8 +256,8 @@ export function CheckInForm() {
                   </div>
                 </div>
 
-                <div className="bg-orange-50 dark:bg-orange-950/20 border border-orange-200 rounded-xl p-4 mb-8">
-                  <p className="text-sm text-orange-900 dark:text-orange-100">
+                <div className="bg-orange-950/40 border-2 border-orange-500 rounded-xl p-4 mb-8">
+                  <p className="text-sm text-orange-200">
                     Certifique-se de que todos os dados estão corretos antes de confirmar seu check-in.
                   </p>
                 </div>
