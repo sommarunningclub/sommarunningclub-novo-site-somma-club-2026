@@ -285,23 +285,6 @@ export default function SoftwareDevelopmentWebsite() {
   return (
     <>
       <HeroHeader />
-      {/* Announcement Banner Desktop */}
-      <div className="hidden md:block w-full">
-        <img 
-          src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/banner_154ad1ed-91e9-4435-a4c1-6f4c591199b6.png?v=1768614884" 
-          alt="SOMMA Banner Desktop"
-          className="w-full h-auto"
-        />
-      </div>
-      
-      {/* Announcement Banner Mobile */}
-      <div className="md:hidden w-full">
-        <img 
-          src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/banner_mobile_5235bf9f-e499-47a1-8052-1108ba7e86f7.png?v=1768615297" 
-          alt="SOMMA Banner Mobile"
-          className="w-full h-auto"
-        />
-      </div>
       <main className="overflow-hidden">
         <div
           aria-hidden
