@@ -132,8 +132,8 @@ const transitionVariants = {
 
 const menuItems = [
   { name: "Home", href: "#home" },
-  { name: "Assessoria", href: "#assessoria" },
-  { name: "Loja", href: "#loja" },
+  { name: "Assessoria", href: "https://membros.sommaclub.com.br/", external: true },
+  { name: "Loja", href: "https://loja.sommaclub.com.br/", external: true },
   { name: "Check-in", href: "#check-in" },
 ]
 
@@ -183,6 +183,7 @@ const HeroHeader = () => {
                     <a
                       href={item.href}
                       className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                      {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                     >
                       <span>{item.name}</span>
                     </a>
@@ -199,6 +200,7 @@ const HeroHeader = () => {
                       <a
                         href={item.href}
                         className="text-muted-foreground hover:text-accent-foreground block duration-150"
+                        {...(item.external && { target: "_blank", rel: "noopener noreferrer" })}
                       >
                         <span>{item.name}</span>
                       </a>
