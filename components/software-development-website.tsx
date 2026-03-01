@@ -521,12 +521,14 @@ export default function SoftwareDevelopmentWebsite() {
                 <p className="text-muted-foreground leading-relaxed mb-8">
                   O SOMMA Running Club nasceu para somar passos, histórias e amizades. Nossa comunidade no Strava conecta corredores de todos os níveis em Brasília, com encontros semanais cheios de energia e motivação.
                 </p>
-                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white">
-                  Junte-se no Strava
-                </Button>
+                <a href="https://www.strava.com/clubs/1608501?share_sig=D8C84ECD1759146345&_branch_match_id=1315308772546708809&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXLy4pSixL1EcsKNDLyczL1jcxdsmPCgmrNA5Psq8rSk1LLSrKzEuPTyrKLy9OLbJ1zijKz00FAFnkwLM9AAAA" target="_blank" rel="noopener noreferrer">
+                  <Button size="lg" className="text-white" style={{ backgroundColor: "#fb4c00" }}>
+                    Junte-se no Strava
+                  </Button>
+                </a>
               </div>
               <div className="rounded-lg overflow-hidden bg-muted h-96 flex items-center justify-center">
-                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757" alt="Strava Community" className="w-full h-full object-cover" />
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757" alt="Strava Community" className="w-full h-full object-cover object-top" />
               </div>
             </div>
           </div>
