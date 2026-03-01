@@ -531,8 +531,8 @@ export default function SoftwareDevelopmentWebsite() {
                   </Button>
                 </a>
               </div>
-              <div className="rounded-lg overflow-hidden bg-muted h-96 flex items-center justify-center">
-                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757" alt="Strava Community" className="w-full h-full object-cover object-top" />
+              <div className="rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+                <img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_1479_JPG.jpg?v=1772326757" alt="Strava Community" className="w-full h-auto object-contain" />
               </div>
             </div>
           </div>
