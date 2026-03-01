@@ -304,10 +304,10 @@ export default function SoftwareDevelopmentWebsite() {
             <div className="mx-auto max-w-7xl px-6">
               <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
                 <AnimatedGroup variants={transitionVariants}>
-                  <h1 className="mt-8 max-w-4xl mx-auto text-balance text-3xl sm:text-4xl md:text-6xl lg:text-7xl lg:mt-16 xl:text-[5.25rem] leading-tight">
+                  <h1 className="mt-8 max-w-4xl mx-auto text-balance text-3xl sm:text-4xl md:text-6xl lg:text-7xl lg:mt-16 xl:text-[5.25rem] leading-tight text-center">
                     <RotatingText
                       texts={["Somma Club", "Comunidade", "Energia", "Corrida"]}
-                      mainClassName="text-orange-500 font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4"
+                      mainClassName="text-orange-500 font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4 justify-center inline-flex"
                       staggerFrom="last"
                       initial={{ y: "100%" }}
                       animate={{ y: 0 }}
