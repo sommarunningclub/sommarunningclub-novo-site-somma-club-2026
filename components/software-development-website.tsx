@@ -732,28 +732,6 @@ export default function SoftwareDevelopmentWebsite() {
           </div>
         </section>
 
-        {/* Seção 8 - Call to Action Final */}
-        <section className="py-16 md:py-32 bg-background">
-          <div className="mx-auto max-w-5xl px-6 text-center">
-            <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-6">
-              Venha somar com a gente
-            </h2>
-            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
-              Faça parte da comunidade que está transformando a corrida em Brasília.
-            </p>
-
-            {/* Botões */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
-                Entrar no Strava
-              </Button>
-              <Button size="lg" variant="outline" className="border-orange-200 hover:bg-orange-50 text-foreground px-8">
-                Participar do próximo encontro
-              </Button>
-            </div>
-          </div>
-        </section>
-
         {/* Seção 8 - Formulário de Cadastro */}
         <section className="py-16 md:py-32 bg-muted/50" id="inscricao">
           <div className="mx-auto max-w-3xl px-6">
