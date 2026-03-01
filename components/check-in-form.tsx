@@ -1,10 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 export function CheckInForm() {
+  const router = useRouter()
   const [step, setStep] = useState(1)
   const [formData, setFormData] = useState({
     nome: '',
@@ -35,7 +37,12 @@ export function CheckInForm() {
   }
 
   const handleSubmit = () => {
-    setSubmitted(true)
+    const qrData = JSON.stringify({
+      nome: formData.nome,
+      cpf: formData.cpf,
+      timestamp: new Date().toISOString()
+    })
+    router.push(`/check-in/sucesso?data=${encodeURIComponent(btoa(qrData))}`)
   }
 
   const formatPhone = (value: string) => {
@@ -54,41 +61,7 @@ export function CheckInForm() {
   }
 
   if (submitted) {
-    return (
-      <main className="min-h-screen bg-gradient-to-b from-orange-500/5 via-background to-background flex items-center justify-center p-6">
-        <div className="max-w-md w-full text-center">
-          <div className="mb-6 flex justify-center">
-            <div className="relative">
-              <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-xl animate-pulse"></div>
-              <div className="relative bg-gradient-to-br from-orange-500 to-orange-600 rounded-full p-4 shadow-lg">
-                <CheckCircle2 className="w-12 h-12 text-white" />
-              </div>
-            </div>
-          </div>
-          <h2 className="text-3xl font-bold mb-2">Parabéns!</h2>
-          <p className="text-muted-foreground mb-6 leading-relaxed">
-            Seu check-in foi realizado com sucesso. Você já está registrado na comunidade SOMMA.
-          </p>
-          <div className="bg-muted/50 rounded-lg p-4 mb-6 border border-orange-200">
-            <p className="text-sm text-muted-foreground mb-2">Próximos passos:</p>
-            <ul className="text-sm space-y-1 text-left">
-              <li className="flex items-center gap-2">
-                <span className="w-5 h-5 bg-orange-500 rounded-full text-white text-xs flex items-center justify-center">1</span>
-                Guarde seu QR code
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-5 h-5 bg-orange-500 rounded-full text-white text-xs flex items-center justify-center">2</span>
-                Retire sua pulseira no evento
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-5 h-5 bg-orange-500 rounded-full text-white text-xs flex items-center justify-center">3</span>
-                Aproveite a comunidade!
-              </li>
-            </ul>
-          </div>
-        </div>
-      </main>
-    )
+    return null
   }
 
   return (
