@@ -307,15 +307,14 @@ export default function SoftwareDevelopmentWebsite() {
               aria-hidden
               className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--background)_75%)]"
             />
-            <div 
-              className="mx-auto max-w-7xl px-6 flex items-center justify-center min-h-screen relative"
-              style={{
-                backgroundImage: "url(https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_0888_JPG.jpg?v=1772326001)",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundAttachment: "fixed"
-              }}
-            >
+            <div className="mx-auto max-w-7xl px-6 flex items-center justify-center min-h-screen relative overflow-hidden">
+              {/* Imagem de fundo responsiva */}
+              <img
+                src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_0888_JPG.jpg?v=1772326001"
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover object-center -z-10"
+              />
               {/* Overlay escuro para melhor legibilidade */}
               <div className="absolute inset-0 bg-black/50 -z-10"></div>
               <div className="text-center relative z-10">
