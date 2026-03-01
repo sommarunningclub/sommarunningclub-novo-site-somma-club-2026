@@ -514,6 +514,206 @@ export default function SoftwareDevelopmentWebsite() {
             </div>
           </div>
         </section>
+
+        {/* Seção 3 - Energia da Comunidade */}
+        <section className="py-16 md:py-32 bg-background">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
+                <span className="text-orange-500">SOMMA</span> em ação
+              </h2>
+              <p className="mt-4 text-lg text-orange-500 font-medium">
+                Energia e Motivação
+              </p>
+            </div>
+
+            {/* Grid de imagens de placeholder */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+              <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
+                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Running" className="w-full h-full object-cover" />
+              </div>
+              <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
+                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Community" className="w-full h-full object-cover" />
+              </div>
+              <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
+                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Events" className="w-full h-full object-cover" />
+              </div>
+              <div className="rounded-lg overflow-hidden bg-muted h-64 md:h-80 flex items-center justify-center">
+                <img src="/placeholder.svg?height=320&width=500" alt="SOMMA Moments" className="w-full h-full object-cover" />
+              </div>
+            </div>
+
+            {/* Mensagem de Apoio */}
+            <div className="text-center bg-orange-500/10 rounded-lg border border-orange-200 p-8">
+              <p className="text-lg text-foreground leading-relaxed">
+                <span className="font-semibold">Mais do que correr,</span> é sobre compartilhar energia, celebrar conquistas e viver a corrida de forma coletiva.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção 4 - Nossa Comunidade */}
+        <section className="py-16 md:py-32 bg-muted/50">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-6">
+                  SOMMA Running Club
+                </h2>
+                <p className="text-xl font-semibold text-orange-500 mb-4">
+                  Se é pra correr, que seja com vibe boa.
+                </p>
+                <p className="text-muted-foreground leading-relaxed mb-8">
+                  O SOMMA Running Club nasceu para somar passos, histórias e amizades. Nossa comunidade no Strava conecta corredores de todos os níveis em Brasília, com encontros semanais cheios de energia e motivação.
+                </p>
+                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white">
+                  Junte-se no Strava
+                </Button>
+              </div>
+              <div className="rounded-lg overflow-hidden bg-muted h-96 flex items-center justify-center">
+                <img src="/placeholder.svg?height=400&width=500" alt="Strava Community" className="w-full h-full object-cover" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção 5 - Nossos Pelotões */}
+        <section className="py-16 md:py-32 bg-background">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
+                Escolha seu ritmo
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+                Independente do seu nível, sempre existe um pelotão para você correr com conforto e evolução.
+              </p>
+            </div>
+
+            {/* Cards de Pelotões */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <h3 className="text-2xl font-semibold text-orange-500">4km</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Caminhada + corrida</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <h3 className="text-2xl font-semibold text-orange-500">4km</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Ritmo confortável</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <h3 className="text-2xl font-semibold text-orange-500">6km</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Ritmo moderado</p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <h3 className="text-2xl font-semibold text-orange-500">8km</h3>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">Ritmo avançado</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Informação Adicional */}
+            <div className="text-center bg-orange-500/10 rounded-lg border border-orange-200 p-6">
+              <p className="text-sm text-muted-foreground">
+                Pace médio entre <span className="font-semibold text-foreground">6'00 e 6'30</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção 6 - Regras da Comunidade */}
+        <section className="py-16 md:py-32 bg-muted/50">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
+                O que é obrigatório?
+              </h2>
+            </div>
+
+            {/* Regras */}
+            <div className="space-y-6 max-w-3xl mx-auto">
+              <div className="flex gap-4 p-6 bg-white dark:bg-zinc-900 rounded-lg border border-orange-200">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500/10">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Respeito e energia positiva</h3>
+                  <p className="text-sm text-muted-foreground">
+                    O pilar fundamental da nossa comunidade é a energia positiva e o respeito mútuo entre todos os corredores.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-6 bg-white dark:bg-zinc-900 rounded-lg border border-orange-200">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500/10">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Uniforme bem-vindo, não obrigatório</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Não é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex gap-4 p-6 bg-white dark:bg-zinc-900 rounded-lg border border-orange-200">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-8 w-8 rounded-full bg-orange-500/10">
+                    <div className="h-2 w-2 rounded-full bg-orange-500"></div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-semibold mb-1">Motivação é gratuita</h3>
+                  <p className="text-sm text-muted-foreground">
+                    A comunidade é aberta a todos e a motivação é gratuita. Todos são bem-vindos, independente do seu nível.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção 7 - Call to Action Final */}
+        <section className="py-16 md:py-32 bg-background">
+          <div className="mx-auto max-w-5xl px-6 text-center">
+            <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-6">
+              Venha somar com a gente
+            </h2>
+            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+              Faça parte da comunidade que está transformando a corrida em Brasília.
+            </p>
+
+            {/* Botões */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                Entrar no Strava
+              </Button>
+              <Button size="lg" variant="outline" className="border-orange-200 hover:bg-orange-50 text-foreground px-8">
+                Participar do próximo encontro
+              </Button>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="bg-background border-t border-orange-200">
