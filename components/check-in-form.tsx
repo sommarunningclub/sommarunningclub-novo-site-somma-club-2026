@@ -10,10 +10,11 @@ export function CheckInForm() {
     nome: '',
     telefone: '',
     cpf: '',
+    sexo: '',
   })
   const [submitted, setSubmitted] = useState(false)
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
@@ -198,11 +199,28 @@ export function CheckInForm() {
                     className="w-full px-6 py-4 border-2 border-orange-200 rounded-lg text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all bg-background"
                   />
                 </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-3">Sexo</label>
+                  <select
+                    name="sexo"
+                    value={formData.sexo}
+                    onChange={handleInputChange}
+                    className="w-full px-6 py-4 border-2 border-orange-200 rounded-lg text-lg focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition-all bg-background"
+                  >
+                    <option value="">Selecione uma opção</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="feminino">Feminino</option>
+                    <option value="outro">Outro</option>
+                    <option value="prefiro-nao-dizer">Prefiro não dizer</option>
+                  </select>
+                </div>
               </div>
 
               <div className="text-sm text-muted-foreground space-y-2 mb-8">
                 <p>✓ Seu telefone será usado para contato</p>
                 <p>✓ Seu CPF é necessário para validação</p>
+                <p>✓ Essa informação ajuda a melhorar nossa comunidade</p>
               </div>
             </div>
           )}
@@ -237,6 +255,16 @@ export function CheckInForm() {
                   <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">CPF</p>
                   <p className="text-lg font-semibold font-mono">{formatCPF(formData.cpf) || '—'}</p>
                 </div>
+
+                <div className="bg-muted/50 rounded-lg p-4 border border-orange-200">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Sexo</p>
+                  <p className="text-lg font-semibold capitalize">
+                    {formData.sexo 
+                      ? formData.sexo.replace('-', ' ') 
+                      : '—'
+                    }
+                  </p>
+                </div>
               </div>
 
               <div className="bg-orange-500/10 border border-orange-200 rounded-lg p-4 mb-8">
@@ -260,15 +288,15 @@ export function CheckInForm() {
             </Button>
 
             {step < 3 ? (
-              <Button
-                size="lg"
-                className="bg-orange-500 hover:bg-orange-600 text-white gap-2"
-                onClick={handleNext}
-                disabled={
-                  (step === 1 && !formData.nome) ||
-                  (step === 2 && (!formData.telefone || !formData.cpf))
-                }
-              >
+            <Button
+              size="lg"
+              className="bg-orange-500 hover:bg-orange-600 text-white gap-2"
+              onClick={handleNext}
+              disabled={
+                (step === 1 && !formData.nome) ||
+                (step === 2 && (!formData.telefone || !formData.cpf || !formData.sexo))
+              }
+            >
                 Próximo
                 <ArrowRight className="w-4 h-4" />
               </Button>
@@ -277,7 +305,7 @@ export function CheckInForm() {
                 size="lg"
                 className="bg-orange-500 hover:bg-orange-600 text-white gap-2"
                 onClick={handleSubmit}
-                disabled={!formData.nome || !formData.telefone || !formData.cpf}
+                disabled={!formData.nome || !formData.telefone || !formData.cpf || !formData.sexo}
               >
                 Confirmar Check-in
                 <CheckCircle2 className="w-4 h-4" />
