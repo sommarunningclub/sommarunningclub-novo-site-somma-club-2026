@@ -305,10 +305,10 @@ export default function SoftwareDevelopmentWebsite() {
                 <AnimatedGroup variants={transitionVariants}>
                   <a
                     href="#services"
-                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit items-center gap-4 rounded-full border p-1 pl-4 shadow-md shadow-black/5 transition-all duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
+                    className="hover:bg-background dark:hover:border-t-border bg-muted group mx-auto flex w-fit flex-col sm:flex-row items-center gap-2 sm:gap-4 rounded-full border p-3 sm:p-1 sm:pl-4 shadow-md shadow-black/5 transition-all duration-300 dark:border-t-white/5 dark:shadow-zinc-950"
                   >
-                    <span className="text-foreground text-sm">O Somma conecta pessoas através da corrida</span>
-                    <span className="dark:border-background block h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
+                    <span className="text-foreground text-xs sm:text-sm text-center sm:text-left">O Somma conecta pessoas através da corrida</span>
+                    <span className="hidden sm:block dark:border-background h-4 w-0.5 border-l bg-white dark:bg-zinc-700"></span>
 
                     <div className="bg-background group-hover:bg-muted size-6 overflow-hidden rounded-full duration-500">
                       <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
