@@ -133,7 +133,7 @@ const menuItems = [
   { name: "Home", href: "#home" },
   { name: "Assessoria", href: "#assessoria" },
   { name: "Loja", href: "#loja" },
-  { name: "Eventos", href: "#eventos" },
+  { name: "Check-in", href: "#check-in" },
 ]
 
 const HeroHeader = () => {
