@@ -391,9 +391,6 @@ export default function SoftwareDevelopmentWebsite() {
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
                 Comunidade <span className="text-orange-500">SOMMA</span>
               </h2>
-              <p className="mt-4 text-lg text-orange-500 font-medium">
-                Running Club
-              </p>
               <p className="mt-6 text-lg text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                 O SOMMA é <span className="font-semibold text-foreground">muito mais que um clube de corrida</span>. Somos uma comunidade que acredita no poder da união, constância e inclusão. Abertos a todos que desejam correr, melhorar sua saúde ou simplesmente compartilhar momentos significativos.
               </p>
@@ -448,7 +445,7 @@ export default function SoftwareDevelopmentWebsite() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">Parque da Cidade, Estacionamento 10</p>
+                  <p className="text-sm text-muted-foreground"><a href="https://maps.app.goo.gl/19XSfZUuooHXdpTs7" target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors">Parque da Cidade, Estacionamento 10</a></p>
                 </CardContent>
               </Card>
             </div>
