@@ -985,6 +985,54 @@ export default function SoftwareDevelopmentWebsite() {
                 Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
               </p>
               <div className="flex space-x-4">
+                <a 
+                  href="https://www.instagram.com/somma.club/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-orange-500 transition-colors duration-200 group"
+                  aria-label="Seguir SOMMA Running Club no Instagram"
+                >
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="24" 
+                    height="24" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className="lucide lucide-instagram w-5 h-5 group-hover:scale-110 transition-transform duration-200"
+                    aria-hidden="true"
+                  >
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
+                  </svg>
+                </a>
+                <a 
+                  href="https://www.strava.com/clubs/1608501?share_sig=D8C84ECD1759146345&_branch_match_id=1315308772546708809&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXLy4pSixL1EcsKNDLzczL1jcxdsmPCgmrNA5Psq8rSk1LLSrKzEuPTyrKLy9OLbJ1zijKz00FAFnkwLM9AAAA" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="flex items-center space-x-2 text-muted-foreground hover:text-orange-500 transition-colors duration-200 group"
+                  aria-label="Seguir SOMMA Running Club no Strava"
+                >
+                  <svg 
+                    className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" 
+                    aria-hidden="true" 
+                    viewBox="0 0 512 512" 
+                    fill="none" 
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <polygon points="226.172,26.001 90.149,288.345 170.29,288.345 226.172,184.036 281.605,288.345 361.116,288.345" fill="currentColor"></polygon>
+                    <polygon points="361.116,288.345 321.675,367.586 281.605,288.345 220.871,288.345 321.675,485.999 421.851,288.345" fill="currentColor"></polygon>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            {/* Contato */}
+            <div className="space-y-4">
               <h3 className="text-sm font-semibold text-foreground">Contato</h3>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li>
@@ -1070,98 +1118,6 @@ export default function SoftwareDevelopmentWebsite() {
                   </a>
                 </li>
               </ul>
-            </div>
-
-            {/* Mais do Somma - DUPLICADO, REMOVER */}
-            <div className="space-y-4 hidden">
-              <h3 className="text-sm font-semibold text-foreground">Mais do Somma</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Parcerias Somma
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Benefícios do Membro
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Empresa - DUPLICADO, REMOVER */}
-            <div className="space-y-4 hidden">
-              <h3 className="text-sm font-semibold text-foreground">Empresa</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Somma Eventos
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Somma Mídia
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Assessoria Esportiva
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Logo and Social - DUPLICADO, REMOVER */}
-            <div className="space-y-4 sm:col-span-2 lg:col-span-1 hidden">
-              <Logo />
-              <p className="text-sm text-muted-foreground max-w-xs">
-                Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
-              </p>
-              <div className="flex space-x-4">
-                <a 
-                  href="https://www.instagram.com/somma.club/" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center space-x-2 text-muted-foreground hover:text-orange-500 transition-colors duration-200 group"
-                  aria-label="Seguir SOMMA Running Club no Instagram"
-                >
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="2" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    className="lucide lucide-instagram w-5 h-5 group-hover:scale-110 transition-transform duration-200"
-                    aria-hidden="true"
-                  >
-                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line>
-                  </svg>
-                </a>
-                <a 
-                  href="https://www.strava.com/clubs/1608501?share_sig=D8C84ECD1759146345&_branch_match_id=1315308772546708809&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXLy4pSixL1EcsKNDLzczL1jcxdsmPCgmrNA5Psq8rSk1LLSrKzEuPTyrKLy9OLbJ1zijKz00FAFnkwLM9AAAA" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="flex items-center space-x-2 text-muted-foreground hover:text-orange-500 transition-colors duration-200 group"
-                  aria-label="Seguir SOMMA Running Club no Strava"
-                >
-                  <svg 
-                    className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" 
-                    aria-hidden="true" 
-                    viewBox="0 0 512 512" 
-                    fill="none" 
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <polygon points="226.172,26.001 90.149,288.345 170.29,288.345 226.172,184.036 281.605,288.345 361.116,288.345" fill="currentColor"></polygon>
-                    <polygon points="361.116,288.345 321.675,367.586 281.605,288.345 220.871,288.345 321.675,485.999 421.851,288.345" fill="currentColor"></polygon>
-                  </svg>
-                </a>
-              </div>
             </div>
           </div>
 
