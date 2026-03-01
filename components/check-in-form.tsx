@@ -36,7 +36,6 @@ export function CheckInForm() {
 
   const handleSubmit = () => {
     setSubmitted(true)
-    console.log('Form submitted:', formData)
   }
 
   const formatPhone = (value: string) => {
@@ -53,8 +52,6 @@ export function CheckInForm() {
     if (cleaned.length <= 9) return `${cleaned.slice(0, 3)}.${cleaned.slice(3, 6)}.${cleaned.slice(6)}`
     return `${cleaned.slice(0, 3)}.${cleaned.slice(3, 6)}.${cleaned.slice(6, 9)}-${cleaned.slice(9, 11)}`
   }
-
-  const progressPercentage = (step / 3) * 100
 
   if (submitted) {
     return (
@@ -114,7 +111,7 @@ export function CheckInForm() {
           <div className="relative h-2 bg-muted rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all duration-500 ease-out shadow-lg"
-              style={{ width: `${progressPercentage}%` }}
+              style={{ width: `${(step / 3) * 100}%` }}
             />
           </div>
         </div>
