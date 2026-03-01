@@ -732,7 +732,104 @@ export default function SoftwareDevelopmentWebsite() {
           </div>
         </section>
 
-        {/* Seção 8 - Formulário de Cadastro */}
+        {/* Seção 8 - Check-in */}
+        <section className="py-16 md:py-32 bg-background">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
+                Como funciona o <span className="text-orange-500">Check-in</span>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Garantia de acesso a ativações, sorteios e café da manhã
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+              {/* Step 1 */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-6 text-center">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-orange-500/10 text-orange-500 text-xl font-bold mx-auto mb-4">
+                  1
+                </div>
+                <h3 className="font-semibold mb-2">Inscreva-se</h3>
+                <p className="text-sm text-muted-foreground">
+                  Preencha o formulário de cadastro na comunidade
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-6 text-center">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-orange-500/10 text-orange-500 text-xl font-bold mx-auto mb-4">
+                  2
+                </div>
+                <h3 className="font-semibold mb-2">Salvar QR Code</h3>
+                <p className="text-sm text-muted-foreground">
+                  Guarde o QR code que será enviado para seu e-mail
+                </p>
+              </div>
+
+              {/* Step 3 */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-6 text-center">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-orange-500/10 text-orange-500 text-xl font-bold mx-auto mb-4">
+                  3
+                </div>
+                <h3 className="font-semibold mb-2">Retirar Pulseira</h3>
+                <p className="text-sm text-muted-foreground">
+                  No dia do evento, retire sua pulseira no local
+                </p>
+              </div>
+
+              {/* Step 4 */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-6 text-center">
+                <div className="flex items-center justify-center h-12 w-12 rounded-full bg-orange-500/10 text-orange-500 text-xl font-bold mx-auto mb-4">
+                  4
+                </div>
+                <h3 className="font-semibold mb-2">Aproveite!</h3>
+                <p className="text-sm text-muted-foreground">
+                  Acesso a ativações, sorteios e café da manhã
+                </p>
+              </div>
+            </div>
+
+            {/* Benefícios */}
+            <div className="bg-orange-500/10 rounded-lg border border-orange-200 p-8 md:p-12 mb-12">
+              <h3 className="text-2xl font-semibold mb-6 text-center">Com o Check-in você tem acesso a:</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 text-orange-500 text-2xl">✓</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Café da Manhã</h4>
+                    <p className="text-sm text-muted-foreground">Refeição completa para recarregar energias</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 text-orange-500 text-2xl">✓</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Ativações</h4>
+                    <p className="text-sm text-muted-foreground">Experiências exclusivas e interativas</p>
+                  </div>
+                </div>
+                <div className="flex gap-4">
+                  <div className="flex-shrink-0 text-orange-500 text-2xl">✓</div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Sorteios</h4>
+                    <p className="text-sm text-muted-foreground">Prêmios e brindes para participantes</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="text-center">
+              <a href="/check-in">
+                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                  Saiba Mais Sobre Check-in
+                </Button>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção 9 - Formulário de Cadastro */}
         <section className="py-16 md:py-32 bg-muted/50" id="inscricao">
           <div className="mx-auto max-w-3xl px-6">
             <div className="text-center mb-12">
