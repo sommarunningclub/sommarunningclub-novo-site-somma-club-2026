@@ -977,9 +977,9 @@ export default function SoftwareDevelopmentWebsite() {
 
       <footer className="bg-background border-t border-orange-200">
         <div className="mx-auto max-w-7xl py-16 px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
             {/* Logo and Social - PRIMEIRO */}
-            <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+            <div className="space-y-4">
               <Logo />
               <p className="text-sm text-muted-foreground max-w-xs">
                 Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
