@@ -6,6 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { ArrowRight, ChevronRight, Menu, X, Code, Zap, Settings2, Sparkles, Users, Clock, MapPin, Heart, Lightbulb } from "lucide-react"
 import { motion, type Variants } from "framer-motion"
 import { GridMotion } from "./ui/grid-motion"
+import { AnnouncementBanner } from "./ui/announcement-banner"
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ")
@@ -285,6 +286,11 @@ export default function SoftwareDevelopmentWebsite() {
   return (
     <>
       <HeroHeader />
+      <AnnouncementBanner
+        desktopImage="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/banner_154ad1ed-91e9-4435-a4c1-6f4c591199b6.png?v=1768614884"
+        mobileImage="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/banner_mobile_5235bf9f-e499-47a1-8052-1108ba7e86f7.png?v=1768615297"
+        altText="SOMMA Running Club"
+      />
       <main className="overflow-hidden">
         <div
           aria-hidden
