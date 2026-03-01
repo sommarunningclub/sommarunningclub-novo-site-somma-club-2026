@@ -1071,7 +1071,7 @@ export default function SoftwareDevelopmentWebsite() {
             <div className="space-y-4 sm:col-span-2 lg:col-span-1">
               <Logo />
               <p className="text-sm text-muted-foreground max-w-xs">
-                Conectando corredores através da paixão por corrida e construindo uma comunidade de bem-estar.
+                Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
               </p>
               <div className="flex space-x-4">
                 <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
