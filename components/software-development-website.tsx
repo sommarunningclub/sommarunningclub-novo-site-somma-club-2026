@@ -311,12 +311,12 @@ export default function SoftwareDevelopmentWebsite() {
               }}
             >
               {/* Overlay escuro para melhor legibilidade */}
-              <div className="absolute inset-0 bg-black/40 -z-10"></div>
+              <div className="absolute inset-0 bg-black/50 -z-10"></div>
               <div className="text-center relative z-10">
                 <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-tight text-center">
                   <RotatingText
                     texts={["Somma Club", "Comunidade", "Energia", "Corrida"]}
-                    mainClassName="text-orange-500 font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4 justify-center inline-flex"
+                    mainClassName="text-white font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4 justify-center inline-flex"
                     staggerFrom="last"
                     initial={{ y: "100%" }}
                     animate={{ y: 0 }}
