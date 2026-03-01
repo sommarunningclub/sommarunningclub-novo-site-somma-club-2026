@@ -322,9 +322,9 @@ export default function SoftwareDevelopmentWebsite() {
                     </div>
                   </a>
 
-                  <h1 className="mt-8 max-w-4xl mx-auto text-balance text-6xl md:text-7xl lg:mt-16 xl:text-[5.25rem]">
+                  <h1 className="mt-8 max-w-4xl mx-auto text-balance text-3xl sm:text-4xl md:text-6xl lg:text-7xl lg:mt-16 xl:text-[5.25rem] leading-tight">
                     Mais que um clube,{" "}
-                    <span className="inline-block text-orange-500 text-6xl md:text-7xl xl:text-[5.25rem] font-semibold">
+                    <span className="inline-block text-orange-500 text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.25rem] font-semibold">
                       uma comunidade
                     </span>
                   </h1>
