@@ -1140,9 +1140,12 @@ export default function SoftwareDevelopmentWebsite() {
 
           {/* Bottom section */}
           <div className="mt-12 pt-8 border-t border-orange-200">
-            <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-              <div className="text-sm text-muted-foreground">© 2026 Somma Running Club. All rights reserved.</div>
-              <div className="flex flex-wrap justify-center sm:justify-end gap-x-6 gap-y-2 text-sm">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+              <div className="space-y-2">
+                <div className="text-sm text-muted-foreground">© 2026 Somma Running Club. All rights reserved.</div>
+                <div className="text-xs text-muted-foreground">CNPJ 61.315.987/0001-28</div>
+              </div>
+              <div className="flex flex-wrap justify-start sm:justify-end gap-x-6 gap-y-2 text-sm">
                 <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
                   Privacy Policy
                 </a>
