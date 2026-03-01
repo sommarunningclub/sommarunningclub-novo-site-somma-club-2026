@@ -301,72 +301,24 @@ export default function SoftwareDevelopmentWebsite() {
               aria-hidden
               className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--background)_75%)]"
             />
-            <div className="mx-auto max-w-7xl px-6">
-              <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
-                <AnimatedGroup variants={transitionVariants}>
-                  <h1 className="mt-8 max-w-4xl mx-auto text-balance text-3xl sm:text-4xl md:text-6xl lg:text-7xl lg:mt-16 xl:text-[5.25rem] leading-tight text-center">
-                    <RotatingText
-                      texts={["Somma Club", "Comunidade", "Energia", "Corrida"]}
-                      mainClassName="text-orange-500 font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4 justify-center inline-flex"
-                      staggerFrom="last"
-                      initial={{ y: "100%" }}
-                      animate={{ y: 0 }}
-                      exit={{ y: "-120%" }}
-                      staggerDuration={0.025}
-                      splitLevelClassName="overflow-hidden pb-1"
-                      transition={{ type: "spring", damping: 30, stiffness: 400 }}
-                      rotationInterval={2000}
-                    />
-                  </h1>
-
-                </AnimatedGroup>
-
-                <AnimatedGroup
-                  variants={{
-                    container: {
-                      visible: {
-                        transition: {
-                          staggerChildren: 0.05,
-                          delayChildren: 0.75,
-                        },
-                      },
-                    },
-                    ...transitionVariants,
-                  }}
-                  className="mt-12 flex flex-col items-center justify-center gap-2 md:flex-row"
-                >
-                  <div key={1} className="bg-orange-500/10 rounded-[14px] border border-orange-200 p-0.5">
-                    <Button size="lg" className="rounded-xl px-5 text-base bg-orange-500 hover:bg-orange-600">
-                      <span className="text-nowrap">Inscreva-se grátis</span>
-                    </Button>
-                  </div>
-                </AnimatedGroup>
+            <div className="mx-auto max-w-7xl px-6 flex items-center justify-center min-h-screen">
+              <div className="text-center">
+                <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-tight text-center">
+                  <RotatingText
+                    texts={["Somma Club", "Comunidade", "Energia", "Corrida"]}
+                    mainClassName="text-orange-500 font-semibold overflow-hidden rounded-lg px-2 sm:px-3 md:px-4 justify-center inline-flex"
+                    staggerFrom="last"
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    exit={{ y: "-120%" }}
+                    staggerDuration={0.025}
+                    splitLevelClassName="overflow-hidden pb-1"
+                    transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                    rotationInterval={2000}
+                  />
+                </h1>
               </div>
             </div>
-
-            <AnimatedGroup
-              variants={{
-                container: {
-                  visible: {
-                    transition: {
-                      staggerChildren: 0.05,
-                      delayChildren: 0.75,
-                    },
-                  },
-                },
-                ...transitionVariants,
-              }}
-            >
-              <div className="relative -mr-56 mt-8 overflow-hidden px-2 sm:mr-0 sm:mt-12 md:mt-20">
-                <div className="inset-shadow-2xs ring-background dark:inset-shadow-white/20 bg-background relative mx-auto max-w-6xl overflow-hidden rounded-2xl border border-orange-200 p-4 shadow-lg shadow-orange-500/15 ring-1">
-                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 aspect-15/8 relative rounded-2xl border border-orange-200 overflow-hidden">
-                    <GridMotion items={gridItems} gradientColor="rgba(249, 115, 22, 0.1)" className="h-full w-full" />
-                  </div>
-                </div>
-              </div>
-
-
-            </AnimatedGroup>
           </div>
         </section>
 
