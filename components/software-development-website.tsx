@@ -207,9 +207,11 @@ const HeroHeader = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <Button variant="outline" size="sm" className={cn(isScrolled && "lg:hidden")}>
-                  <span>Login</span>
-                </Button>
+                <a href="https://admin.sommaclub.com.br/login" target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" size="sm" className={cn(isScrolled && "lg:hidden")}>
+                    <span>Login</span>
+                  </Button>
+                </a>
                 <Button
                   size="sm"
                   className={cn(
