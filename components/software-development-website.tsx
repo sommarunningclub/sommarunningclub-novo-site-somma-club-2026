@@ -978,47 +978,13 @@ export default function SoftwareDevelopmentWebsite() {
       <footer className="bg-background border-t border-orange-200">
         <div className="mx-auto max-w-7xl py-16 px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {/* Mais do Somma */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-foreground">Mais do Somma</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Parcerias Somma
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Benefícios do Membro
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Empresa */}
-            <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-foreground">Empresa</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Somma Eventos
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Somma Mídia
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Assessoria Esportiva
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            {/* Contato */}
-            <div className="space-y-4">
+            {/* Logo and Social - PRIMEIRO */}
+            <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+              <Logo />
+              <p className="text-sm text-muted-foreground max-w-xs">
+                Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
+              </p>
+              <div className="flex space-x-4">
               <h3 className="text-sm font-semibold text-foreground">Contato</h3>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li>
@@ -1106,8 +1072,47 @@ export default function SoftwareDevelopmentWebsite() {
               </ul>
             </div>
 
-            {/* Logo and Social */}
-            <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+            {/* Mais do Somma - DUPLICADO, REMOVER */}
+            <div className="space-y-4 hidden">
+              <h3 className="text-sm font-semibold text-foreground">Mais do Somma</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Parcerias Somma
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Benefícios do Membro
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Empresa - DUPLICADO, REMOVER */}
+            <div className="space-y-4 hidden">
+              <h3 className="text-sm font-semibold text-foreground">Empresa</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Somma Eventos
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Somma Mídia
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Assessoria Esportiva
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Logo and Social - DUPLICADO, REMOVER */}
+            <div className="space-y-4 sm:col-span-2 lg:col-span-1 hidden">
               <Logo />
               <p className="text-sm text-muted-foreground max-w-xs">
                 Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
