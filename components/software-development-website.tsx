@@ -301,8 +301,18 @@ export default function SoftwareDevelopmentWebsite() {
               aria-hidden
               className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--background)_75%)]"
             />
-            <div className="mx-auto max-w-7xl px-6 flex items-center justify-center min-h-screen">
-              <div className="text-center">
+            <div 
+              className="mx-auto max-w-7xl px-6 flex items-center justify-center min-h-screen relative"
+              style={{
+                backgroundImage: "url(https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_0888_JPG.jpg?v=1772326001)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundAttachment: "fixed"
+              }}
+            >
+              {/* Overlay escuro para melhor legibilidade */}
+              <div className="absolute inset-0 bg-black/40 -z-10"></div>
+              <div className="text-center relative z-10">
                 <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-tight text-center">
                   <RotatingText
                     texts={["Somma Club", "Comunidade", "Energia", "Corrida"]}
