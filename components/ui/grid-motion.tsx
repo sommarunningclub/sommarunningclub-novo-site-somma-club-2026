@@ -1,16 +1,16 @@
 "use client"
 
-import { useEffect, useRef, type ReactNode } from "react"
-import { gsap } from "gsap"
+import { useEffect, useState } from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface GridMotionProps {
   /**
-   * Array of items to display in the grid
+   * Array of items to display in the carousel
    */
-  items?: (string | ReactNode)[]
+  items?: (string | React.ReactNode)[]
   /**
-   * Color for the radial gradient background
+   * Color for the gradient background (unused in carousel)
    */
   gradientColor?: string
   /**
@@ -19,94 +19,112 @@ interface GridMotionProps {
   className?: string
 }
 
-export function GridMotion({ items = [], gradientColor = "black", className }: GridMotionProps) {
-  const gridRef = useRef<HTMLDivElement>(null)
-  const rowRefs = useRef<(HTMLDivElement | null)[]>([])
-  const mouseXRef = useRef(typeof window !== "undefined" ? window.innerWidth / 2 : 0)
+export function GridMotion({ items = [], className }: GridMotionProps) {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isAutoPlay, setIsAutoPlay] = useState(true)
 
-  const totalItems = 28
-  const defaultItems = Array.from({ length: totalItems }, (_, index) => `Item ${index + 1}`)
-  const combinedItems = items.length > 0 ? items.slice(0, totalItems) : defaultItems
+  // Create slides array with image URLs
+  const slides = items.length > 0 
+    ? items.map((item, idx) => ({
+        id: idx,
+        src: typeof item === "string" ? item : `/placeholder.svg?height=500&width=1000`,
+      }))
+    : Array.from({ length: 5 }, (_, idx) => ({
+        id: idx,
+        src: `/placeholder.svg?height=500&width=1000`,
+      }))
 
+  // Auto rotate slides
   useEffect(() => {
-    if (typeof window === "undefined") return
+    if (!isAutoPlay || slides.length === 0) return
 
-    gsap.ticker.lagSmoothing(0)
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length)
+    }, 5000)
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseXRef.current = e.clientX
-    }
+    return () => clearInterval(interval)
+  }, [isAutoPlay, slides.length])
 
-    const updateMotion = () => {
-      const maxMoveAmount = 300
-      const baseDuration = 0.8
-      const inertiaFactors = [0.6, 0.4, 0.3, 0.2]
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index % slides.length)
+    setIsAutoPlay(false)
+    setTimeout(() => setIsAutoPlay(true), 8000)
+  }
 
-      rowRefs.current.forEach((row, index) => {
-        if (row) {
-          const direction = index % 2 === 0 ? 1 : -1
-          const moveAmount = ((mouseXRef.current / window.innerWidth) * maxMoveAmount - maxMoveAmount / 2) * direction
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length)
+    setIsAutoPlay(false)
+    setTimeout(() => setIsAutoPlay(true), 8000)
+  }
 
-          gsap.to(row, {
-            x: moveAmount,
-            duration: baseDuration + inertiaFactors[index % inertiaFactors.length],
-            ease: "power3.out",
-            overwrite: "auto",
-          })
-        }
-      })
-    }
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length)
+    setIsAutoPlay(false)
+    setTimeout(() => setIsAutoPlay(true), 8000)
+  }
 
-    const removeAnimationLoop = gsap.ticker.add(updateMotion)
-    window.addEventListener("mousemove", handleMouseMove)
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove)
-      removeAnimationLoop()
-    }
-  }, [])
+  if (slides.length === 0) {
+    return <div className={cn("w-full h-full bg-muted", className)} />
+  }
 
   return (
-    <div className={cn("h-full w-full overflow-hidden", className)} ref={gridRef}>
-      <section
-        className="relative flex h-screen w-full items-center justify-center overflow-hidden"
-        style={{
-          background: `radial-gradient(circle, ${gradientColor} 0%, transparent 100%)`,
-        }}
+    <div className={cn("relative w-full h-full group bg-background overflow-hidden rounded-xl", className)}>
+      {/* Slides container */}
+      <div className="relative w-full h-full">
+        {slides.map((slide, index) => (
+          <div
+            key={slide.id}
+            className={cn(
+              "absolute inset-0 transition-opacity duration-1000 ease-in-out",
+              index === currentSlide ? "opacity-100" : "opacity-0"
+            )}
+          >
+            <img
+              src={slide.src}
+              alt={`Banner slide ${index + 1}`}
+              className="w-full h-full object-cover"
+            />
+            {/* Dark overlay */}
+            <div className="absolute inset-0 bg-black/10" />
+          </div>
+        ))}
+      </div>
+
+      {/* Previous button */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/75 text-white p-2.5 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100"
+        aria-label="Previous slide"
       >
-        <div className="relative z-2 flex-none grid h-[150vh] w-[150vw] gap-4 grid-rows-[repeat(4,1fr)] grid-cols-[100%] -rotate-15 origin-center">
-          {[...Array(4)].map((_, rowIndex) => (
-            <div
-              key={rowIndex}
-              className="grid gap-4 grid-cols-[repeat(7,1fr)] will-change-transform will-change-filter"
-              ref={(el) => (rowRefs.current[rowIndex] = el)}
-            >
-              {[...Array(7)].map((_, itemIndex) => {
-                const content = combinedItems[rowIndex * 7 + itemIndex]
-                return (
-                  <div key={itemIndex} className="relative">
-                    <div className="relative h-full w-full overflow-hidden rounded-lg bg-muted flex items-center justify-center text-foreground text-xl">
-                      {typeof content === "string" &&
-                      (content.startsWith("http") || content.startsWith("/placeholder")) ? (
-                        <img
-                          src={content || "/placeholder.svg"}
-                          alt="Service representation"
-                          className="absolute inset-0 w-full h-full object-cover rounded-lg"
-                        />
-                      ) : (
-                        <div className="p-4 text-center z-1">{content}</div>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          ))}
-        </div>
-        <div className="relative pointer-events-none h-full w-full inset-0">
-          <div className="rounded-none" />
-        </div>
-      </section>
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+
+      {/* Next button */}
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/50 hover:bg-black/75 text-white p-2.5 rounded-full transition-all duration-200 opacity-0 group-hover:opacity-100"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
+
+      {/* Dots indicator */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {slides.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={cn(
+              "transition-all duration-300 rounded-full",
+              index === currentSlide
+                ? "bg-orange-500 w-8 h-2.5"
+                : "bg-white/50 hover:bg-white/75 w-2.5 h-2.5"
+            )}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   )
 }
+
