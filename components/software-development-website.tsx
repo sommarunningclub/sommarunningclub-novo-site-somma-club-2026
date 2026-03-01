@@ -658,7 +658,81 @@ export default function SoftwareDevelopmentWebsite() {
           </div>
         </section>
 
-        {/* Seção 7 - Call to Action Final */}
+        {/* Seção 7 - Conheça o Somma Club */}
+        <section className="py-16 md:py-32 bg-muted/50">
+          <div className="mx-auto max-w-5xl px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
+                Conheça o <span className="text-orange-500">Somma Club</span>
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                O maior clube de corrida democrático do Distrito Federal
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {/* Card 1 - Membros */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 text-center hover:shadow-lg transition-shadow">
+                <div className="text-4xl md:text-5xl font-bold text-orange-500 mb-3">
+                  4.300+
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Membros Ativos</h3>
+                <p className="text-sm text-muted-foreground">
+                  Corredores apaixonados formando a maior comunidade de corrida do DF
+                </p>
+              </div>
+
+              {/* Card 2 - Gratuito */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 text-center hover:shadow-lg transition-shadow">
+                <div className="text-4xl md:text-5xl font-bold text-orange-500 mb-3">
+                  100%
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Gratuito</h3>
+                <p className="text-sm text-muted-foreground">
+                  Todos os encontros e eventos são completamente abertos e gratuitos
+                </p>
+              </div>
+
+              {/* Card 3 - Democrático */}
+              <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 text-center hover:shadow-lg transition-shadow">
+                <div className="text-4xl md:text-5xl font-bold text-orange-500 mb-3">
+                  100%
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Democrático</h3>
+                <p className="text-sm text-muted-foreground">
+                  Decisões tomadas coletivamente pela comunidade, todos têm voz
+                </p>
+              </div>
+            </div>
+
+            {/* Descrição */}
+            <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 md:p-12 mb-12">
+              <h3 className="text-2xl font-semibold mb-6">O que é o Somma Club?</h3>
+              <div className="space-y-4 text-muted-foreground leading-relaxed">
+                <p>
+                  O Somma Running Club é mais do que um grupo de corrida. Somos um movimento que mistura esporte, comunidade, estilo de vida e pertencimento. Fundado em Brasília, o Somma conecta corredores de todos os níveis em torno de um objetivo comum: transformar a corrida em uma experiência coletiva.
+                </p>
+                <p>
+                  Nossa estrutura funciona em dois níveis: o <span className="font-semibold text-foreground">Running Club</span>, que representa a comunidade ampla com encontros, treinos coletivos e eventos; e a <span className="font-semibold text-foreground">Assessoria Somma</span>, que oferece acompanhamento técnico para quem deseja evoluir profissionalmente.
+                </p>
+                <p>
+                  Nos encontros do Somma, você encontra mais do que corrida. Encontra amizades, networking, experiências de bem-estar, conteúdo educacional e uma comunidade que acredita que a corrida é um catalisador para conexões reais e transformação pessoal.
+                </p>
+              </div>
+            </div>
+
+            {/* CTA */}
+            <div className="text-center">
+              <a href="#inscricao">
+                <Button size="lg" className="bg-orange-500 hover:bg-orange-600 text-white px-8">
+                  Faça Parte do Somma
+                </Button>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção 8 - Call to Action Final */}
         <section className="py-16 md:py-32 bg-background">
           <div className="mx-auto max-w-5xl px-6 text-center">
             <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-6">
