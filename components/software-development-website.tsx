@@ -978,6 +978,45 @@ export default function SoftwareDevelopmentWebsite() {
       <footer className="bg-background border-t border-orange-200">
         <div className="mx-auto max-w-7xl py-16 px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+            {/* Mais do Somma */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-foreground">Mais do Somma</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Parcerias Somma
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Benefícios do Membro
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            {/* Empresa */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-foreground">Empresa</h3>
+              <ul className="space-y-2 text-sm">
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Somma Eventos
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Somma Mídia
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Assessoria Esportiva
+                  </a>
+                </li>
+              </ul>
+            </div>
+
             {/* Contato */}
             <div className="space-y-4">
               <h3 className="text-sm font-semibold text-foreground">Contato</h3>
