@@ -566,7 +566,7 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-12">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-                O que é obrigatório?
+                O que é obrigat��rio?
               </h2>
             </div>
 
@@ -841,7 +841,14 @@ export default function SoftwareDevelopmentWebsite() {
               </div>
 
               {/* Botão de Submit */}
-              <Button size="lg" className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold">
+              <Button 
+                size="lg" 
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold"
+                onClick={(e) => {
+                  e.preventDefault()
+                  window.location.href = '/obrigado'
+                }}
+              >
                 Inscrever-se agora
               </Button>
 
