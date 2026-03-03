@@ -874,6 +874,8 @@ export default function SoftwareDevelopmentWebsite() {
                     bairro: formData.get('bairro'),
                   }
 
+                  console.log('[v0] Dados sendo enviados:', data)
+
                   try {
                     const response = await fetch('/api/cadastro', {
                       method: 'POST',
@@ -884,13 +886,15 @@ export default function SoftwareDevelopmentWebsite() {
                     })
 
                     if (response.ok) {
+                      console.log('[v0] Cadastro realizado com sucesso!')
                       window.location.href = '/obrigado'
                     } else {
                       const error = await response.json()
+                      console.error('[v0] Erro na resposta:', error)
                       alert('Erro ao registrar: ' + (error.error || 'Tente novamente'))
                     }
                   } catch (error) {
-                    console.error('Erro:', error)
+                    console.error('[v0] Erro na requisição:', error)
                     alert('Erro ao enviar dados. Tente novamente.')
                   }
                 }}

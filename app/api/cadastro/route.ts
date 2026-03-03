@@ -16,8 +16,13 @@ export async function POST(request: NextRequest) {
 
     const { nome, email, whatsapp, data_nascimento, sexo, cpf, bairro, cep } = body
 
-    // Validação básica
-    if (!nome || !email || !whatsapp) {
+    // Validação básica com trim
+    const nomeTrimmed = nome?.trim()
+    const emailTrimmed = email?.trim()
+    const whatsappTrimmed = whatsapp?.trim()
+
+    if (!nomeTrimmed || !emailTrimmed || !whatsappTrimmed) {
+      console.error('[v0] Validação falhou:', { nome: nomeTrimmed, email: emailTrimmed, whatsapp: whatsappTrimmed })
       return NextResponse.json(
         { error: 'Nome, email e WhatsApp são obrigatórios' },
         { status: 400 }
@@ -29,11 +34,11 @@ export async function POST(request: NextRequest) {
       .from('cadastro_site')
       .insert([
         {
-          nome_completo: nome,
-          email,
-          whatsapp,
-          data_nascimento,
-          sexo,
+          nome_completo: nomeTrimmed,
+          email: emailTrimmed,
+          whatsapp: whatsappTrimmed,
+          data_nascimento: data_nascimento || null,
+          sexo: sexo || null,
           cpf: cpf || null,
           bairro: bairro || null,
           cep: cep || null,
@@ -42,9 +47,9 @@ export async function POST(request: NextRequest) {
       .select()
 
     if (error) {
-      console.error('Supabase error:', error)
+      console.error('[v0] Supabase error:', error)
       return NextResponse.json(
-        { error: 'Erro ao registrar cadastro' },
+        { error: 'Erro ao registrar cadastro: ' + error.message },
         { status: 500 }
       )
     }
@@ -54,9 +59,9 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     )
   } catch (error) {
-    console.error('API error:', error)
+    console.error('[v0] API error:', error)
     return NextResponse.json(
-      { error: 'Erro interno do servidor' },
+      { error: 'Erro interno do servidor: ' + (error instanceof Error ? error.message : 'Unknown error') },
       { status: 500 }
     )
   }
