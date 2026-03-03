@@ -42,6 +42,9 @@ const RotatingText = forwardRef((props: any, ref) => {
   };
 
   const elements = useMemo(() => {
+    if (!texts || texts.length === 0) {
+      return [];
+    }
     const currentText = texts[currentTextIndex];
     if (splitBy === 'characters') {
       const words = currentText.split(' ');
@@ -96,27 +99,30 @@ const RotatingText = forwardRef((props: any, ref) => {
   );
 
   const next = useCallback(() => {
+    if (!texts || texts.length === 0) return;
     const nextIndex = currentTextIndex === texts.length - 1 ? (loop ? 0 : currentTextIndex) : currentTextIndex + 1;
     if (nextIndex !== currentTextIndex) {
       handleIndexChange(nextIndex);
     }
-  }, [currentTextIndex, texts.length, loop, handleIndexChange]);
+  }, [currentTextIndex, texts, loop, handleIndexChange]);
 
   const previous = useCallback(() => {
+    if (!texts || texts.length === 0) return;
     const prevIndex = currentTextIndex === 0 ? (loop ? texts.length - 1 : currentTextIndex) : currentTextIndex - 1;
     if (prevIndex !== currentTextIndex) {
       handleIndexChange(prevIndex);
     }
-  }, [currentTextIndex, texts.length, loop, handleIndexChange]);
+  }, [currentTextIndex, texts, loop, handleIndexChange]);
 
   const jumpTo = useCallback(
     (index: number) => {
+      if (!texts || texts.length === 0) return;
       const validIndex = Math.max(0, Math.min(index, texts.length - 1));
       if (validIndex !== currentTextIndex) {
         handleIndexChange(validIndex);
       }
     },
-    [texts.length, currentTextIndex, handleIndexChange]
+    [texts, currentTextIndex, handleIndexChange]
   );
 
   const reset = useCallback(() => {
@@ -144,8 +150,9 @@ const RotatingText = forwardRef((props: any, ref) => {
 
   return (
     <motion.span className={cn('text-rotate', mainClassName)} {...rest} layout transition={transition as any}>
-      <span className="text-rotate-sr-only">{texts[currentTextIndex]}</span>
+      <span className="text-rotate-sr-only">{texts && texts.length > 0 ? texts[currentTextIndex] : ''}</span>
       <AnimatePresence mode={animatePresenceMode as any} initial={animatePresenceInitial}>
+        {texts && texts.length > 0 && (
         <motion.span
           key={currentTextIndex}
           className={cn(splitBy === 'lines' ? 'text-rotate-lines' : 'text-rotate')}
@@ -179,6 +186,7 @@ const RotatingText = forwardRef((props: any, ref) => {
             );
           })}
         </motion.span>
+        )}
       </AnimatePresence>
     </motion.span>
   );
