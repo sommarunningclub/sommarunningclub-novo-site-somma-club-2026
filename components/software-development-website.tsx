@@ -721,6 +721,7 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <input
                       id="email"
+                      name="email"
                       type="email"
                       placeholder="seu@email.com"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -735,6 +736,7 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <input
                       id="cpf"
+                      name="cpf"
                       type="text"
                       placeholder="000.000.000-00"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -751,6 +753,7 @@ export default function SoftwareDevelopmentWebsite() {
                       </label>
                       <input
                         id="data"
+                        name="data"
                         type="text"
                         placeholder="DD/MM/AAAA"
                         className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -765,6 +768,7 @@ export default function SoftwareDevelopmentWebsite() {
                       </label>
                       <input
                         id="cep"
+                        name="cep"
                         type="text"
                         placeholder="00000-000"
                         className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -780,6 +784,7 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <input
                       id="whatsapp"
+                      name="whatsapp"
                       type="tel"
                       placeholder="(61) 99999-9999"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -794,6 +799,7 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <select
                       id="sexo"
+                      name="sexo"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
                       required
                     >
@@ -832,10 +838,43 @@ export default function SoftwareDevelopmentWebsite() {
               {/* Botão de Submit */}
               <Button 
                 size="lg" 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold"
-                onClick={(e) => {
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={async (e) => {
                   e.preventDefault()
-                  window.location.href = '/obrigado'
+                  const form = (e.currentTarget as HTMLElement).closest('form')
+                  if (!form) return
+
+                  const formData = new FormData(form)
+                  const data = {
+                    nome: formData.get('nome'),
+                    email: formData.get('email'),
+                    cpf: formData.get('cpf'),
+                    data_nascimento: formData.get('data'),
+                    cep: formData.get('cep'),
+                    whatsapp: formData.get('whatsapp'),
+                    sexo: formData.get('sexo'),
+                    bairro: formData.get('bairro'),
+                  }
+
+                  try {
+                    const response = await fetch('/api/cadastro', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(data),
+                    })
+
+                    if (response.ok) {
+                      window.location.href = '/obrigado'
+                    } else {
+                      const error = await response.json()
+                      alert('Erro ao registrar: ' + (error.error || 'Tente novamente'))
+                    }
+                  } catch (error) {
+                    console.error('Erro:', error)
+                    alert('Erro ao enviar dados. Tente novamente.')
+                  }
                 }}
               >
                 Inscrever-se agora
