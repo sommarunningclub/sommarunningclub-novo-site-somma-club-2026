@@ -129,7 +129,7 @@ export default function SoftwareDevelopmentWebsite() {
             <motion.h1 variants={itemVariants} className="text-5xl md:text-6xl lg:text-7xl font-bold text-balance">
               Bem-vindo à{" "}
               <span className="text-orange-500">
-                <RotatingText words={["SOMMA", "Comunidade", "Família"]} />
+                <RotatingText texts={["SOMMA", "Comunidade", "Família"]} />
               </span>
             </motion.h1>
 
