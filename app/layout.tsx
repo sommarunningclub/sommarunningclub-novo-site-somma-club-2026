@@ -1,18 +1,10 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
-
-export const viewport: Viewport = {
-  width: 'device-width',
-  initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  themeColor: '#fb4c00',
-}
 
 export const metadata: Metadata = {
   title: 'SOMMA Running Club | Maior Clube de Corrida Democrático de Brasília',
@@ -60,6 +52,12 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-icon.png',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 5,
+    userScalable: true,
+  },
 }
 
 export default function RootLayout({
@@ -70,6 +68,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
+        <meta name="theme-color" content="#fb4c00" />
         <meta name="mobile-web-app-capable" content="yes" />
         <link rel="canonical" href="https://sommaclub.com.br" />
       </head>
