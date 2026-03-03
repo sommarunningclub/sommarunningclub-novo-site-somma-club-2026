@@ -252,7 +252,101 @@ export default function SoftwareDevelopmentWebsite() {
             </p>
           </div>
 
-          <JoinClubForm />
+          <form className="space-y-6 mb-8" onSubmit={(e) => { e.preventDefault(); window.location.href = '/obrigado'; }}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Nome Completo */}
+              <div>
+                <label htmlFor="nome" className="block text-sm font-medium mb-2">
+                  Nome Completo <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="nome"
+                  type="text"
+                  placeholder="João Silva"
+                  className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              </div>
+
+              {/* Email */}
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium mb-2">
+                  Email <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="joao@email.com"
+                  className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              </div>
+
+              {/* WhatsApp */}
+              <div>
+                <label htmlFor="whatsapp" className="block text-sm font-medium mb-2">
+                  WhatsApp <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="whatsapp"
+                  type="tel"
+                  placeholder="(61) 99999-9999"
+                  className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              </div>
+
+              {/* CEP */}
+              <div>
+                <label htmlFor="cep" className="block text-sm font-medium mb-2">
+                  CEP <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="cep"
+                  type="text"
+                  placeholder="70000-000"
+                  className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              </div>
+
+              {/* Data de Nascimento */}
+              <div>
+                <label htmlFor="data-nascimento" className="block text-sm font-medium mb-2">
+                  Data de Nascimento <span className="text-red-500">*</span>
+                </label>
+                <input
+                  id="data-nascimento"
+                  type="date"
+                  className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              </div>
+
+              {/* Sexo */}
+              <div>
+                <label htmlFor="sexo" className="block text-sm font-medium mb-2">
+                  Sexo <span className="text-red-500">*</span>
+                </label>
+                <select
+                  id="sexo"
+                  className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                >
+                  <option value="">Selecione uma opção</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="feminino">Feminino</option>
+                  <option value="outro">Outro</option>
+                  <option value="prefiro-nao-dizer">Prefiro não dizer</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Botão de Submit */}
+            <Button size="lg" className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold">
+              Inscrever-se agora
+            </Button>
+          </form>
         </div>
       </section>
 
