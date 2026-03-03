@@ -169,10 +169,11 @@ export function JoinClubForm() {
               </label>
               <input
                 id="data"
-                type="date"
+                type="text"
                 name="data"
                 value={formData.data}
                 onChange={handleInputChange}
+                placeholder="DD/MM/YYYY"
                 className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
