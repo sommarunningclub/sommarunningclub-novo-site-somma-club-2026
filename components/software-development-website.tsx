@@ -6,7 +6,6 @@ import { motion, type Variants } from "framer-motion"
 import { GridMotion } from "./ui/grid-motion"
 import RotatingText from "./ui/RotatingText"
 import { Button } from "./ui/button"
-import { JoinClubForm } from "./join-club-form"
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ")

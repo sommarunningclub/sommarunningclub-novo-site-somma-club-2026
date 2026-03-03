@@ -46,6 +46,9 @@ const RotatingText = forwardRef((props: any, ref) => {
       return [];
     }
     const currentText = texts[currentTextIndex];
+    if (!currentText) {
+      return [];
+    }
     if (splitBy === 'characters') {
       const words = currentText.split(' ');
       return words.map((word: string, i: number) => ({
