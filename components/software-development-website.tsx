@@ -554,7 +554,7 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-12">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-                O que é obrigat��rio?
+                O que é obrigatório?
               </h2>
             </div>
 
@@ -583,7 +583,7 @@ export default function SoftwareDevelopmentWebsite() {
                 <div>
                   <h3 className="font-semibold mb-1">Uniforme bem-vindo, não obrigatório</h3>
                   <p className="text-sm text-muted-foreground">
-                    N��o é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
+                    Não é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
                   </p>
                 </div>
               </div>
