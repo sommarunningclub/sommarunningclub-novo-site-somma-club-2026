@@ -757,6 +757,24 @@ export default function SoftwareDevelopmentWebsite() {
                         type="text"
                         placeholder="DD/MM/AAAA"
                         className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        maxLength={10}
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/\D/g, '');
+                          if (value.length > 8) value = value.slice(0, 8);
+                          
+                          let formattedValue = '';
+                          if (value.length > 0) {
+                            formattedValue = value.slice(0, 2);
+                          }
+                          if (value.length > 2) {
+                            formattedValue += '/' + value.slice(2, 4);
+                          }
+                          if (value.length > 4) {
+                            formattedValue += '/' + value.slice(4, 8);
+                          }
+                          
+                          e.target.value = formattedValue;
+                        }}
                         required
                       />
                     </div>
