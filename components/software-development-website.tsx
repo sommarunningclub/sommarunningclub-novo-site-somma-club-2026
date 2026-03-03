@@ -554,7 +554,7 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-12">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-                O que é obrigatório?
+                O que é obrigat��rio?
               </h2>
             </div>
 
@@ -583,7 +583,7 @@ export default function SoftwareDevelopmentWebsite() {
                 <div>
                   <h3 className="font-semibold mb-1">Uniforme bem-vindo, não obrigatório</h3>
                   <p className="text-sm text-muted-foreground">
-                    Não é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
+                    N��o é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
                   </p>
                 </div>
               </div>
@@ -721,7 +721,6 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <input
                       id="email"
-                      name="email"
                       type="email"
                       placeholder="seu@email.com"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -736,7 +735,6 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <input
                       id="cpf"
-                      name="cpf"
                       type="text"
                       placeholder="000.000.000-00"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -753,28 +751,9 @@ export default function SoftwareDevelopmentWebsite() {
                       </label>
                       <input
                         id="data"
-                        name="data"
                         type="text"
                         placeholder="DD/MM/AAAA"
                         className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        maxLength={10}
-                        onChange={(e) => {
-                          let value = e.target.value.replace(/\D/g, '');
-                          if (value.length > 8) value = value.slice(0, 8);
-                          
-                          let formattedValue = '';
-                          if (value.length > 0) {
-                            formattedValue = value.slice(0, 2);
-                          }
-                          if (value.length > 2) {
-                            formattedValue += '/' + value.slice(2, 4);
-                          }
-                          if (value.length > 4) {
-                            formattedValue += '/' + value.slice(4, 8);
-                          }
-                          
-                          e.target.value = formattedValue;
-                        }}
                         required
                       />
                     </div>
@@ -786,7 +765,6 @@ export default function SoftwareDevelopmentWebsite() {
                       </label>
                       <input
                         id="cep"
-                        name="cep"
                         type="text"
                         placeholder="00000-000"
                         className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -802,7 +780,6 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <input
                       id="whatsapp"
-                      name="whatsapp"
                       type="tel"
                       placeholder="(61) 99999-9999"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -817,7 +794,6 @@ export default function SoftwareDevelopmentWebsite() {
                     </label>
                     <select
                       id="sexo"
-                      name="sexo"
                       className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
                       required
                     >
@@ -856,47 +832,10 @@ export default function SoftwareDevelopmentWebsite() {
               {/* Botão de Submit */}
               <Button 
                 size="lg" 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                onClick={async (e) => {
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold"
+                onClick={(e) => {
                   e.preventDefault()
-                  const form = (e.currentTarget as HTMLElement).closest('form')
-                  if (!form) return
-
-                  const formData = new FormData(form)
-                  const data = {
-                    nome: formData.get('nome'),
-                    email: formData.get('email'),
-                    cpf: formData.get('cpf'),
-                    data_nascimento: formData.get('data'),
-                    cep: formData.get('cep'),
-                    whatsapp: formData.get('whatsapp'),
-                    sexo: formData.get('sexo'),
-                    bairro: formData.get('bairro'),
-                  }
-
-                  console.log('[v0] Dados sendo enviados:', data)
-
-                  try {
-                    const response = await fetch('/api/cadastro', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(data),
-                    })
-
-                    if (response.ok) {
-                      console.log('[v0] Cadastro realizado com sucesso!')
-                      window.location.href = '/obrigado'
-                    } else {
-                      const error = await response.json()
-                      console.error('[v0] Erro na resposta:', error)
-                      alert('Erro ao registrar: ' + (error.error || 'Tente novamente'))
-                    }
-                  } catch (error) {
-                    console.error('[v0] Erro na requisição:', error)
-                    alert('Erro ao enviar dados. Tente novamente.')
-                  }
+                  window.location.href = '/obrigado'
                 }}
               >
                 Inscrever-se agora
