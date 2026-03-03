@@ -2,34 +2,44 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
-if (!supabaseUrl || !supabaseAnonKey) {
+if (!supabaseUrl || !supabaseServiceKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    const { nome, email, whatsapp, data_nascimento, sexo, cpf, bairro, cep } = body
+    console.log('[v0] Corpo completo recebido:', body)
 
-    // Validação básica com trim
-    const nomeTrimmed = nome?.trim()
-    const emailTrimmed = email?.trim()
-    const whatsappTrimmed = whatsapp?.trim()
+    const { nome, email, whatsapp, data_nascimento, sexo, cpf, cep } = body
+
+    // Validação com conversão para string e trim
+    const nomeTrimmed = String(nome || '').trim()
+    const emailTrimmed = String(email || '').trim()
+    const whatsappTrimmed = String(whatsapp || '').trim()
+
+    console.log('[v0] Valores após validação:', {
+      nomeTrimmed: `"${nomeTrimmed}" (comprimento: ${nomeTrimmed.length})`,
+      emailTrimmed: `"${emailTrimmed}" (comprimento: ${emailTrimmed.length})`,
+      whatsappTrimmed: `"${whatsappTrimmed}" (comprimento: ${whatsappTrimmed.length})`
+    })
 
     if (!nomeTrimmed || !emailTrimmed || !whatsappTrimmed) {
-      console.error('[v0] Validação falhou:', { nome: nomeTrimmed, email: emailTrimmed, whatsapp: whatsappTrimmed })
+      console.error('[v0] Validação falhou - campo obrigatório vazio')
       return NextResponse.json(
         { error: 'Nome, email e WhatsApp são obrigatórios' },
         { status: 400 }
       )
     }
 
-    // Inserir na tabela cadastro_site
+    console.log('[v0] Validação passou, inserindo no Supabase...')
+
+    // Inserir na tabela cadastro_site (sem bairro - já foi deletado)
     const { data, error } = await supabase
       .from('cadastro_site')
       .insert([
@@ -40,7 +50,6 @@ export async function POST(request: NextRequest) {
           data_nascimento: data_nascimento || null,
           sexo: sexo || null,
           cpf: cpf || null,
-          bairro: bairro || null,
           cep: cep || null,
         },
       ])
@@ -54,6 +63,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('[v0] Cadastro realizado com sucesso:', data)
     return NextResponse.json(
       { success: true, message: 'Cadastro realizado com sucesso', data },
       { status: 201 }
