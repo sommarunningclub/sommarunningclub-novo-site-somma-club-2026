@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { Heart, MessageCircle, Calendar } from 'lucide-react'
+import { Heart, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ObrigadoPage() {
@@ -59,40 +59,6 @@ export default function ObrigadoPage() {
           >
             <MessageCircle className="w-5 h-5" />
             Entrar no Grupo WhatsApp
-          </Button>
-        </a>
-
-        {/* Botão Adicionar à Agenda */}
-        <a 
-          href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Somma+Club+-+Corrida&details=Corrida+com+muita+animação+e+café+da+manhã+pós-corrida.+Conheça+mais+em+sommaclub.com.br&location=Parque+da+Cidade,+Estacionamento+10,+Brasília+-+DF&dates=20260307T070000Z/20260307T093000Z&ctz=America/Sao_Paulo" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-full"
-        >
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="w-full gap-2 mb-3 border-orange-200 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-950/20"
-          >
-            <Calendar className="w-5 h-5" />
-            Adicionar à Agenda
-          </Button>
-        </a>
-
-        {/* Botão Adicionar à Agenda */}
-        <a 
-          href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Somma+Club+-+Corrida&details=Corrida+com+muita+animação+e+café+da+manhã+pós-corrida.+Conheça+mais+em+sommaclub.com.br&location=Parque+da+Cidade,+Estacionamento+10,+Brasília+-+DF&dates=20260307T070000Z/20260307T093000Z&ctz=America/Sao_Paulo" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-full"
-        >
-          <Button 
-            size="lg" 
-            variant="outline"
-            className="w-full gap-2 mb-3 border-orange-200 text-orange-600 hover:bg-orange-50 dark:border-orange-500/30 dark:text-orange-400 dark:hover:bg-orange-950/20"
-          >
-            <Calendar className="w-5 h-5" />
-            Adicionar à Agenda
           </Button>
         </a>
 
