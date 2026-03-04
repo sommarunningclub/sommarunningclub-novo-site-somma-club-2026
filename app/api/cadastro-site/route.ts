@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    // Inserir dados na tabela cadastro_site (sem created_at pois não existe)
+    // Inserir dados na tabela cadastro_site com data de cadastro
     const { data, error } = await supabase
       .from('cadastro_site')
       .insert([
@@ -39,6 +39,7 @@ export async function POST(request: NextRequest) {
           data_nascimento: data_nascimento || null,
           sexo: sexo || null,
           cep: null,
+          data_de_cadastro: new Date().toISOString(),
         },
       ])
       .select()
