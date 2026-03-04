@@ -17,6 +17,7 @@ const TOTAL_STEPS = 3
 
 export default function CheckInPage() {
   const router = useRouter()
+  const [step, setStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const [formData, setFormData] = useState<FormData>({
