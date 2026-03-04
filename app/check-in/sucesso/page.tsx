@@ -58,6 +58,7 @@ export default function CheckInSucessoPage() {
               <div>
                 <p className="text-zinc-500 text-xs">Local</p>
                 <p className="text-white text-sm font-medium">Parque da Cidade — Brasília, DF</p>
+                <p className="text-zinc-400 text-xs mt-1">Estacionamento 10, sempre aos sábados, às 7h da manhã</p>
               </div>
             </div>
           </div>
@@ -69,6 +70,16 @@ export default function CheckInSucessoPage() {
               Salve o seu CPF cadastrado ou tire um print desta tela. Ele será usado para identificar sua presença no evento.
             </p>
           </div>
+
+          {/* Link de localização */}
+          <a 
+            href="https://maps.app.goo.gl/uoXH8fHjhdTXMWAj7" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block w-full border border-orange-500 hover:bg-orange-500/10 text-orange-500 hover:text-orange-400 font-semibold py-3 rounded-xl text-center transition-all duration-200 text-sm mb-3"
+          >
+            Ver localização no mapa
+          </a>
 
           <a
             href="/"

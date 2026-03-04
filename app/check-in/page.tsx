@@ -17,7 +17,8 @@ const TOTAL_STEPS = 3
 
 export default function CheckInPage() {
   const router = useRouter()
-  const [step, setStep] = useState(1)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
   const [formData, setFormData] = useState<FormData>({
     peloton: '',
     nome: '',
@@ -57,8 +58,41 @@ export default function CheckInPage() {
     if (step > 1) setStep(step - 1)
   }
 
-  const handleSubmit = () => {
-    router.push('/check-in/sucesso')
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true)
+      setError('')
+
+      const response = await fetch('/api/checkin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome_completo: formData.nome,
+          email: formData.email,
+          telefone: formData.telefone,
+          cpf: formData.cpf,
+          sexo: formData.sexo,
+          pelotao: formData.peloton,
+          data_do_evento: '2026-03-07',
+          nome_do_evento: 'Somma Club',
+        }),
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erro ao salvar check-in')
+      }
+
+      // Redirecionar para página de sucesso
+      router.push('/check-in/sucesso')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao enviar formulário')
+      console.error('[v0] Erro no check-in:', err)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const pelotons = [
@@ -346,19 +380,27 @@ export default function CheckInPage() {
                 </div>
               </div>
 
+              {/* Erro */}
+              {error && (
+                <div className="mt-6 bg-red-900/20 border border-red-500 rounded-xl px-5 py-4">
+                  <p className="text-red-400 text-sm">{error}</p>
+                </div>
+              )}
+
               <div className="flex gap-3 mt-8">
                 <button
                   onClick={handlePrev}
-                  className="flex-1 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200"
+                  disabled={isLoading}
+                  className="flex-1 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ArrowLeft className="w-4 h-4" /> Voltar
                 </button>
                 <button
                   onClick={handleSubmit}
-                  disabled={!canAdvance()}
+                  disabled={!canAdvance() || isLoading}
                   className="flex-1 bg-orange-500 hover:bg-orange-400 disabled:bg-zinc-800 disabled:text-zinc-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 disabled:cursor-not-allowed"
                 >
-                  Confirmar <Check className="w-4 h-4" />
+                  {isLoading ? 'Enviando...' : 'Confirmar'} {!isLoading && <Check className="w-4 h-4" />}
                 </button>
               </div>
             </div>
