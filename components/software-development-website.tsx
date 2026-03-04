@@ -774,7 +774,7 @@ export default function SoftwareDevelopmentWebsite() {
                   </a>
                 </li>
                 <li>
-                  <a href="tel:+5561953724777" className="hover:text-orange-500 transition-colors flex items-center gap-2">
+                  <a href="https://wa.me/5561995372477?text=Ol%C3%A1%2C%20tudo%20bem%3F%20Vim%20do%20Site%20do%20Somma%20e%20quero%20falar%20com%20o%20atendimento." target="_blank" rel="noopener noreferrer" className="hover:text-orange-500 transition-colors flex items-center gap-2">
                     <svg className="h-4 w-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path
                         strokeLinecap="round"
