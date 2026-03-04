@@ -7,7 +7,16 @@ export function JoinClubForm() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value.replace(/\D/g, '') // Remove tudo que não é dígito
+    if (value.length >= 2) {
+      value = value.slice(0, 2) + '/' + value.slice(2)
+    }
+    if (value.length >= 5) {
+      value = value.slice(0, 5) + '/' + value.slice(5, 9)
+    }
+    e.target.value = value
+  }
     e.preventDefault()
     setIsLoading(true)
     setError('')
@@ -115,6 +124,8 @@ export function JoinClubForm() {
                 name="data"
                 type="text"
                 placeholder="DD/MM/AAAA"
+                onInput={handleDateChange}
+                maxLength={10}
                 className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
                 required
               />
