@@ -498,57 +498,59 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-16">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
-                Escolha seu ritmo
+                Escolha o ritmo do seu treino
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                Independente do seu nível, sempre existe um pelotão para você correr com conforto e evolução.
-              </p>
             </div>
 
             {/* Cards de Pelotões */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Iniciante */}
               <Card className="border-orange-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <h3 className="text-2xl font-semibold text-orange-500">4km</h3>
+                <CardHeader className="pb-3">
+                  <div className="inline-flex items-center gap-2 bg-orange-500/10 text-orange-500 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3 w-fit">
+                    Iniciante
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">Corrida leve alternando com caminhada</p>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">Caminhada + corrida</p>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
+                    <span className="text-muted-foreground">Distância: <span className="font-semibold text-foreground">4 km</span></span>
+                  </div>
                 </CardContent>
               </Card>
 
+              {/* Ritmo confortável */}
               <Card className="border-orange-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <h3 className="text-2xl font-semibold text-orange-500">4km</h3>
+                <CardHeader className="pb-3">
+                  <div className="inline-flex items-center gap-2 bg-orange-500/10 text-orange-500 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3 w-fit">
+                    Ritmo confortável
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">Cada km em cerca de 6min30</p>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">Ritmo confortável</p>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
+                    <span className="text-muted-foreground">Distância: <span className="font-semibold text-foreground">4, 6 ou 8 km</span></span>
+                  </div>
                 </CardContent>
               </Card>
 
+              {/* Ritmo mais rápido */}
               <Card className="border-orange-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <h3 className="text-2xl font-semibold text-orange-500">6km</h3>
+                <CardHeader className="pb-3">
+                  <div className="inline-flex items-center gap-2 bg-orange-500/10 text-orange-500 text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full mb-3 w-fit">
+                    Ritmo mais rápido
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed">Cada km em cerca de 5min30</p>
                 </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">Ritmo moderado</p>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
+                    <span className="text-muted-foreground">Distância: <span className="font-semibold text-foreground">4, 6 ou 8 km</span></span>
+                  </div>
                 </CardContent>
               </Card>
-
-              <Card className="border-orange-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <h3 className="text-2xl font-semibold text-orange-500">8km</h3>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground">Ritmo avançado</p>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Informação Adicional */}
-            <div className="text-center bg-orange-500/10 rounded-lg border border-orange-200 p-6">
-              <p className="text-sm text-muted-foreground">
-                Pace médio entre <span className="font-semibold text-foreground">6'00 e 6'30</span>
-              </p>
             </div>
           </div>
         </section>
