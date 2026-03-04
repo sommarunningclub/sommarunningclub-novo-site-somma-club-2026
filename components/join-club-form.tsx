@@ -8,7 +8,7 @@ export function JoinClubForm() {
   const [error, setError] = useState('')
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let value = e.target.value.replace(/\D/g, '') // Remove tudo que não é dígito
+    let value = e.target.value.replace(/\D/g, '')
     if (value.length >= 2) {
       value = value.slice(0, 2) + '/' + value.slice(2)
     }
@@ -17,6 +17,8 @@ export function JoinClubForm() {
     }
     e.target.value = value
   }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsLoading(true)
     setError('')
@@ -47,7 +49,6 @@ export function JoinClubForm() {
         throw new Error(data.error)
       }
 
-      // Redirecionar após sucesso
       window.location.href = '/obrigado'
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao enviar formulário')
@@ -58,7 +59,7 @@ export function JoinClubForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8">
+    <form onSubmit={handleSubmit} className="space-y-8 bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 md:p-12">
       {/* Seção 1 - Dados Pessoais */}
       <div>
         <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
@@ -196,6 +197,7 @@ export function JoinClubForm() {
         <label className="flex items-start gap-3 cursor-pointer">
           <input
             type="checkbox"
+            name="lgpd"
             className="mt-1 h-5 w-5 rounded border-zinc-300 text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
             required
           />
@@ -207,17 +209,17 @@ export function JoinClubForm() {
 
       {/* Erro */}
       {error && (
-        <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800 rounded-lg px-4 py-3">
-          <p className="text-red-800 dark:text-red-200 text-sm">{error}</p>
+        <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900 rounded-lg px-4 py-3">
+          <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
         </div>
       )}
 
       {/* Botão de Submit */}
       <Button 
-        type="submit"
         size="lg" 
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-zinc-400 disabled:cursor-not-allowed text-white py-6 text-base font-semibold"
         disabled={isLoading}
+        type="submit"
       >
         {isLoading ? 'Enviando...' : 'Inscrever-se agora'}
       </Button>
