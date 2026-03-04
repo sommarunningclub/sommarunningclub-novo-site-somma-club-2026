@@ -1,10 +1,13 @@
 "use client"
 
 import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva, type VariantProps } from "class-variance-authority"
 import { ArrowRight, ChevronRight, Menu, X, Code, Zap, Settings2, Sparkles, Users, Clock, MapPin, Heart, Lightbulb } from "lucide-react"
 import { motion, type Variants } from "framer-motion"
 import { GridMotion } from "./ui/grid-motion"
 import { Button } from "./ui/button"
+import { JoinClubForm } from "./join-club-form"
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ")
@@ -555,7 +558,7 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-12">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-                O que é obrigat��rio?
+                O que é obrigatório?
               </h2>
             </div>
 
@@ -584,7 +587,7 @@ export default function SoftwareDevelopmentWebsite() {
                 <div>
                   <h3 className="font-semibold mb-1">Uniforme bem-vindo, não obrigatório</h3>
                   <p className="text-sm text-muted-foreground">
-                    N��o é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
+                    Não é obrigatório uniforme, mas camiseta ou boné SOMMA são bem-vindos para fortalecer a identidade do grupo.
                   </p>
                 </div>
               </div>
@@ -692,160 +695,7 @@ export default function SoftwareDevelopmentWebsite() {
               </p>
             </div>
 
-            <form className="space-y-8 bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 md:p-12">
-              {/* Informações Pessoais */}
-              <div>
-                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-orange-500/10 text-orange-500 font-semibold">1</span>
-                  Informações Pessoais
-                </h3>
-
-                <div className="space-y-4">
-                  {/* Nome completo */}
-                  <div>
-                    <label htmlFor="nome" className="block text-sm font-medium mb-2">
-                      Nome completo <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="nome"
-                      type="text"
-                      placeholder="Seu nome completo"
-                      className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      required
-                    />
-                  </div>
-
-                  {/* E-mail */}
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      E-mail <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      placeholder="seu@email.com"
-                      className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      required
-                    />
-                  </div>
-
-                  {/* CPF */}
-                  <div>
-                    <label htmlFor="cpf" className="block text-sm font-medium mb-2">
-                      CPF <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="cpf"
-                      type="text"
-                      placeholder="000.000.000-00"
-                      className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      required
-                    />
-                  </div>
-
-                  {/* Grid para Data de nascimento e CEP */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Data de nascimento */}
-                    <div>
-                      <label htmlFor="data" className="block text-sm font-medium mb-2">
-                        Data de nascimento <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        id="data"
-                        type="text"
-                        placeholder="DD/MM/AAAA"
-                        className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        required
-                      />
-                    </div>
-
-                    {/* CEP */}
-                    <div>
-                      <label htmlFor="cep" className="block text-sm font-medium mb-2">
-                        CEP <span className="text-red-500">*</span>
-                      </label>
-                      <input
-                        id="cep"
-                        type="text"
-                        placeholder="00000-000"
-                        className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  {/* WhatsApp */}
-                  <div>
-                    <label htmlFor="whatsapp" className="block text-sm font-medium mb-2">
-                      WhatsApp <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      id="whatsapp"
-                      type="tel"
-                      placeholder="(61) 99999-9999"
-                      className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      required
-                    />
-                  </div>
-
-                  {/* Sexo */}
-                  <div>
-                    <label htmlFor="sexo" className="block text-sm font-medium mb-2">
-                      Sexo <span className="text-red-500">*</span>
-                    </label>
-                    <select
-                      id="sexo"
-                      className="w-full px-4 py-2 border border-zinc-200 dark:border-zinc-700 rounded-lg bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-orange-500"
-                      required
-                    >
-                      <option value="">Selecione uma opção</option>
-                      <option value="masculino">Masculino</option>
-                      <option value="feminino">Feminino</option>
-                      <option value="outro">Outro</option>
-                      <option value="prefiro-nao-dizer">Prefiro não dizer</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              {/* Divisor */}
-              <div className="border-t border-zinc-200 dark:border-zinc-700"></div>
-
-              {/* Termos e Condições */}
-              <div>
-                <h3 className="text-xl font-semibold mb-6 flex items-center gap-2">
-                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-orange-500/10 text-orange-500 font-semibold">2</span>
-                  Termos e Condições
-                </h3>
-
-                <label className="flex items-start gap-3 cursor-pointer">
-                  <input
-                    type="checkbox"
-                    className="mt-1 h-5 w-5 rounded border-zinc-300 text-orange-500 focus:ring-orange-500 focus:ring-offset-0"
-                    required
-                  />
-                  <span className="text-sm text-muted-foreground leading-relaxed">
-                    Aceito os termos da LGPD, autorizo o tratamento dos meus dados pessoais e o uso da minha imagem em atividades do clube. <span className="text-red-500">*</span>
-                  </span>
-                </label>
-              </div>
-
-              {/* Botão de Submit */}
-              <Button 
-                size="lg" 
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-6 text-base font-semibold"
-                onClick={(e) => {
-                  e.preventDefault()
-                  window.location.href = '/obrigado'
-                }}
-              >
-                Inscrever-se agora
-              </Button>
-
-              <p className="text-xs text-center text-muted-foreground">
-                Seus dados serão tratados conforme nossa política de privacidade.
-              </p>
-            </form>
+            <JoinClubForm />
           </div>
         </section>
       </main>
