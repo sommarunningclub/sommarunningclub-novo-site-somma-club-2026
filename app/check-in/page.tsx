@@ -103,6 +103,20 @@ export default function CheckInPage() {
       icon: '🟢',
       pace: 'Ritmo leve',
     },
+    {
+      id: '6km' as const,
+      label: '6 km',
+      description: 'Para quem já tem um bom ritmo e quer evoluir',
+      icon: '🟡',
+      pace: 'Ritmo moderado',
+    },
+    {
+      id: '8km' as const,
+      label: '8 km',
+      description: 'Para corredores experientes que gostam de desafios',
+      icon: '🔴',
+      pace: 'Ritmo intenso',
+    },
   ]
 
   return (
