@@ -3,12 +3,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const { nome, email, cpf, telefone, data_nascimento, sexo } = await request.json()
+    const { nome_completo, email, cpf, whatsapp, data_nascimento, sexo } = await request.json()
 
     // Validação básica
-    if (!nome || !email || !cpf || !telefone) {
+    if (!nome_completo || !email || !cpf || !whatsapp) {
       return NextResponse.json(
-        { error: 'Campos obrigatórios faltando: nome, email, cpf, telefone' },
+        { error: 'Campos obrigatórios faltando: nome_completo, email, cpf, whatsapp' },
         { status: 400 }
       )
     }
@@ -27,18 +27,18 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    // Inserir dados na tabela cadastro_site
+    // Inserir dados na tabela cadastro_site (sem created_at pois não existe)
     const { data, error } = await supabase
       .from('cadastro_site')
       .insert([
         {
-          nome,
+          nome_completo,
           email,
           cpf,
-          telefone,
+          whatsapp,
           data_nascimento: data_nascimento || null,
           sexo: sexo || null,
-          created_at: new Date().toISOString(),
+          cep: null,
         },
       ])
       .select()

@@ -14,20 +14,20 @@ export function JoinClubForm() {
 
     try {
       const formData = new FormData(e.currentTarget)
-      const nome = formData.get('nome') as string
+      const nome_completo = formData.get('nome') as string
       const email = formData.get('email') as string
       const cpf = formData.get('cpf') as string
-      const telefone = formData.get('whatsapp') as string
+      const whatsapp = formData.get('whatsapp') as string
       const data_nascimento = formData.get('data') as string
 
       const response = await fetch('/api/cadastro-site', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          nome,
+          nome_completo,
           email,
           cpf,
-          telefone,
+          whatsapp,
           data_nascimento,
           sexo: formData.get('sexo'),
         }),
