@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowRight, ArrowLeft, Check, MapPin, Clock, Calendar } from 'lucide-react'
 
 type FormData = {
-  peloton: '' | '4km' | '6km' | '8km'
+  peloton: '' | '4km'
   nome: string
   telefone: string
   sexo: '' | 'masculino' | 'feminino'
@@ -86,7 +86,6 @@ export default function CheckInPage() {
         throw new Error(errorData.error || 'Erro ao salvar check-in')
       }
 
-      // Redirecionar para página de sucesso
       router.push('/check-in/sucesso')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao enviar formulário')
@@ -123,132 +122,132 @@ export default function CheckInPage() {
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
       {/* Header */}
-      <header className="border-b border-zinc-800 px-6 py-4">
-        <a href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm">
-          <ArrowLeft className="w-4 h-4" />
+      <header className="border-b border-zinc-800 px-3 sm:px-6 py-3 sm:py-4 sticky top-0 z-50 bg-black/95 backdrop-blur-sm">
+        <a href="/" className="inline-flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-xs sm:text-sm">
+          <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           Voltar ao site
         </a>
       </header>
 
-      <div className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-xl">
+      <div className="flex-1 flex items-center justify-center px-3 sm:px-4 py-6 sm:py-12">
+        <div className="w-full max-w-2xl">
 
           {/* Logo + Título */}
-          <div className="text-center mb-10">
-            <p className="text-orange-500 text-xs font-semibold uppercase tracking-widest mb-3">Somma Running Club</p>
-            <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight text-balance">
+          <div className="text-center mb-8 sm:mb-10">
+            <p className="text-orange-500 text-xs font-semibold uppercase tracking-widest mb-2 sm:mb-3">Somma Running Club</p>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight text-balance">
               Faça seu <span className="text-orange-500">Check-in</span>
             </h1>
-            <p className="text-zinc-400 text-sm mt-3">
+            <p className="text-zinc-400 text-xs sm:text-sm mt-2 sm:mt-3">
               Confirme sua presença em {TOTAL_STEPS} passos simples
             </p>
           </div>
 
           {/* Progress */}
-          <div className="flex items-center gap-2 mb-10">
+          <div className="flex items-center gap-1 sm:gap-2 mb-8 sm:mb-10">
             {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-              <div key={i} className="flex-1 flex items-center gap-2">
+              <div key={i} className="flex-1 flex items-center gap-1 sm:gap-2">
                 <div
-                  className={`h-1 flex-1 rounded-full transition-all duration-500 ${
+                  className={`h-1 sm:h-1.5 flex-1 rounded-full transition-all duration-500 ${
                     i + 1 <= step ? 'bg-orange-500' : 'bg-zinc-800'
                   }`}
                 />
               </div>
             ))}
-            <span className="text-xs text-zinc-500 whitespace-nowrap ml-1">{step}/{TOTAL_STEPS}</span>
+            <span className="text-xs text-zinc-500 whitespace-nowrap ml-2">{step}/{TOTAL_STEPS}</span>
           </div>
 
-          {/* ───────── STEP 1: Evento ───────── */}
+          {/* STEP 1: Evento */}
           {step === 1 && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-400">
-              <div className="mb-8">
-                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-2">Passo 1</p>
-                <h2 className="text-2xl font-bold text-white mb-1">Confirme o evento</h2>
-                <p className="text-zinc-400 text-sm">Verifique os detalhes antes de continuar</p>
+              <div className="mb-6 sm:mb-8">
+                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-1 sm:mb-2">Passo 1</p>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Confirme o evento</h2>
+                <p className="text-zinc-400 text-xs sm:text-sm">Verifique os detalhes antes de continuar</p>
               </div>
 
-              <div className="rounded-2xl border-2 border-orange-500 bg-zinc-900 overflow-hidden">
-                {/* Imagem / banner */}
-                <div className="bg-gradient-to-br from-orange-600 to-orange-400 p-8 text-center">
+              <div className="rounded-xl sm:rounded-2xl border-2 border-orange-500 bg-zinc-900 overflow-hidden">
+                {/* Banner */}
+                <div className="bg-gradient-to-br from-orange-600 to-orange-400 p-5 sm:p-8 text-center">
                   <p className="text-white/80 text-xs font-semibold uppercase tracking-widest mb-2">Somma Running Club</p>
-                  <h3 className="text-white text-2xl font-bold leading-tight mb-1">Corra. Celebre. Repita.</h3>
-                  <p className="text-white/80 text-sm">Uma manhã de movimento, energia e comunidade — com café no final pra recarregar as baterias</p>
+                  <h3 className="text-lg sm:text-2xl font-bold leading-tight mb-1 text-white">Corra. Celebre. Repita.</h3>
+                  <p className="text-white/80 text-xs sm:text-sm">Uma manhã de movimento, energia e comunidade — com café no final pra recarregar as baterias</p>
                 </div>
 
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                      <Calendar className="w-4 h-4 text-orange-500" />
+                <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                  <div className="flex items-start gap-3 text-xs sm:text-sm">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-zinc-400 text-xs">Data</p>
-                      <p className="text-white font-medium">Sábado, 07 de março de 2026</p>
+                      <p className="text-white font-medium text-sm sm:text-base">Sábado, 07 de março de 2026</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-4 h-4 text-orange-500" />
+                  <div className="flex items-start gap-3 text-xs sm:text-sm">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-zinc-400 text-xs">Horário</p>
-                      <p className="text-white font-medium">A partir das 07h00</p>
+                      <p className="text-white font-medium text-sm sm:text-base">A partir das 07h00</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 text-sm">
-                    <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-4 h-4 text-orange-500" />
+                  <div className="flex items-start gap-3 text-xs sm:text-sm">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <MapPin className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-orange-500" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <p className="text-zinc-400 text-xs">Local</p>
-                      <p className="text-white font-medium">Parque da Cidade — Brasília, DF</p>
+                      <p className="text-white font-medium text-sm sm:text-base">Parque da Cidade — Brasília, DF</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8">
+              <div className="mt-6 sm:mt-8">
                 <button
                   onClick={handleNext}
-                  className="w-full bg-orange-500 hover:bg-orange-400 active:bg-orange-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25"
+                  className="w-full bg-orange-500 hover:bg-orange-400 active:bg-orange-600 text-white font-semibold py-3 sm:py-4 rounded-xl sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 text-sm sm:text-base touch-none"
                 >
-                  Confirmar e continuar <ArrowRight className="w-4 h-4" />
+                  Confirmar e continuar <ArrowRight className="w-4 h-4 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* ───────── STEP 2: Pelotão ───────── */}
+          {/* STEP 2: Pelotão */}
           {step === 2 && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-400">
-              <div className="mb-8">
-                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-2">Passo 2</p>
-                <h2 className="text-2xl font-bold text-white mb-1">Escolha seu pelotão</h2>
-                <p className="text-zinc-400 text-sm">Selecione a distância que mais combina com você</p>
+              <div className="mb-6 sm:mb-8">
+                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-1 sm:mb-2">Passo 2</p>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Escolha seu pelotão</h2>
+                <p className="text-zinc-400 text-xs sm:text-sm">Selecione a distância que mais combina com você</p>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5 sm:space-y-3">
                 {pelotons.map((p) => (
                   <button
                     key={p.id}
                     onClick={() => setFormData(prev => ({ ...prev, peloton: p.id }))}
-                    className={`w-full text-left rounded-2xl border-2 p-5 transition-all duration-200 ${
+                    className={`w-full text-left rounded-lg sm:rounded-2xl border-2 p-4 sm:p-5 transition-all duration-200 ${
                       formData.peloton === p.id
                         ? 'border-orange-500 bg-orange-500/10'
                         : 'border-zinc-800 bg-zinc-900 hover:border-zinc-600'
                     }`}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl font-bold transition-all ${
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-base sm:text-xl font-bold transition-all flex-shrink-0 ${
                           formData.peloton === p.id ? 'bg-orange-500 text-white' : 'bg-zinc-800 text-zinc-300'
                         }`}>
-                          {p.label.replace(' ', '')}
+                          {p.label.replace(' km', '')}
                         </div>
-                        <div>
-                          <p className="text-white font-semibold">{p.label}</p>
-                          <p className="text-zinc-400 text-xs mt-0.5">{p.description}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-white font-semibold text-sm sm:text-base">{p.label}</p>
+                          <p className="text-zinc-400 text-xs mt-0.5 line-clamp-2">{p.description}</p>
                         </div>
                       </div>
                       <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
@@ -261,37 +260,37 @@ export default function CheckInPage() {
                 ))}
               </div>
 
-              <div className="flex gap-3 mt-8">
+              <div className="flex gap-2 sm:gap-3 mt-6 sm:mt-8">
                 <button
                   onClick={handlePrev}
-                  className="flex-1 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200"
+                  className="flex-1 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 text-xs sm:text-sm touch-none"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Voltar
+                  <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Voltar
                 </button>
                 <button
                   onClick={handleNext}
                   disabled={!formData.peloton}
-                  className="flex-1 bg-orange-500 hover:bg-orange-400 disabled:bg-zinc-800 disabled:text-zinc-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 disabled:cursor-not-allowed"
+                  className="flex-1 bg-orange-500 hover:bg-orange-400 disabled:bg-zinc-800 disabled:text-zinc-600 text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 disabled:cursor-not-allowed text-xs sm:text-sm touch-none"
                 >
-                  Continuar <ArrowRight className="w-4 h-4" />
+                  Continuar <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* ───────── STEP 3: Dados pessoais ───────── */}
+          {/* STEP 3: Dados pessoais */}
           {step === 3 && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-400">
-              <div className="mb-8">
-                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-2">Passo 3</p>
-                <h2 className="text-2xl font-bold text-white mb-1">Seus dados</h2>
-                <p className="text-zinc-400 text-sm">Precisamos de algumas informações para confirmar sua vaga</p>
+              <div className="mb-6 sm:mb-8">
+                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-1 sm:mb-2">Passo 3</p>
+                <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Seus dados</h2>
+                <p className="text-zinc-400 text-xs sm:text-sm">Precisamos de algumas informações para confirmar sua vaga</p>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {/* Nome */}
                 <div>
-                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-2">
+                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-1.5 sm:mb-2">
                     Nome completo <span className="text-orange-500">*</span>
                   </label>
                   <input
@@ -300,36 +299,36 @@ export default function CheckInPage() {
                     onChange={e => setFormData(prev => ({ ...prev, nome: e.target.value }))}
                     placeholder="Ex: João Silva Santos"
                     autoFocus
-                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-xl px-5 py-4 text-sm outline-none transition-all duration-200"
+                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 text-sm outline-none transition-all duration-200"
                   />
                 </div>
 
                 {/* Telefone */}
                 <div>
-                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-2">
+                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-1.5 sm:mb-2">
                     Telefone <span className="text-orange-500">*</span>
                   </label>
                   <input
-                    type="text"
+                    type="tel"
                     value={formatPhone(formData.telefone)}
                     onChange={e => setFormData(prev => ({ ...prev, telefone: e.target.value.replace(/\D/g, '') }))}
                     placeholder="(61) 99999-9999"
-                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-xl px-5 py-4 text-sm outline-none transition-all duration-200"
+                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 text-sm outline-none transition-all duration-200"
                   />
                 </div>
 
                 {/* Sexo */}
                 <div>
-                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-2">
+                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-1.5 sm:mb-2">
                     Sexo <span className="text-orange-500">*</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-2 gap-2 sm:gap-3">
                     {(['masculino', 'feminino'] as const).map(s => (
                       <button
                         key={s}
                         type="button"
                         onClick={() => setFormData(prev => ({ ...prev, sexo: s }))}
-                        className={`py-4 rounded-xl border-2 font-semibold text-sm capitalize transition-all duration-200 ${
+                        className={`py-3 sm:py-4 rounded-lg sm:rounded-xl border-2 font-semibold text-xs sm:text-sm capitalize transition-all duration-200 ${
                           formData.sexo === s
                             ? 'border-orange-500 bg-orange-500/10 text-orange-400'
                             : 'border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-500'
@@ -343,7 +342,7 @@ export default function CheckInPage() {
 
                 {/* Email */}
                 <div>
-                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-2">
+                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-1.5 sm:mb-2">
                     E-mail <span className="text-orange-500">*</span>
                   </label>
                   <input
@@ -351,13 +350,13 @@ export default function CheckInPage() {
                     value={formData.email}
                     onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
                     placeholder="seuemail@exemplo.com"
-                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-xl px-5 py-4 text-sm outline-none transition-all duration-200"
+                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 text-sm outline-none transition-all duration-200"
                   />
                 </div>
 
                 {/* CPF */}
                 <div>
-                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-2">
+                  <label className="block text-xs text-zinc-400 font-medium uppercase tracking-wide mb-1.5 sm:mb-2">
                     CPF <span className="text-orange-500">*</span>
                   </label>
                   <input
@@ -365,43 +364,43 @@ export default function CheckInPage() {
                     value={formatCPF(formData.cpf)}
                     onChange={e => setFormData(prev => ({ ...prev, cpf: e.target.value.replace(/\D/g, '') }))}
                     placeholder="000.000.000-00"
-                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-xl px-5 py-4 text-sm outline-none transition-all duration-200 font-mono"
+                    className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 text-sm outline-none transition-all duration-200 font-mono"
                   />
                 </div>
               </div>
 
               {/* Resumo pelotão */}
-              <div className="mt-6 flex items-center gap-3 bg-zinc-900 rounded-xl px-5 py-4 border border-zinc-800">
-                <div className="w-8 h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
+              <div className="mt-5 sm:mt-6 flex items-center gap-3 bg-zinc-900 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 border border-zinc-800">
+                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold flex-shrink-0">
                   {formData.peloton.replace('km', '')}
                 </div>
-                <div>
+                <div className="flex-1 min-w-0">
                   <p className="text-xs text-zinc-500">Pelotão selecionado</p>
-                  <p className="text-white font-semibold text-sm">{formData.peloton} — 07 de março de 2026</p>
+                  <p className="text-white font-semibold text-xs sm:text-sm">{formData.peloton} — 07 de março de 2026</p>
                 </div>
               </div>
 
               {/* Erro */}
               {error && (
-                <div className="mt-6 bg-red-900/20 border border-red-500 rounded-xl px-5 py-4">
-                  <p className="text-red-400 text-sm">{error}</p>
+                <div className="mt-4 sm:mt-6 bg-red-900/20 border border-red-500 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4">
+                  <p className="text-red-400 text-xs sm:text-sm">{error}</p>
                 </div>
               )}
 
-              <div className="flex gap-3 mt-8">
+              <div className="flex gap-2 sm:gap-3 mt-6 sm:mt-8">
                 <button
                   onClick={handlePrev}
                   disabled={isLoading}
-                  className="flex-1 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="flex-1 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed text-xs sm:text-sm touch-none"
                 >
-                  <ArrowLeft className="w-4 h-4" /> Voltar
+                  <ArrowLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Voltar
                 </button>
                 <button
                   onClick={handleSubmit}
                   disabled={!canAdvance() || isLoading}
-                  className="flex-1 bg-orange-500 hover:bg-orange-400 disabled:bg-zinc-800 disabled:text-zinc-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 disabled:cursor-not-allowed"
+                  className="flex-1 bg-orange-500 hover:bg-orange-400 disabled:bg-zinc-800 disabled:text-zinc-600 text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 disabled:cursor-not-allowed text-xs sm:text-sm touch-none"
                 >
-                  {isLoading ? 'Enviando...' : 'Confirmar'} {!isLoading && <Check className="w-4 h-4" />}
+                  {isLoading ? 'Enviando...' : 'Confirmar'} {!isLoading && <Check className="w-4 h-4 sm:w-4 sm:h-4" />}
                 </button>
               </div>
             </div>
