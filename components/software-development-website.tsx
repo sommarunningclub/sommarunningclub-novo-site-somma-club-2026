@@ -818,7 +818,7 @@ export default function SoftwareDevelopmentWebsite() {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                  <a href="/evolve" className="text-muted-foreground hover:text-orange-500 transition-colors">
                     Benefícios do Membro
                   </a>
                 </li>
