@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
           data_nascimento: data_nascimento || null,
           sexo: sexo || null,
           cep: null,
-          data_de_cadastro: new Date().toISOString(),
+          data_de_cadastro: new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '-03:00',
         },
       ])
       .select()
