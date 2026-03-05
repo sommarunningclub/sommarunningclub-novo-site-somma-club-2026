@@ -844,8 +844,6 @@ export default function SoftwareDevelopmentWebsite() {
                     Assessoria Somma Club
                   </a>
                 </li>
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
