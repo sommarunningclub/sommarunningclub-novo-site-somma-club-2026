@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
           pelotao,
           data_do_evento: data_do_evento || '2026-03-07',
           nome_do_evento: nome_do_evento || 'Somma Club',
-          data_hora_checkin: new Date().toISOString(),
+          data_hora_checkin: new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '-03:00',
           validacao_do_checkin: false,
         },
       ])
