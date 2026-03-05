@@ -819,7 +819,7 @@ export default function SoftwareDevelopmentWebsite() {
                 </li>
                 <li>
                   <a href="/evolve" className="text-muted-foreground hover:text-orange-500 transition-colors">
-                    Benefícios do Membro
+                    Somma & Evolve
                   </a>
                 </li>
               </ul>
