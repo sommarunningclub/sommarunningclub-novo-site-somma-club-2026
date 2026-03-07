@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, ArrowLeft, Check, MapPin, Clock, Calendar } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Check, MapPin, Clock, Calendar, Lock } from 'lucide-react'
 
 type FormData = {
   peloton: '' | '4km'
@@ -209,10 +209,11 @@ export default function CheckInPage() {
 
               <div className="mt-6 sm:mt-8">
                 <button
-                  onClick={handleNext}
-                  className="w-full bg-orange-500 hover:bg-orange-400 active:bg-orange-600 text-white font-semibold py-3 sm:py-4 rounded-xl sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 hover:shadow-lg hover:shadow-orange-500/25 text-sm sm:text-base touch-none"
+                  disabled
+                  className="w-full bg-zinc-700 cursor-not-allowed text-zinc-400 font-semibold py-3 sm:py-4 rounded-xl sm:rounded-xl flex items-center justify-center gap-2 transition-all duration-200 text-sm sm:text-base touch-none"
                 >
-                  Confirmar e continuar <ArrowRight className="w-4 h-4 sm:w-4 sm:h-4" />
+                  <Lock className="w-4 h-4 sm:w-4 sm:h-4" />
+                  Check-in encerrado
                 </button>
               </div>
             </div>
