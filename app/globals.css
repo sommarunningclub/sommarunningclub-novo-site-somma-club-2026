@@ -8,6 +8,73 @@
   }
 }
 
+/* Override para cor laranja do SOMMA */
+:root {
+  --color-orange: #ff2c03;
+  --color-orange-light: #ff4d35;
+  --color-orange-dark: #cc2402;
+}
+
+@layer utilities {
+  .orange-500 {
+    @apply [&]:bg-[#ff2c03] [&]:text-[#ff2c03] [&]:border-[#ff2c03] [&]:shadow-[#ff2c03];
+  }
+  .bg-orange-500 {
+    background-color: #ff2c03 !important;
+  }
+  .text-orange-500 {
+    color: #ff2c03 !important;
+  }
+  .border-orange-500 {
+    border-color: #ff2c03 !important;
+  }
+  .bg-orange-400 {
+    background-color: #ff4d35 !important;
+  }
+  .text-orange-400 {
+    color: #ff4d35 !important;
+  }
+  .border-orange-400 {
+    border-color: #ff4d35 !important;
+  }
+  .bg-orange-600 {
+    background-color: #cc2402 !important;
+  }
+  .text-orange-600 {
+    color: #cc2402 !important;
+  }
+  .border-orange-600 {
+    border-color: #cc2402 !important;
+  }
+  .bg-orange-200 {
+    background-color: #ffe8e3 !important;
+  }
+  .text-orange-200 {
+    color: #ffe8e3 !important;
+  }
+  .border-orange-200 {
+    border-color: #ffe8e3 !important;
+  }
+  .hover\:text-orange-500:hover {
+    color: #ff2c03 !important;
+  }
+  .hover\:bg-orange-500:hover {
+    background-color: #ff2c03 !important;
+  }
+  .hover\:border-orange-500:hover {
+    border-color: #ff2c03 !important;
+  }
+  .hover\:text-orange-400:hover {
+    color: #ff4d35 !important;
+  }
+  .hover\:bg-orange-400:hover {
+    background-color: #ff4d35 !important;
+  }
+  .hover\:bg-orange-600:hover {
+    background-color: #cc2402 !important;
+  }
+}
+
 @layer base {
   :root {
     --font-sans: var(--font-geist-sans);
