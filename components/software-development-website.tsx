@@ -93,7 +93,7 @@ const transitionVariants = {
 
 const menuItems = [
   { name: "Home", href: "#home" },
-  { name: "Assessoria", href: "https://membros.sommaclub.com.br/", external: true },
+  { name: "Assessoria", href: "https://assessoria.sommaclub.com.br/", external: true },
   { name: "Loja", href: "https://loja.sommaclub.com.br/", external: true },
   { name: "Check-in", href: "/check-in" },
 ]
