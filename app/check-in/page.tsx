@@ -34,8 +34,8 @@ type Countdown = {
 
 const TOTAL_STEPS = 3
 
-// Abertura do check-in: 11/03/2026 às 01:00 horário de Brasília (UTC-3)
-const ABERTURA_CHECKIN_EDICAO_02 = '2026-03-11T01:00:00-03:00'
+// Abertura do check-in: 11/03/2026 às 12:00 horário de Brasília (UTC-3)
+const ABERTURA_CHECKIN_EDICAO_02 = '2026-03-11T12:00:00-03:00'
 
 const eventos: Evento[] = [
   {
@@ -305,7 +305,7 @@ export default function CheckInPage() {
                           ))}
                         </div>
                         <p className="text-zinc-600 text-xs mt-3 text-center">
-                          Abertura: 11 de março às 01h00 (Brasília)
+                          Abertura: 11 de março às 12h00 (Brasília)
                         </p>
                       </div>
                     )}
