@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, ArrowLeft, Check, MapPin, Clock, Calendar, Lock, ChevronRight } from 'lucide-react'
+import { ArrowRight, ArrowLeft, Check, MapPin, Clock, Calendar, Lock, ChevronRight, Timer } from 'lucide-react'
 
 type FormData = {
   peloton: '' | '4km' | '6km' | '8km'
@@ -21,9 +21,21 @@ type Evento = {
   local: string
   encerrado: boolean
   dataEvento: string
+  // Data/hora de abertura do check-in (ISO string com offset -03:00)
+  aberturaCheckin?: string
+}
+
+type Countdown = {
+  dias: number
+  horas: number
+  minutos: number
+  segundos: number
 }
 
 const TOTAL_STEPS = 3
+
+// Abertura do check-in: 11/03/2026 às 01:00 horário de Brasília (UTC-3)
+const ABERTURA_CHECKIN_EDICAO_02 = '2026-03-11T01:00:00-03:00'
 
 const eventos: Evento[] = [
   {
@@ -39,12 +51,31 @@ const eventos: Evento[] = [
     id: 'evento-2026-03-14',
     data: '2026-03-14',
     dataFormatada: 'Sábado, 14 de março de 2026',
-    titulo: 'Somma Club — Edição #02',
+    titulo: 'Somma Club — Edição #02 de Março',
     local: 'Parque da Cidade — Brasília, DF',
     encerrado: false,
     dataEvento: '2026-03-14',
+    aberturaCheckin: ABERTURA_CHECKIN_EDICAO_02,
   },
 ]
+
+function calcularCountdown(dataAbertura: string): Countdown {
+  const agora = new Date()
+  const abertura = new Date(dataAbertura)
+  const diff = abertura.getTime() - agora.getTime()
+  if (diff <= 0) return { dias: 0, horas: 0, minutos: 0, segundos: 0 }
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24))
+  const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+  const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+  const segundos = Math.floor((diff % (1000 * 60)) / 1000)
+  return { dias, horas, minutos, segundos }
+}
+
+function checkinAberto(evento: Evento): boolean {
+  if (evento.encerrado) return false
+  if (!evento.aberturaCheckin) return true
+  return new Date() >= new Date(evento.aberturaCheckin)
+}
 
 export default function CheckInPage() {
   const router = useRouter()
@@ -60,6 +91,23 @@ export default function CheckInPage() {
     email: '',
     cpf: '',
   })
+  const [countdowns, setCountdowns] = useState<Record<string, Countdown>>({})
+
+  const atualizarCountdowns = useCallback(() => {
+    const novo: Record<string, Countdown> = {}
+    eventos.forEach(e => {
+      if (e.aberturaCheckin && !checkinAberto(e)) {
+        novo[e.id] = calcularCountdown(e.aberturaCheckin)
+      }
+    })
+    setCountdowns(novo)
+  }, [])
+
+  useEffect(() => {
+    atualizarCountdowns()
+    const interval = setInterval(atualizarCountdowns, 1000)
+    return () => clearInterval(interval)
+  }, [atualizarCountdowns])
 
   const formatPhone = (value: string) => {
     const cleaned = value.replace(/\D/g, '').slice(0, 11)
@@ -176,38 +224,95 @@ export default function CheckInPage() {
           {/* Próximo evento */}
           <div className="mb-8">
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-3">Proximo evento</p>
-            {eventos.filter(e => !e.encerrado).map(evento => (
-              <button
-                key={evento.id}
-                onClick={() => setEventoSelecionado(evento)}
-                className="w-full text-left rounded-xl border-2 border-orange-500 bg-zinc-900 overflow-hidden hover:bg-zinc-800 transition-all duration-200 group"
-              >
-                <div className="bg-orange-500 px-4 sm:px-6 py-2 flex items-center justify-between">
-                  <span className="text-white text-xs font-semibold uppercase tracking-widest">Check-in aberto</span>
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
-                </div>
-                <div className="p-4 sm:p-6">
-                  <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
-                      <Calendar className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-                      {evento.dataFormatada}
+            {eventos.filter(e => !e.encerrado).map(evento => {
+              const aberto = checkinAberto(evento)
+              const countdown = countdowns[evento.id]
+              return aberto ? (
+                <button
+                  key={evento.id}
+                  onClick={() => setEventoSelecionado(evento)}
+                  className="w-full text-left rounded-xl border-2 border-orange-500 bg-zinc-900 overflow-hidden hover:bg-zinc-800 transition-all duration-200 group"
+                >
+                  <div className="bg-orange-500 px-4 sm:px-6 py-2 flex items-center justify-between">
+                    <span className="text-white text-xs font-semibold uppercase tracking-widest">Check-in aberto</span>
+                    <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                  </div>
+                  <div className="p-4 sm:p-6">
+                    <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <Calendar className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                        {evento.dataFormatada}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <Clock className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                        A partir das 07h00
+                      </div>
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <MapPin className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                        {evento.local}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
-                      <Clock className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-                      A partir das 07h00
-                    </div>
-                    <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
-                      <MapPin className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
-                      {evento.local}
+                    <div className="mt-4 flex items-center justify-end gap-1 text-orange-500 text-xs font-semibold group-hover:gap-2 transition-all">
+                      Fazer check-in <ChevronRight className="w-3.5 h-3.5" />
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center justify-end gap-1 text-orange-500 text-xs font-semibold group-hover:gap-2 transition-all">
-                    Fazer check-in <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <div
+                  key={evento.id}
+                  className="w-full text-left rounded-xl border-2 border-zinc-700 bg-zinc-900 overflow-hidden"
+                >
+                  <div className="bg-zinc-800 px-4 sm:px-6 py-2 flex items-center justify-between">
+                    <span className="text-zinc-400 text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
+                      <Timer className="w-3 h-3" /> Check-in abre em breve
+                    </span>
+                  </div>
+                  <div className="p-4 sm:p-6">
+                    <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>
+                    <div className="space-y-2 mb-5">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <Calendar className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
+                        {evento.dataFormatada}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <Clock className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
+                        A partir das 07h00
+                      </div>
+                      <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
+                        <MapPin className="w-3.5 h-3.5 text-zinc-500 flex-shrink-0" />
+                        {evento.local}
+                      </div>
+                    </div>
+
+                    {/* Contagem regressiva */}
+                    {countdown && (
+                      <div>
+                        <p className="text-zinc-500 text-xs mb-3 uppercase tracking-widest">Check-in abre em</p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {[
+                            { valor: countdown.dias, label: 'dias' },
+                            { valor: countdown.horas, label: 'horas' },
+                            { valor: countdown.minutos, label: 'min' },
+                            { valor: countdown.segundos, label: 'seg' },
+                          ].map(({ valor, label }) => (
+                            <div key={label} className="bg-zinc-800 rounded-lg py-2.5 px-1 text-center">
+                              <p className="text-white font-bold text-lg sm:text-2xl tabular-nums leading-none">
+                                {String(valor).padStart(2, '0')}
+                              </p>
+                              <p className="text-zinc-500 text-xs mt-1">{label}</p>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="text-zinc-600 text-xs mt-3 text-center">
+                          Abertura: 11 de março às 01h00 (Brasília)
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </button>
-            ))}
+              )
+            })}
           </div>
 
           {/* Eventos passados */}
