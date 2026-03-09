@@ -90,42 +90,43 @@ function LoginScreen({ onLogin }: { onLogin: (insider: Insider) => void }) {
 
   return (
     <main className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
-      style={{ background: 'radial-gradient(ellipse at center, #1a0a00 0%, #0d0d0d 50%, #000000 100%)' }}
+      style={{ background: 'linear-gradient(160deg, #1a0800 0%, #0d0300 40%, #000000 100%)' }}
     >
-      {/* Ondas animadas */}
+      {/* Ondas animadas — cor ajustada para #ff2c03 */}
       <style>{`
         .ocean {
-          height: 120px;
+          height: 160px;
           width: 100%;
           position: absolute;
           bottom: 0;
           left: 0;
-          background: #1a0500;
+          background: #110200;
         }
         .wave {
           background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
           position: absolute;
-          top: -80px;
+          top: -100px;
           width: 6400px;
-          height: 100px;
-          animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+          height: 120px;
+          animation: wave 8s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
           transform: translate3d(0, 0, 0);
-          opacity: 0.3;
-          filter: hue-rotate(330deg) saturate(3) brightness(0.6);
+          /* azul padrão → #ff2c03: hue-rotate ~-140deg + saturate alto */
+          filter: hue-rotate(200deg) saturate(10) brightness(0.75);
+          opacity: 0.55;
         }
         .wave:nth-of-type(2) {
-          top: -65px;
-          animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, swell 7s ease -1.25s infinite;
-          opacity: 0.2;
-          filter: hue-rotate(330deg) saturate(4) brightness(0.5);
+          top: -75px;
+          animation: wave 8s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, swell 7s ease -1.25s infinite;
+          filter: hue-rotate(200deg) saturate(8) brightness(0.5);
+          opacity: 0.35;
         }
         @keyframes wave {
           0% { margin-left: 0; }
           100% { margin-left: -1600px; }
         }
         @keyframes swell {
-          0%, 100% { transform: translate3d(0, -15px, 0); }
-          50% { transform: translate3d(0, 5px, 0); }
+          0%, 100% { transform: translate3d(0, -18px, 0); }
+          50% { transform: translate3d(0, 6px, 0); }
         }
       `}</style>
 
@@ -548,7 +549,7 @@ function ModuloValidar() {
   )
 }
 
-// ─── Painel Principal ─────────────────────────────────────────────────────────
+// ─── Painel Principal ────────────────────���────────────────────────────────────
 
 function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void }) {
   const [modulo, setModulo] = useState<Modulo>('home')
