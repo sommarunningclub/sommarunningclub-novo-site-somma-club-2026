@@ -11,20 +11,31 @@ export async function POST(req: Request) {
     const { cpf } = await req.json()
     if (!cpf) return NextResponse.json({ error: 'CPF obrigatório' }, { status: 400 })
 
+    // Normaliza: remove tudo que não é dígito
     const cpfLimpo = cpf.replace(/\D/g, '')
 
-    const { data, error } = await supabase
+    // Busca todos os insiders e filtra no JS para comparar CPF normalizado
+    const { data: insiders, error } = await supabase
       .from('dados_insiders')
       .select('id, nome, cpf')
-      .or(`cpf.eq.${cpf},cpf.eq.${cpfLimpo}`)
-      .single()
 
-    if (error || !data) {
+    if (error) {
+      console.log('[v0] Erro ao buscar insiders:', error)
+      return NextResponse.json({ error: 'Erro ao consultar banco de dados.' }, { status: 500 })
+    }
+
+    // Compara CPF removendo formatação de ambos os lados
+    const insider = insiders?.find(
+      (i) => i.cpf && i.cpf.replace(/\D/g, '') === cpfLimpo
+    )
+
+    if (!insider) {
       return NextResponse.json({ error: 'CPF não encontrado. Acesso negado.' }, { status: 401 })
     }
 
-    return NextResponse.json({ success: true, insider: { id: data.id, nome: data.nome } })
-  } catch {
+    return NextResponse.json({ success: true, insider: { id: insider.id, nome: insider.nome } })
+  } catch (err) {
+    console.log('[v0] Erro interno no login:', err)
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
   }
 }
