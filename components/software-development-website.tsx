@@ -844,6 +844,11 @@ export default function SoftwareDevelopmentWebsite() {
                     Assessoria Somma Club
                   </a>
                 </li>
+                <li>
+                  <a href="/insider-conect" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Insider Conect
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
