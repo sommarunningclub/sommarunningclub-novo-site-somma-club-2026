@@ -849,6 +849,11 @@ export default function SoftwareDevelopmentWebsite() {
                     Insider Conect
                   </a>
                 </li>
+                <li>
+                  <a href="/parceiro-somma-club" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                    Parceiro Somma Club
+                  </a>
+                </li>
               </ul>
             </div>
           </div>

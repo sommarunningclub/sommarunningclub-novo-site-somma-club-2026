@@ -88,9 +88,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
-  themeColor: '#fb4c00',
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#ff2c03',
 }
 
 export default function RootLayout({
@@ -101,7 +101,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
-        <meta name="theme-color" content="#fb4c00" />
+        <meta name="theme-color" content="#ff2c03" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
