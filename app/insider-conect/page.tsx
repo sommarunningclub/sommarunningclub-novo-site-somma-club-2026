@@ -89,11 +89,61 @@ function LoginScreen({ onLogin }: { onLogin: (insider: Insider) => void }) {
   }
 
   return (
-    <main className="min-h-screen bg-black flex items-center justify-center px-4">
-      <div className="w-full max-w-sm">
+    <main className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden"
+      style={{ background: 'radial-gradient(ellipse at center, #1a0a00 0%, #0d0d0d 50%, #000000 100%)' }}
+    >
+      {/* Ondas animadas */}
+      <style>{`
+        .ocean {
+          height: 120px;
+          width: 100%;
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          background: #1a0500;
+        }
+        .wave {
+          background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/85486/wave.svg) repeat-x;
+          position: absolute;
+          top: -80px;
+          width: 6400px;
+          height: 100px;
+          animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
+          transform: translate3d(0, 0, 0);
+          opacity: 0.3;
+          filter: hue-rotate(330deg) saturate(3) brightness(0.6);
+        }
+        .wave:nth-of-type(2) {
+          top: -65px;
+          animation: wave 7s cubic-bezier(0.36, 0.45, 0.63, 0.53) -0.125s infinite, swell 7s ease -1.25s infinite;
+          opacity: 0.2;
+          filter: hue-rotate(330deg) saturate(4) brightness(0.5);
+        }
+        @keyframes wave {
+          0% { margin-left: 0; }
+          100% { margin-left: -1600px; }
+        }
+        @keyframes swell {
+          0%, 100% { transform: translate3d(0, -15px, 0); }
+          50% { transform: translate3d(0, 5px, 0); }
+        }
+      `}</style>
+
+      <div className="ocean">
+        <div className="wave" />
+        <div className="wave" />
+      </div>
+
+      {/* Card de login */}
+      <div className="w-full max-w-sm relative z-10">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#ff2c03]/10 border border-[#ff2c03]/20 mb-4">
-            <ShieldCheck className="w-7 h-7 text-[#ff2c03]" />
+          {/* Logo */}
+          <div className="flex justify-center mb-6">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/Logo_Nova_Somma_Branca_Laranja.svg?v=1772736456"
+              alt="Somma Running Club"
+              className="h-12 w-auto"
+            />
           </div>
           <p className="text-[#ff2c03] text-xs font-semibold uppercase tracking-widest mb-1">Acesso Restrito</p>
           <h1 className="text-2xl font-bold text-white">Insider Connect</h1>
@@ -112,7 +162,7 @@ function LoginScreen({ onLogin }: { onLogin: (insider: Insider) => void }) {
               placeholder="000.000.000-00"
               maxLength={14}
               autoFocus
-              className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-[#ff2c03] text-white placeholder:text-zinc-600 rounded-xl px-4 py-3.5 text-sm outline-none transition-all font-mono"
+              className="w-full bg-zinc-900/80 backdrop-blur-sm border-2 border-zinc-700 focus:border-[#ff2c03] text-white placeholder:text-zinc-600 rounded-xl px-4 py-3.5 text-sm outline-none transition-all font-mono"
             />
           </div>
 
