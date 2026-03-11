@@ -118,7 +118,11 @@ export default function CheckInPage() {
         throw new Error(errorData.error || 'Erro ao salvar check-in')
       }
 
-      router.push('/check-in/sucesso')
+      const params = new URLSearchParams({
+        data: eventoSelecionado?.dataFormatada || '',
+        evento: eventoSelecionado?.titulo || '',
+      })
+      router.push(`/check-in/sucesso?${params.toString()}`)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Erro ao enviar formulário')
       console.error('[v0] Erro no check-in:', err)
