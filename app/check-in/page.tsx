@@ -134,22 +134,22 @@ export default function CheckInPage() {
   const pelotons = [
     {
       id: '4km' as const,
-      label: '4 km',
-      description: 'Ideal para iniciantes e quem quer curtir o ritmo',
+      label: 'Ritmo Iniciante',
+      description: 'corre 1\' caminha 2\'',
       icon: '🟢',
       pace: 'Ritmo leve',
     },
     {
       id: '6km' as const,
-      label: '6 km',
-      description: 'Para quem já tem um bom ritmo e quer evoluir',
+      label: 'Ritmo Moderado',
+      description: 'pace 6\'30',
       icon: '🟡',
       pace: 'Ritmo moderado',
     },
     {
       id: '8km' as const,
-      label: '8 km',
-      description: 'Para corredores experientes que gostam de desafios',
+      label: 'Ritmo Avançado',
+      description: 'pace 5\'30',
       icon: '🔴',
       pace: 'Ritmo intenso',
     },
