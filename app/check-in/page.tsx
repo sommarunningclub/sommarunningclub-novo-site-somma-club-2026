@@ -151,7 +151,7 @@ export default function CheckInPage() {
     },
   ]
 
-  // Se nenhum evento foi selecionado, exibe lista de eventos
+  // Exibe lista de eventos — sem countdown, check-in sempre aberto
   if (!eventoSelecionado) {
     return (
       <main className="min-h-screen bg-black text-white flex flex-col">
