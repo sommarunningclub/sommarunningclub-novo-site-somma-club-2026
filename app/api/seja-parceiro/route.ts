@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
           email,
           phone: telefone,
           cnpj: tipo_documento === 'cnpj' ? documento : null,
-          company_name: nome_da_empresa,
+          nome_da_empresa: nome_da_empresa,
           description: descricao,
           stage: 'novo_lead',
           position: 0,
