@@ -134,22 +134,22 @@ export default function CheckInPage() {
   const pelotons = [
     {
       id: '4km' as const,
-      label: '4 km',
-      description: 'Ideal para iniciantes e quem quer curtir o ritmo',
+      label: 'Ritmo Iniciante',
+      description: "Corre 1' caminha 2'",
       icon: '🟢',
-      pace: 'Ritmo leve',
+      pace: 'Ritmo Iniciante',
     },
     {
       id: '6km' as const,
-      label: '6 km',
-      description: 'Para quem já tem um bom ritmo e quer evoluir',
+      label: 'Ritmo Moderado',
+      description: "Pace 6'30",
       icon: '🟡',
-      pace: 'Ritmo moderado',
+      pace: 'Ritmo Moderado',
     },
     {
       id: '8km' as const,
-      label: '8 km',
-      description: 'Para corredores experientes que gostam de desafios',
+      label: 'Ritmo Avançado',
+      description: "Pace 5'30",
       icon: '🔴',
       pace: 'Ritmo intenso',
     },
@@ -371,10 +371,10 @@ export default function CheckInPage() {
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-base sm:text-xl font-bold transition-all flex-shrink-0 ${
-                          formData.peloton === p.id ? 'bg-orange-500 text-white' : 'bg-zinc-800 text-zinc-300'
+                        <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-lg sm:text-xl transition-all flex-shrink-0 ${
+                          formData.peloton === p.id ? 'bg-orange-500' : 'bg-zinc-800'
                         }`}>
-                          {p.label.replace(' km', '')}
+                          {p.icon}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-semibold text-sm sm:text-base">{p.label}</p>
