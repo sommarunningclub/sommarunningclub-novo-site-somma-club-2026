@@ -3,10 +3,10 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const { nome, email, telefone, tipo_documento, documento, instagram, descricao, razao_social, nome_fantasia, atividade_principal } = await request.json()
+    const { nome, email, telefone, tipo_documento, documento, nome_da_empresa, instagram, descricao, razao_social, nome_fantasia, atividade_principal } = await request.json()
 
     // Validação básica
-    if (!nome || !email || !telefone || !tipo_documento || !documento || !instagram || !descricao) {
+    if (!nome || !email || !telefone || !tipo_documento || !documento || !nome_da_empresa || !instagram || !descricao) {
       return NextResponse.json(
         { error: 'Campos obrigatórios faltando' },
         { status: 400 }
@@ -54,6 +54,7 @@ export async function POST(request: NextRequest) {
           telefone,
           tipo_documento,
           documento,
+          nome_da_empresa,
           razao_social: razao_social || null,
           nome_fantasia: nome_fantasia || null,
           atividade_principal: atividade_principal || null,
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
           email,
           phone: telefone,
           cnpj: tipo_documento === 'cnpj' ? documento : null,
-          company_name: nome_fantasia || razao_social || null,
+          company_name: nome_da_empresa,
           description: descricao,
           stage: 'novo_lead',
           position: 0,

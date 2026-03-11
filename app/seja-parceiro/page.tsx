@@ -10,6 +10,7 @@ type FormData = {
   telefone: string
   tipo_documento: 'cpf' | 'cnpj' | ''
   documento: string
+  nome_da_empresa: string
   instagram: string
   descricao: string
 }
@@ -62,6 +63,7 @@ export default function SejaParceiro() {
     telefone: '',
     tipo_documento: '',
     documento: '',
+    nome_da_empresa: '',
     instagram: '',
     descricao: '',
   })
@@ -140,6 +142,7 @@ export default function SejaParceiro() {
       if (docLimpo.length !== 14) errors.documento = 'CNPJ deve ter 14 dígitos'
     }
 
+    if (!formData.nome_da_empresa.trim()) errors.nome_da_empresa = 'Nome da empresa é obrigatório'
     if (!formData.instagram.trim()) errors.instagram = 'Instagram é obrigatório'
     if (!formData.instagram.startsWith('@')) errors.instagram = 'Instagram deve começar com @'
     if (formData.descricao.trim().length < 50) errors.descricao = 'Descrição deve ter no mínimo 50 caracteres'
@@ -162,6 +165,7 @@ export default function SejaParceiro() {
         telefone: formData.telefone,
         tipo_documento: formData.tipo_documento,
         documento: formData.documento.replace(/\D/g, ''),
+        nome_da_empresa: formData.nome_da_empresa,
         instagram: formData.instagram,
         descricao: formData.descricao,
         razao_social: companyData?.razao_social || null,
@@ -356,6 +360,21 @@ export default function SejaParceiro() {
                 Buscando dados da empresa...
               </div>
             )}
+
+            {/* Nome da Empresa */}
+            <div>
+              <label className="block text-xs text-zinc-400 uppercase tracking-wide mb-1.5 font-medium">
+                Nome da Empresa
+              </label>
+              <input
+                type="text"
+                value={formData.nome_da_empresa}
+                onChange={e => setFormData(prev => ({ ...prev, nome_da_empresa: e.target.value }))}
+                placeholder="Nome da sua empresa"
+                className="w-full bg-zinc-900 border-2 border-zinc-700 focus:border-orange-500 text-white placeholder:text-zinc-600 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 text-sm outline-none transition-all duration-200"
+              />
+              {fieldErrors.nome_da_empresa && <p className="text-red-400 text-xs mt-1.5">{fieldErrors.nome_da_empresa}</p>}
+            </div>
 
             {/* Instagram */}
             <div>
