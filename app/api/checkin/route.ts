@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
 export async function POST(request: NextRequest) {
@@ -40,18 +40,18 @@ export async function POST(request: NextRequest) {
           cpf,
           sexo,
           pelotao,
-          data_do_evento: data_do_evento || '2026-03-07',
-          nome_do_evento: nome_do_evento || 'Somma Club',
-          data_hora_checkin: new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '-03:00',
+          data_do_evento: data_do_evento || '2026-03-14',
+          nome_do_evento: nome_do_evento || 'Somma Club — Edição #02 de Março',
+          data_hora_checkin: new Date().toISOString(),
           validacao_do_checkin: false,
         },
       ])
       .select()
 
     if (error) {
-      console.error('[v0] Erro ao inserir check-in:', error)
+      console.error('[v0] Erro ao inserir check-in:', error.message, error.details, error.hint)
       return NextResponse.json(
-        { error: 'Erro ao salvar check-in' },
+        { error: `Erro ao salvar check-in: ${error.message}` },
         { status: 500 }
       )
     }
