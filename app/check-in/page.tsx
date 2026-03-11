@@ -130,24 +130,24 @@ export default function CheckInPage() {
   const pelotons = [
     {
       id: '4km' as const,
-      label: 'Ritmo Moderado',
-      description: 'Pace 6\'30 — Para quem já tem uma base e quer manter um ritmo consistente',
-      icon: '🟡',
-      pace: 'Pace 6\'30 / km',
+      label: '4 km',
+      description: 'Ideal para iniciantes e quem quer curtir o ritmo',
+      icon: '🟢',
+      pace: 'Ritmo leve',
     },
     {
       id: '6km' as const,
-      label: 'Ritmo Avançado',
-      description: 'Pace 5\'30 — Para corredores experientes que buscam desempenho',
-      icon: '🔴',
-      pace: 'Pace 5\'30 / km',
+      label: '6 km',
+      description: 'Para quem já tem um bom ritmo e quer evoluir',
+      icon: '🟡',
+      pace: 'Ritmo moderado',
     },
     {
       id: '8km' as const,
-      label: 'Ritmo Iniciante',
-      description: 'Corre 1\' caminha 2\' — Perfeito para quem está começando a correr',
-      icon: '🟢',
-      pace: 'Corre 1\' / Caminha 2\'',
+      label: '8 km',
+      description: 'Para corredores experientes que gostam de desafios',
+      icon: '🔴',
+      pace: 'Ritmo intenso',
     },
   ]
 
@@ -499,11 +499,11 @@ export default function CheckInPage() {
               {/* Resumo pelotão */}
               <div className="mt-5 sm:mt-6 flex items-center gap-3 bg-zinc-900 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 border border-zinc-800">
                 <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold flex-shrink-0">
-                  {pelotons.find(p => p.id === formData.peloton)?.label ?? formData.peloton}
+                  {formData.peloton.replace('km', '')}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-xs text-zinc-500">Pelotão selecionado</p>
-                  <p className="text-white font-semibold text-xs sm:text-sm">{pelotons.find(p => p.id === formData.peloton)?.label ?? formData.peloton} — {eventoSelecionado.dataFormatada}</p>
+                  <p className="text-white font-semibold text-xs sm:text-sm">{formData.peloton} — {eventoSelecionado.dataFormatada}</p>
                 </div>
               </div>
 
