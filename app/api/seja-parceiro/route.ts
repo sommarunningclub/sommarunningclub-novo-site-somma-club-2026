@@ -86,6 +86,7 @@ export async function POST(request: NextRequest) {
           stage: 'novo_lead',
           position: 0,
           created_by: 'website',
+          origem: 'site',
         },
       ])
       .select()
