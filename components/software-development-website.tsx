@@ -690,7 +690,7 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-3xl px-6">
             <div className="text-center mb-12">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
-                Junte-se ao clube
+                Faça parte do clube
               </h2>
               <p className="text-lg text-muted-foreground">
                 Preencha suas informações para fazer parte da nossa comunidade

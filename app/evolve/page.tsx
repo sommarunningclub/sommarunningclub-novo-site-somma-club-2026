@@ -183,7 +183,7 @@ function CPFVerification({ onVerified }: { onVerified: () => void }) {
                     <a href="/" className="underline font-semibold hover:text-red-800 transition-colors">
                       página inicial
                     </a>
-                    , preencha o formulário &quot;Junte-se ao clube&quot; e aguarde a liberação.
+                    , preencha o formulário &quot;Faça parte do clube&quot; e aguarde a liberação.
                   </p>
                 </div>
               </div>
