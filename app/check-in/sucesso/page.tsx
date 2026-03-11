@@ -1,8 +1,14 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin } from 'lucide-react'
 
-export default function CheckInSucessoPage() {
+function CheckInSucessoContent() {
+  const searchParams = useSearchParams()
+  const dataEvento = searchParams.get('data') || 'Sábado, 14 de março de 2026'
+  const nomeEvento = searchParams.get('evento') || 'Somma Club — Edição #02 de Março'
+
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
       <header className="border-b border-zinc-800 px-6 py-4">
@@ -39,7 +45,7 @@ export default function CheckInSucessoPage() {
               </div>
               <div>
                 <p className="text-zinc-500 text-xs">Data</p>
-                <p className="text-white text-sm font-medium">Sábado, 07 de março de 2026</p>
+                <p className="text-white text-sm font-medium">{dataEvento}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -90,5 +96,13 @@ export default function CheckInSucessoPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function CheckInSucessoPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black" />}>
+      <CheckInSucessoContent />
+    </Suspense>
   )
 }
