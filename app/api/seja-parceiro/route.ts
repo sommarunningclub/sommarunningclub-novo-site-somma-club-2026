@@ -72,7 +72,34 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Inserir dados na tabela crm_leads
+    const { data: crmData, error: crmError } = await supabase
+      .from('crm_leads')
+      .insert([
+        {
+          name: nome,
+          email,
+          phone: telefone,
+          cnpj: tipo_documento === 'cnpj' ? documento : null,
+          company_name: nome_fantasia || razao_social || null,
+          description: descricao,
+          stage: 'novo_lead',
+          position: 0,
+          created_by: 'website',
+        },
+      ])
+      .select()
+
+    if (crmError) {
+      console.error('[v0] Erro ao inserir em crm_leads:', crmError)
+      // Não retorna erro, pois o lead foi criado na tabela principal
+      console.log('[v0] Lead não foi sincronizado com CRM, mas candidatura foi salva')
+    }
+
     console.log('[v0] Candidatura de parceiro salva com sucesso:', data)
+    if (crmData) {
+      console.log('[v0] Lead sincronizado com CRM:', crmData)
+    }
     return NextResponse.json({ success: true, data })
   } catch (error) {
     console.error('[v0] Erro na API seja-parceiro:', error)
