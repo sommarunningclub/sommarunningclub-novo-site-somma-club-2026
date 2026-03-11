@@ -55,7 +55,6 @@ const eventos: Evento[] = [
     local: 'Parque da Cidade — Brasília, DF',
     encerrado: false,
     dataEvento: '2026-03-14',
-    aberturaCheckin: ABERTURA_CHECKIN_EDICAO_02,
   },
 ]
 
