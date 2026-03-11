@@ -135,21 +135,21 @@ export default function CheckInPage() {
     {
       id: '4km' as const,
       label: 'Ritmo Iniciante',
-      description: 'corre 1\' caminha 2\'',
+      description: 'Alterna corrida e caminhada • 1\' correndo, 2\' caminhando',
       icon: '🟢',
       pace: 'Ritmo leve',
     },
     {
       id: '6km' as const,
       label: 'Ritmo Moderado',
-      description: 'pace 6\'30',
+      description: 'Ritmo constante • Pace aproximado de 6\'30"',
       icon: '🟡',
       pace: 'Ritmo moderado',
     },
     {
       id: '8km' as const,
       label: 'Ritmo Avançado',
-      description: 'pace 5\'30',
+      description: 'Para corredores experientes • Pace aproximado de 5\'30"',
       icon: '🔴',
       pace: 'Ritmo intenso',
     },
@@ -374,7 +374,7 @@ export default function CheckInPage() {
                         <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-base sm:text-xl font-bold transition-all flex-shrink-0 ${
                           formData.peloton === p.id ? 'bg-orange-500 text-white' : 'bg-zinc-800 text-zinc-300'
                         }`}>
-                          {p.label.replace(' km', '')}
+                          {p.icon}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-white font-semibold text-sm sm:text-base">{p.label}</p>
