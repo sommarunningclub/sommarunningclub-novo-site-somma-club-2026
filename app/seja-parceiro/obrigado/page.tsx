@@ -39,7 +39,7 @@ export default function SejaParceirObrigado() {
               </div>
               <div>
                 <p className="text-zinc-400 text-xs uppercase tracking-wide font-medium">Próximo passo</p>
-                <p className="text-white text-sm mt-1">Acompanhe seu e-mail para as novidades sobre sua candidatura</p>
+                <p className="text-white text-sm mt-1">Fique atento ao seu e-mail e telefone. A Camilla Rodrigues vai entrar em contato para entender melhor o fit entre os dois negócios.</p>
               </div>
             </div>
           </div>
@@ -54,14 +54,6 @@ export default function SejaParceirObrigado() {
 
           {/* Botões */}
           <div className="space-y-2 sm:space-y-3">
-            <a
-              href="https://instagram.com/sommarunningclub"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full bg-orange-500 hover:bg-orange-400 text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl text-center transition-all duration-200 text-xs sm:text-sm hover:shadow-lg hover:shadow-orange-500/25"
-            >
-              Siga nosso Instagram
-            </a>
             <a
               href="/"
               className="block w-full border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold py-3 sm:py-4 rounded-lg sm:rounded-xl text-center transition-all duration-200 text-xs sm:text-sm"
