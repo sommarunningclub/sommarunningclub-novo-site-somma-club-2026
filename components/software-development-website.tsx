@@ -813,7 +813,7 @@ export default function SoftwareDevelopmentWebsite() {
               <h3 className="text-sm font-semibold text-foreground">Mais do Somma</h3>
               <ul className="space-y-2 text-sm">
                 <li>
-                  <a href="https://wa.me/5561995372477?text=Ol%C3%A1%2C%20tudo%20bem%3F%20Tenho%20interesse%20em%20parceria%20com%20o%20Somma." target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-orange-500 transition-colors">
+                  <a href="/seja-parceiro" className="text-muted-foreground hover:text-orange-500 transition-colors">
                     Seja um Parceiro Somma Club
                   </a>
                 </li>
