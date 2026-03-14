@@ -41,8 +41,17 @@ const eventos: Evento[] = [
     dataFormatada: 'Sábado, 14 de março de 2026',
     titulo: 'Somma Club — Edição #02 de Março',
     local: 'Parque da Cidade — Brasília, DF',
-    encerrado: false,
+    encerrado: true,
     dataEvento: '2026-03-14',
+  },
+  {
+    id: 'evento-2026-03-21',
+    data: '2026-03-21',
+    dataFormatada: 'Sábado, 21 de março de 2026',
+    titulo: 'Somma Club — Edição #03 de Março',
+    local: 'Parque da Cidade — Brasília, DF',
+    encerrado: false,
+    dataEvento: '2026-03-21',
   },
 ]
 
