@@ -13,11 +13,12 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split('T')[0]
 
-    // Próximo evento (futuro ou aberto)
+    // Próximo evento (futuro ou aberto, excluindo encerrados)
     const { data: upcoming, error: upErr } = await supabase
       .from('eventos')
       .select('id, titulo, data_evento, horario_inicio, local, checkin_status, pelotoes')
-      .or(`data_evento.gte.${today},checkin_status.eq.aberto`)
+      .or(`data_evento.gt.${today},checkin_status.eq.aberto,checkin_status.eq.bloqueado`)
+      .neq('checkin_status', 'encerrado')
       .order('data_evento', { ascending: true })
       .limit(1)
       .single()
@@ -26,12 +27,12 @@ export async function GET() {
       console.error('[site] Erro ao buscar próximo evento:', upErr)
     }
 
-    // Histórico (últimos 30 dias)
+    // Histórico (últimos 30 dias, apenas encerrados)
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
     const { data: historico, error: histErr } = await supabase
       .from('eventos')
       .select('id, titulo, data_evento, local, checkin_status')
-      .lt('data_evento', today)
+      .eq('checkin_status', 'encerrado')
       .gte('data_evento', thirtyDaysAgo)
       .neq('id', upcoming?.id || '00000000-0000-0000-0000-000000000000')
       .order('data_evento', { ascending: false })
