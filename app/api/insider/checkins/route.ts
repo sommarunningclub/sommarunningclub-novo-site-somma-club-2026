@@ -11,11 +11,11 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const busca = searchParams.get('busca') || ''
 
-    // Buscar o evento mais recente a partir de 14/03/2026
+    // Buscar o evento mais recente a partir de 15/03/2026
     const { data: eventoRecente } = await supabase
       .from('checkins')
       .select('nome_do_evento, data_do_evento')
-      .gte('data_do_evento', '2026-03-14')
+      .gte('data_do_evento', '2026-03-15')
       .order('data_do_evento', { ascending: false })
       .limit(1)
       .single()

@@ -19,6 +19,7 @@ export async function POST(request: NextRequest) {
       pelotao,
       data_do_evento,
       nome_do_evento,
+      evento_id,
     } = body
 
     // Validação básica
@@ -40,8 +41,9 @@ export async function POST(request: NextRequest) {
           cpf,
           sexo,
           pelotao,
-          data_do_evento: data_do_evento || '2026-03-14',
-          nome_do_evento: nome_do_evento || 'Somma Club — Edição #02 de Março',
+          data_do_evento: data_do_evento || '',
+          nome_do_evento: nome_do_evento || '',
+          evento_id: evento_id || null,
           data_hora_checkin: new Date().toISOString(),
           validacao_do_checkin: false,
         },
