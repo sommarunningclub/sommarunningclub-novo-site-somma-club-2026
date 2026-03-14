@@ -20,6 +20,7 @@ type Evento = {
   titulo: string
   local: string
   encerrado: boolean
+  bloqueado?: boolean
   dataEvento: string
 }
 
@@ -51,6 +52,7 @@ const eventos: Evento[] = [
     titulo: 'Somma Club — Edição #03 de Março',
     local: 'Parque da Cidade — Brasília, DF',
     encerrado: false,
+    bloqueado: true,
     dataEvento: '2026-03-21',
   },
 ]
@@ -190,36 +192,57 @@ export default function CheckInPage() {
           <div className="mb-8">
             <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-3">Proximo evento</p>
             {eventos.filter(e => !e.encerrado).map(evento => (
-              <button
+              <div
                 key={evento.id}
-                onClick={() => setEventoSelecionado(evento)}
-                className="w-full text-left rounded-xl border-2 border-orange-500 bg-zinc-900 overflow-hidden hover:bg-zinc-800 transition-all duration-200 group"
+                onClick={() => !evento.bloqueado && setEventoSelecionado(evento)}
+                className={`w-full text-left rounded-xl border-2 bg-zinc-900 overflow-hidden transition-all duration-200 ${
+                  evento.bloqueado
+                    ? 'border-zinc-700 cursor-not-allowed opacity-70'
+                    : 'border-orange-500 hover:bg-zinc-800 cursor-pointer group'
+                }`}
               >
-                <div className="bg-orange-500 px-4 sm:px-6 py-2 flex items-center justify-between">
-                  <span className="text-white text-xs font-semibold uppercase tracking-widest">Check-in aberto</span>
-                  <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                <div className={`px-4 sm:px-6 py-2 flex items-center justify-between ${evento.bloqueado ? 'bg-zinc-700' : 'bg-orange-500'}`}>
+                  {evento.bloqueado ? (
+                    <>
+                      <span className="text-zinc-300 text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
+                        <Lock className="w-3 h-3" /> Check-in em breve
+                      </span>
+                      <Lock className="w-3.5 h-3.5 text-zinc-400" />
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-white text-xs font-semibold uppercase tracking-widest">Check-in aberto</span>
+                      <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                    </>
+                  )}
                 </div>
                 <div className="p-4 sm:p-6">
                   <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
-                      <Calendar className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                      <Calendar className={`w-3.5 h-3.5 flex-shrink-0 ${evento.bloqueado ? 'text-zinc-500' : 'text-orange-500'}`} />
                       {evento.dataFormatada}
                     </div>
                     <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
-                      <Clock className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                      <Clock className={`w-3.5 h-3.5 flex-shrink-0 ${evento.bloqueado ? 'text-zinc-500' : 'text-orange-500'}`} />
                       A partir das 07h00
                     </div>
                     <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
-                      <MapPin className="w-3.5 h-3.5 text-orange-500 flex-shrink-0" />
+                      <MapPin className={`w-3.5 h-3.5 flex-shrink-0 ${evento.bloqueado ? 'text-zinc-500' : 'text-orange-500'}`} />
                       {evento.local}
                     </div>
                   </div>
-                  <div className="mt-4 flex items-center justify-end gap-1 text-orange-500 text-xs font-semibold group-hover:gap-2 transition-all">
-                    Fazer check-in <ChevronRight className="w-3.5 h-3.5" />
-                  </div>
+                  {evento.bloqueado ? (
+                    <div className="mt-4 flex items-center justify-end gap-1.5 text-zinc-500 text-xs font-semibold">
+                      <Lock className="w-3 h-3" /> Check-in indisponível no momento
+                    </div>
+                  ) : (
+                    <div className="mt-4 flex items-center justify-end gap-1 text-orange-500 text-xs font-semibold group-hover:gap-2 transition-all">
+                      Fazer check-in <ChevronRight className="w-3.5 h-3.5" />
+                    </div>
+                  )}
                 </div>
-              </button>
+              </div>
             ))}
           </div>
 
