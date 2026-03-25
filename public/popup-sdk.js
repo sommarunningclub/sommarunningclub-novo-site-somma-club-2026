@@ -13,6 +13,8 @@
   var queue = []
   var currentIndex = 0
   var overlay = null
+  var currentPopup = null  // popup currently displayed
+  var pendingDismiss = true  // whether current popup should be tracked as dismiss on close
 
   // ─── Session ID ──────────────────────────────────────────────────────────
   function getSessionId() {
@@ -50,13 +52,68 @@
     return window.innerWidth <= 768 ? 'mobile' : 'desktop'
   }
 
-  // ─── Track click ─────────────────────────────────────────────────────────
-  function trackClick(popup) {
+  // ─── Track view ──────────────────────────────────────────────────────────
+  function trackView(popup) {
     var body = JSON.stringify({
       popup_id: popup.id,
       user_session_id: getSessionId(),
       page: window.location.pathname,
       device_type: getDeviceType(),
+    })
+    fetch(SUPABASE_URL + '/rest/v1/popup_views', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+        Prefer: 'return=minimal',
+      },
+      body: body,
+    }).catch(function () {})
+  }
+
+  // ─── Track dismissal ─────────────────────────────────────────────────────
+  function trackDismissal(popup) {
+    var body = JSON.stringify({
+      popup_id: popup.id,
+      user_session_id: getSessionId(),
+      page: window.location.pathname,
+      device_type: getDeviceType(),
+    })
+    fetch(SUPABASE_URL + '/rest/v1/popup_dismissals', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+        Prefer: 'return=minimal',
+      },
+      body: body,
+    }).catch(function () {})
+  }
+
+  // ─── Track click ─────────────────────────────────────────────────────────
+  function trackClick(popup) {
+    var params = new URLSearchParams(window.location.search)
+    var ua = navigator.userAgent
+    var browser = 'other'
+    if (/Chrome/.test(ua) && !/Edg/.test(ua) && !/OPR/.test(ua)) browser = 'Chrome'
+    else if (/Safari/.test(ua) && !/Chrome/.test(ua)) browser = 'Safari'
+    else if (/Firefox/.test(ua)) browser = 'Firefox'
+    else if (/Edg/.test(ua)) browser = 'Edge'
+    else if (/OPR/.test(ua)) browser = 'Opera'
+
+    var body = JSON.stringify({
+      popup_id: popup.id,
+      user_session_id: getSessionId(),
+      page: window.location.pathname,
+      device_type: getDeviceType(),
+      referrer: document.referrer || '',
+      utm_source: params.get('utm_source') || '',
+      utm_medium: params.get('utm_medium') || '',
+      utm_campaign: params.get('utm_campaign') || '',
+      browser: browser,
+      viewport_width: window.innerWidth,
     })
     fetch(SUPABASE_URL + '/rest/v1/popup_clicks', {
       method: 'POST',
@@ -67,14 +124,15 @@
         Prefer: 'return=minimal',
       },
       body: body,
-    }).catch(function () {
-      // Non-critical, ignore errors
-    })
+    }).catch(function () {})
   }
 
   // ─── Render overlay ──────────────────────────────────────────────────────
   function showPopup(popup) {
+    currentPopup = popup
+    pendingDismiss = true
     markShown(popup)
+    trackView(popup)
 
     var style = document.createElement('style')
     style.textContent = [
@@ -98,6 +156,7 @@
     img.src = popup.image_url
     img.alt = popup.title
     img.onclick = function () {
+      pendingDismiss = false
       trackClick(popup)
       closeOverlay()
       if (popup.redirect_link) window.open(popup.redirect_link, '_blank', 'noopener')
@@ -123,8 +182,11 @@
 
   function closeOverlay() {
     if (overlay) {
+      if (pendingDismiss && currentPopup) { trackDismissal(currentPopup) }
       overlay.remove()
       overlay = null
+      currentPopup = null
+      pendingDismiss = true
     }
     // Show next in queue
     currentIndex++
