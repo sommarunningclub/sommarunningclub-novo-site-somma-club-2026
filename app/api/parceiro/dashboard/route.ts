@@ -8,12 +8,11 @@ const supabase = createClient(
 
 export async function GET() {
   try {
-    // Busca o evento mais recente a partir de 14/03/2026
+    // Busca o evento mais recente com status "aberto" ou o mais recente por data
     const { data: eventoRecente, error: eventoError } = await supabase
-      .from('checkins')
-      .select('nome_do_evento, data_do_evento')
-      .gte('data_do_evento', '2026-03-14')
-      .order('data_do_evento', { ascending: false })
+      .from('eventos')
+      .select('id, titulo, data_evento')
+      .order('data_evento', { ascending: false })
       .limit(1)
       .single()
 
@@ -21,12 +20,11 @@ export async function GET() {
       return NextResponse.json({ error: 'Nenhum evento encontrado.' }, { status: 404 })
     }
 
-    // Busca todos os check-ins do evento mais recente (sem dados pessoais)
+    // Busca todos os check-ins pelo evento_id (sem dados pessoais)
     const { data: checkins, error: checkinsError } = await supabase
       .from('checkins')
       .select('id, pelotao, sexo, data_do_evento, nome_do_evento, validacao_do_checkin, data_hora_checkin')
-      .eq('nome_do_evento', eventoRecente.nome_do_evento)
-      .eq('data_do_evento', eventoRecente.data_do_evento)
+      .eq('evento_id', eventoRecente.id)
       .order('data_hora_checkin', { ascending: false })
 
     if (checkinsError) {
@@ -69,8 +67,8 @@ export async function GET() {
 
     return NextResponse.json({
       evento: {
-        nome: eventoRecente.nome_do_evento,
-        data: eventoRecente.data_do_evento,
+        nome: eventoRecente.titulo,
+        data: eventoRecente.data_evento,
       },
       total,
       validados,
