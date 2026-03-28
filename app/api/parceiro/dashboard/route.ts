@@ -6,25 +6,31 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
-    // Busca o evento mais recente com status "aberto" ou o mais recente por data
-    const { data: eventoRecente, error: eventoError } = await supabase
-      .from('eventos')
-      .select('id, titulo, data_evento')
-      .order('data_evento', { ascending: false })
-      .limit(1)
-      .single()
+    const { searchParams } = new URL(req.url)
+    const eventoId = searchParams.get('evento_id') || ''
 
-    if (eventoError || !eventoRecente) {
+    // Buscar todos os eventos da tabela eventos
+    const { data: eventos, error: eventosError } = await supabase
+      .from('eventos')
+      .select('id, titulo, data_evento, checkin_status')
+      .order('data_evento', { ascending: false })
+
+    if (eventosError || !eventos || eventos.length === 0) {
       return NextResponse.json({ error: 'Nenhum evento encontrado.' }, { status: 404 })
     }
+
+    // Se evento_id informado usa ele, senão pega o mais recente
+    const eventoSelecionado = eventoId
+      ? eventos.find(e => e.id === eventoId) || eventos[0]
+      : eventos[0]
 
     // Busca todos os check-ins pelo evento_id (sem dados pessoais)
     const { data: checkins, error: checkinsError } = await supabase
       .from('checkins')
       .select('id, pelotao, sexo, data_do_evento, nome_do_evento, validacao_do_checkin, data_hora_checkin')
-      .eq('evento_id', eventoRecente.id)
+      .eq('evento_id', eventoSelecionado.id)
       .order('data_hora_checkin', { ascending: false })
 
     if (checkinsError) {
@@ -67,9 +73,17 @@ export async function GET() {
 
     return NextResponse.json({
       evento: {
-        nome: eventoRecente.titulo,
-        data: eventoRecente.data_evento,
+        id: eventoSelecionado.id,
+        nome: eventoSelecionado.titulo,
+        data: eventoSelecionado.data_evento,
+        checkin_status: eventoSelecionado.checkin_status,
       },
+      eventos: eventos.map(e => ({
+        id: e.id,
+        titulo: e.titulo,
+        data_evento: e.data_evento,
+        checkin_status: e.checkin_status,
+      })),
       total,
       validados,
       pendentes,

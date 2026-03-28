@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   Search, LogOut, Users, ClipboardList, CheckSquare,
   MessageCircle, Check, X, ShieldCheck, ChevronRight,
-  ArrowLeft, Loader2, RefreshCw, Lock,
+  ArrowLeft, Loader2, RefreshCw, Lock, ChevronDown,
 } from 'lucide-react'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -37,6 +37,13 @@ type Checkin = {
   validacao_do_checkin: boolean
 }
 
+type EventoOption = {
+  id: string
+  titulo: string
+  data_evento: string
+  checkin_status: 'aberto' | 'bloqueado' | 'encerrado'
+}
+
 type Modulo = 'home' | 'membros' | 'checkins' | 'validar'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -59,6 +66,48 @@ function formatDateTime(d: string) {
   if (!d) return '—'
   const date = new Date(d)
   return date.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+}
+
+// ─── Dropdown de Eventos ──────────────────────────────────────────────────────
+
+function EventoSelector({
+  eventos,
+  selectedId,
+  onChange,
+}: {
+  eventos: EventoOption[]
+  selectedId: string
+  onChange: (id: string) => void
+}) {
+  const selected = eventos.find(e => e.id === selectedId)
+  const statusLabel = (s: string) => s === 'aberto' ? 'Aberto' : s === 'encerrado' ? 'Encerrado' : 'Bloqueado'
+  const statusColor = (s: string) => s === 'aberto' ? 'text-green-400' : s === 'encerrado' ? 'text-zinc-500' : 'text-yellow-400'
+
+  return (
+    <div className="relative">
+      <select
+        value={selectedId}
+        onChange={e => onChange(e.target.value)}
+        className="w-full appearance-none bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl px-4 py-3 pr-10 text-sm outline-none transition-all cursor-pointer"
+      >
+        {eventos.map(e => (
+          <option key={e.id} value={e.id}>
+            {e.titulo} — {formatDate(e.data_evento)} ({statusLabel(e.checkin_status)})
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+      {selected && (
+        <div className="flex items-center gap-2 mt-1.5 px-1">
+          <span className={`text-xs font-medium ${statusColor(selected.checkin_status)}`}>
+            {statusLabel(selected.checkin_status)}
+          </span>
+          <span className="text-zinc-600 text-xs">•</span>
+          <span className="text-zinc-500 text-xs">{formatDate(selected.data_evento)}</span>
+        </div>
+      )}
+    </div>
+  )
 }
 
 // ─── Tela de Login ────────────────────────────────────────────────────────────
@@ -325,17 +374,22 @@ function ModuloMembros() {
 
 function ModuloCheckins() {
   const [checkins, setCheckins] = useState<Checkin[]>([])
-  const [evento, setEvento] = useState<{ nome_do_evento: string; data_do_evento: string } | null>(null)
+  const [eventos, setEventos] = useState<EventoOption[]>([])
+  const [selectedEventoId, setSelectedEventoId] = useState('')
   const [busca, setBusca] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const buscarCheckins = useCallback(async (q: string) => {
+  const buscarCheckins = useCallback(async (q: string, eventoId?: string) => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/insider/checkins?busca=${encodeURIComponent(q)}`)
+      const params = new URLSearchParams()
+      if (q) params.set('busca', q)
+      if (eventoId) params.set('evento_id', eventoId)
+      const res = await fetch(`/api/insider/checkins?${params}`)
       const data = await res.json()
       setCheckins(data.checkins || [])
-      setEvento(data.evento || null)
+      if (data.eventos) setEventos(data.eventos)
+      if (data.evento?.id && !eventoId) setSelectedEventoId(data.evento.id)
     } finally {
       setLoading(false)
     }
@@ -344,21 +398,27 @@ function ModuloCheckins() {
   useEffect(() => { buscarCheckins('') }, [buscarCheckins])
 
   useEffect(() => {
-    const t = setTimeout(() => buscarCheckins(busca), 400)
+    const t = setTimeout(() => buscarCheckins(busca, selectedEventoId), 400)
     return () => clearTimeout(t)
-  }, [busca, buscarCheckins])
+  }, [busca, buscarCheckins, selectedEventoId])
+
+  function handleEventoChange(id: string) {
+    setSelectedEventoId(id)
+    setBusca('')
+    buscarCheckins('', id)
+  }
 
   const validados = checkins.filter(c => c.validacao_do_checkin).length
   const pendentes = checkins.filter(c => !c.validacao_do_checkin).length
 
   return (
     <div className="space-y-4">
-      {evento && (
-        <div className="bg-[#ff2c03]/10 border border-[#ff2c03]/20 rounded-xl px-4 py-3">
-          <p className="text-[#ff2c03] text-xs font-semibold uppercase tracking-widest">Evento mais recente</p>
-          <p className="text-white font-semibold text-sm mt-0.5">{evento.nome_do_evento}</p>
-          <p className="text-zinc-400 text-xs">{formatDate(evento.data_do_evento)}</p>
-        </div>
+      {eventos.length > 0 && (
+        <EventoSelector
+          eventos={eventos}
+          selectedId={selectedEventoId}
+          onChange={handleEventoChange}
+        />
       )}
 
       <div className="grid grid-cols-3 gap-2">
@@ -385,7 +445,7 @@ function ModuloCheckins() {
             className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white placeholder:text-zinc-600 rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all"
           />
         </div>
-        <button onClick={() => buscarCheckins(busca)} className="p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 transition-all">
+        <button onClick={() => buscarCheckins(busca, selectedEventoId)} className="p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 transition-all">
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
@@ -427,18 +487,23 @@ function ModuloCheckins() {
 
 function ModuloValidar() {
   const [checkins, setCheckins] = useState<Checkin[]>([])
-  const [evento, setEvento] = useState<{ nome_do_evento: string; data_do_evento: string } | null>(null)
+  const [eventos, setEventos] = useState<EventoOption[]>([])
+  const [selectedEventoId, setSelectedEventoId] = useState('')
   const [busca, setBusca] = useState('')
   const [loading, setLoading] = useState(false)
   const [validando, setValidando] = useState<string | null>(null)
 
-  const buscarCheckins = useCallback(async (q: string) => {
+  const buscarCheckins = useCallback(async (q: string, eventoId?: string) => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/insider/validar?busca=${encodeURIComponent(q)}`)
+      const params = new URLSearchParams()
+      if (q) params.set('busca', q)
+      if (eventoId) params.set('evento_id', eventoId)
+      const res = await fetch(`/api/insider/validar?${params}`)
       const data = await res.json()
       setCheckins(data.checkins || [])
-      setEvento(data.evento || null)
+      if (data.eventos) setEventos(data.eventos)
+      if (data.evento?.id && !eventoId) setSelectedEventoId(data.evento.id)
     } finally {
       setLoading(false)
     }
@@ -447,9 +512,15 @@ function ModuloValidar() {
   useEffect(() => { buscarCheckins('') }, [buscarCheckins])
 
   useEffect(() => {
-    const t = setTimeout(() => buscarCheckins(busca), 400)
+    const t = setTimeout(() => buscarCheckins(busca, selectedEventoId), 400)
     return () => clearTimeout(t)
-  }, [busca, buscarCheckins])
+  }, [busca, buscarCheckins, selectedEventoId])
+
+  function handleEventoChange(id: string) {
+    setSelectedEventoId(id)
+    setBusca('')
+    buscarCheckins('', id)
+  }
 
   async function toggleValidacao(id: string, atual: boolean) {
     setValidando(id)
@@ -471,12 +542,12 @@ function ModuloValidar() {
 
   return (
     <div className="space-y-4">
-      {evento && (
-        <div className="bg-[#ff2c03]/10 border border-[#ff2c03]/20 rounded-xl px-4 py-3">
-          <p className="text-[#ff2c03] text-xs font-semibold uppercase tracking-widest">Validando evento</p>
-          <p className="text-white font-semibold text-sm mt-0.5">{evento.nome_do_evento}</p>
-          <p className="text-zinc-400 text-xs">{formatDate(evento.data_do_evento)}</p>
-        </div>
+      {eventos.length > 0 && (
+        <EventoSelector
+          eventos={eventos}
+          selectedId={selectedEventoId}
+          onChange={handleEventoChange}
+        />
       )}
 
       <div className="grid grid-cols-2 gap-2">
@@ -501,7 +572,7 @@ function ModuloValidar() {
             className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white placeholder:text-zinc-600 rounded-xl pl-10 pr-4 py-3 text-sm outline-none transition-all"
           />
         </div>
-        <button onClick={() => buscarCheckins(busca)} className="p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 transition-all">
+        <button onClick={() => buscarCheckins(busca, selectedEventoId)} className="p-3 bg-zinc-900 border border-zinc-700 rounded-xl text-zinc-400 hover:text-white hover:border-zinc-500 transition-all">
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
         </button>
       </div>
@@ -549,7 +620,7 @@ function ModuloValidar() {
   )
 }
 
-// ─── Painel Principal ────────────────────���────────────────────────────────────
+// ─── Painel Principal ─────────────────────────────────────────────────────────
 
 function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void }) {
   const [modulo, setModulo] = useState<Modulo>('home')
@@ -564,7 +635,7 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
     {
       id: 'checkins' as Modulo,
       titulo: 'Consultar CPF Check-in',
-      descricao: 'Veja todos os check-ins do evento mais recente',
+      descricao: 'Veja todos os check-ins do evento selecionado',
       icone: ClipboardList,
     },
     {

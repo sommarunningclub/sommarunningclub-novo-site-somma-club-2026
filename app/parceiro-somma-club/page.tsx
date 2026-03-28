@@ -1,13 +1,20 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { Lock, LogOut, RefreshCw, Users, CheckCircle, Clock, TrendingUp, Shield } from 'lucide-react'
-import Image from 'next/image'
+import { Lock, LogOut, RefreshCw, Users, CheckCircle, Clock, TrendingUp, Shield, ChevronDown } from 'lucide-react'
 
 type Parceiro = { id: string; nome: string }
 
+type EventoOption = {
+  id: string
+  titulo: string
+  data_evento: string
+  checkin_status: 'aberto' | 'bloqueado' | 'encerrado'
+}
+
 type DashboardData = {
-  evento: { nome: string; data: string }
+  evento: { id: string; nome: string; data: string; checkin_status: string }
+  eventos: EventoOption[]
   total: number
   validados: number
   pendentes: number
@@ -204,21 +211,25 @@ function BarraProgresso({ label, valor, total, cor }: { label: string; valor: nu
 // ─── Dashboard ────────────────────────────────────────────────────────────────
 function Dashboard({ parceiro, onLogout }: { parceiro: Parceiro; onLogout: () => void }) {
   const [dados, setDados] = useState<DashboardData | null>(null)
+  const [selectedEventoId, setSelectedEventoId] = useState('')
   const [loading, setLoading] = useState(true)
   const [erro, setErro] = useState('')
   const [ultimaAtt, setUltimaAtt] = useState<Date | null>(null)
 
-  const buscarDados = useCallback(async () => {
+  const buscarDados = useCallback(async (eventoId?: string) => {
     setLoading(true)
     setErro('')
     try {
-      const res = await fetch('/api/parceiro/dashboard')
+      const params = new URLSearchParams()
+      if (eventoId) params.set('evento_id', eventoId)
+      const res = await fetch(`/api/parceiro/dashboard?${params}`)
       const json = await res.json()
       if (!res.ok) {
         setErro(json.error || 'Erro ao carregar dados.')
       } else {
         setDados(json)
         setUltimaAtt(new Date())
+        if (json.evento?.id && !eventoId) setSelectedEventoId(json.evento.id)
       }
     } catch {
       setErro('Erro de conexão.')
@@ -229,9 +240,17 @@ function Dashboard({ parceiro, onLogout }: { parceiro: Parceiro; onLogout: () =>
 
   useEffect(() => {
     buscarDados()
-    const interval = setInterval(buscarDados, 60000) // atualiza a cada 1 min
+    const interval = setInterval(() => buscarDados(selectedEventoId || undefined), 60000)
     return () => clearInterval(interval)
-  }, [buscarDados])
+  }, [buscarDados, selectedEventoId])
+
+  function handleEventoChange(id: string) {
+    setSelectedEventoId(id)
+    buscarDados(id)
+  }
+
+  const statusLabel = (s: string) => s === 'aberto' ? 'Aberto' : s === 'encerrado' ? 'Encerrado' : 'Bloqueado'
+  const statusColor = (s: string) => s === 'aberto' ? 'text-green-400' : s === 'encerrado' ? 'text-zinc-500' : 'text-yellow-400'
 
   const corSexo = (sexo: string) => {
     if (sexo === 'masculino') return '#3b82f6'
@@ -263,7 +282,7 @@ function Dashboard({ parceiro, onLogout }: { parceiro: Parceiro; onLogout: () =>
           <div className="flex items-center gap-3">
             <span className="text-zinc-500 text-xs hidden sm:block">Olá, <span className="text-white font-medium">{parceiro.nome}</span></span>
             <button
-              onClick={buscarDados}
+              onClick={() => buscarDados(selectedEventoId || undefined)}
               disabled={loading}
               className="p-2 rounded-lg bg-zinc-900 border border-zinc-800 hover:border-zinc-600 transition-all text-zinc-400 hover:text-white"
               title="Atualizar dados"
@@ -298,15 +317,41 @@ function Dashboard({ parceiro, onLogout }: { parceiro: Parceiro; onLogout: () =>
 
         {dados && (
           <>
-            {/* Cabeçalho do evento */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-              <div>
-                <p className="text-[#ff2c03] text-xs font-semibold uppercase tracking-widest mb-1">Evento atual</p>
-                <h2 className="text-xl sm:text-2xl font-bold text-white">{dados.evento.nome}</h2>
-                <p className="text-zinc-500 text-sm mt-0.5">{formatarData(dados.evento.data)}</p>
+            {/* Seletor de evento */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <p className="text-[#ff2c03] text-xs font-semibold uppercase tracking-widest">Evento</p>
+                  {dados.evento.checkin_status && (
+                    <span className={`text-xs font-medium ${statusColor(dados.evento.checkin_status)}`}>
+                      ({statusLabel(dados.evento.checkin_status)})
+                    </span>
+                  )}
+                </div>
+                {dados.eventos && dados.eventos.length > 1 ? (
+                  <div className="relative">
+                    <select
+                      value={selectedEventoId}
+                      onChange={e => handleEventoChange(e.target.value)}
+                      className="w-full appearance-none bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl px-4 py-3 pr-10 text-sm outline-none transition-all cursor-pointer font-semibold"
+                    >
+                      {dados.eventos.map(e => (
+                        <option key={e.id} value={e.id}>
+                          {e.titulo} — {formatarData(e.data_evento)} ({statusLabel(e.checkin_status)})
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+                  </div>
+                ) : (
+                  <div>
+                    <h2 className="text-xl sm:text-2xl font-bold text-white">{dados.evento.nome}</h2>
+                    <p className="text-zinc-500 text-sm mt-0.5">{formatarData(dados.evento.data)}</p>
+                  </div>
+                )}
               </div>
               {ultimaAtt && (
-                <p className="text-zinc-600 text-xs">
+                <p className="text-zinc-600 text-xs flex-shrink-0">
                   Atualizado às {ultimaAtt.toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit' })}
                 </p>
               )}
