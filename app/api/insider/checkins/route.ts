@@ -11,12 +11,11 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url)
     const busca = searchParams.get('busca') || ''
 
-    // Buscar o evento mais recente a partir de 15/03/2026
+    // Buscar o evento mais recente da tabela eventos
     const { data: eventoRecente } = await supabase
-      .from('checkins')
-      .select('nome_do_evento, data_do_evento')
-      .gte('data_do_evento', '2026-03-15')
-      .order('data_do_evento', { ascending: false })
+      .from('eventos')
+      .select('id, titulo, data_evento')
+      .order('data_evento', { ascending: false })
       .limit(1)
       .single()
 
@@ -27,7 +26,7 @@ export async function GET(req: Request) {
     let query = supabase
       .from('checkins')
       .select('id, nome_completo, email, telefone, cpf, sexo, pelotao, nome_do_evento, data_do_evento, data_hora_checkin, validacao_do_checkin')
-      .eq('data_do_evento', eventoRecente.data_do_evento)
+      .eq('evento_id', eventoRecente.id)
       .order('data_hora_checkin', { ascending: false })
 
     if (busca) {
@@ -42,7 +41,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({
       checkins: data || [],
-      evento: eventoRecente,
+      evento: { nome_do_evento: eventoRecente.titulo, data_do_evento: eventoRecente.data_evento },
     })
   } catch {
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
