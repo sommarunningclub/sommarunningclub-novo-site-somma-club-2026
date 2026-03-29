@@ -18,80 +18,10 @@ function criarCharMap() {
 
 const CHAR_MAP = criarCharMap()
 
-function tocarSomJackpot() {
-  try {
-    const ctx = new AudioContext()
-    const agora = ctx.currentTime
-
-    // Sequência de notas ascendentes (fanfarra de vitória)
-    const notas = [523, 659, 784, 1047, 1319, 1568] // C5, E5, G5, C6, E6, G6
-    notas.forEach((freq, i) => {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      osc.type = 'square'
-      osc.frequency.setValueAtTime(freq, agora + i * 0.12)
-      gain.gain.setValueAtTime(0, agora)
-      gain.gain.linearRampToValueAtTime(0.12, agora + i * 0.12)
-      gain.gain.linearRampToValueAtTime(0.08, agora + i * 0.12 + 0.1)
-      gain.gain.linearRampToValueAtTime(0, agora + i * 0.12 + 0.3)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start(agora + i * 0.12)
-      osc.stop(agora + i * 0.12 + 0.35)
-    })
-
-    // Acorde final sustentado (C major)
-    const acordeInicio = agora + notas.length * 0.12 + 0.1
-    ;[523, 659, 784, 1047].forEach(freq => {
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      osc.type = 'sine'
-      osc.frequency.setValueAtTime(freq, acordeInicio)
-      gain.gain.setValueAtTime(0, acordeInicio)
-      gain.gain.linearRampToValueAtTime(0.06, acordeInicio + 0.05)
-      gain.gain.linearRampToValueAtTime(0, acordeInicio + 1.2)
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      osc.start(acordeInicio)
-      osc.stop(acordeInicio + 1.3)
-    })
-  } catch { /* sem áudio */ }
-}
-
-function criarSomRoleta(): OscillatorNode | null {
-  try {
-    const audioCtx = new AudioContext()
-    const oscillator = audioCtx.createOscillator()
-    const gainNode = audioCtx.createGain()
-
-    oscillator.type = 'square'
-    oscillator.frequency.setValueAtTime(180, audioCtx.currentTime)
-
-    // Modulação de frequência para simular roleta mecânica
-    const lfo = audioCtx.createOscillator()
-    const lfoGain = audioCtx.createGain()
-    lfo.frequency.setValueAtTime(12, audioCtx.currentTime)
-    lfoGain.gain.setValueAtTime(80, audioCtx.currentTime)
-    lfo.connect(lfoGain)
-    lfoGain.connect(oscillator.frequency)
-    lfo.start()
-
-    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime)
-    oscillator.connect(gainNode)
-    gainNode.connect(audioCtx.destination)
-    oscillator.start()
-
-    return oscillator
-  } catch {
-    return null
-  }
-}
-
 export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const nomeAtualRef = useRef(0)
   const animationRef = useRef<number>(0)
-  const somRef = useRef<OscillatorNode | null>(null)
 
   const animarNome = useCallback((nome: string, aoTerminar: () => void) => {
     const canvas = canvasRef.current
@@ -190,13 +120,6 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
           ctx.fillText(text[i], scale * i, 0)
         }
 
-        // Parar som de roleta e tocar jackpot
-        if (somRef.current) {
-          try { somRef.current.stop() } catch { /* já parou */ }
-          somRef.current = null
-        }
-        tocarSomJackpot()
-
         setTimeout(aoTerminar, 1500)
         return
       }
@@ -218,16 +141,8 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
 
     function avancar() {
       if (nomeAtualRef.current >= nomes.length) {
-        if (somRef.current) {
-          try { somRef.current.stop() } catch { /* já parou */ }
-          somRef.current = null
-        }
         onComplete()
         return
-      }
-      // Reiniciar som de roleta para cada nome
-      if (!somRef.current) {
-        somRef.current = criarSomRoleta()
       }
       animarNome(nomes[nomeAtualRef.current], () => {
         nomeAtualRef.current++
@@ -235,17 +150,10 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
       })
     }
 
-    // Iniciar som de roleta
-    somRef.current = criarSomRoleta()
-
     avancar()
 
     return () => {
       cancelAnimationFrame(animationRef.current)
-      if (somRef.current) {
-        try { somRef.current.stop() } catch { /* já parou */ }
-        somRef.current = null
-      }
     }
   }, [nomes, onComplete, animarNome])
 
