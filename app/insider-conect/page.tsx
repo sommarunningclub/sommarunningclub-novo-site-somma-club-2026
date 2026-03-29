@@ -5,7 +5,12 @@ import {
   Search, LogOut, Users, ClipboardList, CheckSquare,
   MessageCircle, Check, X, ShieldCheck, ChevronRight,
   ArrowLeft, Loader2, RefreshCw, Lock, ChevronDown,
+  Trophy, Dices, Filter, Clock,
 } from 'lucide-react'
+import SorteioMachine from '@/components/sorteio/SorteioMachine'
+import GanhadorCard from '@/components/sorteio/GanhadorCard'
+import SorteioHistorico from '@/components/sorteio/SorteioHistorico'
+import type { Ganhador, Sorteio, EstatisticasSorteio } from '@/lib/sorteio/types'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -44,7 +49,7 @@ type EventoOption = {
   checkin_status: 'aberto' | 'bloqueado' | 'encerrado'
 }
 
-type Modulo = 'home' | 'membros' | 'checkins' | 'validar'
+type Modulo = 'home' | 'membros' | 'checkins' | 'validar' | 'sorteio'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -620,6 +625,357 @@ function ModuloValidar() {
   )
 }
 
+// ─── Módulo: Sorteio ─────────────────────────────────────────────────────────
+
+function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
+  const [eventos, setEventos] = useState<EventoOption[]>([])
+  const [selectedEventoId, setSelectedEventoId] = useState('')
+  const [stats, setStats] = useState<EstatisticasSorteio | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  // Filtros
+  const [sexo, setSexo] = useState('todos')
+  const [pelotao, setPelotao] = useState('todos')
+  const [dataInscricao, setDataInscricao] = useState('todos')
+  const [validacao, setValidacao] = useState('todos')
+  const [quantidade, setQuantidade] = useState(1)
+  const [titulo, setTitulo] = useState('')
+
+  // Resultado
+  const [ganhadores, setGanhadores] = useState<Ganhador[]>([])
+  const [sorteando, setSorteando] = useState(false)
+  const [nomesAnimacao, setNomesAnimacao] = useState<string[]>([])
+  const [animacaoCompleta, setAnimacaoCompleta] = useState(false)
+
+  // Histórico
+  const [historico, setHistorico] = useState<Sorteio[]>([])
+  const [loadingHistorico, setLoadingHistorico] = useState(false)
+
+  // Datas disponíveis para filtro
+  const [datasDisponiveis, setDatasDisponiveis] = useState<string[]>([])
+
+  // Buscar eventos no mount
+  useEffect(() => {
+    async function carregarEventos() {
+      try {
+        const res = await fetch('/api/insider/checkins')
+        const data = await res.json()
+        if (data.eventos) setEventos(data.eventos)
+        if (data.evento?.id) setSelectedEventoId(data.evento.id)
+      } catch { /* silencioso */ }
+    }
+    carregarEventos()
+  }, [])
+
+  // Buscar participantes quando filtros mudam
+  const buscarParticipantes = useCallback(async () => {
+    if (!selectedEventoId) return
+    setLoading(true)
+    try {
+      const params = new URLSearchParams({ evento_id: selectedEventoId })
+      if (sexo !== 'todos') params.set('sexo', sexo)
+      if (pelotao !== 'todos') params.set('pelotao', pelotao)
+      if (dataInscricao !== 'todos') params.set('data_inscricao', dataInscricao)
+      if (validacao !== 'todos') params.set('validacao', validacao)
+
+      const res = await fetch(`/api/sorteio/participantes?${params}`)
+      const data = await res.json()
+      if (data.stats) setStats(data.stats)
+      if (data.participantes) {
+        const datas = [...new Set(data.participantes.map((p: { data_hora_checkin: string }) =>
+          new Date(p.data_hora_checkin).toISOString().split('T')[0]
+        ))].sort() as string[]
+        setDatasDisponiveis(datas)
+      }
+    } finally {
+      setLoading(false)
+    }
+  }, [selectedEventoId, sexo, pelotao, dataInscricao, validacao])
+
+  useEffect(() => {
+    buscarParticipantes()
+  }, [buscarParticipantes])
+
+  // Buscar histórico quando evento muda
+  const buscarHistorico = useCallback(async () => {
+    if (!selectedEventoId) return
+    setLoadingHistorico(true)
+    try {
+      const res = await fetch(`/api/sorteio/historico?evento_id=${selectedEventoId}`)
+      const data = await res.json()
+      if (data.sorteios) setHistorico(data.sorteios)
+    } finally {
+      setLoadingHistorico(false)
+    }
+  }, [selectedEventoId])
+
+  useEffect(() => {
+    buscarHistorico()
+  }, [buscarHistorico])
+
+  function handleEventoChange(id: string) {
+    setSelectedEventoId(id)
+    setSexo('todos')
+    setPelotao('todos')
+    setDataInscricao('todos')
+    setValidacao('todos')
+    setGanhadores([])
+    setAnimacaoCompleta(false)
+  }
+
+  async function executarSorteio() {
+    if (!selectedEventoId || !titulo.trim()) return
+
+    setSorteando(true)
+    setGanhadores([])
+    setAnimacaoCompleta(false)
+
+    try {
+      const res = await fetch('/api/sorteio/sortear', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          evento_id: selectedEventoId,
+          titulo: titulo.trim(),
+          quantidade,
+          filtros: {
+            sexo: sexo !== 'todos' ? sexo : undefined,
+            pelotao: pelotao !== 'todos' ? pelotao : undefined,
+            data_inscricao: dataInscricao !== 'todos' ? dataInscricao : undefined,
+            validacao: validacao !== 'todos' ? validacao : undefined,
+          },
+          criado_por: insiderNome,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!res.ok) {
+        alert(data.error || 'Erro ao sortear')
+        setSorteando(false)
+        return
+      }
+
+      const ganhadoresResult: Ganhador[] = data.sorteio.ganhadores
+      setGanhadores(ganhadoresResult)
+      setNomesAnimacao(ganhadoresResult.map(g => g.checkin.nome_completo))
+    } catch {
+      alert('Erro ao executar sorteio')
+      setSorteando(false)
+    }
+  }
+
+  function handleAnimacaoCompleta() {
+    setAnimacaoCompleta(true)
+    setSorteando(false)
+    buscarHistorico()
+  }
+
+  async function handleConfirmar(id: string) {
+    await fetch(`/api/sorteio/ganhadores/${id}/confirmar`, { method: 'PATCH' })
+    setGanhadores(prev => prev.map(g => g.id === id ? { ...g, status: 'confirmado' as const } : g))
+  }
+
+  async function handleAusente(id: string) {
+    await fetch(`/api/sorteio/ganhadores/${id}/ausente`, { method: 'PATCH' })
+    setGanhadores(prev => prev.map(g => g.id === id ? { ...g, status: 'ausente' as const } : g))
+  }
+
+  async function handleResorteio(id: string): Promise<Ganhador | null> {
+    const res = await fetch(`/api/sorteio/ganhadores/${id}/resorteio`, { method: 'POST' })
+    const data = await res.json()
+    if (!res.ok) {
+      alert(data.error || 'Erro no resorteio')
+      return null
+    }
+    buscarHistorico()
+    return data.ganhador
+  }
+
+  const selectClass = "w-full appearance-none bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl px-4 py-3 text-sm outline-none transition-all cursor-pointer"
+
+  return (
+    <div className="space-y-4">
+      {/* Animação Slot Machine */}
+      {sorteando && nomesAnimacao.length > 0 && (
+        <SorteioMachine nomes={nomesAnimacao} onComplete={handleAnimacaoCompleta} />
+      )}
+
+      {/* Seletor de Evento */}
+      {eventos.length > 0 && (
+        <EventoSelector
+          eventos={eventos}
+          selectedId={selectedEventoId}
+          onChange={handleEventoChange}
+        />
+      )}
+
+      {/* Estatísticas */}
+      {stats && (
+        <div className="space-y-2">
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: 'Total', valor: stats.total, cor: 'text-white' },
+              { label: 'Masculino', valor: stats.masculino, cor: 'text-blue-400' },
+              { label: 'Feminino', valor: stats.feminino, cor: 'text-pink-400' },
+            ].map(({ label, valor, cor }) => (
+              <div key={label} className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-center">
+                <p className={`text-2xl font-bold ${cor}`}>{valor}</p>
+                <p className="text-zinc-500 text-xs mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            {Object.entries(stats.por_pelotao).map(([nome, valor]) => (
+              <div key={nome} className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-center">
+                <p className="text-2xl font-bold text-[#ff2c03]">{valor}</p>
+                <p className="text-zinc-500 text-xs mt-0.5">{nome}</p>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            {[
+              { label: 'Validados', valor: stats.validados, cor: 'text-green-400' },
+              { label: 'Pendentes', valor: stats.pendentes, cor: 'text-yellow-400' },
+            ].map(({ label, valor, cor }) => (
+              <div key={label} className="bg-zinc-900 border border-zinc-800 rounded-xl p-3 text-center">
+                <p className={`text-2xl font-bold ${cor}`}>{valor}</p>
+                <p className="text-zinc-500 text-xs mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Filtros */}
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 space-y-3">
+        <div className="flex items-center gap-2 mb-2">
+          <Filter className="w-4 h-4 text-[#ff2c03]" />
+          <p className="text-white text-sm font-semibold">Filtros do Sorteio</p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-zinc-500 text-xs mb-1 block">Sexo</label>
+            <div className="relative">
+              <select value={sexo} onChange={e => setSexo(e.target.value)} className={selectClass}>
+                <option value="todos">Todos</option>
+                <option value="masculino">Masculino</option>
+                <option value="feminino">Feminino</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+            </div>
+          </div>
+          <div>
+            <label className="text-zinc-500 text-xs mb-1 block">Pelotão</label>
+            <div className="relative">
+              <select value={pelotao} onChange={e => setPelotao(e.target.value)} className={selectClass}>
+                <option value="todos">Todos</option>
+                <option value="4km">4km</option>
+                <option value="6km">6km</option>
+                <option value="8km">8km</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+            </div>
+          </div>
+          <div>
+            <label className="text-zinc-500 text-xs mb-1 block">Dia do Check-in</label>
+            <div className="relative">
+              <select value={dataInscricao} onChange={e => setDataInscricao(e.target.value)} className={selectClass}>
+                <option value="todos">Todos os dias</option>
+                {datasDisponiveis.map(d => (
+                  <option key={d} value={d}>{new Date(d + 'T12:00:00').toLocaleDateString('pt-BR')}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+            </div>
+          </div>
+          <div>
+            <label className="text-zinc-500 text-xs mb-1 block">Validação</label>
+            <div className="relative">
+              <select value={validacao} onChange={e => setValidacao(e.target.value)} className={selectClass}>
+                <option value="todos">Todos</option>
+                <option value="validados">Validados</option>
+                <option value="pendentes">Pendentes</option>
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500 pointer-events-none" />
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 pt-2 border-t border-zinc-800">
+          <div>
+            <label className="text-zinc-500 text-xs mb-1 block">Quantidade de ganhadores</label>
+            <input
+              type="number"
+              min={1}
+              max={stats?.total || 100}
+              value={quantidade}
+              onChange={e => setQuantidade(Math.max(1, parseInt(e.target.value) || 1))}
+              className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl px-4 py-3 text-sm outline-none transition-all"
+            />
+          </div>
+          <div>
+            <label className="text-zinc-500 text-xs mb-1 block">Descrição do prêmio</label>
+            <input
+              type="text"
+              value={titulo}
+              onChange={e => setTitulo(e.target.value)}
+              placeholder="Ex: Camiseta Somma"
+              className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white placeholder:text-zinc-600 rounded-xl px-4 py-3 text-sm outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        <button
+          onClick={executarSorteio}
+          disabled={sorteando || !titulo.trim() || !stats || stats.total === 0}
+          className="w-full flex items-center justify-center gap-2 bg-[#ff2c03] hover:bg-[#ff2c03]/90 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded-xl py-3.5 text-sm font-bold uppercase tracking-wider transition-all"
+        >
+          {sorteando ? (
+            <Loader2 className="w-5 h-5 animate-spin" />
+          ) : (
+            <Dices className="w-5 h-5" />
+          )}
+          {sorteando ? 'Sorteando...' : 'Sortear'}
+        </button>
+      </div>
+
+      {/* Resultado */}
+      {animacaoCompleta && ganhadores.length > 0 && (
+        <div className="space-y-3">
+          <p className="text-white text-sm font-semibold flex items-center gap-2">
+            <Trophy className="w-4 h-4 text-[#ff2c03]" />
+            Ganhadores
+          </p>
+          {ganhadores.map(g => (
+            <GanhadorCard
+              key={g.id}
+              ganhador={g}
+              onConfirmar={handleConfirmar}
+              onAusente={handleAusente}
+              onResorteio={handleResorteio}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Histórico */}
+      <div className="pt-4 border-t border-zinc-800">
+        <p className="text-white text-sm font-semibold mb-3 flex items-center gap-2">
+          <Clock className="w-4 h-4 text-zinc-500" />
+          Histórico de Sorteios
+        </p>
+        {loadingHistorico ? (
+          <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-zinc-500" /></div>
+        ) : (
+          <SorteioHistorico sorteios={historico} />
+        )}
+      </div>
+    </div>
+  )
+}
+
 // ─── Painel Principal ─────────────────────────────────────────────────────────
 
 function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void }) {
@@ -643,6 +999,12 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
       titulo: 'Validar Check-in',
       descricao: 'Libere pulseiras validando o check-in dos participantes',
       icone: CheckSquare,
+    },
+    {
+      id: 'sorteio' as Modulo,
+      titulo: 'Sorteio',
+      descricao: 'Realize sorteios entre os participantes do evento',
+      icone: Dices,
     },
   ]
 
@@ -706,8 +1068,10 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
           <ModuloMembros />
         ) : modulo === 'checkins' ? (
           <ModuloCheckins />
-        ) : (
+        ) : modulo === 'validar' ? (
           <ModuloValidar />
+        ) : (
+          <ModuloSorteio insiderNome={insider.nome} />
         )}
       </div>
     </main>
