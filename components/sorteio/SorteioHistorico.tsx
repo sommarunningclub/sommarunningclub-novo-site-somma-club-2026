@@ -2,16 +2,29 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, Clock, Trophy, Users } from 'lucide-react'
+import { ChevronDown, Clock, Trophy, Users, Trash2, Loader2 } from 'lucide-react'
 import type { Sorteio } from '@/lib/sorteio/types'
 import { formatDateTime, descricaoFiltros } from '@/lib/sorteio/utils'
 
 type SorteioHistoricoProps = {
   sorteios: Sorteio[]
+  onLimparHistorico?: () => Promise<void>
 }
 
-export default function SorteioHistorico({ sorteios }: SorteioHistoricoProps) {
+export default function SorteioHistorico({ sorteios, onLimparHistorico }: SorteioHistoricoProps) {
   const [expandido, setExpandido] = useState<string | null>(null)
+  const [limpando, setLimpando] = useState(false)
+
+  async function handleLimpar() {
+    if (!onLimparHistorico) return
+    if (!confirm('Tem certeza que deseja limpar todo o histórico de sorteios deste evento?')) return
+    setLimpando(true)
+    try {
+      await onLimparHistorico()
+    } finally {
+      setLimpando(false)
+    }
+  }
 
   if (sorteios.length === 0) {
     return (
@@ -23,6 +36,18 @@ export default function SorteioHistorico({ sorteios }: SorteioHistoricoProps) {
 
   return (
     <div className="space-y-2">
+      {onLimparHistorico && (
+        <div className="flex justify-end">
+          <button
+            onClick={handleLimpar}
+            disabled={limpando}
+            className="flex items-center gap-1.5 text-zinc-600 hover:text-red-400 text-xs transition-colors disabled:opacity-50"
+          >
+            {limpando ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+            Limpar histórico
+          </button>
+        </div>
+      )}
       {sorteios.map(s => {
         const aberto = expandido === s.id
         const confirmados = s.ganhadores.filter(g => g.status === 'confirmado').length

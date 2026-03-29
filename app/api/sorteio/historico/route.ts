@@ -68,3 +68,46 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url)
+    const evento_id = searchParams.get('evento_id')
+
+    if (!evento_id) {
+      return NextResponse.json({ error: 'evento_id é obrigatório' }, { status: 400 })
+    }
+
+    // Buscar sorteios do evento
+    const { data: sorteios } = await supabase
+      .from('sorteios')
+      .select('id')
+      .eq('evento_id', evento_id)
+
+    if (!sorteios || sorteios.length === 0) {
+      return NextResponse.json({ success: true })
+    }
+
+    const sorteioIds = sorteios.map(s => s.id)
+
+    // Deletar ganhadores primeiro
+    await supabase
+      .from('sorteio_ganhadores')
+      .delete()
+      .in('sorteio_id', sorteioIds)
+
+    // Deletar sorteios
+    const { error } = await supabase
+      .from('sorteios')
+      .delete()
+      .eq('evento_id', evento_id)
+
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true })
+  } catch {
+    return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
+  }
+}

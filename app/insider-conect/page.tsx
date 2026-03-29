@@ -771,6 +771,12 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
     buscarHistorico()
   }
 
+  async function handleLimparHistorico() {
+    if (!selectedEventoId) return
+    await fetch(`/api/sorteio/historico?evento_id=${selectedEventoId}`, { method: 'DELETE' })
+    setHistorico([])
+  }
+
   async function handleConfirmar(id: string) {
     await fetch(`/api/sorteio/ganhadores/${id}/confirmar`, { method: 'PATCH' })
     setGanhadores(prev => prev.map(g => g.id === id ? { ...g, status: 'confirmado' as const } : g))
@@ -969,7 +975,7 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
         {loadingHistorico ? (
           <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-zinc-500" /></div>
         ) : (
-          <SorteioHistorico sorteios={historico} />
+          <SorteioHistorico sorteios={historico} onLimparHistorico={handleLimparHistorico} />
         )}
       </div>
     </div>

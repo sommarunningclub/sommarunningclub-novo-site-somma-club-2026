@@ -18,10 +18,40 @@ function criarCharMap() {
 
 const CHAR_MAP = criarCharMap()
 
+function criarSomRoleta(): OscillatorNode | null {
+  try {
+    const audioCtx = new AudioContext()
+    const oscillator = audioCtx.createOscillator()
+    const gainNode = audioCtx.createGain()
+
+    oscillator.type = 'square'
+    oscillator.frequency.setValueAtTime(180, audioCtx.currentTime)
+
+    // Modulação de frequência para simular roleta mecânica
+    const lfo = audioCtx.createOscillator()
+    const lfoGain = audioCtx.createGain()
+    lfo.frequency.setValueAtTime(12, audioCtx.currentTime)
+    lfoGain.gain.setValueAtTime(80, audioCtx.currentTime)
+    lfo.connect(lfoGain)
+    lfoGain.connect(oscillator.frequency)
+    lfo.start()
+
+    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime)
+    oscillator.connect(gainNode)
+    gainNode.connect(audioCtx.destination)
+    oscillator.start()
+
+    return oscillator
+  } catch {
+    return null
+  }
+}
+
 export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const nomeAtualRef = useRef(0)
   const animationRef = useRef<number>(0)
+  const somRef = useRef<OscillatorNode | null>(null)
 
   const animarNome = useCallback((nome: string, aoTerminar: () => void) => {
     const canvas = canvasRef.current
@@ -141,6 +171,10 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
 
     function avancar() {
       if (nomeAtualRef.current >= nomes.length) {
+        if (somRef.current) {
+          try { somRef.current.stop() } catch { /* já parou */ }
+          somRef.current = null
+        }
         onComplete()
         return
       }
@@ -150,10 +184,17 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
       })
     }
 
+    // Iniciar som de roleta
+    somRef.current = criarSomRoleta()
+
     avancar()
 
     return () => {
       cancelAnimationFrame(animationRef.current)
+      if (somRef.current) {
+        try { somRef.current.stop() } catch { /* já parou */ }
+        somRef.current = null
+      }
     }
   }, [nomes, onComplete, animarNome])
 
