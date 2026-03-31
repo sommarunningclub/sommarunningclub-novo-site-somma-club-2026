@@ -6,8 +6,17 @@ import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin } from 'lucide-react'
 
 function CheckInSucessoContent() {
   const searchParams = useSearchParams()
-  const dataEvento = searchParams.get('data') || 'Sábado, 14 de março de 2026'
-  const nomeEvento = searchParams.get('evento') || 'Somma Club — Edição #02 de Março'
+  const dataEvento = searchParams.get('data') || ''
+  const nomeEvento = searchParams.get('evento') || ''
+  const horario = searchParams.get('horario') || '07:00'
+  const local = searchParams.get('local') || 'Parque da Cidade — Brasília, DF'
+  const localUrl = searchParams.get('local_url') || ''
+  const descricao = searchParams.get('descricao') || ''
+
+  const formatarHorario = (h: string) => {
+    const [hr, min] = h.split(':')
+    return `A partir das ${hr}h${min === '00' ? '00' : min}`
+  }
 
   return (
     <main className="min-h-screen bg-black text-white flex flex-col">
@@ -34,7 +43,8 @@ function CheckInSucessoContent() {
           <p className="text-orange-500 text-xs font-semibold uppercase tracking-widest mb-3">Check-in confirmado</p>
           <h1 className="text-3xl font-bold text-white mb-3">Você está dentro!</h1>
           <p className="text-zinc-400 text-sm leading-relaxed mb-10">
-            Sua vaga foi reservada. Nos vemos no Parque da Cidade no sábado de manhã — venha preparado para correr, se divertir e tomar um café delicioso depois!
+            Sua vaga para <span className="text-white font-medium">{nomeEvento}</span> foi reservada.
+            {descricao ? ` ${descricao}` : ' Nos vemos lá!'}
           </p>
 
           {/* Detalhes */}
@@ -54,7 +64,7 @@ function CheckInSucessoContent() {
               </div>
               <div>
                 <p className="text-zinc-500 text-xs">Horário</p>
-                <p className="text-white text-sm font-medium">A partir das 07h00</p>
+                <p className="text-white text-sm font-medium">{formatarHorario(horario)}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -63,8 +73,18 @@ function CheckInSucessoContent() {
               </div>
               <div>
                 <p className="text-zinc-500 text-xs">Local</p>
-                <p className="text-white text-sm font-medium">Parque da Cidade — Brasília, DF</p>
-                <p className="text-zinc-400 text-xs mt-1">Estacionamento 10, sempre aos sábados, às 7h da manhã</p>
+                {localUrl ? (
+                  <a
+                    href={localUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white text-sm font-medium hover:text-orange-400 underline underline-offset-2 transition-colors"
+                  >
+                    {local}
+                  </a>
+                ) : (
+                  <p className="text-white text-sm font-medium">{local}</p>
+                )}
               </div>
             </div>
           </div>
@@ -78,14 +98,16 @@ function CheckInSucessoContent() {
           </div>
 
           {/* Link de localização */}
-          <a 
-            href="https://maps.app.goo.gl/uoXH8fHjhdTXMWAj7" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="block w-full border border-orange-500 hover:bg-orange-500/10 text-orange-500 hover:text-orange-400 font-semibold py-3 rounded-xl text-center transition-all duration-200 text-sm mb-3"
-          >
-            Ver localização no mapa
-          </a>
+          {localUrl && (
+            <a
+              href={localUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full border border-orange-500 hover:bg-orange-500/10 text-orange-500 hover:text-orange-400 font-semibold py-3 rounded-xl text-center transition-all duration-200 text-sm mb-3"
+            >
+              Ver localização no mapa
+            </a>
+          )}
 
           <a
             href="/"
