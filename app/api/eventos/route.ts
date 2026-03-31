@@ -16,7 +16,7 @@ export async function GET() {
     // Próximo evento (futuro ou aberto, excluindo encerrados)
     const { data: upcoming, error: upErr } = await supabase
       .from('eventos')
-      .select('id, titulo, data_evento, horario_inicio, local, checkin_status, pelotoes')
+      .select('id, titulo, data_evento, horario_inicio, local, local_url, tipo, checkin_status, pelotoes, descricao')
       .or(`data_evento.gt.${today},checkin_status.eq.aberto,checkin_status.eq.bloqueado`)
       .neq('checkin_status', 'encerrado')
       .order('data_evento', { ascending: true })

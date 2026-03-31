@@ -18,14 +18,15 @@ type Evento = {
   data: string
   dataFormatada: string
   titulo: string
+  descricao: string | null
   local: string
+  localUrl: string | null
+  tipo: 'corrida' | 'personalizado'
   encerrado: boolean
   bloqueado: boolean
   dataEvento: string
   horarioInicio: string
 }
-
-const TOTAL_STEPS = 3
 
 function formatarData(dataStr: string): string {
   const [year, month, day] = dataStr.split('-').map(Number)
@@ -45,6 +46,7 @@ export default function CheckInPage() {
   const [eventos, setEventos] = useState<Evento[]>([])
   const [loadingEventos, setLoadingEventos] = useState(true)
   const [eventoSelecionado, setEventoSelecionado] = useState<Evento | null>(null)
+  const totalSteps = eventoSelecionado?.tipo === 'personalizado' ? 2 : 3
   const [step, setStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -73,7 +75,10 @@ export default function CheckInPage() {
             data: e.data_evento,
             dataFormatada: formatarData(e.data_evento),
             titulo: e.titulo,
+            descricao: e.descricao || null,
             local: e.local || 'Parque da Cidade — Brasília, DF',
+            localUrl: e.local_url || null,
+            tipo: e.tipo || 'corrida',
             encerrado: e.checkin_status === 'encerrado',
             bloqueado: e.checkin_status === 'bloqueado',
             dataEvento: e.data_evento,
@@ -89,7 +94,10 @@ export default function CheckInPage() {
               data: e.data_evento,
               dataFormatada: formatarData(e.data_evento),
               titulo: e.titulo,
+              descricao: null,
               local: e.local || 'Parque da Cidade — Brasília, DF',
+              localUrl: null,
+              tipo: 'corrida',
               encerrado: e.checkin_status === 'encerrado',
               bloqueado: e.checkin_status === 'bloqueado',
               dataEvento: e.data_evento,
@@ -126,13 +134,17 @@ export default function CheckInPage() {
 
   const canAdvance = () => {
     if (step === 1) return true
-    if (step === 2) return !!formData.peloton
-    if (step === 3) return !!(formData.nome && formData.telefone && formData.sexo && formData.email && formData.cpf)
+    if (eventoSelecionado?.tipo === 'personalizado') {
+      if (step === 2) return !!(formData.nome && formData.telefone && formData.sexo && formData.email && formData.cpf)
+    } else {
+      if (step === 2) return !!formData.peloton
+      if (step === 3) return !!(formData.nome && formData.telefone && formData.sexo && formData.email && formData.cpf)
+    }
     return false
   }
 
   const handleNext = () => {
-    if (canAdvance() && step < TOTAL_STEPS) setStep(step + 1)
+    if (canAdvance() && step < totalSteps) setStep(step + 1)
   }
 
   const handlePrev = () => {
@@ -155,7 +167,7 @@ export default function CheckInPage() {
           telefone: formData.telefone,
           cpf: formData.cpf,
           sexo: formData.sexo,
-          pelotao: formData.peloton,
+          pelotao: eventoSelecionado?.tipo === 'personalizado' ? null : formData.peloton,
           data_do_evento: eventoSelecionado?.dataEvento || '',
           nome_do_evento: eventoSelecionado?.titulo || '',
           evento_id: eventoSelecionado?.id || null,
@@ -170,6 +182,10 @@ export default function CheckInPage() {
       const params = new URLSearchParams({
         data: eventoSelecionado?.dataFormatada || '',
         evento: eventoSelecionado?.titulo || '',
+        horario: eventoSelecionado?.horarioInicio || '07:00',
+        local: eventoSelecionado?.local || '',
+        local_url: eventoSelecionado?.localUrl || '',
+        descricao: eventoSelecionado?.descricao || '',
       })
       router.push(`/check-in/sucesso?${params.toString()}`)
     } catch (err) {
@@ -280,6 +296,9 @@ export default function CheckInPage() {
                   </div>
                   <div className="p-4 sm:p-6">
                     <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>
+                    {evento.descricao && (
+                      <p className="text-zinc-400 text-xs sm:text-sm mb-3 leading-relaxed">{evento.descricao}</p>
+                    )}
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
                         <Calendar className={`w-3.5 h-3.5 flex-shrink-0 ${evento.bloqueado ? 'text-zinc-500' : 'text-orange-500'}`} />
@@ -291,7 +310,19 @@ export default function CheckInPage() {
                       </div>
                       <div className="flex items-center gap-2 text-xs sm:text-sm text-zinc-400">
                         <MapPin className={`w-3.5 h-3.5 flex-shrink-0 ${evento.bloqueado ? 'text-zinc-500' : 'text-orange-500'}`} />
-                        {evento.local}
+                        {evento.localUrl ? (
+                          <a
+                            href={evento.localUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={e => e.stopPropagation()}
+                            className="hover:text-orange-400 underline underline-offset-2 transition-colors"
+                          >
+                            {evento.local}
+                          </a>
+                        ) : (
+                          evento.local
+                        )}
                       </div>
                     </div>
                     {evento.bloqueado ? (
@@ -376,13 +407,13 @@ export default function CheckInPage() {
               Faça seu <span className="text-orange-500">Check-in</span>
             </h1>
             <p className="text-zinc-400 text-xs sm:text-sm mt-2 sm:mt-3">
-              Confirme sua presença em {TOTAL_STEPS} passos simples
+              Confirme sua presença em {totalSteps} passos simples
             </p>
           </div>
 
           {/* Progress */}
           <div className="flex items-center gap-1 sm:gap-2 mb-8 sm:mb-10">
-            {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
+            {Array.from({ length: totalSteps }).map((_, i) => (
               <div key={i} className="flex-1 flex items-center gap-1 sm:gap-2">
                 <div
                   className={`h-1 sm:h-1.5 flex-1 rounded-full transition-all duration-500 ${
@@ -391,7 +422,7 @@ export default function CheckInPage() {
                 />
               </div>
             ))}
-            <span className="text-xs text-zinc-500 whitespace-nowrap ml-2">{step}/{TOTAL_STEPS}</span>
+            <span className="text-xs text-zinc-500 whitespace-nowrap ml-2">{step}/{totalSteps}</span>
           </div>
 
           {/* STEP 1: Evento */}
@@ -438,9 +469,26 @@ export default function CheckInPage() {
                     </div>
                     <div className="flex-1">
                       <p className="text-zinc-400 text-xs">Local</p>
-                      <p className="text-white font-medium text-sm sm:text-base">{eventoSelecionado.local}</p>
+                      {eventoSelecionado.localUrl ? (
+                        <a
+                          href={eventoSelecionado.localUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-white font-medium text-sm sm:text-base hover:text-orange-400 underline underline-offset-2 transition-colors"
+                        >
+                          {eventoSelecionado.local}
+                        </a>
+                      ) : (
+                        <p className="text-white font-medium text-sm sm:text-base">{eventoSelecionado.local}</p>
+                      )}
                     </div>
                   </div>
+
+                  {eventoSelecionado.descricao && (
+                    <div className="pt-3 border-t border-zinc-800 mt-3">
+                      <p className="text-zinc-400 text-xs sm:text-sm leading-relaxed">{eventoSelecionado.descricao}</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -456,7 +504,7 @@ export default function CheckInPage() {
           )}
 
           {/* STEP 2: Pelotão */}
-          {step === 2 && (
+          {step === 2 && eventoSelecionado?.tipo !== 'personalizado' && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-400">
               <div className="mb-6 sm:mb-8">
                 <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-1 sm:mb-2">Passo 2</p>
@@ -516,10 +564,12 @@ export default function CheckInPage() {
           )}
 
           {/* STEP 3: Dados pessoais */}
-          {step === 3 && (
+          {((step === 3 && eventoSelecionado?.tipo !== 'personalizado') || (step === 2 && eventoSelecionado?.tipo === 'personalizado')) && (
             <div className="animate-in fade-in slide-in-from-right-4 duration-400">
               <div className="mb-6 sm:mb-8">
-                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-1 sm:mb-2">Passo 3</p>
+                <p className="text-xs text-orange-500 font-semibold uppercase tracking-widest mb-1 sm:mb-2">
+                  Passo {eventoSelecionado?.tipo === 'personalizado' ? 2 : 3}
+                </p>
                 <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Seus dados</h2>
                 <p className="text-zinc-400 text-xs sm:text-sm">Precisamos de algumas informações para confirmar sua vaga</p>
               </div>
@@ -607,15 +657,17 @@ export default function CheckInPage() {
               </div>
 
               {/* Resumo pelotão */}
-              <div className="mt-5 sm:mt-6 flex items-center gap-3 bg-zinc-900 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 border border-zinc-800">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold flex-shrink-0">
-                  {formData.peloton.replace('km', '')}
+              {eventoSelecionado?.tipo !== 'personalizado' && (
+                <div className="mt-5 sm:mt-6 flex items-center gap-3 bg-zinc-900 rounded-lg sm:rounded-xl px-3.5 sm:px-5 py-3 sm:py-4 border border-zinc-800">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold flex-shrink-0">
+                    {formData.peloton.replace('km', '')}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs text-zinc-500">Pelotão selecionado</p>
+                    <p className="text-white font-semibold text-xs sm:text-sm">{formData.peloton} — {eventoSelecionado.dataFormatada}</p>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs text-zinc-500">Pelotão selecionado</p>
-                  <p className="text-white font-semibold text-xs sm:text-sm">{formData.peloton} — {eventoSelecionado.dataFormatada}</p>
-                </div>
-              </div>
+              )}
 
               {/* Erro */}
               {error && (

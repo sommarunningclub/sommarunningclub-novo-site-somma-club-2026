@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     } = body
 
     // Validação básica
-    if (!nome_completo || !email || !telefone || !cpf || !sexo || !pelotao) {
+    if (!nome_completo || !email || !telefone || !cpf || !sexo) {
       return NextResponse.json(
         { error: 'Campos obrigatórios faltando' },
         { status: 400 }
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
           telefone,
           cpf,
           sexo,
-          pelotao,
+          pelotao: pelotao || null,
           data_do_evento: data_do_evento || '',
           nome_do_evento: nome_do_evento || '',
           evento_id: evento_id || null,
