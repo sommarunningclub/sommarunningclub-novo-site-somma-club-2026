@@ -13,19 +13,20 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split('T')[0]
 
-    // Próximo evento (futuro ou aberto, excluindo encerrados)
+    // Próximos eventos (futuros ou abertos/bloqueados, excluindo encerrados)
     const { data: upcoming, error: upErr } = await supabase
       .from('eventos')
       .select('id, titulo, data_evento, horario_inicio, local, local_url, tipo, checkin_status, pelotoes, descricao')
       .or(`data_evento.gt.${today},checkin_status.eq.aberto,checkin_status.eq.bloqueado`)
       .neq('checkin_status', 'encerrado')
       .order('data_evento', { ascending: true })
-      .limit(1)
-      .single()
+      .limit(10)
 
-    if (upErr && upErr.code !== 'PGRST116') {
-      console.error('[site] Erro ao buscar próximo evento:', upErr)
+    if (upErr) {
+      console.error('[site] Erro ao buscar próximos eventos:', upErr)
     }
+
+    const upcomingIds = (upcoming || []).map(e => e.id)
 
     // Histórico (últimos 30 dias, apenas encerrados)
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
@@ -34,7 +35,7 @@ export async function GET() {
       .select('id, titulo, data_evento, local, checkin_status')
       .eq('checkin_status', 'encerrado')
       .gte('data_evento', thirtyDaysAgo)
-      .neq('id', upcoming?.id || '00000000-0000-0000-0000-000000000000')
+      .not('id', 'in', `(${upcomingIds.join(',')})`)
       .order('data_evento', { ascending: false })
       .limit(10)
 
@@ -43,7 +44,8 @@ export async function GET() {
     }
 
     return NextResponse.json({
-      proximo_evento: upcoming || null,
+      proximos_eventos: upcoming || [],
+      proximo_evento: upcoming?.[0] || null,
       historico: historico || [],
     })
   } catch (error) {

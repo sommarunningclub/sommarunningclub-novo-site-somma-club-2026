@@ -67,9 +67,9 @@ export default function CheckInPage() {
 
         const lista: Evento[] = []
 
-        // Próximo evento
-        if (data.proximo_evento) {
-          const e = data.proximo_evento
+        // Próximos eventos
+        const proximos = data.proximos_eventos || (data.proximo_evento ? [data.proximo_evento] : [])
+        for (const e of proximos) {
           lista.push({
             id: e.id,
             data: e.data_evento,
@@ -265,10 +265,12 @@ export default function CheckInPage() {
             </p>
           </div>
 
-          {/* Próximo evento */}
+          {/* Próximos eventos */}
           {eventosProximos.length > 0 && (
-            <div className="mb-8">
-              <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-3">Proximo evento</p>
+            <div className="mb-8 space-y-3">
+              <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-3">
+                {eventosProximos.length === 1 ? 'Proximo evento' : 'Proximos eventos'}
+              </p>
               {eventosProximos.map(evento => (
                 <div
                   key={evento.id}
