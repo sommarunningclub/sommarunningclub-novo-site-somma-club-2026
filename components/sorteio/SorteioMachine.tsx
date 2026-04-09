@@ -32,10 +32,10 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
 
     const text = nome.toUpperCase().split('')
     const scale = Math.min(50, (canvas.width * 0.85) / Math.max(text.length, 1))
-    const breaks = 0.008
+    const breaks = 0.015
     const endSpeed = 0.05
-    const firstLetter = 60
-    const delay = 10
+    const firstLetter = 35
+    const delay = 5
 
     const offset: number[] = []
     const offsetV: number[] = []
@@ -120,7 +120,7 @@ export default function SorteioMachine({ nomes, onComplete }: SorteioMachineProp
           ctx.fillText(text[i], scale * i, 0)
         }
 
-        setTimeout(aoTerminar, 600)
+        setTimeout(aoTerminar, 400)
         return
       }
 
