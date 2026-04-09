@@ -176,6 +176,10 @@ export default function CheckInPage() {
 
       if (!response.ok) {
         const errorData = await response.json()
+        if (response.status === 409) {
+          setError(errorData.error || 'Você já está inscrito neste evento.')
+          return
+        }
         throw new Error(errorData.error || 'Erro ao salvar check-in')
       }
 

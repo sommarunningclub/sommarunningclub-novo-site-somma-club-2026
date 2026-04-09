@@ -30,6 +30,24 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Verificar duplicidade: mesmo CPF + mesmo evento
+    if (evento_id) {
+      const cpfLimpo = cpf.replace(/\D/g, '')
+      const { data: existing } = await supabase
+        .from('checkins')
+        .select('id')
+        .eq('evento_id', evento_id)
+        .or(`cpf.eq.${cpfLimpo},cpf.eq.${cpf}`)
+        .limit(1)
+
+      if (existing && existing.length > 0) {
+        return NextResponse.json(
+          { error: 'Você já está inscrito neste evento. Cada CPF pode ser cadastrado apenas uma vez por evento.' },
+          { status: 409 }
+        )
+      }
+    }
+
     // Inserir na tabela checkins
     const { data, error } = await supabase
       .from('checkins')
