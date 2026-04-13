@@ -107,7 +107,7 @@ export default function PartnersGrid() {
                   alt={p.name}
                   className={`max-h-full object-contain transition-all duration-300 ${
                     p.invert
-                      ? 'max-w-[160px] sm:max-w-[200px] brightness-0 invert opacity-60 group-hover:opacity-100'
+                      ? 'max-w-[160px] sm:max-w-[200px] brightness-0 invert opacity-80 group-hover:opacity-100'
                       : 'max-w-[60px] sm:max-w-[80px] opacity-80 group-hover:opacity-100 drop-shadow-lg'
                   }`}
                 />
