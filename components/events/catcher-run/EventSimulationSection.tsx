@@ -28,8 +28,7 @@ const cards = [
     icon: Gift,
     label: 'Muito Mais',
     time: 'Todo dia',
-    text: 'Café da manhã com BIG BOX · Red Bull para todos · Parceiros surpresa.',
-    extra: true,
+    text: 'Café da manhã com BIG BOX · Red Bull para todos · Academia Evolve no encerramento · Parceiros surpresa.',
   },
 ]
 
@@ -129,16 +128,6 @@ export default function EventSimulationSection() {
                       >
                         {card.text}
                       </p>
-                      {(card as any).extra && (
-                        <div className="mt-3 flex items-center gap-2.5 bg-[#0D0D0D] border border-zinc-800 px-3 py-2.5 w-fit">
-                          <span className="text-zinc-500 text-xs whitespace-nowrap" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
-                            FitDance com
-                          </span>
-                          <div className="w-px h-3 bg-zinc-700 flex-shrink-0" />
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src="/evolve-logo.svg" alt="Evolve" className="h-5 w-auto" />
-                        </div>
-                      )}
                     </div>
                   </div>
                 </motion.div>

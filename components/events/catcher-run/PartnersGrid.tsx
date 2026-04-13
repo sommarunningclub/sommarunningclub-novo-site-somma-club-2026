@@ -44,7 +44,7 @@ const otherPartners: Partner[] = [
   {
     name: 'Evolve',
     logo: '/evolve-logo.svg',
-    role: 'FitDance',
+    role: 'Academia Evolve',
     tier: 'partner',
   },
   {
