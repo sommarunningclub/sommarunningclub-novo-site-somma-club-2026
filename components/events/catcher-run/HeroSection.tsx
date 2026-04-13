@@ -33,15 +33,24 @@ export default function HeroSection() {
       </div>
 
       {/* Top brand bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 pt-4 pb-4 px-6">
+      <div className="absolute top-0 left-0 right-0 z-20 pt-5 px-4 sm:px-8 flex justify-center">
         <div
-          className="max-w-4xl mx-auto flex items-center justify-center gap-4 sm:gap-8 flex-wrap"
+          className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap"
           style={{
-            background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)',
-            backdropFilter: 'blur(2px)',
-            WebkitBackdropFilter: 'blur(2px)',
-            padding: '10px 24px 14px',
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            /* Liquid Glass — camadas múltiplas */
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.07) 100%)',
+            backdropFilter: 'blur(24px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+            border: '1px solid rgba(255,255,255,0.14)',
+            borderTop: '1px solid rgba(255,255,255,0.22)',
+            borderRadius: '999px',
+            padding: '10px 32px 14px',
+            boxShadow: [
+              '0 8px 32px rgba(0,0,0,0.45)',
+              '0 2px 8px rgba(0,0,0,0.3)',
+              'inset 0 1px 0 rgba(255,255,255,0.18)',
+              'inset 0 -1px 0 rgba(0,0,0,0.2)',
+            ].join(', '),
           }}
         >
           {/* Somma logo */}
@@ -101,7 +110,7 @@ export default function HeroSection() {
       </div>
 
       {/* Main content */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-24 pb-20">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-4 pt-36 pb-20">
         <motion.p
           {...fadeUp(0.1)}
           className="text-[#F26522] text-xs sm:text-sm uppercase tracking-[0.3em] mb-4 sm:mb-6"
