@@ -34,17 +34,23 @@ export default function HeroSection() {
 
       {/* Top brand bar */}
       <div className="absolute top-0 left-0 right-0 z-20 pt-5 pb-4 px-6">
-        <div className="max-w-5xl mx-auto flex items-center justify-center gap-4 sm:gap-6">
+        <div className="max-w-5xl mx-auto flex items-center justify-center gap-3 sm:gap-5 flex-wrap">
           <img
             src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png"
             alt="Somma Running Club"
-            className="h-6 sm:h-8 object-contain brightness-0 invert"
+            className="h-5 sm:h-7 object-contain brightness-0 invert"
           />
-          <span className="text-zinc-500 text-lg font-light">×</span>
+          <span className="text-zinc-600 text-sm font-light">×</span>
           <img
             src="https://upload.wikimedia.org/wikipedia/de/thumb/b/b8/Red_Bull_Logo.svg/800px-Red_Bull_Logo.svg.png"
             alt="Red Bull"
-            className="h-6 sm:h-8 object-contain brightness-0 invert"
+            className="h-5 sm:h-7 object-contain brightness-0 invert"
+          />
+          <span className="text-zinc-600 text-sm font-light">×</span>
+          <img
+            src="https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg"
+            alt="Wings for Life World Run"
+            className="h-5 sm:h-7 object-contain brightness-0 invert"
           />
         </div>
       </div>

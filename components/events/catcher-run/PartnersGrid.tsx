@@ -10,6 +10,11 @@ const partners = [
     role: 'Patrocinador Principal',
   },
   {
+    name: 'Wings for Life World Run',
+    logo: 'https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg',
+    role: 'Evento Oficial',
+  },
+  {
     name: 'Somma Running Club',
     logo: 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png',
     role: 'Organizador',
@@ -25,13 +30,6 @@ const partners = [
     logo: null,
     initials: 'EVOLVE',
     role: 'FitDance',
-  },
-  {
-    name: 'Em breve',
-    logo: null,
-    initials: '?',
-    role: 'Parceiro surpresa',
-    placeholder: true,
   },
   {
     name: 'Em breve',

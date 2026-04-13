@@ -38,6 +38,13 @@ export default function WFLExplainerSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12 sm:mb-16"
         >
+          <div className="flex justify-center mb-5">
+            <img
+              src="https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg"
+              alt="Wings for Life World Run"
+              className="h-10 sm:h-12 object-contain brightness-0 invert"
+            />
+          </div>
           <p
             className="text-[#F26522] text-xs uppercase tracking-[0.3em] mb-3"
             style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
