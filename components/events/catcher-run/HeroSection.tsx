@@ -80,27 +80,17 @@ export default function HeroSection() {
   return (
     <section ref={sectionRef} className="relative min-h-[100svh] flex flex-col overflow-hidden bg-[#0a0a0a]">
 
-      {/* === LAYER 0: Video background === */}
+      {/* === LAYER 0: Image background === */}
       <div className="absolute inset-0 z-0">
-        <iframe
-          src="https://www.youtube.com/embed/M2N4KFg6G0Y?autoplay=1&mute=1&loop=1&playlist=M2N4KFg6G0Y&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&vq=hd1080"
-          title="Wings for Life World Run"
-          allow="autoplay; encrypted-media"
-          className="absolute border-0 pointer-events-none"
-          style={{
-            width: '177.78vh', /* 16:9 */
-            height: '100vh',
-            minWidth: '100%',
-            minHeight: '100%',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
+        <img
+          src="https://img.redbull.com/images/c_crop,x_0,y_0,h_4000,w_6000/c_fill,w_2200,h_1467/q_auto:low,f_jpg/redbullcom/2025/5/5/vvdfr8kkjllrmsife5uf/corrida-wings-for-life-2025-brasilia-duda-ana-patricia-brasil"
+          alt="Wings for Life World Run Brasília"
+          className="w-full h-full object-cover object-center"
         />
-        {/* Dark overlays */}
-        <div className="absolute inset-0 bg-black/55" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/60 via-transparent to-transparent h-[30%]" />
+        {/* Soft dark overlays */}
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/50 via-transparent to-transparent" style={{ height: '35%' }} />
       </div>
 
       {/* === LAYER 1: Blob + Blur === */}
