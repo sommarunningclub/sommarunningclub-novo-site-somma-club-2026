@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/alexrodriguesdossantos/Projetos/v0-sistema-somma-de-gestao-l7/**)",
+      "Bash(find /Users/alexrodriguesdossantos/Projetos/sommarunningclub-novo-site-somma-club-2026 -name .env* -o -name *supabase*)",
+      "Bash(xargs ls:*)",
+      "Bash(find /Users/alexrodriguesdossantos/Projetos/sommarunningclub-novo-site-somma-club-2026 -type f -name *.env*)",
+      "Bash(grep -E \"\\\\.tsx?$\")",
+      "Bash(grep -E \"\\\\.\\(ts|tsx|js\\)$\")",
+      "Bash(mkdir -p /Users/alexrodriguesdossantos/Projetos/sommarunningclub-novo-site-somma-club-2026/app/api/sorteio/ganhadores/[id]/confirmar)",
+      "Bash(mkdir -p /Users/alexrodriguesdossantos/Projetos/sommarunningclub-novo-site-somma-club-2026/app/api/sorteio/ganhadores/[id]/ausente)",
+      "Bash(mkdir -p /Users/alexrodriguesdossantos/Projetos/sommarunningclub-novo-site-somma-club-2026/app/api/sorteio/ganhadores/[id]/resorteio)"
+    ]
+  }
+}

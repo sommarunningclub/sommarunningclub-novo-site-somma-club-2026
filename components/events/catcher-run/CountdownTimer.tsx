@@ -47,7 +47,7 @@ export default function CountdownTimer() {
     return () => clearInterval(id)
   }, [])
 
-  // Antes do mount (SSR) — placeholder estático para evitar hydration mismatch
+  // Placeholder estático antes do mount (evita hydration mismatch)
   if (time === undefined) {
     return (
       <div className="flex items-start gap-2 sm:gap-3 justify-center">

@@ -7,11 +7,11 @@ import { ArrowRight, ArrowLeft, Check, Loader2, AlertCircle } from 'lucide-react
 
 const EVENTO = {
   id: 'f139b049-52c8-4028-9ddb-90cfa72af378',
-  titulo: 'Catcher Run — Somma × Red Bull',
+  titulo: 'Catcher Run | Somma × Red Bull',
   dataEvento: '2026-04-25',
   dataFormatada: 'Sábado, 25 de abril de 2026',
   horarioInicio: '07:00',
-  local: 'Parque da Cidade — Estacionamento 9, Brasília DF',
+  local: 'Parque da Cidade, Estacionamento 9, Brasília DF',
   localUrl: 'https://maps.app.goo.gl/AUMu7k5D34YWUe4LA',
   tipo: 'corrida' as const,
 }
@@ -150,7 +150,7 @@ export default function CatcherRunCheckin() {
       </div>
 
       <AnimatePresence mode="wait">
-        {/* STEP 1 — Pelotão */}
+        {/* STEP 1: Pelotão */}
         {step === 1 && (
           <motion.div
             key="step1"
@@ -213,7 +213,7 @@ export default function CatcherRunCheckin() {
           </motion.div>
         )}
 
-        {/* STEP 2 — Dados pessoais */}
+        {/* STEP 2: Dados pessoais */}
         {step === 2 && (
           <motion.div
             key="step2"
@@ -307,7 +307,7 @@ export default function CatcherRunCheckin() {
                 <div>
                   <p className="text-zinc-500 text-xs" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>Pelotão selecionado</p>
                   <p className="text-white font-semibold text-xs sm:text-sm" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
-                    {selectedPeloton.id} — {selectedPeloton.label}
+                    {selectedPeloton.id} | {selectedPeloton.label}
                   </p>
                 </div>
               </div>
@@ -341,7 +341,7 @@ export default function CatcherRunCheckin() {
           </motion.div>
         )}
 
-        {/* STEP 3 — Confirmação */}
+        {/* STEP 3: Confirmação */}
         {step === 3 && (
           <motion.div
             key="step3"
@@ -361,7 +361,7 @@ export default function CatcherRunCheckin() {
                 { label: 'Telefone', value: formatPhone(formData.telefone) },
                 { label: 'CPF', value: formatCPF(formData.cpf) },
                 { label: 'Sexo', value: formData.sexo.charAt(0).toUpperCase() + formData.sexo.slice(1) },
-                { label: 'Pelotão', value: `${formData.peloton} — ${selectedPeloton?.label}` },
+                { label: 'Pelotão', value: `${formData.peloton} | ${selectedPeloton?.label}` },
                 { label: 'Evento', value: EVENTO.titulo },
                 { label: 'Data', value: EVENTO.dataFormatada },
               ].map(({ label, value }) => (

@@ -15,7 +15,7 @@ const cards = [
     icon: User,
     label: 'O Catcher Car Humano',
     time: '08h50',
-    text: 'Alexandre Alves — nosso Catcher Car humano — sai correndo atrás de todos. Quando ele te tocar: acabou.',
+    text: 'Alexandre Alves, nosso Catcher Car humano, sai correndo atrás de todos. Quando ele te tocar: acabou.',
     highlight: true,
   },
   {
@@ -65,7 +65,7 @@ export default function EventSimulationSection() {
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
               O Somma Running Club e a Red Bull trazem para o Parque da Cidade
-              a experiência completa do maior evento de corrida do mundo —
+              a experiência completa do maior evento de corrida do mundo,
               15 dias antes da corrida oficial.
             </p>
             <p

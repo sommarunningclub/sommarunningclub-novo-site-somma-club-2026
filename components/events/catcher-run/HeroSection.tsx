@@ -156,7 +156,7 @@ export default function HeroSection() {
           Somma × Red Bull Apresentam
         </motion.p>
 
-        {/* Title — GSAP per-character */}
+        {/* Title */}
         <div ref={titleRef} className="flex flex-col items-center mb-6 sm:mb-8">
           {titleLines.map((line, wi) => (
             <div
@@ -200,7 +200,7 @@ export default function HeroSection() {
           {[
             { icon: Calendar, text: '25 de Abril de 2026' },
             { icon: Clock, text: '07h00 às 12h00' },
-            { icon: MapPin, text: 'Parque da Cidade — Est. 9' },
+            { icon: MapPin, text: 'Parque da Cidade, Est. 9' },
           ].map(({ icon: Icon, text }) => (
             <div key={text} className="flex items-center gap-1.5 text-zinc-400 text-[11px] sm:text-sm" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
               <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#F26522] flex-shrink-0" />

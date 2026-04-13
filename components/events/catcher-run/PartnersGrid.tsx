@@ -83,7 +83,7 @@ export default function PartnersGrid() {
           </h2>
         </motion.div>
 
-        {/* Tier 1 — Destaques principais */}
+        {/* Tier 1 */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-zinc-800/50 mb-6">
           {mainPartners.map((p, i) => (
             <motion.div
@@ -128,7 +128,7 @@ export default function PartnersGrid() {
           ))}
         </div>
 
-        {/* Tier 2 — Outros parceiros */}
+        {/* Tier 2 */}
         <div className="grid grid-cols-3 gap-px bg-zinc-800/50">
           {otherPartners.map((p, i) => (
             <motion.div

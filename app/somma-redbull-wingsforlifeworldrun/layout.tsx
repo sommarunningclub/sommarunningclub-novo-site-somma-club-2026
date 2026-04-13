@@ -29,7 +29,7 @@ export const metadata: Metadata = {
         url: 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/PDCSK21FEV-1794.jpg',
         width: 1200,
         height: 630,
-        alt: 'Catcher Run Brasília 2026 — Somma × Red Bull',
+        alt: 'Catcher Run Brasília 2026 | Somma × Red Bull',
       },
     ],
     type: 'website',

@@ -51,9 +51,9 @@ const genderOptions = [
 ]
 
 const levelOptions = [
-  { value: 'iniciante', label: 'Iniciante — corro menos de 5km' },
-  { value: 'intermediario', label: 'Intermediário — corro de 5 a 15km' },
-  { value: 'avancado', label: 'Avançado — corro mais de 15km' },
+  { value: 'iniciante', label: 'Iniciante: corro menos de 5km' },
+  { value: 'intermediario', label: 'Intermediário: corro de 5 a 15km' },
+  { value: 'avancado', label: 'Avançado: corro mais de 15km' },
 ]
 
 const referralOptions = [
@@ -114,7 +114,7 @@ export default function RegistrationForm() {
           style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
         >
           Você está na lista. Nos vemos no Parque da Cidade em 25 de abril.
-          Fique de olho no seu WhatsApp — enviaremos os detalhes em breve.
+          Fique de olho no seu WhatsApp, vamos mandar os detalhes em breve.
         </p>
         <p className="mt-4 text-[#F26522] text-2xl font-black uppercase" style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}>
           Bora fugir do Catcher Car!
@@ -272,7 +272,7 @@ export default function RegistrationForm() {
             Enviando...
           </>
         ) : (
-          'Quero Participar — Inscrição Gratuita'
+          'Quero Participar'
         )}
       </button>
 

@@ -33,7 +33,7 @@ export default function MapSection() {
             className="text-zinc-400 text-sm sm:text-base"
             style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
           >
-            Estacionamento 9 — Brasília, DF
+            Estacionamento 9, Brasília DF
           </p>
         </motion.div>
 
@@ -53,7 +53,7 @@ export default function MapSection() {
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Estacionamento 9 — Parque da Cidade"
+              title="Estacionamento 9, Parque da Cidade"
             />
             {/* Dark overlay on edges */}
             <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: 'inset 0 0 40px 20px rgba(8,8,8,0.6)' }} />
@@ -70,7 +70,7 @@ export default function MapSection() {
                   className="text-white font-bold text-sm uppercase tracking-wide"
                   style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
                 >
-                  Estacionamento 9 — Parque da Cidade
+                  Estacionamento 9, Parque da Cidade
                 </p>
                 <p
                   className="text-zinc-500 text-xs mt-0.5"

@@ -8,7 +8,7 @@ import { TracingBeam } from '@/components/ui/tracing-beam'
 const schedule = [
   { time: '07:00', icon: Tent,          label: 'Abertura & Estrutura',        text: 'Parceiros montados, café da manhã disponível, Red Bull station ativa.', accent: false },
   { time: '07:30', icon: Footprints,    label: 'Recepção dos Participantes',  text: 'Credenciamento, distribuição de número de peito.', accent: false },
-  { time: '07:45', icon: Coffee,        label: 'Café da Manhã — BIG BOX',     text: 'Café especial para quem vai correr.', accent: false },
+  { time: '07:45', icon: Coffee,        label: 'Café da Manhã com BIG BOX',     text: 'Café especial para quem vai correr.', accent: false },
   { time: '08:00', icon: Dumbbell,      label: 'Aquecimento Coletivo',        text: 'Guiado pela equipe Somma. Todo mundo junto.', accent: false },
   { time: '08:20', icon: Megaphone,     label: 'Briefing Oficial',            text: 'Regras explicadas. Alexandre Alves é apresentado como o Catcher Car. Percurso revelado.', accent: false },
   { time: '08:30', icon: Flag,          label: 'LARGADA!',                    text: 'Todos saem ao mesmo tempo.', accent: 'orange' },
