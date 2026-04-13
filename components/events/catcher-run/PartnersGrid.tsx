@@ -20,7 +20,7 @@ const mainPartners: Partner[] = [
   },
   {
     name: 'Wings for Life World Run',
-    logo: 'https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg',
+    logo: '/wfl-logo.svg',
     role: 'Evento Oficial',
     tier: 'main',
     invert: true,

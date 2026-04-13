@@ -98,7 +98,7 @@ export default function HeroSection() {
 
           {/* WFL logo */}
           <motion.img
-            src="https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg"
+            src="/wfl-logo.svg"
             alt="Wings for Life World Run"
             className="h-6 sm:h-8 object-contain brightness-0 invert"
             initial={{ opacity: 0, y: -8 }}

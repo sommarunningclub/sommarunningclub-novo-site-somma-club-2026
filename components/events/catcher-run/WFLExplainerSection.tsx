@@ -40,7 +40,7 @@ export default function WFLExplainerSection() {
         >
           <div className="flex justify-center mb-5">
             <img
-              src="https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg"
+              src="/wfl-logo.svg"
               alt="Wings for Life World Run"
               className="h-10 sm:h-12 object-contain brightness-0 invert"
             />
