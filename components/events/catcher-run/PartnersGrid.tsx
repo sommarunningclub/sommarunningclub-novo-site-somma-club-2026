@@ -27,8 +27,7 @@ const partners = [
   },
   {
     name: 'Evolve',
-    logo: null,
-    initials: 'EVOLVE',
+    logo: '/logo evolve.svg',
     role: 'FitDance',
   },
   {
