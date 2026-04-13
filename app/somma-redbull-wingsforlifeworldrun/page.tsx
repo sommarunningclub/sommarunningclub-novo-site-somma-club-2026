@@ -84,9 +84,9 @@ export default function CatcherRunPage() {
             />
             <span className="text-zinc-700">×</span>
             <img
-              src="https://upload.wikimedia.org/wikipedia/de/thumb/b/b8/Red_Bull_Logo.svg/800px-Red_Bull_Logo.svg.png"
+              src="/RED BULL_ED_LATA_GLASS_BRANCO_ABERTA.png"
               alt="Red Bull"
-              className="h-6 object-contain brightness-0 invert opacity-60"
+              className="h-10 object-contain opacity-70"
             />
           </div>
           <div className="text-center sm:text-right">

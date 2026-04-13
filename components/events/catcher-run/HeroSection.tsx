@@ -42,7 +42,7 @@ export default function HeroSection() {
           />
           <span className="text-zinc-600 text-sm font-light">×</span>
           <img
-            src="/RED BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA (1).png"
+            src="/RED BULL_ED_LATA_FL_BRANCO_ABERTA.png"
             alt="Red Bull"
             className="h-8 sm:h-10 object-contain drop-shadow-lg"
           />
