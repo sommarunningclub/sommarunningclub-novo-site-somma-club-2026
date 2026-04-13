@@ -13,9 +13,11 @@ const fadeUp = (delay = 0) => ({
 })
 
 const titleLines = [
-  { text: 'VOCÊ CONSEGUE', offset: 60 },
-  { text: 'FUGIR DO', offset: -100 },
-  { text: 'CATCHER CAR?', offset: 40 },
+  { text: 'VOCÊ', color: '#fff', style: 'normal' as const },
+  { text: 'CONSEGUE', color: '#fff', style: 'normal' as const },
+  { text: 'FUGIR DO', color: '#F26522', style: 'normal' as const },
+  { text: 'CATCHER', color: '#fff', style: 'italic' as const },
+  { text: 'CAR?', color: '#CC0000', style: 'italic' as const },
 ]
 
 export default function HeroSection() {
@@ -153,21 +155,31 @@ export default function HeroSection() {
       {/* === MAIN CONTENT === */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 pt-28 sm:pt-32 pb-32 sm:pb-28">
 
+        {/* Eyebrow */}
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.05 }}
+          className="text-[#F26522] text-[10px] sm:text-xs uppercase tracking-[0.35em] mb-5 sm:mb-6"
+          style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+        >
+          Somma × Red Bull Apresentam
+        </motion.p>
+
         {/* Title — GSAP per-character */}
         <div ref={titleRef} className="flex flex-col items-center mb-6 sm:mb-8">
           {titleLines.map((line, wi) => (
             <div
               key={wi}
-              className="hero-word flex overflow-hidden"
+              className="hero-word flex justify-center overflow-hidden"
               style={{
                 fontFamily: 'var(--font-barlow-condensed, sans-serif)',
-                color: wi === 1 ? '#F26522' : '#fff',
-                fontSize: 'clamp(2.8rem, 9.5vw, 8.5rem)',
+                color: line.color,
+                fontSize: 'clamp(3.2rem, 12vw, 10rem)',
                 fontWeight: 900,
-                lineHeight: 0.9,
+                lineHeight: 0.88,
                 letterSpacing: '-0.03em',
-                fontStyle: wi === 2 ? 'italic' : 'normal',
-                transform: `translateX(${line.offset}px)`,
+                fontStyle: line.style,
               }}
             >
               {line.text.split('').map((ch, ci) => (
@@ -186,11 +198,11 @@ export default function HeroSection() {
         {/* Subtitle */}
         <motion.p
           {...fadeUp(0)}
-          className="text-zinc-300/80 text-xs sm:text-base max-w-md text-center leading-relaxed mb-6"
+          className="text-zinc-300/70 text-xs sm:text-base max-w-lg text-center leading-relaxed mb-6"
           style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
         >
-          Brasília vive pela primeira vez a simulação do maior evento de corrida do mundo.
-          Venha correr, ou tente não ser pego.
+          Brasília vive pela primeira vez a simulação do maior
+          evento de corrida do mundo. Venha correr, ou tente não ser pego.
         </motion.p>
 
         {/* Event details */}
