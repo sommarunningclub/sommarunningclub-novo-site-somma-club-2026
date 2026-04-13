@@ -3,6 +3,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { Tent, Footprints, Coffee, Dumbbell, Megaphone, Flag, AlertTriangle, Wind, Trophy, PartyPopper, Music, CheckCircle } from 'lucide-react'
+import { TracingBeam } from '@/components/ui/tracing-beam'
 
 const schedule = [
   { time: '07:00', icon: Tent,          label: 'Abertura & Estrutura',        text: 'Parceiros montados, café da manhã disponível, Red Bull station ativa.', accent: false },
@@ -46,10 +47,7 @@ export default function ScheduleTimeline() {
           </h2>
         </motion.div>
 
-        <div className="relative">
-          {/* Timeline line */}
-          <div className="absolute left-[52px] sm:left-[60px] top-5 bottom-5 w-px bg-gradient-to-b from-[#F26522] via-[#CC0000] to-zinc-800 opacity-20" />
-
+        <TracingBeam className="px-2 sm:px-6">
           <div className="flex flex-col gap-0">
             {schedule.map((item, i) => {
               const Icon = item.icon
@@ -63,7 +61,7 @@ export default function ScheduleTimeline() {
                   initial={{ opacity: 0, y: 16 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.45, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-                  className={`flex gap-4 sm:gap-5 py-4 sm:py-5 ${i < schedule.length - 1 ? 'border-b border-zinc-900' : ''} ${isAccent ? 'relative' : ''}`}
+                  className={`flex gap-4 sm:gap-5 py-5 sm:py-6 ${i < schedule.length - 1 ? 'border-b border-zinc-800/50' : ''}`}
                 >
                   {/* Time */}
                   <div
@@ -76,7 +74,7 @@ export default function ScheduleTimeline() {
                     {item.time}
                   </div>
 
-                  {/* Dot */}
+                  {/* Icon */}
                   <div className="flex-shrink-0 relative z-10 mt-[2px]">
                     <div
                       className={`w-7 h-7 flex items-center justify-center ${
@@ -112,7 +110,7 @@ export default function ScheduleTimeline() {
               )
             })}
           </div>
-        </div>
+        </TracingBeam>
       </div>
     </section>
   )
