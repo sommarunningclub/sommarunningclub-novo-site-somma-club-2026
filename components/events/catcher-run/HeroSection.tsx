@@ -33,24 +33,69 @@ export default function HeroSection() {
       </div>
 
       {/* Top brand bar */}
-      <div className="absolute top-0 left-0 right-0 z-20 pt-5 pb-4 px-6">
-        <div className="max-w-5xl mx-auto flex items-center justify-center gap-3 sm:gap-5 flex-wrap">
-          <img
+      <div className="absolute top-0 left-0 right-0 z-20 pt-4 pb-4 px-6">
+        <div
+          className="max-w-4xl mx-auto flex items-center justify-center gap-4 sm:gap-8 flex-wrap"
+          style={{
+            background: 'linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, transparent 100%)',
+            backdropFilter: 'blur(2px)',
+            WebkitBackdropFilter: 'blur(2px)',
+            padding: '10px 24px 14px',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+          }}
+        >
+          {/* Somma logo */}
+          <motion.img
             src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png"
             alt="Somma Running Club"
             className="h-5 sm:h-7 object-contain brightness-0 invert"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            style={{ filter: 'brightness(0) invert(1) drop-shadow(0 0 8px rgba(242,101,34,0.4))' }}
           />
-          <span className="text-zinc-600 text-sm font-light">×</span>
-          <img
+
+          <motion.span
+            className="text-zinc-500 text-base font-thin select-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.25 }}
+          >
+            ×
+          </motion.span>
+
+          {/* Red Bull can */}
+          <motion.img
             src="/RED BULL_ED_LATA_FL_BRANCO_ABERTA.png"
             alt="Red Bull"
-            className="h-8 sm:h-10 object-contain drop-shadow-lg"
+            className="object-contain"
+            style={{
+              height: 'clamp(52px, 9vw, 80px)',
+              filter: 'drop-shadow(0 0 12px rgba(204,0,0,0.5)) drop-shadow(0 4px 16px rgba(0,0,0,0.6))',
+            }}
+            initial={{ opacity: 0, y: -10, scale: 0.85 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           />
-          <span className="text-zinc-600 text-sm font-light">×</span>
-          <img
+
+          <motion.span
+            className="text-zinc-500 text-base font-thin select-none"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.35 }}
+          >
+            ×
+          </motion.span>
+
+          {/* WFL logo */}
+          <motion.img
             src="https://www.wingsforlifeworldrun.com/_nuxt/wflwr-logo-pos.CJlzM-_-.svg"
             alt="Wings for Life World Run"
-            className="h-5 sm:h-7 object-contain brightness-0 invert"
+            className="h-6 sm:h-8 object-contain brightness-0 invert"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            style={{ filter: 'brightness(0) invert(1) drop-shadow(0 0 8px rgba(204,0,0,0.35))' }}
           />
         </div>
       </div>
