@@ -14,7 +14,7 @@ type Partner = {
 const mainPartners: Partner[] = [
   {
     name: 'Red Bull',
-    logo: '/RED BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA (1).png',
+    logo: 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610',
     role: 'Patrocinador Principal',
     tier: 'main',
   },

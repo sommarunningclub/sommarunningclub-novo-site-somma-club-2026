@@ -136,7 +136,7 @@ export default function HeroSection() {
         >
           <motion.img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png" alt="Somma Running Club" className="h-4 sm:h-7 object-contain" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} style={{ filter: 'brightness(0) invert(1) drop-shadow(0 0 6px rgba(242,101,34,0.4))' }} />
           <span className="text-zinc-600 text-xs sm:text-base font-thin select-none">×</span>
-          <motion.img src="/RED BULL_ED_LATA_FL_BRANCO_ABERTA.png" alt="Red Bull" className="object-contain" style={{ height: 'clamp(36px, 7vw, 70px)', filter: 'drop-shadow(0 0 10px rgba(204,0,0,0.4))' }} initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, ease: [0.22, 1, 0.36, 1] }} />
+          <motion.img src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610" alt="Red Bull" className="object-contain" style={{ height: 'clamp(36px, 7vw, 70px)', filter: 'drop-shadow(0 0 10px rgba(204,0,0,0.4))' }} initial={{ opacity: 0, scale: 0.85 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2, ease: [0.22, 1, 0.36, 1] }} />
           <span className="text-zinc-600 text-xs sm:text-base font-thin select-none">×</span>
           <motion.img src="/wfl-logo.svg" alt="Wings for Life World Run" className="h-4 sm:h-8 object-contain" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3 }} style={{ filter: 'brightness(0) invert(1) drop-shadow(0 0 6px rgba(204,0,0,0.3))' }} />
         </div>

@@ -84,7 +84,7 @@ export default function CatcherRunPage() {
             />
             <span className="text-zinc-700">×</span>
             <img
-              src="/RED BULL_ED_LATA_GLASS_BRANCO_ABERTA.png"
+              src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_LATA_GLASS_BRANCO_ABERTA.png?v=1776108606"
               alt="Red Bull"
               className="h-10 object-contain opacity-70"
             />
