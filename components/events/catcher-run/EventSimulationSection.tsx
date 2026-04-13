@@ -130,14 +130,15 @@ export default function EventSimulationSection() {
                         {card.text}
                       </p>
                       {(card as any).extra && (
-                        <div className="mt-3 flex items-center gap-2 bg-[#111] border border-zinc-800 px-3 py-2 rounded-sm w-fit">
-                          <span className="text-zinc-500 text-xs" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
+                        <div className="mt-3 flex items-center gap-2.5 bg-[#0D0D0D] border border-zinc-800 px-3 py-2.5 w-fit">
+                          <span className="text-zinc-500 text-xs whitespace-nowrap" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
                             FitDance com
                           </span>
+                          <div className="w-px h-3 bg-zinc-700 flex-shrink-0" />
                           <img
                             src="/logo evolve.svg"
                             alt="Evolve"
-                            className="h-4 object-contain brightness-0 invert opacity-80"
+                            className="h-5 object-contain"
                           />
                         </div>
                       )}
