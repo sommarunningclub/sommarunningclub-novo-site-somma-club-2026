@@ -24,6 +24,7 @@ const partners = [
     name: 'BIG BOX',
     logo: 'https://institucional.bigbox.com.br/wp-content/uploads/2018/09/cropped-logo-1.png',
     role: 'Café da Manhã',
+    noInvert: true,
   },
   {
     name: 'Evolve',
