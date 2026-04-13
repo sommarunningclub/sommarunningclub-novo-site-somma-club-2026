@@ -6,8 +6,9 @@ import { useRef } from 'react'
 const partners = [
   {
     name: 'Red Bull',
-    logo: 'https://upload.wikimedia.org/wikipedia/de/thumb/b/b8/Red_Bull_Logo.svg/800px-Red_Bull_Logo.svg.png',
+    logo: '/RED BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA (1).png',
     role: 'Patrocinador Principal',
+    noInvert: true,
   },
   {
     name: 'Wings for Life World Run',
@@ -78,12 +79,16 @@ export default function PartnersGrid() {
                 partner.placeholder ? 'opacity-40' : ''
               }`}
             >
-              <div className="h-12 flex items-center justify-center">
+              <div className="h-14 flex items-center justify-center">
                 {partner.logo ? (
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className="max-h-10 max-w-[120px] object-contain brightness-0 invert opacity-70 group-hover:opacity-100 transition-opacity duration-300"
+                    className={`object-contain transition-opacity duration-300 ${
+                      (partner as any).noInvert
+                        ? 'max-h-14 max-w-[70px] opacity-90 group-hover:opacity-100 drop-shadow-md'
+                        : 'max-h-10 max-w-[120px] brightness-0 invert opacity-70 group-hover:opacity-100'
+                    }`}
                   />
                 ) : (
                   <span
