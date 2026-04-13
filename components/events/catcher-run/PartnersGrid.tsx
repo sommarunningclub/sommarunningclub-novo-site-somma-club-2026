@@ -23,7 +23,7 @@ const mainPartners: Partner[] = [
     logo: '/wfl-logo.svg',
     role: 'Evento Oficial',
     tier: 'main',
-    invert: false,
+    invert: true,
   },
   {
     name: 'Somma Running Club',
