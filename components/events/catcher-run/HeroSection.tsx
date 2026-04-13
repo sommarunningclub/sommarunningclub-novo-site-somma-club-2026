@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { MapPin, Calendar, Clock, ChevronDown } from 'lucide-react'
+import gsap from 'gsap'
 import CountdownTimer from './CountdownTimer'
 
 const fadeUp = (delay = 0) => ({
@@ -11,23 +13,88 @@ const fadeUp = (delay = 0) => ({
 })
 
 export default function HeroSection() {
+  const blobRef = useRef<HTMLDivElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  useEffect(() => {
+    const blob = blobRef.current
+    if (!blob) return
+
+    // Blob infinite rotation
+    const rotationTl = gsap.timeline({ repeat: -1, ease: 'none' })
+    rotationTl
+      .to(blob, { rotation: 180, scaleX: 1.6, duration: 8.5 })
+      .to(blob, { rotation: 360, scaleX: 1, duration: 8.5 })
+
+    // Mouse follow
+    const handleMouseMove = (e: MouseEvent) => {
+      const section = sectionRef.current
+      if (!section) return
+      const rect = section.getBoundingClientRect()
+      // Only track within hero section
+      if (e.clientY > rect.bottom || e.clientY < rect.top) return
+
+      gsap.to(blob, {
+        left: e.clientX,
+        top: e.clientY - rect.top,
+        duration: 2,
+        ease: 'power2.out',
+      })
+    }
+
+    window.addEventListener('mousemove', handleMouseMove)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      rotationTl.kill()
+    }
+  }, [])
+
   return (
-    <section className="relative min-h-screen flex flex-col overflow-hidden bg-[#080808]">
-      {/* Background image */}
-      <div className="absolute inset-0 z-0">
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col overflow-hidden bg-[#1d1d1f]">
+      {/* === BLOB BACKGROUND === */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        {/* The blob */}
+        <div
+          ref={blobRef}
+          className="absolute"
+          style={{
+            height: '36vmax',
+            aspectRatio: '1',
+            background: 'linear-gradient(to right, #7a3300, #CC0000, #F26522)',
+            borderRadius: '50%',
+            opacity: 0.7,
+            left: '50%',
+            top: '50%',
+            translate: '-50% -50%',
+            willChange: 'transform, left, top',
+          }}
+        />
+        {/* The blur overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backdropFilter: 'blur(8vmax)',
+            WebkitBackdropFilter: 'blur(8vmax)',
+          }}
+        />
+      </div>
+
+      {/* Background image (on top of blob, with reduced opacity) */}
+      <div className="absolute inset-0 z-[1] pointer-events-none">
         <img
           src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/PDCSK21FEV-1794.jpg"
           alt="Corredores Somma Running Club"
-          className="w-full h-full object-cover object-center opacity-40"
+          className="w-full h-full object-cover object-center opacity-25 mix-blend-luminosity"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/75 to-[#080808]/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-[#080808]/60 to-transparent" />
         {/* Grain texture */}
         <div
-          className="absolute inset-0 opacity-[0.03] mix-blend-overlay pointer-events-none"
+          className="absolute inset-0 opacity-[0.04] mix-blend-overlay"
           style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 512 512\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noise\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noise)\'/%3E%3C/svg%3E")', backgroundSize: '200px 200px' }}
         />
       </div>
@@ -37,7 +104,6 @@ export default function HeroSection() {
         <div
           className="flex items-center justify-center gap-4 sm:gap-8 flex-wrap"
           style={{
-            /* Liquid Glass — camadas múltiplas */
             background: 'linear-gradient(135deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.04) 40%, rgba(255,255,255,0.07) 100%)',
             backdropFilter: 'blur(24px) saturate(180%)',
             WebkitBackdropFilter: 'blur(24px) saturate(180%)',
