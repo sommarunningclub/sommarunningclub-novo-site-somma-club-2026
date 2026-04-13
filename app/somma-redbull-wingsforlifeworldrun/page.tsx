@@ -3,7 +3,6 @@ import WFLExplainerSection from '@/components/events/catcher-run/WFLExplainerSec
 import CatcherCarSteps from '@/components/events/catcher-run/CatcherCarSteps'
 import EventSimulationSection from '@/components/events/catcher-run/EventSimulationSection'
 import ScheduleTimeline from '@/components/events/catcher-run/ScheduleTimeline'
-import PartnersGrid from '@/components/events/catcher-run/PartnersGrid'
 import CatcherRunCheckin from '@/components/events/catcher-run/CatcherRunCheckin'
 
 export default function CatcherRunPage() {
@@ -27,10 +26,7 @@ export default function CatcherRunPage() {
       {/* SEÇÃO 5 — PROGRAMAÇÃO */}
       <ScheduleTimeline />
 
-      {/* SEÇÃO 6 — PARCEIROS */}
-      <PartnersGrid />
-
-      {/* SEÇÃO 7 — FORMULÁRIO DE INSCRIÇÃO */}
+      {/* SEÇÃO 6 — FORMULÁRIO DE INSCRIÇÃO */}
       <section
         id="inscricao"
         className="bg-[#0A0A0A] border-t border-zinc-900 py-20 sm:py-28 px-4 relative overflow-hidden"
