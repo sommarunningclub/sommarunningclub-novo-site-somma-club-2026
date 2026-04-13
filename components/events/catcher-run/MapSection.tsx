@@ -46,7 +46,7 @@ export default function MapSection() {
           {/* Map embed */}
           <div className="relative w-full overflow-hidden border border-zinc-800" style={{ height: 'clamp(300px, 45vw, 480px)' }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1920.8!2d-47.8925!3d-15.8050!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3b38d5e68a3d%3A0x1e0!2sEstacionamento+9+-+Parque+da+Cidade+Sarah+Kubitschek!5e0!3m2!1spt-BR!2sbr!4v1700000000000!5m2!1spt-BR!2sbr"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.5!2d-47.9157284!3d-15.8063279!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3aa2a5947daf%3A0x613a2252d5a08be5!2sEstacionamento%209%20-%20Parque%20da%20Cidade%20-%20Plano%20Piloto%2C%20Bras%C3%ADlia%20-%20DF%2C%2070655-775!5e0!3m2!1spt-BR!2sbr!4v1713030000000!5m2!1spt-BR!2sbr"
               width="100%"
               height="100%"
               style={{ border: 0, filter: 'invert(0.9) hue-rotate(180deg) saturate(0.3) brightness(0.7)' }}
