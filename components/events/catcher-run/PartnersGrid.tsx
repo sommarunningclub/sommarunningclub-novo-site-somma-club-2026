@@ -23,7 +23,7 @@ const mainPartners: Partner[] = [
     logo: '/wfl-logo.svg',
     role: 'Evento Oficial',
     tier: 'main',
-    invert: true,
+    invert: false,
   },
   {
     name: 'Somma Running Club',
@@ -108,7 +108,7 @@ export default function PartnersGrid() {
                   className={`max-h-full object-contain transition-all duration-300 ${
                     p.invert
                       ? 'max-w-[160px] sm:max-w-[200px] brightness-0 invert opacity-80 group-hover:opacity-100'
-                      : 'max-w-[60px] sm:max-w-[80px] opacity-80 group-hover:opacity-100 drop-shadow-lg'
+                      : 'max-w-[140px] sm:max-w-[180px] opacity-80 group-hover:opacity-100'
                   }`}
                 />
               </div>
