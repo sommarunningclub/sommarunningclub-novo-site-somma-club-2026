@@ -6,18 +6,18 @@ import { Tent, Footprints, Coffee, Dumbbell, Megaphone, Flag, AlertTriangle, Win
 import { TracingBeam } from '@/components/ui/tracing-beam'
 
 const schedule = [
-  { time: '07:00', icon: Tent,          label: 'Abertura & Estrutura',        text: 'Parceiros montados, café da manhã disponível, Red Bull station ativa.', accent: false },
-  { time: '07:30', icon: Footprints,    label: 'Recepção dos Participantes',  text: 'Credenciamento, distribuição de número de peito.', accent: false },
-  { time: '07:45', icon: Coffee,        label: 'Café da Manhã com BIG BOX',     text: 'Café especial para quem vai correr.', accent: false },
-  { time: '08:00', icon: Dumbbell,      label: 'Aquecimento Coletivo',        text: 'Guiado pela equipe Somma. Todo mundo junto.', accent: false },
-  { time: '08:20', icon: Megaphone,     label: 'Briefing Oficial',            text: 'Regras explicadas. Alexandre Alves é apresentado como o Catcher Car. Percurso revelado.', accent: false },
-  { time: '08:30', icon: Flag,          label: 'LARGADA!',                    text: 'Todos saem ao mesmo tempo.', accent: 'orange' },
-  { time: '08:50', icon: AlertTriangle, label: 'CATCHER CAR SAIU!',           text: 'Alexandre entra na perseguição. O relógio conta.', accent: 'red' },
-  { time: '09:00', icon: Wind,          label: 'Corrida em Andamento',        text: 'Eliminações progressivas. Tensão total.', accent: false },
-  { time: '10:00', icon: Trophy,        label: 'Último Corredor Alcançado',   text: 'Fim da corrida. Ranking revelado.', accent: 'orange' },
-  { time: '10:15', icon: PartyPopper,   label: 'Premiação & Celebração',      text: 'Top corredores reconhecidos. Red Bull para todos.', accent: false },
-  { time: '10:45', icon: Music,         label: 'FitDance com Evolve',         text: 'Encerramento animado. Música, energia e descontração.', accent: false },
-  { time: '12:00', icon: CheckCircle,   label: 'Fim do Evento',               text: 'Até a próxima!', accent: false },
+  { time: '06:00', icon: Tent,          label: 'Abertura & Estrutura',        text: 'Parceiros montados, Red Bull station ativa.', accent: false },
+  { time: '06:30', icon: Footprints,    label: 'Recepção dos Participantes',  text: 'Credenciamento, distribuição de número de peito.', accent: false },
+  { time: '07:00', icon: Dumbbell,      label: 'Aquecimento Coletivo',        text: 'Guiado pela equipe Somma. Todo mundo junto.', accent: false },
+  { time: '07:15', icon: Megaphone,     label: 'Briefing Oficial',            text: 'Regras explicadas. Alexandre Alves é apresentado como o Catcher Car. Percurso revelado.', accent: false },
+  { time: '07:30', icon: Flag,          label: 'LARGADA!',                    text: 'Todos saem ao mesmo tempo, organizados por pelotão. Primeiro sai o Ritmo Avançado (8km), depois o Ritmo Moderado (6km) e por último o Ritmo Iniciante (4km). Escolha o pelotão que combina com o seu ritmo na hora da inscrição.', accent: 'orange' },
+  { time: '07:50', icon: AlertTriangle, label: 'CATCHER CAR SAIU!',           text: '20 minutos após a largada, Alexandre Alves começa a correr atrás de todos. Ele começa devagar e vai acelerando. Quando te alcançar, sua corrida acabou. A distância que você percorreu é o seu resultado.', accent: 'red' },
+  { time: '08:00', icon: Wind,          label: 'Corrida em Andamento',        text: 'Eliminações progressivas. Tensão total.', accent: false },
+  { time: '09:00', icon: Trophy,        label: 'Último Corredor Alcançado',   text: 'Fim da corrida. Ranking revelado.', accent: 'orange' },
+  { time: '09:15', icon: PartyPopper,   label: 'Premiação & Celebração',      text: 'Top corredores reconhecidos. Red Bull para todos.', accent: false },
+  { time: '09:30', icon: Coffee,        label: 'Café da Manhã com BIG BOX',   text: 'Café especial pós corrida pra recarregar as energias.', accent: false },
+  { time: '10:00', icon: Music,         label: 'FitDance com Evolve',         text: 'Encerramento animado. Música, energia e descontração.', accent: false },
+  { time: '11:00', icon: CheckCircle,   label: 'Fim do Evento',               text: 'Até a próxima!', accent: false },
 ]
 
 export default function ScheduleTimeline() {

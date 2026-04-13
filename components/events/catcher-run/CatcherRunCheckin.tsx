@@ -18,11 +18,11 @@ const EVENTO = {
 
 const pelotons = [
   {
-    id: '4km' as const,
-    label: 'Ritmo Iniciante',
-    description: 'Alterna corrida e caminhada · 1\' correndo, 2\' caminhando',
-    pace: 'Ritmo leve',
-    color: '#22c55e',
+    id: '8km' as const,
+    label: 'Ritmo Avançado',
+    description: 'Para corredores experientes · Pace aproximado de 5\'30"',
+    pace: 'Ritmo intenso',
+    color: '#CC0000',
   },
   {
     id: '6km' as const,
@@ -32,11 +32,11 @@ const pelotons = [
     color: '#eab308',
   },
   {
-    id: '8km' as const,
-    label: 'Ritmo Avançado',
-    description: 'Para corredores experientes · Pace aproximado de 5\'30"',
-    pace: 'Ritmo intenso',
-    color: '#CC0000',
+    id: '4km' as const,
+    label: 'Ritmo Iniciante',
+    description: 'Alterna corrida e caminhada · 1\' correndo, 2\' caminhando',
+    pace: 'Ritmo leve',
+    color: '#22c55e',
   },
 ]
 
