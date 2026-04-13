@@ -4,7 +4,7 @@ import CatcherCarSteps from '@/components/events/catcher-run/CatcherCarSteps'
 import EventSimulationSection from '@/components/events/catcher-run/EventSimulationSection'
 import ScheduleTimeline from '@/components/events/catcher-run/ScheduleTimeline'
 import PartnersGrid from '@/components/events/catcher-run/PartnersGrid'
-import RegistrationForm from '@/components/events/catcher-run/RegistrationForm'
+import CatcherRunCheckin from '@/components/events/catcher-run/CatcherRunCheckin'
 
 export default function CatcherRunPage() {
   return (
@@ -68,7 +68,7 @@ export default function CatcherRunPage() {
           </div>
 
           <div className="bg-[#111111] border border-zinc-800 p-6 sm:p-8">
-            <RegistrationForm />
+            <CatcherRunCheckin />
           </div>
         </div>
       </section>
