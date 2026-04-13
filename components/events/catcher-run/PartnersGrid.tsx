@@ -28,7 +28,7 @@ const partners = [
   },
   {
     name: 'Evolve',
-    logo: '/logo-evolve.svg',
+    logo: 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/logo_evolve.svg?v=1776102826',
     role: 'FitDance',
   },
   {
