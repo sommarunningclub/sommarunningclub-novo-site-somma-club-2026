@@ -136,7 +136,7 @@ export default function EventSimulationSection() {
                           </span>
                           <div className="w-px h-3 bg-zinc-700 flex-shrink-0" />
                           <img
-                            src="/logo evolve.svg"
+                            src="/logo-evolve.svg"
                             alt="Evolve"
                             className="h-5 object-contain"
                           />
