@@ -8,27 +8,27 @@ const cards = [
   {
     icon: Zap,
     label: 'Largada',
-    time: '08h30',
-    text: 'Todo mundo larga junto no mesmo instante, assim como no WFL oficial.',
+    time: '07h30',
+    text: 'Todo mundo larga junto no mesmo instante, organizado por pelotão. Primeiro o Ritmo Avançado, depois o Moderado e por último o Iniciante.',
   },
   {
     icon: User,
-    label: 'O Catcher Car Humano',
-    time: '08h50',
-    text: 'Alexandre Alves, nosso Catcher Car humano, sai correndo atrás de todos. Quando ele te tocar: acabou.',
+    label: 'O Catcher Car Saiu',
+    time: '07h50',
+    text: 'Alexandre Alves começa a correr atrás de todos. Ele sai devagar e vai acelerando. Quando te alcançar: acabou.',
     highlight: true,
   },
   {
     icon: BarChart2,
-    label: 'Seu Resultado',
-    time: 'Ao fim',
-    text: 'A distância que você correu antes de ser tocado é o seu resultado. Ranking completo de todos os participantes.',
+    label: 'Último Corredor Alcançado',
+    time: '09h00',
+    text: 'Fim da corrida. A distância que você correu antes de ser tocado é o seu resultado. Ranking revelado na hora.',
   },
   {
     icon: Gift,
-    label: 'Muito Mais',
-    time: 'Todo dia',
-    text: 'Mega café da manhã com BIG BOX, Red Bull pra todo mundo, pós-treino com FitDance da Evolve aquecendo a galera e muito mais parceiros te esperando.',
+    label: 'Pós-corre',
+    time: '09h15+',
+    text: 'Premiação, Red Bull pra todo mundo, mega café da manhã com BIG BOX e FitDance com a Evolve aquecendo a galera.',
   },
 ]
 
