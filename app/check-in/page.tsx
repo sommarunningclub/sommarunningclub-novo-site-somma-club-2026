@@ -269,6 +269,39 @@ export default function CheckInPage() {
             </p>
           </div>
 
+          {/* Banner especial Catcher Run */}
+          <a
+            href="/somma-redbull-wingsforlifeworldrun"
+            className="block mb-6 rounded-xl overflow-hidden border-2 border-[#CC0000] bg-zinc-900 hover:bg-zinc-800 transition-all duration-200 group"
+          >
+            <div className="bg-[#CC0000] px-4 sm:px-6 py-2 flex items-center justify-between">
+              <span className="text-white text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse" /> Evento especial — inscrições abertas
+              </span>
+              <span className="text-white text-xs font-semibold">Red Bull</span>
+            </div>
+            <div className="p-4 sm:p-6">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-white font-bold text-base sm:text-lg mb-1">Catcher Run — Somma × Red Bull</h3>
+                  <p className="text-zinc-400 text-xs sm:text-sm mb-3 leading-relaxed">
+                    Simulação do Wings for Life World Run. Domingo, 26 de abril · 106 Sul, Brasília
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 text-[#CC0000] text-xs font-semibold group-hover:gap-2.5 transition-all">
+                    Saiba mais e garanta sua vaga <span>→</span>
+                  </span>
+                </div>
+                <div className="flex-shrink-0">
+                  <img
+                    src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610"
+                    alt="Red Bull"
+                    className="h-16 w-auto object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </a>
+
           {/* Próximos eventos */}
           {eventosProximos.length > 0 && (
             <div className="mb-8 space-y-3">
