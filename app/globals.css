@@ -8,6 +8,11 @@
   100% { transform: translateY(0px) rotate(-2deg); }
 }
 
+@keyframes print {
+  0%   { transform: translateY(-510px); }
+  100% { transform: translateY(0px); }
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

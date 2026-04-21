@@ -3,6 +3,7 @@
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin } from 'lucide-react'
+import CatcherRunTicket from '@/components/events/catcher-run/CatcherRunTicket'
 
 function CheckInSucessoContent() {
   const searchParams = useSearchParams()
@@ -12,6 +13,18 @@ function CheckInSucessoContent() {
   const local = searchParams.get('local') || 'Parque da Cidade — Brasília, DF'
   const localUrl = searchParams.get('local_url') || ''
   const descricao = searchParams.get('descricao') || ''
+
+  if (nomeEvento.includes('Catcher Run')) {
+    return (
+      <CatcherRunTicket
+        data={dataEvento}
+        horario={horario}
+        local={local}
+        localUrl={localUrl}
+        nomeEvento={nomeEvento}
+      />
+    )
+  }
 
   const formatarHorario = (h: string) => {
     const [hr, min] = h.split(':')
