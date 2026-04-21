@@ -12,6 +12,7 @@ const partners = [
     color: '#CC0000',
     noInvert: true,
     logoClass: 'h-20 sm:h-24',
+    url: null,
   },
   {
     name: 'BIG BOX',
@@ -21,6 +22,7 @@ const partners = [
     color: '#F26522',
     noInvert: true,
     logoClass: 'h-10 sm:h-12',
+    url: 'https://www.instagram.com/bigboxsupermercados/',
   },
   {
     name: 'Evolve',
@@ -30,6 +32,7 @@ const partners = [
     color: '#df271d',
     noInvert: false,
     logoClass: 'h-8 sm:h-10',
+    url: 'https://www.instagram.com/academiaevolve/',
   },
   {
     name: 'Wings for Life World Run',
@@ -39,6 +42,7 @@ const partners = [
     color: '#fff',
     noInvert: true,
     logoClass: 'h-10 sm:h-12',
+    url: null,
   },
   {
     name: 'Estamina Recovery',
@@ -48,6 +52,7 @@ const partners = [
     color: '#7b9cc4',
     noInvert: true,
     logoClass: 'h-10 sm:h-12',
+    url: 'https://www.instagram.com/estaminarecovery/',
   },
 ]
 
@@ -90,53 +95,65 @@ export default function PartnersSection() {
 
         {/* Main partners */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-          {partners.map((partner, i) => (
-            <motion.div
-              key={partner.name}
-              initial={{ opacity: 0, y: 28 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-              className="group relative bg-[#111] border border-zinc-800 p-6 sm:p-8 hover:border-zinc-600 transition-colors duration-300 overflow-hidden"
-            >
-              {/* Color accent line */}
-              <div
-                className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: `linear-gradient(to right, ${partner.color}, transparent)` }}
-              />
-
-              {/* Logo */}
-              <div className="mb-5 h-14 flex items-center">
-                <img
-                  src={partner.logo}
-                  alt={partner.name}
-                  className={`object-contain ${partner.logoClass} ${
-                    partner.noInvert ? 'opacity-90' : 'brightness-0 invert opacity-80'
-                  } group-hover:opacity-100 transition-opacity duration-300`}
+          {partners.map((partner, i) => {
+            const inner = (
+              <>
+                {/* Color accent line */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ background: `linear-gradient(to right, ${partner.color}, transparent)` }}
                 />
-              </div>
+                {/* Logo */}
+                <div className="mb-5 h-14 flex items-center">
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
+                    className={`object-contain ${partner.logoClass} ${
+                      partner.noInvert ? 'opacity-90' : 'brightness-0 invert opacity-80'
+                    } group-hover:opacity-100 transition-opacity duration-300`}
+                  />
+                </div>
+                {/* Role badge */}
+                <span
+                  className="inline-block text-[10px] uppercase tracking-widest px-2 py-1 mb-3 border"
+                  style={{
+                    fontFamily: 'var(--font-dm-sans, sans-serif)',
+                    color: partner.color,
+                    borderColor: `${partner.color}40`,
+                    background: `${partner.color}10`,
+                  }}
+                >
+                  {partner.role}
+                </span>
+                {/* Description */}
+                <p
+                  className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors duration-300"
+                  style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+                >
+                  {partner.description}
+                </p>
+              </>
+            )
 
-              {/* Role badge */}
-              <span
-                className="inline-block text-[10px] uppercase tracking-widest px-2 py-1 mb-3 border"
-                style={{
-                  fontFamily: 'var(--font-dm-sans, sans-serif)',
-                  color: partner.color,
-                  borderColor: `${partner.color}40`,
-                  background: `${partner.color}10`,
-                }}
-              >
-                {partner.role}
-              </span>
+            const cardClass = "group relative bg-[#111] border border-zinc-800 p-6 sm:p-8 hover:border-zinc-600 transition-colors duration-300 overflow-hidden"
 
-              {/* Description */}
-              <p
-                className="text-zinc-400 text-sm leading-relaxed group-hover:text-zinc-300 transition-colors duration-300"
-                style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+            return (
+              <motion.div
+                key={partner.name}
+                initial={{ opacity: 0, y: 28 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
               >
-                {partner.description}
-              </p>
-            </motion.div>
-          ))}
+                {partner.url ? (
+                  <a href={partner.url} target="_blank" rel="noopener noreferrer" className={cardClass + " block"}>
+                    {inner}
+                  </a>
+                ) : (
+                  <div className={cardClass}>{inner}</div>
+                )}
+              </motion.div>
+            )
+          })}
         </div>
 
         {/* Soon placeholders */}

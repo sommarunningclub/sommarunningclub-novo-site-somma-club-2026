@@ -314,23 +314,29 @@ export default function CatcherRunTicket({
           Oferecimento
         </p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
-          <img
-            src="https://institucional.bigbox.com.br/wp-content/uploads/2018/09/cropped-logo-1.png"
-            alt="Big Box"
-            style={{ height: '28px', objectFit: 'contain', opacity: 0.85 }}
-          />
+          <a href="https://www.instagram.com/bigboxsupermercados/" target="_blank" rel="noopener noreferrer">
+            <img
+              src="https://institucional.bigbox.com.br/wp-content/uploads/2018/09/cropped-logo-1.png"
+              alt="Big Box"
+              style={{ height: '28px', objectFit: 'contain', opacity: 0.85 }}
+            />
+          </a>
           <div style={{ width: '1px', height: '24px', background: '#333' }} />
-          <img
-            src="/evolve-logo.svg"
-            alt="Evolve"
-            style={{ height: '22px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
-          />
+          <a href="https://www.instagram.com/academiaevolve/" target="_blank" rel="noopener noreferrer">
+            <img
+              src="/evolve-logo.svg"
+              alt="Evolve"
+              style={{ height: '22px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
+            />
+          </a>
           <div style={{ width: '1px', height: '24px', background: '#333' }} />
-          <img
-            src="/estamina_logo.jpg"
-            alt="Estamina Recovery"
-            style={{ height: '22px', objectFit: 'contain', opacity: 0.7 }}
-          />
+          <a href="https://www.instagram.com/estaminarecovery/" target="_blank" rel="noopener noreferrer">
+            <img
+              src="/estamina_logo.jpg"
+              alt="Estamina Recovery"
+              style={{ height: '22px', objectFit: 'contain', opacity: 0.7 }}
+            />
+          </a>
         </div>
       </div>
 
