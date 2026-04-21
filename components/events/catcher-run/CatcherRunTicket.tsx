@@ -313,17 +313,23 @@ export default function CatcherRunTicket({
         >
           Oferecimento
         </p>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
           <img
             src="https://institucional.bigbox.com.br/wp-content/uploads/2018/09/cropped-logo-1.png"
             alt="Big Box"
-            style={{ height: '28px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
+            style={{ height: '28px', objectFit: 'contain', opacity: 0.85 }}
           />
           <div style={{ width: '1px', height: '24px', background: '#333' }} />
           <img
             src="/evolve-logo.svg"
             alt="Evolve"
-            style={{ height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
+            style={{ height: '22px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
+          />
+          <div style={{ width: '1px', height: '24px', background: '#333' }} />
+          <img
+            src="/estamina-logo.svg"
+            alt="Estamina Recovery"
+            style={{ height: '22px', objectFit: 'contain', opacity: 0.7 }}
           />
         </div>
       </div>

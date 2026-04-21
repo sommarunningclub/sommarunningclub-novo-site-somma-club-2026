@@ -40,11 +40,18 @@ const partners = [
     noInvert: true,
     logoClass: 'h-10 sm:h-12',
   },
+  {
+    name: 'Estamina Recovery',
+    logo: '/estamina-logo.svg',
+    role: 'Recovery',
+    description: 'A Estamina Recovery cuida do seu corpo depois do esforço. Recuperação de verdade pra quem treina de verdade.',
+    color: '#7b9cc4',
+    noInvert: true,
+    logoClass: 'h-10 sm:h-12',
+  },
 ]
 
-const soon = [
-  { name: 'E muito mais!', role: 'Mais parceiros confirmando' },
-]
+const soon: { name: string; role: string }[] = []
 
 export default function PartnersSection() {
   const ref = useRef(null)
@@ -133,30 +140,32 @@ export default function PartnersSection() {
         </div>
 
         {/* Soon placeholders */}
-        <div className="grid grid-cols-2 gap-4">
-          {soon.map((item, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
-              className="bg-[#0D0D0D] border border-zinc-900 p-5 flex flex-col items-center justify-center gap-2 opacity-30"
-            >
-              <span
-                className="text-zinc-500 text-xl sm:text-2xl font-black uppercase"
-                style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
+        {soon.length > 0 && (
+          <div className="grid grid-cols-2 gap-4">
+            {soon.map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 16 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
+                className="bg-[#0D0D0D] border border-zinc-900 p-5 flex flex-col items-center justify-center gap-2 opacity-30"
               >
-                {item.name}
-              </span>
-              <span
-                className="text-zinc-700 text-[10px] uppercase tracking-widest"
-                style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
-              >
-                {item.role}
-              </span>
-            </motion.div>
-          ))}
-        </div>
+                <span
+                  className="text-zinc-500 text-xl sm:text-2xl font-black uppercase"
+                  style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
+                >
+                  {item.name}
+                </span>
+                <span
+                  className="text-zinc-700 text-[10px] uppercase tracking-widest"
+                  style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+                >
+                  {item.role}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* Bottom note */}
         <motion.p
