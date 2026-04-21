@@ -7,6 +7,7 @@ import MapSection from '@/components/events/catcher-run/MapSection'
 import HowToGetThere from '@/components/events/catcher-run/HowToGetThere'
 import PartnersSection from '@/components/events/catcher-run/PartnersSection'
 import CatcherRunCheckin from '@/components/events/catcher-run/CatcherRunCheckin'
+import FloatingCan from '@/components/events/catcher-run/FloatingCan'
 
 export default function CatcherRunPage() {
   return (
@@ -14,6 +15,9 @@ export default function CatcherRunPage() {
       className="bg-[#080808] min-h-screen"
       style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
     >
+      {/* Lata flutuante fixa */}
+      <FloatingCan />
+
       {/* SEÇÃO 1 — HERO */}
       <HeroSection />
 
@@ -71,7 +75,11 @@ export default function CatcherRunPage() {
               className="text-zinc-500 text-sm"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Inscrição gratuita · Vagas limitadas · 26 de abril de 2026
+              Inscrição gratuita · 26 de abril de 2026
+              <span className="flex items-center justify-center gap-1.5 mt-2 text-red-400 text-xs font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                Vagas limitadas — garante a sua agora
+              </span>
             </p>
           </div>
 
