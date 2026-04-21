@@ -318,7 +318,17 @@ export default function CheckInPage() {
                     )}
                   </div>
                   <div className="p-4 sm:p-6">
-                    <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>
+                    {isCatcherRun && (
+                      <div className="flex items-start justify-between gap-3 mb-1">
+                        <h3 className="text-white font-bold text-base sm:text-lg">{evento.titulo}</h3>
+                        <img
+                          src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610"
+                          alt="Red Bull"
+                          className="h-20 w-auto object-contain flex-shrink-0 -mt-2 -mr-1"
+                        />
+                      </div>
+                    )}
+                    {!isCatcherRun && <h3 className="text-white font-bold text-base sm:text-lg mb-3">{evento.titulo}</h3>}
                     {evento.descricao && (
                       <p className="text-zinc-400 text-xs sm:text-sm mb-3 leading-relaxed">{evento.descricao}</p>
                     )}
