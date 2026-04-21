@@ -269,57 +269,41 @@ export default function CheckInPage() {
             </p>
           </div>
 
-          {/* Banner especial Catcher Run */}
-          <a
-            href="/somma-redbull-wingsforlifeworldrun"
-            className="block mb-6 rounded-xl overflow-hidden border-2 border-[#CC0000] bg-zinc-900 hover:bg-zinc-800 transition-all duration-200 group"
-          >
-            <div className="bg-[#CC0000] px-4 sm:px-6 py-2 flex items-center justify-between">
-              <span className="text-white text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-white animate-pulse" /> Evento especial — inscrições abertas
-              </span>
-              <span className="text-white text-xs font-semibold">Red Bull</span>
-            </div>
-            <div className="p-4 sm:p-6">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-white font-bold text-base sm:text-lg mb-1">Catcher Run — Somma × Red Bull</h3>
-                  <p className="text-zinc-400 text-xs sm:text-sm mb-3 leading-relaxed">
-                    Simulação do Wings for Life World Run. Domingo, 26 de abril · 106 Sul, Brasília
-                  </p>
-                  <span className="inline-flex items-center gap-1.5 text-[#CC0000] text-xs font-semibold group-hover:gap-2.5 transition-all">
-                    Saiba mais e garanta sua vaga <span>→</span>
-                  </span>
-                </div>
-                <div className="flex-shrink-0">
-                  <img
-                    src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610"
-                    alt="Red Bull"
-                    className="h-16 w-auto object-contain"
-                  />
-                </div>
-              </div>
-            </div>
-          </a>
-
           {/* Próximos eventos */}
           {eventosProximos.length > 0 && (
             <div className="mb-8 space-y-3">
               <p className="text-xs text-zinc-500 font-semibold uppercase tracking-widest mb-3">
                 {eventosProximos.length === 1 ? 'Proximo evento' : 'Proximos eventos'}
               </p>
-              {eventosProximos.map(evento => (
+              {eventosProximos.map(evento => {
+                const isCatcherRun = evento.id === 'f139b049-52c8-4028-9ddb-90cfa72af378'
+                return (
                 <div
                   key={evento.id}
-                  onClick={() => !evento.bloqueado && setEventoSelecionado(evento)}
+                  onClick={() => {
+                    if (isCatcherRun) {
+                      router.push('/somma-redbull-wingsforlifeworldrun')
+                    } else if (!evento.bloqueado) {
+                      setEventoSelecionado(evento)
+                    }
+                  }}
                   className={`w-full text-left rounded-xl border-2 bg-zinc-900 overflow-hidden transition-all duration-200 ${
-                    evento.bloqueado
+                    isCatcherRun
+                      ? 'border-red-600 hover:bg-zinc-800 cursor-pointer group'
+                      : evento.bloqueado
                       ? 'border-zinc-700 cursor-not-allowed opacity-70'
                       : 'border-orange-500 hover:bg-zinc-800 cursor-pointer group'
                   }`}
                 >
-                  <div className={`px-4 sm:px-6 py-2 flex items-center justify-between ${evento.bloqueado ? 'bg-zinc-700' : 'bg-orange-500'}`}>
-                    {evento.bloqueado ? (
+                  <div className={`px-4 sm:px-6 py-2 flex items-center justify-between ${isCatcherRun ? 'bg-red-700' : evento.bloqueado ? 'bg-zinc-700' : 'bg-orange-500'}`}>
+                    {isCatcherRun ? (
+                      <>
+                        <span className="text-white text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
+                          <span className="w-2 h-2 rounded-full bg-white animate-pulse" /> Evento especial — inscrições abertas
+                        </span>
+                        <span className="text-white/70 text-xs font-semibold">Red Bull</span>
+                      </>
+                    ) : evento.bloqueado ? (
                       <>
                         <span className="text-zinc-300 text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
                           <Lock className="w-3 h-3" /> Check-in em breve
@@ -364,7 +348,11 @@ export default function CheckInPage() {
                         )}
                       </div>
                     </div>
-                    {evento.bloqueado ? (
+                    {isCatcherRun ? (
+                      <div className="mt-4 flex items-center justify-end gap-1 text-red-500 text-xs font-semibold group-hover:gap-2 transition-all">
+                        Saiba mais e garanta sua vaga <ChevronRight className="w-3.5 h-3.5" />
+                      </div>
+                    ) : evento.bloqueado ? (
                       <div className="mt-4 flex items-center justify-end gap-1.5 text-zinc-500 text-xs font-semibold">
                         <Lock className="w-3 h-3" /> Check-in indisponível no momento
                       </div>
@@ -375,7 +363,8 @@ export default function CheckInPage() {
                     )}
                   </div>
                 </div>
-              ))}
+                )
+              })}
             </div>
           )}
 
