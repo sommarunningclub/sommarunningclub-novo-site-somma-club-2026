@@ -28,7 +28,7 @@ const cards = [
     icon: Gift,
     label: 'Muito Mais',
     time: 'Todo dia',
-    text: 'Café da manhã com BIG BOX · Red Bull para todos · Academia Evolve no encerramento · Parceiros surpresa.',
+    text: 'Mega café da manhã com BIG BOX, Red Bull pra todo mundo, pós-treino com FitDance da Evolve aquecendo a galera e muito mais parceiros te esperando.',
   },
 ]
 
@@ -50,23 +50,32 @@ export default function EventSimulationSection() {
               className="text-[#F26522] text-xs uppercase tracking-[0.3em] mb-3"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Nosso evento
+              Somma Day especial
             </p>
             <h2
               className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-white leading-tight mb-6"
               style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
             >
-              No dia 26 de abril,<br />
-              Brasília vai simular<br />
-              <span className="text-[#CC0000]">o Wings for Life.</span>
+              O último Somma Day<br />
+              de abril vai ser<br />
+              <span className="text-[#CC0000]">diferente.</span>
             </h2>
             <p
               className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-5"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              O Somma Running Club e a Red Bull trazem para a 106 Sul
-              a experiência completa do maior evento de corrida do mundo,
-              15 dias antes da corrida oficial.
+              No dia 26 de abril, o nosso Somma Day de encerramento do mês
+              vira palco de um evento especial com a Red Bull. Em vez de uma corrida
+              comum, a gente vai simular o maior evento de corrida do mundo — o
+              Wings for Life World Run.
+            </p>
+            <p
+              className="text-zinc-300 text-sm sm:text-base leading-relaxed mb-4"
+              style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+            >
+              Mesma energia de todo sábado na 106 Sul, mas com uma dinâmica que
+              você nunca viveu: sem linha de chegada, sem tempo definido,
+              com um Catcher Car humano atrás de você.
             </p>
             <p
               className="text-zinc-300 text-sm sm:text-base leading-relaxed"

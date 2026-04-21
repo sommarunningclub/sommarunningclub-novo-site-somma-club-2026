@@ -10,7 +10,7 @@ const metroSteps = [
   {
     icon: Train,
     label: 'Embarque no Metrô',
-    detail: 'Pegue a linha laranja ou verde em direção à Asa Sul.',
+    detail: 'Pegue o metro no sentido Central e desça na estação 106 Sul.',
     time: null,
     color: '#F26522',
   },

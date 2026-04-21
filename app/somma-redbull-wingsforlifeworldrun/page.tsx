@@ -5,6 +5,7 @@ import EventSimulationSection from '@/components/events/catcher-run/EventSimulat
 import ScheduleTimeline from '@/components/events/catcher-run/ScheduleTimeline'
 import MapSection from '@/components/events/catcher-run/MapSection'
 import HowToGetThere from '@/components/events/catcher-run/HowToGetThere'
+import PartnersSection from '@/components/events/catcher-run/PartnersSection'
 import CatcherRunCheckin from '@/components/events/catcher-run/CatcherRunCheckin'
 
 export default function CatcherRunPage() {
@@ -33,6 +34,9 @@ export default function CatcherRunPage() {
 
       {/* SEÇÃO 6b — COMO CHEGAR */}
       <HowToGetThere />
+
+      {/* SEÇÃO 6c — PARCEIROS */}
+      <PartnersSection />
 
       {/* SEÇÃO 7 — FORMULÁRIO DE INSCRIÇÃO */}
       <section

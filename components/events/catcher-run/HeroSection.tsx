@@ -191,8 +191,9 @@ export default function HeroSection() {
           className="text-zinc-300/70 text-xs sm:text-base max-w-lg text-center leading-relaxed mb-6"
           style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
         >
-          Brasília vive pela primeira vez a simulação do maior
-          evento de corrida do mundo. Venha correr, ou tente não ser pego.
+          O Somma Day de abril vai ser especial. A Red Bull chega na 106 Sul pra
+          transformar o nosso sábado numa simulação do Wings for Life World Run.
+          Mega café da manhã com BIG BOX, pós-treino animado com a Evolve no FitDance e muito mais parceiros te esperando.
         </motion.p>
 
         {/* Event details */}
