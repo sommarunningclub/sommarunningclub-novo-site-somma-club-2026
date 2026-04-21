@@ -13,6 +13,8 @@ function CheckInSucessoContent() {
   const local = searchParams.get('local') || 'Parque da Cidade — Brasília, DF'
   const localUrl = searchParams.get('local_url') || ''
   const descricao = searchParams.get('descricao') || ''
+  const pelotao = searchParams.get('pelotao') || ''
+  const pelotaoLabel = searchParams.get('pelotao_label') || ''
 
   if (nomeEvento.includes('Catcher Run')) {
     return (
@@ -22,6 +24,8 @@ function CheckInSucessoContent() {
         local={local}
         localUrl={localUrl}
         nomeEvento={nomeEvento}
+        pelotao={pelotao}
+        pelotaoLabel={pelotaoLabel}
       />
     )
   }

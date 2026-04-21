@@ -115,6 +115,7 @@ export default function CatcherRunCheckin() {
         return
       }
 
+      const pelotonLabel = pelotons.find(p => p.id === formData.peloton)?.label || ''
       const params = new URLSearchParams({
         data: EVENTO.dataFormatada,
         evento: EVENTO.titulo,
@@ -122,6 +123,8 @@ export default function CatcherRunCheckin() {
         local: EVENTO.local,
         local_url: EVENTO.localUrl,
         descricao: 'Simulação do Wings for Life World Run na 106 Sul, Brasília.',
+        pelotao: formData.peloton,
+        pelotao_label: pelotonLabel,
       })
       router.push(`/check-in/sucesso?${params.toString()}`)
     } catch {

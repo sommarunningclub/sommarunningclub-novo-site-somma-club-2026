@@ -1,11 +1,19 @@
 'use client'
 
+const PELOTON_COLORS: Record<string, string> = {
+  '8km': '#CC0000',
+  '6km': '#eab308',
+  '4km': '#22c55e',
+}
+
 interface CatcherRunTicketProps {
   data: string
   horario: string
   local: string
   localUrl: string
   nomeEvento: string
+  pelotao: string
+  pelotaoLabel: string
 }
 
 export default function CatcherRunTicket({
@@ -13,7 +21,10 @@ export default function CatcherRunTicket({
   horario,
   local,
   localUrl,
+  pelotao,
+  pelotaoLabel,
 }: CatcherRunTicketProps) {
+  const pelotaoColor = PELOTON_COLORS[pelotao] || '#F26522'
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#080808] px-4 py-12">
       {/* Título acima */}
@@ -191,29 +202,20 @@ export default function CatcherRunTicket({
                 </div>
               </div>
 
-              {/* Pelotões */}
-              <div style={{ marginTop: '16px' }}>
-                <p style={{ color: '#999', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 6px', fontFamily: 'var(--font-dm-sans, sans-serif)' }}>Pelotões</p>
-                <div style={{ display: 'flex', gap: '6px' }}>
-                  {['A – Até 5 km', 'B – 5 a 10 km', 'C – 10 km+'].map((p) => (
-                    <span
-                      key={p}
-                      style={{
-                        background: '#f0f0f0',
-                        border: '1px solid #ddd',
-                        borderRadius: '4px',
-                        padding: '3px 6px',
-                        fontSize: '9px',
-                        color: '#333',
-                        fontFamily: 'var(--font-dm-sans, sans-serif)',
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {p}
+              {/* Pelotão do usuário */}
+              {pelotao && (
+                <div style={{ marginTop: '16px', gridColumn: '1 / -1' }}>
+                  <p style={{ color: '#999', fontSize: '9px', letterSpacing: '0.15em', textTransform: 'uppercase', margin: '0 0 6px', fontFamily: 'var(--font-dm-sans, sans-serif)' }}>Meu pelotão</p>
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: '#f0f0f0', border: `2px solid ${pelotaoColor}`, borderRadius: '6px', padding: '6px 12px' }}>
+                    <div style={{ width: '28px', height: '28px', background: pelotaoColor, borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-barlow-condensed, sans-serif)', fontWeight: 900, fontSize: '11px', color: '#fff' }}>
+                      {pelotao}
+                    </div>
+                    <span style={{ color: '#111', fontSize: '12px', fontWeight: 700, fontFamily: 'var(--font-barlow-condensed, sans-serif)', letterSpacing: '0.05em' }}>
+                      {pelotaoLabel}
                     </span>
-                  ))}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Linha pontilhada de separação */}
