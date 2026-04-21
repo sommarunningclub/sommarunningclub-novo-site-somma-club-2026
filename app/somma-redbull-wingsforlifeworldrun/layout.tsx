@@ -19,7 +19,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Catcher Run Brasília 2026 | Somma × Red Bull | Simulação Wings for Life',
   description:
-    'O Somma Running Club e a Red Bull simulam o Wings for Life World Run na 106 Sul em Brasília. 26 de abril, 07h. Inscrição gratuita. Você consegue fugir do Catcher Car?',
+    'O Somma Running Club e a Red Bull simulam o Wings for Life World Run na 106 Sul em Brasília. 26 de abril, largada 07h30. Inscrição gratuita. Você consegue fugir do Catcher Car?',
   openGraph: {
     title: 'Catcher Run Brasília 2026 | Somma × Red Bull',
     description:

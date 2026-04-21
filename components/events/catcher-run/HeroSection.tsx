@@ -200,7 +200,7 @@ export default function HeroSection() {
         <motion.div {...fadeUp(0.1)} className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1.5 mb-6 sm:mb-8">
           {[
             { icon: Calendar, text: '26 de Abril de 2026' },
-            { icon: Clock, text: 'Concentração 06h30, largada 07h00' },
+            { icon: Clock, text: 'Concentração 06h30, largada 07h30' },
             { icon: MapPin, text: '106 Sul, Brasília DF' },
           ].map(({ icon: Icon, text }) => (
             <div key={text} className="flex items-center gap-1.5 text-zinc-400 text-[11px] sm:text-sm" style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}>

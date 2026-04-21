@@ -10,28 +10,28 @@ const metroSteps = [
   {
     icon: Train,
     label: 'Embarque no Metrô',
-    detail: 'Pegue o metro no sentido Central e desça na estação 106 Sul.',
+    detail: 'Pegue o metrô no sentido Samambaia. A estação 106 Sul é a mais próxima do evento.',
     time: null,
     color: '#F26522',
   },
   {
     icon: Train,
-    label: 'Desça na Estação 102 Sul',
-    detail: 'A estação 102 Sul é a mais próxima do evento. Saída pela plataforma leste.',
+    label: 'Desça na Estação 106 Sul',
+    detail: 'Desça na estação 106 Sul e saia pela saída mais próxima da W3 Sul.',
     time: null,
     color: '#F26522',
   },
   {
     icon: FootprintsIcon,
-    label: 'Caminhada de ~7 minutos',
-    detail: 'Da saída da estação, siga pela W3 Sul em direção ao sul por cerca de 400m até a entrada da 106 Sul.',
-    time: '~7 min a pé',
+    label: 'Caminhada de ~5 minutos',
+    detail: 'Da saída da estação, caminhe pela W3 Sul até a 106 Sul. São poucos minutos a pé.',
+    time: '~5 min a pé',
     color: '#fff',
   },
   {
     icon: MapPin,
     label: 'Chegou! Local do evento',
-    detail: 'Concentração às 06h30. Largada às 07h. Procure a estrutura do Somma Running Club.',
+    detail: 'Concentração às 06h30. Largada às 07h30. Procure a estrutura do Somma Running Club.',
     time: '06h30',
     color: '#CC0000',
     accent: true,
@@ -63,7 +63,7 @@ const carroSteps = [
   {
     icon: MapPin,
     label: 'Chegou! Local do evento',
-    detail: 'Concentração às 06h30. Largada às 07h. Procure a estrutura do Somma Running Club.',
+    detail: 'Concentração às 06h30. Largada às 07h30. Procure a estrutura do Somma Running Club.',
     time: '06h30',
     color: '#CC0000',
     accent: true,
@@ -173,7 +173,7 @@ export default function HowToGetThere() {
             className="text-zinc-400 text-sm sm:text-base max-w-lg"
             style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
           >
-            Simule seu trajeto até o evento para não perder a largada das 07h.
+            A concentração começa às 06h30 e a largada é às 07h30. Planeje seu trajeto com antecedência. A estação de metrô 106 Sul é a mais próxima do evento.
           </p>
         </motion.div>
 
