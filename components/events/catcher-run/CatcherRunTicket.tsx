@@ -298,6 +298,36 @@ export default function CatcherRunTicket({
         </div>
       </div>
 
+      {/* Oferecimento */}
+      <div className="w-full max-w-[340px] mt-5">
+        <p
+          style={{
+            color: '#555',
+            fontSize: '9px',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            textAlign: 'center',
+            marginBottom: '10px',
+            fontFamily: 'var(--font-dm-sans, sans-serif)',
+          }}
+        >
+          Oferecimento
+        </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px' }}>
+          <img
+            src="https://institucional.bigbox.com.br/wp-content/uploads/2018/09/cropped-logo-1.png"
+            alt="Big Box"
+            style={{ height: '28px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
+          />
+          <div style={{ width: '1px', height: '24px', background: '#333' }} />
+          <img
+            src="/evolve-logo.svg"
+            alt="Evolve"
+            style={{ height: '24px', objectFit: 'contain', filter: 'brightness(0) invert(1)', opacity: 0.7 }}
+          />
+        </div>
+      </div>
+
       {/* Botões abaixo do ticket */}
       <div className="w-full max-w-[340px] mt-6 flex flex-col gap-3">
         {localUrl && (
