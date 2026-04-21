@@ -42,7 +42,7 @@ const partners = [
   },
   {
     name: 'Estamina Recovery',
-    logo: '/estamina-logo.svg',
+    logo: '/estamina_logo.jpg',
     role: 'Recovery',
     description: 'A Estamina Recovery cuida do seu corpo depois do esforço. Recuperação de verdade pra quem treina de verdade.',
     color: '#7b9cc4',

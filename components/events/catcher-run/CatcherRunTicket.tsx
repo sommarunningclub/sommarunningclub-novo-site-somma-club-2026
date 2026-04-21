@@ -327,7 +327,7 @@ export default function CatcherRunTicket({
           />
           <div style={{ width: '1px', height: '24px', background: '#333' }} />
           <img
-            src="/estamina-logo.svg"
+            src="/estamina_logo.jpg"
             alt="Estamina Recovery"
             style={{ height: '22px', objectFit: 'contain', opacity: 0.7 }}
           />
