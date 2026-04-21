@@ -325,6 +325,7 @@ export default function CheckInPage() {
                           src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610"
                           alt="Red Bull"
                           className="h-20 w-auto object-contain flex-shrink-0 -mt-2 -mr-1"
+                          style={{ animation: 'floatCan 3s ease-in-out infinite' }}
                         />
                       </div>
                     )}
