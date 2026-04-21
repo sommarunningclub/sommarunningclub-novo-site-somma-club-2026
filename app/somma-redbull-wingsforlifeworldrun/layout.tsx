@@ -19,11 +19,11 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Catcher Run Brasília 2026 | Somma × Red Bull | Simulação Wings for Life',
   description:
-    'O Somma Running Club e a Red Bull simulam o Wings for Life World Run na 106 Sul em Brasília. 25 de abril, 07h. Inscrição gratuita. Você consegue fugir do Catcher Car?',
+    'O Somma Running Club e a Red Bull simulam o Wings for Life World Run na 106 Sul em Brasília. 26 de abril, 07h. Inscrição gratuita. Você consegue fugir do Catcher Car?',
   openGraph: {
     title: 'Catcher Run Brasília 2026 | Somma × Red Bull',
     description:
-      'Simulação do Wings for Life World Run. 25/04 • 106 Sul, Brasília • Gratuito',
+      'Simulação do Wings for Life World Run. 26/04 • 106 Sul, Brasília • Gratuito',
     images: [
       {
         url: 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/PDCSK21FEV-1794.jpg',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Catcher Run Brasília 2026 | Somma × Red Bull',
-    description: 'Simulação do Wings for Life World Run. 25/04 • 106 Sul, Brasília • Gratuito',
+    description: 'Simulação do Wings for Life World Run. 26/04 • 106 Sul, Brasília • Gratuito',
   },
   keywords: [
     'Wings for Life World Run',

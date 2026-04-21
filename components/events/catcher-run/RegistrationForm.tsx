@@ -113,7 +113,7 @@ export default function RegistrationForm() {
           className="text-zinc-400 text-sm sm:text-base max-w-md leading-relaxed"
           style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
         >
-          Você está na lista. Nos vemos na 106 Sul em 25 de abril.
+          Você está na lista. Nos vemos na 106 Sul em 26 de abril.
           Fique de olho no seu WhatsApp, vamos mandar os detalhes em breve.
         </p>
         <p className="mt-4 text-[#F26522] text-2xl font-black uppercase" style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}>
@@ -280,7 +280,7 @@ export default function RegistrationForm() {
         className="text-center text-zinc-600 text-xs"
         style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
       >
-        Inscrição gratuita · Vagas limitadas · 25 de abril de 2026
+        Inscrição gratuita · Vagas limitadas · 26 de abril de 2026
       </p>
     </form>
   )

@@ -37,7 +37,7 @@ export default function ScheduleTimeline() {
             className="text-[#F26522] text-xs uppercase tracking-[0.3em] mb-3"
             style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
           >
-            25 de abril de 2026
+            26 de abril de 2026
           </p>
           <h2
             className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-white leading-none"

@@ -56,7 +56,7 @@ export default function EventSimulationSection() {
               className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-white leading-tight mb-6"
               style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
             >
-              No dia 25 de abril,<br />
+              No dia 26 de abril,<br />
               Brasília vai simular<br />
               <span className="text-[#CC0000]">o Wings for Life.</span>
             </h2>

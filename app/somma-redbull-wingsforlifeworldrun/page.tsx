@@ -67,7 +67,7 @@ export default function CatcherRunPage() {
               className="text-zinc-500 text-sm"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Inscrição gratuita · Vagas limitadas · 25 de abril de 2026
+              Inscrição gratuita · Vagas limitadas · 26 de abril de 2026
             </p>
           </div>
 
@@ -98,7 +98,7 @@ export default function CatcherRunPage() {
               className="text-zinc-600 text-xs"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Catcher Run Brasília 2026 · 106 Sul · 25 de abril
+              Catcher Run Brasília 2026 · 106 Sul · 26 de abril
             </p>
             <p
               className="text-zinc-700 text-xs mt-0.5"

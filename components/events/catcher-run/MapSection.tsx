@@ -76,7 +76,7 @@ export default function MapSection() {
                   className="text-zinc-500 text-xs mt-0.5"
                   style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
                 >
-                  106 Sul · Brasília, DF · 25 de abril · Concentração 06h30, largada 07h
+                  106 Sul · Brasília, DF · 26 de abril · Concentração 06h30, largada 07h
                 </p>
               </div>
             </div>

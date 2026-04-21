@@ -8,8 +8,8 @@ import { ArrowRight, ArrowLeft, Check, Loader2, AlertCircle } from 'lucide-react
 const EVENTO = {
   id: 'f139b049-52c8-4028-9ddb-90cfa72af378',
   titulo: 'Catcher Run | Somma × Red Bull',
-  dataEvento: '2026-04-25',
-  dataFormatada: 'Sábado, 25 de abril de 2026',
+  dataEvento: '2026-04-26',
+  dataFormatada: 'Sábado, 26 de abril de 2026',
   horarioInicio: '07:00',
   local: '106 Sul, Brasília DF',
   localUrl: 'https://www.google.com/maps/place//@-15.8139033,-47.8967623,230m',
