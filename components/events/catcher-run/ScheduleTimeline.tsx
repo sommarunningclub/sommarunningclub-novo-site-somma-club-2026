@@ -7,7 +7,7 @@ import { TracingBeam } from '@/components/ui/tracing-beam'
 
 const schedule = [
   { time: '06:00', icon: Tent,          label: 'Abertura & Estrutura',        text: 'Parceiros montados, Red Bull station ativa.', accent: false },
-  { time: '06:30', icon: Footprints,    label: 'Recepção dos Participantes',  text: 'Credenciamento, distribuição de número de peito.', accent: false },
+  { time: '06:30', icon: Footprints,    label: 'Concentração e Recepção',     text: 'Chegada dos participantes, credenciamento e distribuição de número de peito.', accent: false },
   { time: '07:00', icon: Dumbbell,      label: 'Aquecimento Coletivo',        text: 'Guiado pela equipe Somma. Todo mundo junto.', accent: false },
   { time: '07:15', icon: Megaphone,     label: 'Briefing Oficial',            text: 'Regras explicadas. Alexandre Alves é apresentado como o Catcher Car. Percurso revelado.', accent: false },
   { time: '07:30', icon: Flag,          label: 'LARGADA!',                    text: 'Todos saem ao mesmo tempo, organizados por pelotão. Primeiro sai o Ritmo Avançado (8km), depois o Ritmo Moderado (6km) e por último o Ritmo Iniciante (4km). Escolha o pelotão que combina com o seu ritmo na hora da inscrição.', accent: 'orange' },

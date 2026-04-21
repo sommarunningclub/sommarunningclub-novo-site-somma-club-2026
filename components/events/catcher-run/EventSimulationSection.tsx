@@ -64,7 +64,7 @@ export default function EventSimulationSection() {
               className="text-zinc-400 text-sm sm:text-base leading-relaxed mb-5"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              O Somma Running Club e a Red Bull trazem para o Parque da Cidade
+              O Somma Running Club e a Red Bull trazem para a 106 Sul
               a experiência completa do maior evento de corrida do mundo,
               15 dias antes da corrida oficial.
             </p>

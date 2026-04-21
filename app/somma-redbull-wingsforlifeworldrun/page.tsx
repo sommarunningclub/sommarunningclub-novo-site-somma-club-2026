@@ -4,6 +4,7 @@ import CatcherCarSteps from '@/components/events/catcher-run/CatcherCarSteps'
 import EventSimulationSection from '@/components/events/catcher-run/EventSimulationSection'
 import ScheduleTimeline from '@/components/events/catcher-run/ScheduleTimeline'
 import MapSection from '@/components/events/catcher-run/MapSection'
+import HowToGetThere from '@/components/events/catcher-run/HowToGetThere'
 import CatcherRunCheckin from '@/components/events/catcher-run/CatcherRunCheckin'
 
 export default function CatcherRunPage() {
@@ -29,6 +30,9 @@ export default function CatcherRunPage() {
 
       {/* SEÇÃO 6 — MAPA */}
       <MapSection />
+
+      {/* SEÇÃO 6b — COMO CHEGAR */}
+      <HowToGetThere />
 
       {/* SEÇÃO 7 — FORMULÁRIO DE INSCRIÇÃO */}
       <section
@@ -94,7 +98,7 @@ export default function CatcherRunPage() {
               className="text-zinc-600 text-xs"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Catcher Run Brasília 2026 · Parque da Cidade · 25 de abril
+              Catcher Run Brasília 2026 · 106 Sul · 25 de abril
             </p>
             <p
               className="text-zinc-700 text-xs mt-0.5"

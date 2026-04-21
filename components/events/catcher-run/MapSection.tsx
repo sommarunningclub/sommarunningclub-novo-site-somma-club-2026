@@ -27,13 +27,13 @@ export default function MapSection() {
             className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-white leading-none mb-3"
             style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
           >
-            Parque da Cidade
+            106 Sul
           </h2>
           <p
             className="text-zinc-400 text-sm sm:text-base"
             style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
           >
-            Estacionamento 9, Brasília DF
+            106 Sul, Brasília DF
           </p>
         </motion.div>
 
@@ -46,14 +46,14 @@ export default function MapSection() {
           {/* Map embed */}
           <div className="relative w-full overflow-hidden border border-zinc-800" style={{ height: 'clamp(300px, 45vw, 480px)' }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3454.5!2d-47.9157284!3d-15.8063279!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x935a3aa2a5947daf%3A0x613a2252d5a08be5!2sEstacionamento%209%20-%20Parque%20da%20Cidade%20-%20Plano%20Piloto%2C%20Bras%C3%ADlia%20-%20DF%2C%2070655-775!5e0!3m2!1spt-BR!2sbr!4v1713030000000!5m2!1spt-BR!2sbr"
+              src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d230!2d-47.8968315!3d-15.8140469!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTXCsDQ4JzUwLjYiUyA0N8KwNTMnNDguNiJX!5e1!3m2!1spt-BR!2sbr!4v1713200000000"
               width="100%"
               height="100%"
               style={{ border: 0, filter: 'invert(0.9) hue-rotate(180deg) saturate(0.3) brightness(0.7)' }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Estacionamento 9, Parque da Cidade"
+              title="106 Sul, Brasília DF"
             />
             {/* Dark overlay on edges */}
             <div className="absolute inset-0 pointer-events-none" style={{ boxShadow: 'inset 0 0 40px 20px rgba(8,8,8,0.6)' }} />
@@ -70,18 +70,18 @@ export default function MapSection() {
                   className="text-white font-bold text-sm uppercase tracking-wide"
                   style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
                 >
-                  Estacionamento 9, Parque da Cidade
+                  106 Sul, Brasília DF
                 </p>
                 <p
                   className="text-zinc-500 text-xs mt-0.5"
                   style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
                 >
-                  Parque da Cidade Sarah Kubitschek · Brasília, DF · 25 de abril, 07h00
+                  106 Sul · Brasília, DF · 25 de abril · Concentração 06h30, largada 07h
                 </p>
               </div>
             </div>
             <a
-              href="https://maps.app.goo.gl/U1jVjWWywa9HWu5A9"
+              href="https://www.google.com/maps/place//@-15.8139033,-47.8967623,230m/data=!3m1!1e3!4m6!1m5!3m4!2zMTXCsDQ4JzUwLjYiUyA0N8KwNTMnNDguNiJX!8m2!3d-15.8140469!4d-47.8968315?hl=pt-BR"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-[#F26522] hover:bg-[#CC0000] text-white font-black text-xs sm:text-sm uppercase tracking-wider px-5 py-3 transition-colors duration-200 cursor-pointer flex-shrink-0"

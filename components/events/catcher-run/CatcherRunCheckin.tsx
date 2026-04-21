@@ -11,8 +11,8 @@ const EVENTO = {
   dataEvento: '2026-04-25',
   dataFormatada: 'Sábado, 25 de abril de 2026',
   horarioInicio: '07:00',
-  local: 'Parque da Cidade, Estacionamento 9, Brasília DF',
-  localUrl: 'https://maps.app.goo.gl/AUMu7k5D34YWUe4LA',
+  local: '106 Sul, Brasília DF',
+  localUrl: 'https://www.google.com/maps/place//@-15.8139033,-47.8967623,230m',
   tipo: 'corrida' as const,
 }
 
@@ -121,7 +121,7 @@ export default function CatcherRunCheckin() {
         horario: EVENTO.horarioInicio,
         local: EVENTO.local,
         local_url: EVENTO.localUrl,
-        descricao: 'Simulação do Wings for Life World Run no Parque da Cidade.',
+        descricao: 'Simulação do Wings for Life World Run na 106 Sul, Brasília.',
       })
       router.push(`/check-in/sucesso?${params.toString()}`)
     } catch {
