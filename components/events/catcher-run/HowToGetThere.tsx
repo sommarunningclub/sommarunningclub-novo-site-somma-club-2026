@@ -10,14 +10,7 @@ const metroSteps = [
   {
     icon: Train,
     label: 'Embarque no Metrô',
-    detail: 'Pegue o metrô no sentido Samambaia. A estação 106 Sul é a mais próxima do evento.',
-    time: null,
-    color: '#F26522',
-  },
-  {
-    icon: Train,
-    label: 'Desça na Estação 106 Sul',
-    detail: 'Desça na estação 106 Sul e saia pela saída mais próxima da W3 Sul.',
+    detail: 'Pegue o metrô no sentido Central. Desça na estação 106 Sul.',
     time: null,
     color: '#F26522',
   },
@@ -70,9 +63,9 @@ const carroSteps = [
   },
 ]
 
-function StepItem({ step, index, active }: { step: typeof metroSteps[0], index: number, active: boolean }) {
+function StepItem({ step, index, active, total }: { step: typeof metroSteps[0], index: number, active: boolean, total: number }) {
   const Icon = step.icon
-  const isLast = index === metroSteps.length - 1
+  const isLast = index === total - 1
 
   return (
     <motion.div
@@ -212,7 +205,7 @@ export default function HowToGetThere() {
         <AnimatePresence mode="wait">
           <div key={key} className="space-y-0">
             {steps.map((step, i) => (
-              <StepItem key={i} step={step} index={i} active={visible} />
+              <StepItem key={i} step={step} index={i} active={visible} total={steps.length} />
             ))}
           </div>
         </AnimatePresence>
