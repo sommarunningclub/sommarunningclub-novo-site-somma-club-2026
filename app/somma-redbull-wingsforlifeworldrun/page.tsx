@@ -92,13 +92,13 @@ export default function CatcherRunPage() {
               As inscrições para o Catcher Run × Red Bull foram encerradas. Acompanhe as redes do Somma Running Club para ficar por dentro das próximas corridas.
             </p>
             <a
-              href="https://www.instagram.com/sommarunningclub/"
+              href="https://www.instagram.com/somma.club/"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block mt-6 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold text-xs uppercase tracking-wider px-6 py-3 transition-colors duration-200"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Seguir @sommarunningclub
+              Seguir @somma.club
             </a>
           </div>
         </div>
