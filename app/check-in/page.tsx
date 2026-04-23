@@ -282,26 +282,26 @@ export default function CheckInPage() {
                   key={evento.id}
                   onClick={() => {
                     if (isCatcherRun) {
-                      router.push('/somma-redbull-wingsforlifeworldrun')
+                      return
                     } else if (!evento.bloqueado) {
                       setEventoSelecionado(evento)
                     }
                   }}
                   className={`w-full text-left rounded-xl border-2 bg-zinc-900 overflow-hidden transition-all duration-200 ${
                     isCatcherRun
-                      ? 'border-red-600 hover:bg-zinc-800 cursor-pointer group'
+                      ? 'border-zinc-700 cursor-not-allowed opacity-70'
                       : evento.bloqueado
                       ? 'border-zinc-700 cursor-not-allowed opacity-70'
                       : 'border-orange-500 hover:bg-zinc-800 cursor-pointer group'
                   }`}
                 >
-                  <div className={`px-4 sm:px-6 py-2 flex items-center justify-between ${isCatcherRun ? 'bg-red-700' : evento.bloqueado ? 'bg-zinc-700' : 'bg-orange-500'}`}>
+                  <div className={`px-4 sm:px-6 py-2 flex items-center justify-between ${isCatcherRun ? 'bg-zinc-700' : evento.bloqueado ? 'bg-zinc-700' : 'bg-orange-500'}`}>
                     {isCatcherRun ? (
                       <>
-                        <span className="text-white text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
-                          <span className="w-2 h-2 rounded-full bg-white animate-pulse" /> Evento especial — inscrições abertas
+                        <span className="text-zinc-300 text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5">
+                          <Lock className="w-3 h-3" /> Inscrições encerradas
                         </span>
-                        <span className="text-white/70 text-xs font-semibold">Red Bull</span>
+                        <Lock className="w-3.5 h-3.5 text-zinc-400" />
                       </>
                     ) : evento.bloqueado ? (
                       <>
@@ -322,16 +322,15 @@ export default function CheckInPage() {
                       <div className="flex items-start justify-between gap-3 mb-1">
                         <div>
                           <h3 className="text-white font-bold text-base sm:text-lg mb-1.5">{evento.titulo}</h3>
-                          <span className="inline-flex items-center gap-1.5 bg-red-950/60 border border-red-700/50 text-red-400 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                            Vagas limitadas
+                          <span className="inline-flex items-center gap-1.5 bg-zinc-800 border border-zinc-700 text-zinc-400 text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full">
+                            <Lock className="w-2.5 h-2.5" />
+                            Inscrições encerradas
                           </span>
                         </div>
                         <img
                           src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/RED_BULL_ED_MOLHADO_LATA_IR_ABERTA_ILUSTRADA_1.png?v=1776108610"
                           alt="Red Bull"
-                          className="h-20 w-auto object-contain flex-shrink-0 -mt-2 -mr-1"
-                          style={{ animation: 'floatCan 3s ease-in-out infinite' }}
+                          className="h-20 w-auto object-contain flex-shrink-0 -mt-2 -mr-1 opacity-40 grayscale"
                         />
                       </div>
                     )}
@@ -367,8 +366,8 @@ export default function CheckInPage() {
                       </div>
                     </div>
                     {isCatcherRun ? (
-                      <div className="mt-4 flex items-center justify-end gap-1 text-red-500 text-xs font-semibold group-hover:gap-2 transition-all">
-                        Saiba mais e garanta sua vaga <ChevronRight className="w-3.5 h-3.5" />
+                      <div className="mt-4 flex items-center justify-end gap-1.5 text-zinc-500 text-xs font-semibold">
+                        <Lock className="w-3 h-3" /> Inscrições encerradas
                       </div>
                     ) : evento.bloqueado ? (
                       <div className="mt-4 flex items-center justify-end gap-1.5 text-zinc-500 text-xs font-semibold">

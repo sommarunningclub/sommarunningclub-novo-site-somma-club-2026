@@ -219,10 +219,11 @@ export default function HeroSection() {
         <motion.div {...fadeUp(0.3)} className="flex flex-col sm:flex-row gap-3 w-full max-w-xs sm:max-w-none sm:justify-center">
           <button
             onClick={() => scrollTo('inscricao')}
-            className="bg-[#F26522] text-white font-black text-sm sm:text-lg px-7 py-3.5 sm:py-4 uppercase tracking-wider hover:bg-[#CC0000] transition-colors duration-200 cursor-pointer"
+            className="bg-zinc-800 text-zinc-400 font-black text-sm sm:text-lg px-7 py-3.5 sm:py-4 uppercase tracking-wider cursor-not-allowed border border-zinc-700"
             style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
+            disabled
           >
-            Quero Participar →
+            Inscrições encerradas
           </button>
           <button
             onClick={() => scrollTo('como-funciona')}
@@ -238,7 +239,7 @@ export default function HeroSection() {
           className="mt-3 text-zinc-600 text-[10px] sm:text-xs uppercase tracking-[0.2em]"
           style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
         >
-          Inscrição gratuita · Vagas limitadas
+          Inscrições encerradas · 26 de abril
         </motion.p>
       </div>
 

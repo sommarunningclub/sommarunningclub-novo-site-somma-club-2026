@@ -1,3 +1,4 @@
+import { Lock } from 'lucide-react'
 import HeroSection from '@/components/events/catcher-run/HeroSection'
 import WFLExplainerSection from '@/components/events/catcher-run/WFLExplainerSection'
 import CatcherCarSteps from '@/components/events/catcher-run/CatcherCarSteps'
@@ -6,8 +7,6 @@ import ScheduleTimeline from '@/components/events/catcher-run/ScheduleTimeline'
 import MapSection from '@/components/events/catcher-run/MapSection'
 import HowToGetThere from '@/components/events/catcher-run/HowToGetThere'
 import PartnersSection from '@/components/events/catcher-run/PartnersSection'
-import CatcherRunCheckin from '@/components/events/catcher-run/CatcherRunCheckin'
-import FloatingCan from '@/components/events/catcher-run/FloatingCan'
 
 export default function CatcherRunPage() {
   return (
@@ -15,8 +14,6 @@ export default function CatcherRunPage() {
       className="bg-[#080808] min-h-screen"
       style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
     >
-      {/* Lata flutuante fixa */}
-      <FloatingCan />
 
       {/* SEÇÃO 1 — HERO */}
       <HeroSection />
@@ -42,49 +39,67 @@ export default function CatcherRunPage() {
       {/* SEÇÃO 6c — PARCEIROS */}
       <PartnersSection />
 
-      {/* SEÇÃO 7 — FORMULÁRIO DE INSCRIÇÃO */}
+      {/* SEÇÃO 7 — INSCRIÇÕES ENCERRADAS */}
       <section
         id="inscricao"
         className="bg-[#0A0A0A] border-t border-zinc-900 py-20 sm:py-28 px-4 relative overflow-hidden"
       >
-        {/* Background glow */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
-            background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(204,0,0,0.06) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse 70% 50% at 50% 0%, rgba(204,0,0,0.04) 0%, transparent 70%)',
           }}
         />
 
         <div className="relative max-w-xl mx-auto">
           <div className="text-center mb-10 sm:mb-12">
             <p
-              className="text-[#CC0000] text-xs uppercase tracking-[0.3em] mb-3"
+              className="text-zinc-500 text-xs uppercase tracking-[0.3em] mb-3"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Garanta sua vaga
+              Inscrições encerradas
             </p>
             <h2
               className="text-4xl sm:text-5xl lg:text-6xl font-black uppercase text-white leading-tight mb-3"
               style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
             >
-              Você está pronto
+              As vagas foram
               <br />
-              <span className="italic text-[#F26522]">para o Catcher Car?</span>
+              <span className="italic text-zinc-400">preenchidas.</span>
             </h2>
             <p
               className="text-zinc-500 text-sm"
               style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
             >
-              Inscrição gratuita · 26 de abril de 2026
-              <span className="flex items-center justify-center gap-1.5 mt-2 text-red-400 text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-                Vagas limitadas — garante a sua agora
-              </span>
+              Agradecemos o interesse. Nos vemos no dia 26 de abril.
             </p>
           </div>
 
-          <div className="bg-[#111111] border border-zinc-800 p-6 sm:p-8">
-            <CatcherRunCheckin />
+          <div className="bg-[#111111] border border-zinc-800 p-8 sm:p-10 text-center">
+            <div className="w-14 h-14 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center mx-auto mb-5">
+              <Lock className="w-6 h-6 text-zinc-500" />
+            </div>
+            <h3
+              className="text-white text-xl sm:text-2xl font-black uppercase mb-2"
+              style={{ fontFamily: 'var(--font-barlow-condensed, sans-serif)' }}
+            >
+              Check-in bloqueado
+            </h3>
+            <p
+              className="text-zinc-500 text-sm leading-relaxed max-w-sm mx-auto"
+              style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+            >
+              As inscrições para o Catcher Run × Red Bull foram encerradas. Acompanhe as redes do Somma Running Club para ficar por dentro das próximas corridas.
+            </p>
+            <a
+              href="https://www.instagram.com/sommarunningclub/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-6 border border-zinc-700 hover:border-zinc-500 text-zinc-300 hover:text-white font-semibold text-xs uppercase tracking-wider px-6 py-3 transition-colors duration-200"
+              style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
+            >
+              Seguir @sommarunningclub
+            </a>
           </div>
         </div>
       </section>
