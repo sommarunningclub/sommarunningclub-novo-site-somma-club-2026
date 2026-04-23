@@ -17,7 +17,7 @@ const partners = [
   {
     name: 'BIG BOX',
     logo: 'https://institucional.bigbox.com.br/wp-content/uploads/2018/09/cropped-logo-1.png',
-    role: 'Mega Café da Manhã',
+    role: 'Café da Manhã',
     description: 'O BIG BOX chega com café especial pós-corrida pra você recarregar as energias depois de dar tudo na pista. Porque correr com barriga vazia não é com a gente.',
     color: '#F26522',
     noInvert: true,

@@ -193,7 +193,7 @@ export default function HeroSection() {
         >
           O Somma Day de abril vai ser especial. A Red Bull chega na 106 Sul pra
           transformar o nosso sábado numa simulação do Wings for Life World Run.
-          Mega café da manhã com BIG BOX, pós-treino animado com a Evolve no FitDance e muito mais parceiros te esperando.
+          Café da manhã com BIG BOX, pós-treino animado com a Evolve no FitDance e muito mais parceiros te esperando.
         </motion.p>
 
         {/* Event details */}

@@ -28,7 +28,7 @@ const cards = [
     icon: Gift,
     label: 'Pós-corre',
     time: '09h15+',
-    text: 'Premiação, Red Bull pra todo mundo, mega café da manhã com BIG BOX e FitDance com a Evolve aquecendo a galera.',
+    text: 'Premiação, Red Bull pra todo mundo, café da manhã com BIG BOX e FitDance com a Evolve aquecendo a galera.',
   },
 ]
 
