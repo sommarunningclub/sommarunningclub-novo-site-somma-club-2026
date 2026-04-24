@@ -74,7 +74,7 @@ export default function TransferirPage() {
   const [habilitada, setHabilitada] = useState<boolean | null>(null)
 
   useEffect(() => {
-    fetch(`/api/transferencias/status?evento_id=${EVENTO.id}`)
+    fetch(`/api/transferencias/status?evento_id=${EVENTO.id}&t=${Date.now()}`, { cache: 'no-store' })
       .then(r => r.json())
       .then(d => setHabilitada(!!d.habilitada))
       .catch(() => setHabilitada(false))

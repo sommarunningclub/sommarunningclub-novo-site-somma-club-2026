@@ -738,8 +738,8 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
         <EventoSelector eventos={eventos} selectedId={selectedEventoId} onChange={setSelectedEventoId} />
       )}
 
-      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center justify-between gap-3">
-        <div className="min-w-0">
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col sm:flex-row items-center sm:justify-between gap-4">
+        <div className="min-w-0 text-center sm:text-left">
           <p className="text-white text-sm font-semibold">Transferências por usuário</p>
           <p className="text-zinc-500 text-xs mt-0.5 leading-relaxed">
             {habilitada === null
@@ -749,20 +749,17 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
               : 'Bloqueado: opção fica oculta no site público.'}
           </p>
         </div>
-        <button
-          onClick={toggleHabilitada}
-          disabled={togglando || habilitada === null}
-          aria-pressed={!!habilitada}
-          className={`relative flex-shrink-0 w-14 h-7 rounded-full transition-colors duration-200 disabled:opacity-50 ${
-            habilitada ? 'bg-green-500' : 'bg-zinc-700'
-          }`}
-        >
-          <span
-            className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform duration-200 ${
-              habilitada ? 'translate-x-7' : 'translate-x-0'
-            }`}
+        <div className="flex-shrink-0">
+          <input
+            id="toggle-transferencia"
+            type="checkbox"
+            className="toggle-onoff"
+            checked={!!habilitada}
+            disabled={togglando || habilitada === null}
+            onChange={toggleHabilitada}
           />
-        </button>
+          <label htmlFor="toggle-transferencia" />
+        </div>
       </div>
 
       <div className="flex gap-2">

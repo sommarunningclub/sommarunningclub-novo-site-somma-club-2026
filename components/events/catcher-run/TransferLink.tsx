@@ -9,7 +9,7 @@ export default function TransferLink() {
   const [carregando, setCarregando] = useState(true)
 
   useEffect(() => {
-    fetch(`/api/transferencias/status?evento_id=${EVENTO_ID}`)
+    fetch(`/api/transferencias/status?evento_id=${EVENTO_ID}&t=${Date.now()}`, { cache: 'no-store' })
       .then(r => r.json())
       .then(d => setHabilitada(!!d.habilitada))
       .catch(() => setHabilitada(false))

@@ -13,6 +13,58 @@
   100% { transform: translateY(0px); }
 }
 
+/* Toggle ON/OFF estilo gradient */
+.toggle-onoff {
+  display: none;
+}
+.toggle-onoff + label {
+  display: inline-block;
+  position: relative;
+  width: 180px;
+  height: 78px;
+  background: linear-gradient(to right, #fd1a15 0, #fc8b34 45%, #7fd03e 55%, #007177 100%) 0 0;
+  background-size: 410px 100%;
+  border-radius: 70px;
+  padding: 4px;
+  cursor: pointer;
+  transition: all 500ms ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2) inset;
+}
+.toggle-onoff + label::before {
+  content: 'Off';
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  border-radius: 100%;
+  background: #fff;
+  text-align: center;
+  line-height: 70px;
+  font-family: 'Cabin', sans-serif;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fd1a15;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  transition: left 500ms ease, color 500ms ease, transform 150ms ease;
+}
+.toggle-onoff + label:active::before {
+  transform: scale(0.95);
+}
+.toggle-onoff:checked + label {
+  background-position-x: -230px;
+}
+.toggle-onoff:checked + label::before {
+  content: 'On';
+  color: #007177;
+  left: 106px;
+}
+.toggle-onoff:disabled + label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
