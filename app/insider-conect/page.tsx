@@ -5,7 +5,7 @@ import {
   Search, LogOut, Users, ClipboardList, CheckSquare,
   MessageCircle, Check, X, ShieldCheck, ChevronRight,
   ArrowLeft, Loader2, RefreshCw, Lock, ChevronDown,
-  Trophy, Dices, Filter, Clock,
+  Trophy, Dices, Filter, Clock, Repeat, Plus,
 } from 'lucide-react'
 import SorteioMachine from '@/components/sorteio/SorteioMachine'
 import GanhadorCard from '@/components/sorteio/GanhadorCard'
@@ -49,7 +49,7 @@ type EventoOption = {
   checkin_status: 'aberto' | 'bloqueado' | 'encerrado'
 }
 
-type Modulo = 'home' | 'membros' | 'checkins' | 'validar' | 'sorteio'
+type Modulo = 'home' | 'membros' | 'checkins' | 'validar' | 'sorteio' | 'transferencias'
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -625,6 +625,460 @@ function ModuloValidar() {
   )
 }
 
+// ─── Módulo: Transferências ──────────────────────────────────────────────────
+
+type Transferencia = {
+  id: string
+  evento_id: string
+  inscricao_original_id: string
+  inscricao_nova_id: string
+  cpf_origem: string
+  cpf_destino: string
+  email_origem: string
+  email_destino: string
+  nome_origem: string
+  nome_destino: string
+  origem: 'usuario' | 'admin'
+  admin_user_id: string | null
+  created_at: string
+}
+
+type CheckinBusca = {
+  id: string
+  nome_completo: string
+  email: string
+  cpf: string
+  pelotao: string | null
+  evento_id: string
+  nome_do_evento: string
+  data_do_evento: string
+  status?: string
+}
+
+function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
+  const [transferencias, setTransferencias] = useState<Transferencia[]>([])
+  const [eventos, setEventos] = useState<EventoOption[]>([])
+  const [selectedEventoId, setSelectedEventoId] = useState('')
+  const [busca, setBusca] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+  const [habilitada, setHabilitada] = useState<boolean | null>(null)
+  const [togglando, setTogglando] = useState(false)
+
+  const carregarStatus = useCallback(async () => {
+    if (!selectedEventoId) return
+    try {
+      const res = await fetch(`/api/transferencias/status?evento_id=${selectedEventoId}`)
+      const data = await res.json()
+      setHabilitada(!!data.habilitada)
+    } catch {
+      setHabilitada(false)
+    }
+  }, [selectedEventoId])
+
+  const toggleHabilitada = async () => {
+    if (!selectedEventoId || habilitada === null) return
+    setTogglando(true)
+    try {
+      const res = await fetch('/api/transferencias/status', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ evento_id: selectedEventoId, habilitada: !habilitada }),
+      })
+      const data = await res.json()
+      if (res.ok) setHabilitada(!!data.habilitada)
+    } catch (e) {
+      console.error('[transferencias] erro toggle:', e)
+    } finally {
+      setTogglando(false)
+    }
+  }
+
+  const carregarEventos = useCallback(async () => {
+    try {
+      const res = await fetch('/api/insider/checkins?limit=1')
+      const data = await res.json()
+      if (data.eventos?.length) {
+        setEventos(data.eventos)
+        if (!selectedEventoId) setSelectedEventoId(data.eventos[0].id)
+      }
+    } catch (e) {
+      console.error('[transferencias] erro eventos:', e)
+    }
+  }, [selectedEventoId])
+
+  const carregarTransferencias = useCallback(async () => {
+    if (!selectedEventoId) return
+    setLoading(true)
+    try {
+      const params = new URLSearchParams({ evento_id: selectedEventoId })
+      if (busca) params.set('busca', busca)
+      const res = await fetch(`/api/transferencias/listar?${params}`)
+      const data = await res.json()
+      setTransferencias(data.transferencias || [])
+    } catch (e) {
+      console.error('[transferencias] erro listar:', e)
+    } finally {
+      setLoading(false)
+    }
+  }, [selectedEventoId, busca])
+
+  useEffect(() => { carregarEventos() }, [carregarEventos])
+  useEffect(() => { carregarTransferencias() }, [carregarTransferencias])
+  useEffect(() => { carregarStatus() }, [carregarStatus])
+
+  useEffect(() => {
+    const t = setTimeout(() => carregarTransferencias(), 400)
+    return () => clearTimeout(t)
+  }, [busca, carregarTransferencias])
+
+  return (
+    <div className="space-y-4">
+      {eventos.length > 0 && (
+        <EventoSelector eventos={eventos} selectedId={selectedEventoId} onChange={setSelectedEventoId} />
+      )}
+
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-white text-sm font-semibold">Transferências por usuário</p>
+          <p className="text-zinc-500 text-xs mt-0.5 leading-relaxed">
+            {habilitada === null
+              ? 'Carregando...'
+              : habilitada
+              ? 'Liberado: usuários podem transferir pelo site.'
+              : 'Bloqueado: opção fica oculta no site público.'}
+          </p>
+        </div>
+        <button
+          onClick={toggleHabilitada}
+          disabled={togglando || habilitada === null}
+          aria-pressed={!!habilitada}
+          className={`relative flex-shrink-0 w-14 h-7 rounded-full transition-colors duration-200 disabled:opacity-50 ${
+            habilitada ? 'bg-green-500' : 'bg-zinc-700'
+          }`}
+        >
+          <span
+            className={`absolute top-0.5 left-0.5 w-6 h-6 rounded-full bg-white transition-transform duration-200 ${
+              habilitada ? 'translate-x-7' : 'translate-x-0'
+            }`}
+          />
+        </button>
+      </div>
+
+      <div className="flex gap-2">
+        <div className="flex-1 relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+          <input
+            type="text"
+            value={busca}
+            onChange={e => setBusca(e.target.value)}
+            placeholder="Buscar por nome, CPF ou e-mail"
+            className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl pl-10 pr-3 py-3 text-sm outline-none"
+          />
+        </div>
+        <button
+          onClick={() => setShowModal(true)}
+          className="flex items-center gap-2 px-4 py-3 bg-[#ff2c03] hover:bg-[#cc2402] text-white text-sm font-semibold rounded-xl transition-colors whitespace-nowrap"
+        >
+          <Plus className="w-4 h-4" /> Manual
+        </button>
+      </div>
+
+      {loading ? (
+        <div className="py-12 flex justify-center">
+          <Loader2 className="w-6 h-6 text-[#ff2c03] animate-spin" />
+        </div>
+      ) : transferencias.length === 0 ? (
+        <div className="py-12 text-center text-zinc-500 text-sm">
+          Nenhuma transferência registrada neste evento.
+        </div>
+      ) : (
+        <div className="space-y-2">
+          {transferencias.map(t => (
+            <div key={t.id} className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+              <div className="flex items-center justify-between mb-2">
+                <span className={`text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded-full ${
+                  t.origem === 'admin'
+                    ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30'
+                    : 'bg-green-500/10 text-green-400 border border-green-500/30'
+                }`}>
+                  {t.origem === 'admin' ? 'Manual (Insider)' : 'Pelo usuário'}
+                </span>
+                <span className="text-zinc-600 text-xs">{formatDateTime(t.created_at)}</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="bg-zinc-950/60 rounded-lg p-3 border border-zinc-800">
+                  <p className="text-zinc-500 uppercase tracking-wider text-[10px] mb-1">De</p>
+                  <p className="text-white font-semibold text-sm">{t.nome_origem}</p>
+                  <p className="text-zinc-500 mt-0.5">{formatCPF(t.cpf_origem)}</p>
+                  <p className="text-zinc-600 truncate">{t.email_origem}</p>
+                </div>
+                <div className="bg-zinc-950/60 rounded-lg p-3 border border-zinc-800">
+                  <p className="text-zinc-500 uppercase tracking-wider text-[10px] mb-1">Para</p>
+                  <p className="text-white font-semibold text-sm">{t.nome_destino}</p>
+                  <p className="text-zinc-500 mt-0.5">{formatCPF(t.cpf_destino)}</p>
+                  <p className="text-zinc-600 truncate">{t.email_destino}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showModal && (
+        <ModalTransferenciaManual
+          eventoId={selectedEventoId}
+          insiderNome={insiderNome}
+          onClose={() => setShowModal(false)}
+          onSuccess={() => {
+            setShowModal(false)
+            carregarTransferencias()
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+function ModalTransferenciaManual({
+  eventoId,
+  insiderNome,
+  onClose,
+  onSuccess,
+}: {
+  eventoId: string
+  insiderNome: string
+  onClose: () => void
+  onSuccess: () => void
+}) {
+  const [step, setStep] = useState<'buscar' | 'dados'>('buscar')
+  const [buscaCpf, setBuscaCpf] = useState('')
+  const [resultado, setResultado] = useState<CheckinBusca | null>(null)
+  const [buscando, setBuscando] = useState(false)
+  const [erro, setErro] = useState('')
+  const [salvando, setSalvando] = useState(false)
+  const [novo, setNovo] = useState({
+    nome: '', email: '', telefone: '', cpf: '', sexo: '' as '' | 'masculino' | 'feminino', peloton: '' as '' | '4km' | '6km' | '8km',
+  })
+
+  const buscar = async () => {
+    const cpfLimpo = buscaCpf.replace(/\D/g, '')
+    if (cpfLimpo.length !== 11) {
+      setErro('CPF inválido.')
+      return
+    }
+    setBuscando(true)
+    setErro('')
+    try {
+      const res = await fetch(`/api/insider/checkins?busca=${cpfLimpo}&evento_id=${eventoId}`)
+      const data = await res.json()
+      const ativa = (data.checkins || []).find((c: CheckinBusca) => {
+        const cpfC = (c.cpf || '').replace(/\D/g, '')
+        return cpfC === cpfLimpo && (!c.status || c.status === 'ativo')
+      })
+      if (!ativa) {
+        setErro('Inscrição ativa não encontrada com este CPF.')
+        return
+      }
+      setResultado(ativa)
+      if (ativa.pelotao) {
+        setNovo(p => ({ ...p, peloton: ativa.pelotao as NonNullable<typeof p.peloton> }))
+      }
+      setStep('dados')
+    } catch {
+      setErro('Erro ao buscar inscrição.')
+    } finally {
+      setBuscando(false)
+    }
+  }
+
+  const confirmar = async () => {
+    if (!resultado) return
+    if (!novo.nome || !novo.email || !novo.telefone || !novo.cpf || !novo.sexo || !novo.peloton) {
+      setErro('Preencha todos os campos.')
+      return
+    }
+    setSalvando(true)
+    setErro('')
+    try {
+      const res = await fetch('/api/transferencias/admin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          inscricao_original_id: resultado.id,
+          evento_id: eventoId,
+          admin_user_id: insiderNome,
+          dados_novo: novo,
+        }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setErro(data.error || 'Erro ao registrar transferência.')
+        return
+      }
+      onSuccess()
+    } catch {
+      setErro('Erro de conexão.')
+    } finally {
+      setSalvando(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4">
+      <div className="w-full max-w-lg bg-zinc-950 border border-zinc-800 rounded-t-2xl sm:rounded-2xl max-h-[92vh] overflow-y-auto">
+        <div className="sticky top-0 bg-zinc-950 border-b border-zinc-800 px-5 py-4 flex items-center justify-between">
+          <div>
+            <p className="text-[#ff2c03] text-[10px] font-semibold uppercase tracking-widest">Transferência manual</p>
+            <p className="text-white text-sm font-semibold mt-0.5">
+              {step === 'buscar' ? 'Buscar inscrição' : 'Dados do novo titular'}
+            </p>
+          </div>
+          <button onClick={onClose} className="p-1.5 text-zinc-500 hover:text-white">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          {step === 'buscar' ? (
+            <>
+              <div>
+                <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">CPF do titular atual</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={formatCPF(buscaCpf)}
+                  onChange={e => setBuscaCpf(e.target.value.replace(/\D/g, ''))}
+                  placeholder="000.000.000-00"
+                  className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl px-4 py-3 text-sm font-mono outline-none"
+                />
+              </div>
+
+              {erro && (
+                <div className="bg-red-900/20 border border-red-500/30 px-3 py-2 rounded-lg">
+                  <p className="text-red-400 text-xs">{erro}</p>
+                </div>
+              )}
+
+              <button
+                onClick={buscar}
+                disabled={buscando}
+                className="w-full bg-[#ff2c03] hover:bg-[#cc2402] disabled:opacity-60 text-white font-semibold text-sm py-3 rounded-xl flex items-center justify-center gap-2"
+              >
+                {buscando ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                Buscar
+              </button>
+            </>
+          ) : resultado ? (
+            <>
+              <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+                <p className="text-[10px] text-zinc-500 uppercase tracking-wider mb-1">Inscrição encontrada</p>
+                <p className="text-white text-sm font-semibold">{resultado.nome_completo}</p>
+                <p className="text-zinc-500 text-xs">{formatCPF(resultado.cpf)} · {resultado.email}</p>
+                <p className="text-zinc-600 text-xs mt-1">Pelotão atual: {resultado.pelotao || '—'}</p>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <div>
+                  <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">Nome completo</label>
+                  <input
+                    type="text"
+                    value={novo.nome}
+                    onChange={e => setNovo(p => ({ ...p, nome: e.target.value }))}
+                    className="w-full bg-zinc-900 border border-zinc-700 focus:border-[#ff2c03] text-white rounded-xl px-3 py-2.5 text-sm outline-none"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">CPF</label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={formatCPF(novo.cpf)}
+                      onChange={e => setNovo(p => ({ ...p, cpf: e.target.value.replace(/\D/g, '') }))}
+                      className="w-full bg-zinc-900 border border-zinc-700 text-white rounded-xl px-3 py-2.5 text-sm font-mono outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">Telefone</label>
+                    <input
+                      type="tel"
+                      value={novo.telefone}
+                      onChange={e => setNovo(p => ({ ...p, telefone: e.target.value }))}
+                      placeholder="(61) 99999-9999"
+                      className="w-full bg-zinc-900 border border-zinc-700 text-white rounded-xl px-3 py-2.5 text-sm outline-none"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">E-mail</label>
+                  <input
+                    type="email"
+                    value={novo.email}
+                    onChange={e => setNovo(p => ({ ...p, email: e.target.value }))}
+                    className="w-full bg-zinc-900 border border-zinc-700 text-white rounded-xl px-3 py-2.5 text-sm outline-none"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">Sexo</label>
+                    <select
+                      value={novo.sexo}
+                      onChange={e => setNovo(p => ({ ...p, sexo: e.target.value as typeof novo.sexo }))}
+                      className="w-full bg-zinc-900 border border-zinc-700 text-white rounded-xl px-3 py-2.5 text-sm outline-none"
+                    >
+                      <option value="">—</option>
+                      <option value="masculino">Masculino</option>
+                      <option value="feminino">Feminino</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs text-zinc-400 uppercase tracking-wider mb-1.5">Pelotão</label>
+                    <select
+                      value={novo.peloton}
+                      onChange={e => setNovo(p => ({ ...p, peloton: e.target.value as typeof novo.peloton }))}
+                      className="w-full bg-zinc-900 border border-zinc-700 text-white rounded-xl px-3 py-2.5 text-sm outline-none"
+                    >
+                      <option value="">—</option>
+                      <option value="4km">4km — Iniciante</option>
+                      <option value="6km">6km — Moderado</option>
+                      <option value="8km">8km — Avançado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {erro && (
+                <div className="bg-red-900/20 border border-red-500/30 px-3 py-2 rounded-lg">
+                  <p className="text-red-400 text-xs">{erro}</p>
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  onClick={() => { setStep('buscar'); setResultado(null); setErro('') }}
+                  disabled={salvando}
+                  className="px-4 py-3 border border-zinc-700 text-zinc-400 text-sm font-semibold rounded-xl disabled:opacity-50"
+                >
+                  Voltar
+                </button>
+                <button
+                  onClick={confirmar}
+                  disabled={salvando}
+                  className="flex-1 bg-[#ff2c03] hover:bg-[#cc2402] disabled:opacity-60 text-white font-semibold text-sm py-3 rounded-xl flex items-center justify-center gap-2"
+                >
+                  {salvando ? <><Loader2 className="w-4 h-4 animate-spin" /> Salvando...</> : <><Check className="w-4 h-4" /> Confirmar transferência</>}
+                </button>
+              </div>
+            </>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Módulo: Sorteio ─────────────────────────────────────────────────────────
 
 function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
@@ -1012,6 +1466,12 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
       descricao: 'Realize sorteios entre os participantes do evento',
       icone: Dices,
     },
+    {
+      id: 'transferencias' as Modulo,
+      titulo: 'Transferências',
+      descricao: 'Veja o histórico e registre transferências manuais',
+      icone: Repeat,
+    },
   ]
 
   const moduloAtual = modulos.find(m => m.id === modulo)
@@ -1076,6 +1536,8 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
           <ModuloCheckins />
         ) : modulo === 'validar' ? (
           <ModuloValidar />
+        ) : modulo === 'transferencias' ? (
+          <ModuloTransferencias insiderNome={insider.nome} />
         ) : (
           <ModuloSorteio insiderNome={insider.nome} />
         )}

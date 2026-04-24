@@ -7,6 +7,7 @@ import ScheduleTimeline from '@/components/events/catcher-run/ScheduleTimeline'
 import MapSection from '@/components/events/catcher-run/MapSection'
 import HowToGetThere from '@/components/events/catcher-run/HowToGetThere'
 import PartnersSection from '@/components/events/catcher-run/PartnersSection'
+import TransferLink from '@/components/events/catcher-run/TransferLink'
 
 export default function CatcherRunPage() {
   return (
@@ -101,6 +102,8 @@ export default function CatcherRunPage() {
               Seguir @somma.club
             </a>
           </div>
+
+          <TransferLink />
         </div>
       </section>
 

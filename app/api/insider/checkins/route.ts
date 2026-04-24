@@ -29,7 +29,7 @@ export async function GET(req: Request) {
 
     let query = supabase
       .from('checkins')
-      .select('id, nome_completo, email, telefone, cpf, sexo, pelotao, nome_do_evento, data_do_evento, data_hora_checkin, validacao_do_checkin')
+      .select('id, nome_completo, email, telefone, cpf, sexo, pelotao, nome_do_evento, data_do_evento, data_hora_checkin, validacao_do_checkin, status')
       .eq('evento_id', eventoSelecionado.id)
       .order('data_hora_checkin', { ascending: false })
 
