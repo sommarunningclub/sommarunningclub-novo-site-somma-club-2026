@@ -1547,12 +1547,22 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
               </p>
             </div>
           </div>
-          <button
-            onClick={onLogout}
-            className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-xs transition-colors"
-          >
-            <LogOut className="w-3.5 h-3.5" /> Sair
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => location.reload()}
+              className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-xs transition-colors"
+              title="Atualizar dados"
+            >
+              <RefreshCw className="w-3.5 h-3.5" /> Atualizar
+            </button>
+            <div className="w-px h-4 bg-zinc-800" />
+            <button
+              onClick={onLogout}
+              className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-xs transition-colors"
+            >
+              <LogOut className="w-3.5 h-3.5" /> Sair
+            </button>
+          </div>
         </div>
       </header>
 
@@ -1603,8 +1613,33 @@ function Painel({ insider, onLogout }: { insider: Insider; onLogout: () => void 
 
 export default function InsiderConect() {
   const [insider, setInsider] = useState<Insider | null>(null)
+  const [carregado, setCarregado] = useState(false)
+
+  useEffect(() => {
+    const insiderSalvo = localStorage.getItem('insider-conect-session')
+    if (insiderSalvo) {
+      try {
+        setInsider(JSON.parse(insiderSalvo))
+      } catch {
+        localStorage.removeItem('insider-conect-session')
+      }
+    }
+    setCarregado(true)
+  }, [])
+
+  const handleLogin = (insiderData: Insider) => {
+    setInsider(insiderData)
+    localStorage.setItem('insider-conect-session', JSON.stringify(insiderData))
+  }
+
+  const handleLogout = () => {
+    setInsider(null)
+    localStorage.removeItem('insider-conect-session')
+  }
+
+  if (!carregado) return null
 
   return insider
-    ? <Painel insider={insider} onLogout={() => setInsider(null)} />
-    : <LoginScreen onLogin={setInsider} />
+    ? <Painel insider={insider} onLogout={handleLogout} />
+    : <LoginScreen onLogin={handleLogin} />
 }
