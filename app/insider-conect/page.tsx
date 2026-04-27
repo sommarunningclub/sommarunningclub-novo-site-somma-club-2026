@@ -664,6 +664,8 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
   const [showModal, setShowModal] = useState(false)
   const [habilitada, setHabilitada] = useState<boolean | null>(null)
   const [togglando, setTogglando] = useState(false)
+  const [encerrado, setEncerrado] = useState<boolean | null>(null)
+  const [togglando_encerrado, setTogglando_encerrado] = useState(false)
 
   const carregarStatus = useCallback(async () => {
     if (!selectedEventoId) return
@@ -673,6 +675,17 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
       setHabilitada(!!data.habilitada)
     } catch {
       setHabilitada(false)
+    }
+  }, [selectedEventoId])
+
+  const carregarStatusEncerrado = useCallback(async () => {
+    if (!selectedEventoId) return
+    try {
+      const res = await fetch(`/api/eventos/status?evento_id=${selectedEventoId}`)
+      const data = await res.json()
+      setEncerrado(!!data.encerrado)
+    } catch {
+      setEncerrado(false)
     }
   }, [selectedEventoId])
 
@@ -691,6 +704,24 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
       console.error('[transferencias] erro toggle:', e)
     } finally {
       setTogglando(false)
+    }
+  }
+
+  const toggleEncerrado = async () => {
+    if (!selectedEventoId || encerrado === null) return
+    setTogglando_encerrado(true)
+    try {
+      const res = await fetch('/api/eventos/status', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ evento_id: selectedEventoId, encerrado: !encerrado }),
+      })
+      const data = await res.json()
+      if (res.ok) setEncerrado(!!data.encerrado)
+    } catch (e) {
+      console.error('[eventos] erro toggle encerrado:', e)
+    } finally {
+      setTogglando_encerrado(false)
     }
   }
 
@@ -726,6 +757,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
   useEffect(() => { carregarEventos() }, [carregarEventos])
   useEffect(() => { carregarTransferencias() }, [carregarTransferencias])
   useEffect(() => { carregarStatus() }, [carregarStatus])
+  useEffect(() => { carregarStatusEncerrado() }, [carregarStatusEncerrado])
 
   useEffect(() => {
     const t = setTimeout(() => carregarTransferencias(), 400)
@@ -737,6 +769,30 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
       {eventos.length > 0 && (
         <EventoSelector eventos={eventos} selectedId={selectedEventoId} onChange={setSelectedEventoId} />
       )}
+
+      <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col sm:flex-row items-center sm:justify-between gap-4">
+        <div className="min-w-0 text-center sm:text-left">
+          <p className="text-white text-sm font-semibold">Status do Evento</p>
+          <p className="text-zinc-500 text-xs mt-0.5 leading-relaxed">
+            {encerrado === null
+              ? 'Carregando...'
+              : encerrado
+              ? 'Evento Encerrado: página com overlay bloqueado.'
+              : 'Evento Ativo: página visível normalmente.'}
+          </p>
+        </div>
+        <div className="flex-shrink-0">
+          <input
+            id="toggle-encerrado"
+            type="checkbox"
+            className="toggle-onoff"
+            checked={!!encerrado}
+            disabled={togglando_encerrado || encerrado === null}
+            onChange={toggleEncerrado}
+          />
+          <label htmlFor="toggle-encerrado" />
+        </div>
+      </div>
 
       <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-5 flex flex-col sm:flex-row items-center sm:justify-between gap-4">
         <div className="min-w-0 text-center sm:text-left">

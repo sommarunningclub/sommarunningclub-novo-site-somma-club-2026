@@ -8,6 +8,7 @@ import MapSection from '@/components/events/catcher-run/MapSection'
 import HowToGetThere from '@/components/events/catcher-run/HowToGetThere'
 import PartnersSection from '@/components/events/catcher-run/PartnersSection'
 import TransferLink from '@/components/events/catcher-run/TransferLink'
+import EventClosedOverlay from '@/components/events/catcher-run/EventClosedOverlay'
 
 export default function CatcherRunPage() {
   return (
@@ -15,6 +16,7 @@ export default function CatcherRunPage() {
       className="bg-[#080808] min-h-screen"
       style={{ fontFamily: 'var(--font-dm-sans, sans-serif)' }}
     >
+      <EventClosedOverlay />
 
       {/* SEÇÃO 1 — HERO */}
       <HeroSection />
