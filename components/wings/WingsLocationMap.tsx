@@ -6,28 +6,22 @@ import { AlertCircle } from 'lucide-react'
 
 const CO_UNB = { lat: -15.7622, lng: -47.8595 }
 
-// Estilo tático dark — fundo quase preto, ruas em cinza metálico,
-// vegetação apagada, labels verdes fosforescentes. Estética CIA/ops room.
+// Dark map style — navy/red/yellow, integrado ao layout WFL do site.
 const WFL_MAP_STYLES: google.maps.MapTypeStyle[] = [
-  { elementType: 'geometry',              stylers: [{ color: '#0d0f0e' }] },
-  { elementType: 'labels.text.fill',      stylers: [{ color: '#4caf6a' }] },
-  { elementType: 'labels.text.stroke',    stylers: [{ color: '#0d0f0e' }] },
-  { featureType: 'administrative',        elementType: 'geometry',       stylers: [{ color: '#1a2e1a' }] },
-  { featureType: 'administrative',        elementType: 'geometry.stroke',stylers: [{ color: '#1f3d1f' }] },
-  { featureType: 'landscape',             elementType: 'geometry',       stylers: [{ color: '#111411' }] },
-  { featureType: 'poi',                   stylers:                       [{ visibility: 'off' }] },
-  { featureType: 'poi.park',              elementType: 'geometry.fill',  stylers: [{ color: '#0e1f0e' }] },
-  { featureType: 'poi.sports_complex',    elementType: 'geometry.fill',  stylers: [{ color: '#142014' }] },
-  { featureType: 'road',                  elementType: 'geometry',       stylers: [{ color: '#1c2e1c' }] },
-  { featureType: 'road',                  elementType: 'geometry.stroke',stylers: [{ color: '#0d160d' }] },
-  { featureType: 'road',                  elementType: 'labels.icon',    stylers: [{ visibility: 'off' }] },
-  { featureType: 'road.arterial',         elementType: 'geometry',       stylers: [{ color: '#253a25' }] },
-  { featureType: 'road.highway',          elementType: 'geometry',       stylers: [{ color: '#2e4a2e' }] },
-  { featureType: 'road.highway',          elementType: 'geometry.stroke',stylers: [{ color: '#182818' }] },
-  { featureType: 'road.local',            elementType: 'labels',         stylers: [{ visibility: 'off' }] },
-  { featureType: 'transit',              stylers:                        [{ visibility: 'off' }] },
-  { featureType: 'water',                 elementType: 'geometry',       stylers: [{ color: '#050e14' }] },
-  { featureType: 'water',                 elementType: 'labels.text.fill',stylers: [{ color: '#1a4a3a' }] },
+  { elementType: 'geometry', stylers: [{ color: '#022755' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#022755' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#9aa6bd' }] },
+  { featureType: 'administrative', elementType: 'geometry.stroke', stylers: [{ color: '#0d3a78' }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#03306a' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#063b6f' }] },
+  { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#F6E331' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#0a3c75' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#022755' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#0f4a8a' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#E30D3F' }] },
+  { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#0a3460' }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#01193a' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#7fb3ff' }] },
 ]
 
 // Contorno mapeado no Strava — CO UnB, 2026-04-28
@@ -84,7 +78,7 @@ export default function WingsLocationMap({ height = '420px' }: Props) {
           disableDefaultUI: true,
           zoomControl: true,
           gestureHandling: 'cooperative',
-          backgroundColor: '#0d0f0e',
+          backgroundColor: '#022755',
           mapId: mapId || undefined,
           styles: mapId ? undefined : WFL_MAP_STYLES,
         })
@@ -142,22 +136,13 @@ export default function WingsLocationMap({ height = '420px' }: Props) {
           })
         }
 
-        // Glow sob o contorno — efeito mapa tático
-        new google.maps.Polyline({
-          map,
-          path: TRACK_PATH,
-          strokeColor: '#F6E331',
-          strokeOpacity: 0.18,
-          strokeWeight: 14,
-          geodesic: true,
-        })
-        // Contorno principal
+        // Contorno do espaço demarcado (traçado no Strava)
         new google.maps.Polyline({
           map,
           path: TRACK_PATH,
           strokeColor: '#E30D3F',
           strokeOpacity: 1,
-          strokeWeight: 3,
+          strokeWeight: 4,
           geodesic: true,
         })
 
