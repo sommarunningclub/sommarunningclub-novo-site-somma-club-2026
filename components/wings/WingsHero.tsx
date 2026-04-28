@@ -10,7 +10,9 @@ const ZERO = { days: 0, hours: 0, mins: 0, secs: 0 }
 function diff() {
   const now = Date.now()
   const ms = Math.max(0, TARGET - now)
-  const days = Math.floor(ms / 86_400_000)
+  // Conta dias inteiros pelo calendário (arredonda pra cima): se faltam 3d 13h até a largada,
+  // mostra "4 dias" — alinhado ao senso comum de "faltam X dias até o evento".
+  const days = Math.ceil(ms / 86_400_000)
   const hours = Math.floor((ms % 86_400_000) / 3_600_000)
   const mins = Math.floor((ms % 3_600_000) / 60_000)
   const secs = Math.floor((ms % 60_000) / 1000)
@@ -98,7 +100,7 @@ export default function WingsHero() {
           className="mt-3 sm:mt-6 text-sm sm:text-xl font-medium tracking-[0.2em] sm:tracking-[0.25em] uppercase text-white/80"
           style={fontBody}
         >
-          Atletic Day Wings for Life 2
+          Atléticas Day — Wings For Life
         </p>
 
         {/* Date badge — quebra em duas linhas no mobile */}

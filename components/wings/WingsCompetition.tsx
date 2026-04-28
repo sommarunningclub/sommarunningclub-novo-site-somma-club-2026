@@ -8,7 +8,7 @@ const summaryCards = [
   { icon: Ruler, title: 'Distância', body: '100m por atleta = 400m total' },
   { icon: Users, title: 'Baterias', body: '4 equipes por bateria' },
   { icon: Trophy, title: 'Classificação', body: '8 melhores tempos vão às finais' },
-  { icon: Award, title: 'Pódio', body: 'Top 3 são premiadas' },
+  { icon: Award, title: 'Premiação', body: 'Top 3 atléticas levam prêmios' },
   { icon: ClipboardCheck, title: 'Staff', body: '1 responsável por equipe' },
 ]
 
@@ -123,9 +123,9 @@ export default function WingsCompetition() {
               Final
             </p>
             <p className="mt-2 text-sm text-white/90 leading-relaxed">
-              As <span className="text-wfl-yellow font-semibold">3 equipes</span> com
-              melhor tempo total são premiadas no pódio. Resultado afixado em placar
-              ao vivo.
+              As <span className="text-wfl-yellow font-semibold">3 atléticas</span> com
+              melhor tempo total no revezamento levam <span className="text-wfl-yellow font-semibold">premiações no pódio</span>.
+              Resultado afixado em placar ao vivo.
             </p>
           </div>
         </div>

@@ -44,7 +44,7 @@ export default function WingsPage() {
             className="mt-2 sm:mt-3 text-center text-sm sm:text-base text-wfl-dark/70 max-w-md mx-auto"
             style={fontBody}
           >
-            Cada inscrição vale ponto pra sua atlética. Bora reunir a galera.
+            Quanto mais gente da sua atlética presente, mais forte a torcida e maior a chance de levar o troféu de Atlética Mais Engajada. Bora reunir a galera.
           </p>
 
           <div className="mt-6 sm:mt-10 bg-white border border-wfl-border p-4 sm:p-10">

@@ -45,14 +45,14 @@ const fontDisplay = { fontFamily: 'var(--font-bebas), sans-serif' }
 const fontBody = { fontFamily: 'var(--font-dm-sans-wfl), sans-serif' }
 
 const EVENT = {
-  title: 'Wings das Atléticas 2026 — Atletic Day Wings for Life 2',
+  title: 'Wings das Atléticas 2026 — Atléticas Day — Wings For Life',
   description:
-    'Atletic Day Wings for Life 2 — encontro das atléticas da UnB e CEUB no Centro Olímpico. Programação completa em https://sommaclub.com.br/wings-das-atleticas-2026',
+    'Atléticas Day — Wings For Life. Encontro das atléticas da UnB e CEUB na Pista de Atletismo do Centro Olímpico CO UnB. Programação completa em https://sommaclub.com.br/wings-das-atleticas-2026',
   location: 'Pista de Atletismo — Centro Olímpico CO UnB, Brasília, DF',
-  // 02/05/2026 — concentração 06h, encerramento ~12h (BRT = UTC-3)
-  startUtc: '20260502T090000Z', // 06:00 BRT
+  // 02/05/2026 — concentração 08h, encerramento ~12h (BRT = UTC-3)
+  startUtc: '20260502T110000Z', // 08:00 BRT
   endUtc: '20260502T150000Z', // 12:00 BRT
-  startLocal: new Date('2026-05-02T06:00:00-03:00'),
+  startLocal: new Date('2026-05-02T08:00:00-03:00'),
   endLocal: new Date('2026-05-02T12:00:00-03:00'),
 }
 
@@ -122,7 +122,7 @@ export default function WingsAddToCalendar() {
           Adicione na sua agenda
         </h2>
         <p className="mt-2 sm:mt-3 text-sm sm:text-base text-wfl-dark/70 max-w-md mx-auto">
-          Salve a data — 02 de maio de 2026, das 06h às 12h. Disponível para Google
+          Salve a data — 02 de maio de 2026, das 08h às 12h. Disponível para Google
           Calendar, Apple Calendar e Outlook.
         </p>
 

@@ -11,7 +11,7 @@ const fontBody = { fontFamily: 'var(--font-dm-sans-wfl), sans-serif' }
 
 const EVENT_INFO = {
   date: '02 / 05 / 2026',
-  time: '06h – 12h',
+  time: '08h – 12h',
   location: 'Pista de Atletismo — CO UnB',
   city: 'Brasília · DF',
   mapsUrl: 'https://maps.app.goo.gl/8hLYd9ULSM76Ffeh8',
@@ -53,7 +53,7 @@ export default function WingsSuccessState({ fullName, registration }: Props) {
   }, [registration.institution_id, registration.atletica_id])
 
   const shareText = encodeURIComponent(
-    `Tô dentro do Wings das Atléticas 2026! 🏃‍♀️🏃‍♂️ Atletic Day Wings for Life 2 — 02/05/2026 na Pista de Atletismo CO UnB. Bora correr juntos! sommaclub.com.br/wings-das-atleticas-2026`
+    `Tô dentro do Wings das Atléticas 2026! 🏃‍♀️🏃‍♂️ Atléticas Day — Wings For Life · 02/05/2026 na Pista de Atletismo CO UnB. Bora correr juntos! sommaclub.com.br/wings-das-atleticas-2026`
   )
 
   return (
@@ -101,7 +101,7 @@ export default function WingsSuccessState({ fullName, registration }: Props) {
               className="h-7 sm:h-8 w-auto"
             />
             <span className="text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-wfl-dark/50">
-              Atletic Day · 02
+              Atléticas Day · 02
             </span>
           </div>
 

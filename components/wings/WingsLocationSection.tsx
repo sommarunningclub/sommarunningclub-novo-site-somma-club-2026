@@ -65,7 +65,7 @@ export default function WingsLocationSection() {
                 metrô Ceilândia / Asa Norte chega direto ao Centro Olímpico.
               </p>
               <p className="text-white/60">
-                Concentração a partir das <span className="text-wfl-yellow font-semibold">06h</span>.
+                Concentração a partir das <span className="text-wfl-yellow font-semibold">08h</span>.
                 Largada oficial às <span className="text-wfl-yellow font-semibold">09h</span> de
                 02 de maio de 2026.
               </p>

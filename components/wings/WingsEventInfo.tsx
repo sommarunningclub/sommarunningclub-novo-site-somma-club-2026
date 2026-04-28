@@ -8,7 +8,7 @@ const items = [
   {
     icon: Clock,
     title: 'Horário',
-    body: 'Concentração a partir das 06h, largada às 09h de 02 de maio.',
+    body: 'Concentração a partir das 08h, largada às 09h de 02 de maio.',
   },
   {
     icon: Music,
