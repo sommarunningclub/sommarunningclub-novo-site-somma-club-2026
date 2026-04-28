@@ -13,12 +13,13 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split('T')[0]
 
-    // Próximos eventos (futuros ou abertos/bloqueados, excluindo encerrados)
+    // Próximos eventos (futuros ou abertos/bloqueados, excluindo encerrados e ocultos)
     const { data: upcoming, error: upErr } = await supabase
       .from('eventos')
       .select('id, titulo, data_evento, horario_inicio, local, local_url, tipo, checkin_status, pelotoes, descricao')
       .or(`data_evento.gt.${today},checkin_status.eq.aberto,checkin_status.eq.bloqueado`)
       .neq('checkin_status', 'encerrado')
+      .eq('oculto_no_checkin_publico', false)
       .order('data_evento', { ascending: true })
       .limit(10)
 
@@ -34,6 +35,7 @@ export async function GET() {
       .from('eventos')
       .select('id, titulo, data_evento, local, checkin_status')
       .eq('checkin_status', 'encerrado')
+      .eq('oculto_no_checkin_publico', false)
       .gte('data_evento', thirtyDaysAgo)
       .not('id', 'in', `(${upcomingIds.join(',')})`)
       .order('data_evento', { ascending: false })

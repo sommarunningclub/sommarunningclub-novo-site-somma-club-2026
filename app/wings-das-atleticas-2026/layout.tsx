@@ -1,0 +1,42 @@
+import type { Metadata } from 'next'
+import { Bebas_Neue, DM_Sans } from 'next/font/google'
+
+const bebas = Bebas_Neue({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--font-bebas',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans-wfl',
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: 'Wings das Atléticas 2026 | Atletic Day Wings for Life 2',
+  description:
+    'Inscreva sua atlética no Atletic Day Wings for Life 2 — 24 de maio de 2026, Centro Olímpico CO UnB, Brasília. Somma × Wings for Life × Red Bull.',
+  alternates: { canonical: 'https://sommaclub.com.br/wings-das-atleticas-2026' },
+  openGraph: {
+    title: 'Wings das Atléticas 2026',
+    description: 'Atletic Day Wings for Life 2 — UnB e CEUB no Centro Olímpico.',
+    url: 'https://sommaclub.com.br/wings-das-atleticas-2026',
+    type: 'website',
+    locale: 'pt_BR',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Wings das Atléticas 2026',
+    description: 'Atletic Day Wings for Life 2 — 24 de maio de 2026, CO UnB.',
+  },
+}
+
+export default function WingsLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className={`${bebas.variable} ${dmSans.variable}`}>
+      {children}
+    </div>
+  )
+}

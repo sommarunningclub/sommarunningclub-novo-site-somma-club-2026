@@ -13,6 +13,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        wfl: {
+          red: '#E30D3F',
+          navy: '#022755',
+          yellow: '#F6E331',
+          dark: '#34383B',
+          card: '#ECEEF3',
+          border: '#DEE1E7',
+        },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {
