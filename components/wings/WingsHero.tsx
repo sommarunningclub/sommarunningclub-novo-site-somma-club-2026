@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 
-const TARGET = new Date('2026-05-24T09:00:00-03:00').getTime()
+const TARGET = new Date('2026-05-02T09:00:00-03:00').getTime()
 const ZERO = { days: 0, hours: 0, mins: 0, secs: 0 }
 
 function diff() {
@@ -107,9 +107,9 @@ export default function WingsHero() {
             className="block bg-wfl-yellow text-wfl-navy px-3 py-2 sm:px-5 sm:py-3 font-bold text-xs sm:text-base tracking-wider uppercase leading-tight"
             style={fontBody}
           >
-            <span className="block sm:inline">24 de maio de 2026</span>
+            <span className="block sm:inline">02 de maio de 2026</span>
             <span className="hidden sm:inline"> · </span>
-            <span className="block sm:inline">Centro Olímpico — CO UnB</span>
+            <span className="block sm:inline">Pista de Atletismo — CO UnB</span>
           </span>
         </div>
 

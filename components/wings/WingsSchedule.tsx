@@ -37,7 +37,7 @@ export default function WingsSchedule({ showOperational = false }: Props) {
             className="text-[10px] sm:text-sm font-semibold tracking-[0.3em] uppercase text-wfl-yellow"
             style={fontBody}
           >
-            24 de maio de 2026
+            02 de maio de 2026
           </p>
           <h2
             id="schedule-heading"
@@ -47,7 +47,7 @@ export default function WingsSchedule({ showOperational = false }: Props) {
             Programação do dia
           </h2>
           <p className="mt-2 sm:mt-3 text-sm sm:text-base text-white/60" style={fontBody}>
-            Centro Olímpico — CO UnB · Brasília, DF
+            Pista de Atletismo — CO UnB · Brasília, DF
           </p>
         </div>
 

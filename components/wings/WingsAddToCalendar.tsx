@@ -27,7 +27,7 @@ function AppleCalendarIcon({ className }: { className?: string }) {
       <rect x="2" y="2" width="60" height="14" rx="12" fill="#ff3b30" />
       <rect x="2" y="10" width="60" height="6" fill="#ff3b30" />
       <text x="32" y="11" textAnchor="middle" fill="#fff" fontSize="8" fontWeight="700" fontFamily="-apple-system, system-ui, sans-serif">MAIO</text>
-      <text x="32" y="50" textAnchor="middle" fill="#1c1c1e" fontSize="28" fontWeight="600" fontFamily="-apple-system, system-ui, sans-serif">24</text>
+      <text x="32" y="50" textAnchor="middle" fill="#1c1c1e" fontSize="28" fontWeight="600" fontFamily="-apple-system, system-ui, sans-serif">02</text>
     </svg>
   )
 }
@@ -48,12 +48,12 @@ const EVENT = {
   title: 'Wings das Atléticas 2026 — Atletic Day Wings for Life 2',
   description:
     'Atletic Day Wings for Life 2 — encontro das atléticas da UnB e CEUB no Centro Olímpico. Programação completa em https://sommaclub.com.br/wings-das-atleticas-2026',
-  location: 'Centro Olímpico — CO UnB, Brasília, DF',
-  // 24/05/2026 — concentração 06h, encerramento ~12h (BRT = UTC-3)
-  startUtc: '20260524T090000Z', // 06:00 BRT
-  endUtc: '20260524T150000Z', // 12:00 BRT
-  startLocal: new Date('2026-05-24T06:00:00-03:00'),
-  endLocal: new Date('2026-05-24T12:00:00-03:00'),
+  location: 'Pista de Atletismo — Centro Olímpico CO UnB, Brasília, DF',
+  // 02/05/2026 — concentração 06h, encerramento ~12h (BRT = UTC-3)
+  startUtc: '20260502T090000Z', // 06:00 BRT
+  endUtc: '20260502T150000Z', // 12:00 BRT
+  startLocal: new Date('2026-05-02T06:00:00-03:00'),
+  endLocal: new Date('2026-05-02T12:00:00-03:00'),
 }
 
 function googleCalendarUrl() {
@@ -122,7 +122,7 @@ export default function WingsAddToCalendar() {
           Adicione na sua agenda
         </h2>
         <p className="mt-2 sm:mt-3 text-sm sm:text-base text-wfl-dark/70 max-w-md mx-auto">
-          Salve a data — 24 de maio de 2026, das 06h às 12h. Disponível para Google
+          Salve a data — 02 de maio de 2026, das 06h às 12h. Disponível para Google
           Calendar, Apple Calendar e Outlook.
         </p>
 

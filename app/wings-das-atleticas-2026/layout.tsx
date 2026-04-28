@@ -17,7 +17,7 @@ const dmSans = DM_Sans({
 export const metadata: Metadata = {
   title: 'Wings das Atléticas 2026 | Atletic Day Wings for Life 2',
   description:
-    'Inscreva sua atlética no Atletic Day Wings for Life 2 — 24 de maio de 2026, Centro Olímpico CO UnB, Brasília. Somma × Wings for Life × Red Bull.',
+    'Inscreva sua atlética no Atletic Day Wings for Life 2 — 02 de maio de 2026, Pista de Atletismo CO UnB, Brasília. Somma × Wings for Life × Red Bull.',
   alternates: { canonical: 'https://sommaclub.com.br/wings-das-atleticas-2026' },
   openGraph: {
     title: 'Wings das Atléticas 2026',
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Wings das Atléticas 2026',
-    description: 'Atletic Day Wings for Life 2 — 24 de maio de 2026, CO UnB.',
+    description: 'Atletic Day Wings for Life 2 — 02 de maio de 2026, Pista de Atletismo CO UnB.',
   },
 }
 

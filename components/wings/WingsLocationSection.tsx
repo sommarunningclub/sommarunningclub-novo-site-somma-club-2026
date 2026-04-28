@@ -53,10 +53,10 @@ export default function WingsLocationSection() {
               className="text-3xl sm:text-4xl uppercase leading-none text-wfl-yellow"
               style={fontDisplay}
             >
-              Centro Olímpico
+              Pista de Atletismo
             </h3>
             <p className="mt-1 text-base sm:text-lg text-white/90">
-              CO UnB · Brasília, DF
+              Centro Olímpico — CO UnB · Brasília, DF
             </p>
 
             <div className="mt-6 space-y-3 text-sm text-white/70 flex-1">
@@ -67,7 +67,7 @@ export default function WingsLocationSection() {
               <p className="text-white/60">
                 Concentração a partir das <span className="text-wfl-yellow font-semibold">06h</span>.
                 Largada oficial às <span className="text-wfl-yellow font-semibold">09h</span> de
-                24 de maio de 2026.
+                02 de maio de 2026.
               </p>
             </div>
 

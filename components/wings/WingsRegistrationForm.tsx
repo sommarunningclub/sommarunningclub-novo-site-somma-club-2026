@@ -249,7 +249,7 @@ export default function WingsRegistrationForm() {
       </button>
 
       <p className="text-center text-xs text-wfl-dark/50">
-        Inscrição gratuita · Vagas limitadas · 24 de maio de 2026
+        Inscrição gratuita · Vagas ilimitadas · 02 de maio de 2026
       </p>
     </form>
   )
