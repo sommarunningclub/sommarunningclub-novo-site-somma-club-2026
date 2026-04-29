@@ -8,6 +8,16 @@ type Props = {
   onTempoCapturado: (ms: number) => void
 }
 
+function vibrar(ms: number) {
+  if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+    try {
+      navigator.vibrate(ms)
+    } catch {
+      // ignore
+    }
+  }
+}
+
 export default function Cronometro({ onTempoCapturado }: Props) {
   const [running, setRunning] = useState(false)
   const [ms, setMs] = useState(0)
@@ -32,6 +42,7 @@ export default function Cronometro({ onTempoCapturado }: Props) {
   function start() {
     startedAtRef.current = performance.now()
     setRunning(true)
+    vibrar(40)
   }
 
   function stop() {
@@ -40,6 +51,7 @@ export default function Cronometro({ onTempoCapturado }: Props) {
       startedAtRef.current = null
     }
     setRunning(false)
+    vibrar([30, 60, 30])
   }
 
   function reset() {
@@ -47,50 +59,62 @@ export default function Cronometro({ onTempoCapturado }: Props) {
     startedAtRef.current = null
     offsetRef.current = 0
     setMs(0)
+    vibrar(20)
   }
 
   function capturar() {
     onTempoCapturado(Math.round(ms))
+    vibrar(60)
   }
 
   return (
-    <div className="bg-black text-white p-4 sm:p-5 rounded-lg border border-white/10">
-      <div className="flex items-baseline justify-between mb-4">
-        <span className="text-[10px] tracking-[0.3em] uppercase text-white/50">Cronômetro</span>
-        {running && (
-          <span className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-wfl-red font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-wfl-red animate-pulse" /> Rodando
-          </span>
-        )}
+    <div className="bg-black text-white border border-white/10">
+      <div className="flex items-center justify-between px-3 sm:px-4 pt-3">
+        <span className="text-[10px] tracking-[0.3em] uppercase text-white/50 font-bold">Cronômetro</span>
+        <span
+          className={`flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold transition-opacity ${
+            running ? 'text-wfl-red opacity-100' : 'text-white/30 opacity-60'
+          }`}
+        >
+          <span
+            className={`w-1.5 h-1.5 rounded-full ${
+              running ? 'bg-wfl-red animate-pulse' : 'bg-white/30'
+            }`}
+          />
+          {running ? 'Rodando' : 'Parado'}
+        </span>
       </div>
+
       <div
-        className="font-mono text-4xl sm:text-5xl font-bold text-wfl-yellow tabular-nums text-center select-none"
-        aria-live="polite"
+        className="font-mono font-bold text-wfl-yellow tabular-nums text-center select-none px-3 py-2 sm:py-3"
+        style={{ fontSize: 'clamp(2.5rem, 12vw, 4rem)', lineHeight: 1 }}
+        aria-live="off"
       >
         {msParaDisplay(ms)}
       </div>
-      <div className="mt-4 grid grid-cols-3 gap-2">
+
+      <div className="grid grid-cols-3 gap-px bg-white/10">
         {!running ? (
           <button
             type="button"
             onClick={start}
-            className="col-span-1 inline-flex items-center justify-center gap-1.5 bg-wfl-red hover:bg-wfl-red/90 text-white py-3 text-sm font-bold uppercase tracking-wider transition-colors"
+            className="min-h-14 inline-flex items-center justify-center gap-1.5 bg-wfl-red hover:bg-wfl-red/90 active:bg-wfl-red/80 text-white text-sm font-bold uppercase tracking-wider transition-colors"
           >
-            <Play className="w-4 h-4" /> Start
+            <Play className="w-4 h-4 fill-white" /> Start
           </button>
         ) : (
           <button
             type="button"
             onClick={stop}
-            className="col-span-1 inline-flex items-center justify-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy py-3 text-sm font-bold uppercase tracking-wider transition-colors"
+            className="min-h-14 inline-flex items-center justify-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 active:bg-wfl-yellow/80 text-wfl-navy text-sm font-bold uppercase tracking-wider transition-colors"
           >
-            <Pause className="w-4 h-4" /> Stop
+            <Pause className="w-4 h-4 fill-wfl-navy" /> Stop
           </button>
         )}
         <button
           type="button"
           onClick={reset}
-          className="inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white py-3 text-sm font-bold uppercase tracking-wider transition-colors"
+          className="min-h-14 inline-flex items-center justify-center gap-1.5 bg-black hover:bg-white/5 text-white text-sm font-bold uppercase tracking-wider transition-colors"
         >
           <RotateCcw className="w-4 h-4" /> Reset
         </button>
@@ -98,7 +122,7 @@ export default function Cronometro({ onTempoCapturado }: Props) {
           type="button"
           onClick={capturar}
           disabled={ms <= 0}
-          className="inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-40 disabled:cursor-not-allowed text-white py-3 text-sm font-bold uppercase tracking-wider transition-colors"
+          className="min-h-14 inline-flex items-center justify-center gap-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 disabled:opacity-30 disabled:cursor-not-allowed text-white text-sm font-bold uppercase tracking-wider transition-colors"
         >
           <Check className="w-4 h-4" /> Usar
         </button>

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
+import { Maximize2, Minimize2, Activity } from 'lucide-react'
 import { useRanking } from './useRanking'
 import { msParaDisplay } from '@/lib/wings-cronometragem/tempo'
 import type { Fase } from '@/lib/wings-cronometragem/tempo'
@@ -14,7 +15,15 @@ const MEDALHAS = ['🥇', '🥈', '🥉']
 
 export default function WingsRankingClient() {
   const [fase, setFase] = useState<Fase>('classificatoria')
-  const { ranking, loading, aoVivo } = useRanking(fase)
+  const { ranking, loading, aoVivo, runs } = useRanking(fase)
+  const [telao, setTelao] = useState(false)
+  const [agora, setAgora] = useState(() => Date.now())
+
+  // tick para "última atualização há Xs"
+  useEffect(() => {
+    const id = setInterval(() => setAgora(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
 
   // Atléticas classificadas para final = top 8 das classificatórias
   const classificadasParaFinal = (() => {
@@ -23,92 +32,187 @@ export default function WingsRankingClient() {
     return new Set(comTempo.slice(0, 8).map(r => r.atletica.id))
   })()
 
+  // Tempo do líder pra calcular gap
+  const tempoLider = ranking.find(r => r.melhorRun)?.melhorRun?.tempo_final_ms ?? null
+
+  // Última atualização
+  const ultimaRunMs = runs.reduce((max, r) => {
+    const t = new Date(r.created_at).getTime()
+    return t > max ? t : max
+  }, 0)
+  const segDesdeUpdate = ultimaRunMs ? Math.floor((agora - ultimaRunMs) / 1000) : null
+
   return (
-    <main className="min-h-screen bg-wfl-navy text-white" style={fontBody}>
-      {/* Header */}
-      <header className="border-b border-white/10 bg-black/40 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
+    <main
+      className={`min-h-[100dvh] bg-wfl-navy text-white ${telao ? 'text-lg' : ''}`}
+      style={fontBody}
+    >
+      {/* Header — não sticky em telão */}
+      <header
+        className={`border-b border-white/10 bg-black/40 backdrop-blur ${
+          telao ? '' : 'sticky top-0 z-10'
+        }`}
+        style={{ paddingTop: 'env(safe-area-inset-top)' }}
+      >
+        <div
+          className={`mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-3 ${
+            telao ? 'max-w-[1600px]' : 'max-w-5xl'
+          }`}
+        >
+          <div className="flex items-center gap-3 min-w-0">
             <Image
               src="/Logo_Nova_Somma_Branca_Laranja.svg"
               alt="Somma"
               width={80}
               height={28}
-              className="h-7 sm:h-8 w-auto"
+              priority
+              className={`w-auto flex-shrink-0 ${telao ? 'h-10' : 'h-7 sm:h-9'}`}
             />
             <div className="hidden sm:block w-px h-8 bg-white/20" />
-            <div>
-              <p className="text-[9px] tracking-[0.3em] uppercase text-wfl-yellow font-bold">Ranking ao vivo</p>
-              <h1 className="text-base sm:text-xl uppercase leading-none" style={fontDisplay}>
+            <div className="min-w-0">
+              <p
+                className={`tracking-[0.3em] uppercase text-wfl-yellow font-bold ${
+                  telao ? 'text-xs' : 'text-[9px] sm:text-[10px]'
+                }`}
+              >
+                Ranking ao vivo
+              </p>
+              <h1
+                className={`uppercase leading-none truncate ${
+                  telao ? 'text-3xl sm:text-4xl' : 'text-base sm:text-xl'
+                }`}
+                style={fontDisplay}
+              >
                 Wings das Atléticas 2026
               </h1>
             </div>
           </div>
-          <span
-            className={`flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
-              aoVivo ? 'bg-wfl-red text-white' : 'bg-white/10 text-white/60'
-            }`}
-          >
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Status realtime */}
             <span
-              className={`w-1.5 h-1.5 rounded-full ${aoVivo ? 'bg-white animate-pulse' : 'bg-white/40'}`}
-            />
-            {aoVivo ? 'AO VIVO' : 'Conectando…'}
-          </span>
+              className={`flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
+                aoVivo ? 'bg-wfl-red text-white' : 'bg-white/10 text-white/60'
+              }`}
+              aria-live="polite"
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  aoVivo ? 'bg-white animate-pulse' : 'bg-white/40'
+                }`}
+              />
+              {aoVivo ? 'AO VIVO' : 'CONECTANDO'}
+            </span>
+            {/* Toggle telão (iPad/TV) */}
+            <button
+              onClick={() => setTelao(t => !t)}
+              className="hidden md:inline-flex items-center justify-center w-9 h-9 bg-white/5 hover:bg-white/10 text-white/70 transition-colors"
+              aria-label={telao ? 'Sair do modo telão' : 'Modo telão'}
+              title={telao ? 'Sair do modo telão' : 'Modo telão'}
+            >
+              {telao ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Sub-header com tabs (sempre visível) */}
+        <div
+          className={`mx-auto px-4 sm:px-6 pb-3 ${
+            telao ? 'max-w-[1600px]' : 'max-w-5xl'
+          }`}
+        >
+          <div
+            className={`grid grid-cols-2 gap-1.5 bg-black/30 p-1 ${
+              telao ? 'max-w-md mx-auto' : ''
+            }`}
+            role="tablist"
+          >
+            {(['classificatoria', 'final'] as Fase[]).map(f => (
+              <button
+                key={f}
+                role="tab"
+                aria-selected={fase === f}
+                onClick={() => setFase(f)}
+                className={`min-h-11 text-xs sm:text-sm font-bold uppercase tracking-[0.15em] transition-colors ${
+                  fase === f
+                    ? 'bg-wfl-red text-white'
+                    : 'bg-transparent text-white/60 hover:bg-white/5'
+                }`}
+              >
+                {f === 'classificatoria' ? 'Classificatórias' : 'Final'}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-5">
-        {/* Tabs */}
-        <div className="grid grid-cols-2 gap-2 mb-5">
-          {(['classificatoria', 'final'] as Fase[]).map(f => (
-            <button
-              key={f}
-              onClick={() => setFase(f)}
-              className={`py-3 text-xs sm:text-sm font-bold uppercase tracking-[0.15em] transition-colors ${
-                fase === f
-                  ? 'bg-wfl-red text-white'
-                  : 'bg-white/5 text-white/60 hover:bg-white/10'
-              }`}
-            >
-              {f === 'classificatoria' ? 'Classificatórias' : 'Final'}
-            </button>
-          ))}
-        </div>
-
+      <div
+        className={`mx-auto px-3 sm:px-6 py-4 sm:py-6 ${
+          telao ? 'max-w-[1600px]' : 'max-w-5xl'
+        }`}
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}
+      >
         {loading ? (
-          <p className="text-center text-white/40 py-10">Carregando ranking…</p>
+          <SkeletonRanking />
         ) : ranking.length === 0 ? (
-          <p className="text-center text-white/40 py-10">Nenhuma atlética cadastrada ainda.</p>
+          <div className="bg-white/5 border border-white/10 px-4 py-12 text-center">
+            <Activity className="w-8 h-8 mx-auto text-white/30 mb-3" aria-hidden />
+            <p className="text-white/40">Nenhuma atlética cadastrada ainda.</p>
+            <p className="text-white/30 text-xs mt-1">As equipes aparecerão aqui assim que o staff cadastrar.</p>
+          </div>
         ) : (
-          <ul className="space-y-2">
-            {ranking.map((linha, idx) => (
+          <ul
+            className={`space-y-2 ${
+              telao ? 'sm:space-y-3 grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2' : ''
+            }`}
+            aria-live="polite"
+            aria-label="Ranking"
+          >
+            {ranking.map(linha => (
               <RankingRowItem
                 key={linha.atletica.id}
                 linha={linha}
-                index={idx}
+                tempoLider={tempoLider}
                 classificadaParaFinal={classificadasParaFinal.has(linha.atletica.id)}
+                telao={telao}
               />
             ))}
           </ul>
         )}
 
-        {/* Legenda */}
-        <p className="mt-6 text-[10px] text-white/40 text-center uppercase tracking-wider">
-          Tempo final = bruto + soma das penalidades · Atualização em tempo real
-        </p>
+        {/* Meta */}
+        <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row sm:justify-between items-center gap-2 text-[10px] sm:text-xs text-white/40 uppercase tracking-wider">
+          <span>Tempo final = bruto + soma das penalidades</span>
+          {segDesdeUpdate != null && (
+            <span className="tabular-nums">
+              Última run há {segDesdeUpdate < 60 ? `${segDesdeUpdate}s` : `${Math.floor(segDesdeUpdate / 60)}min`}
+            </span>
+          )}
+        </div>
       </div>
     </main>
   )
 }
 
+function SkeletonRanking() {
+  return (
+    <ul className="space-y-2" aria-hidden>
+      {[0, 1, 2, 3, 4].map(i => (
+        <li key={i} className="bg-white/5 h-16 animate-pulse" />
+      ))}
+    </ul>
+  )
+}
+
 function RankingRowItem({
   linha,
-  index,
+  tempoLider,
   classificadaParaFinal,
+  telao,
 }: {
   linha: RankingRow
-  index: number
+  tempoLider: number | null
   classificadaParaFinal: boolean
+  telao: boolean
 }) {
   const { atletica, atletas, melhorRun, posicao } = linha
   const top3 = posicao >= 1 && posicao <= 3
@@ -118,40 +222,77 @@ function RankingRowItem({
       melhorRun.penalidade_3_ms +
       melhorRun.penalidade_4_ms
     : 0
+  const gap =
+    melhorRun && tempoLider != null && melhorRun.tempo_final_ms !== tempoLider
+      ? melhorRun.tempo_final_ms - tempoLider
+      : null
+
+  // Anim subtle quando posição muda — usa key + animação CSS
+  const ref = useRef<HTMLLIElement>(null)
+  const posRef = useRef(posicao)
+  useEffect(() => {
+    if (posRef.current !== posicao && ref.current) {
+      ref.current.classList.remove('ring-2', 'ring-wfl-yellow')
+      // force reflow
+      void ref.current.offsetWidth
+      ref.current.classList.add('ring-2', 'ring-wfl-yellow')
+      const t = setTimeout(() => {
+        ref.current?.classList.remove('ring-2', 'ring-wfl-yellow')
+      }, 1500)
+      posRef.current = posicao
+      return () => clearTimeout(t)
+    }
+    posRef.current = posicao
+  }, [posicao])
 
   return (
     <li
-      className={`relative bg-white/5 border-l-4 transition-all ${
-        top3 ? 'border-wfl-yellow' : 'border-white/10'
-      }`}
+      ref={ref}
+      className="relative bg-white/5 border-l-4 transition-all duration-500"
       style={{
-        borderLeftColor: melhorRun ? atletica.cor : undefined,
+        borderLeftColor: melhorRun ? atletica.cor : 'rgba(255,255,255,0.1)',
       }}
     >
-      <div className="px-3 sm:px-4 py-3 grid grid-cols-[40px_1fr_auto] items-center gap-3">
-        {/* Posição */}
-        <div className="text-center">
+      <div
+        className={`grid grid-cols-[44px_1fr_auto] items-center gap-2 sm:gap-3 ${
+          telao ? 'px-4 sm:px-5 py-3 sm:py-4' : 'px-3 sm:px-4 py-2.5 sm:py-3'
+        }`}
+      >
+        {/* Posição / medalha */}
+        <div className="flex items-center justify-center">
           {melhorRun ? (
             top3 ? (
-              <span className="text-2xl sm:text-3xl">{MEDALHAS[posicao - 1]}</span>
+              <span className={telao ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'} aria-label={`${posicao}º lugar`}>
+                {MEDALHAS[posicao - 1]}
+              </span>
             ) : (
-              <span className="font-mono text-xl sm:text-2xl text-white/70 tabular-nums" style={fontDisplay}>
+              <span
+                className={`text-white/70 tabular-nums leading-none ${
+                  telao ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'
+                }`}
+                style={fontDisplay}
+              >
                 {posicao}º
               </span>
             )
           ) : (
-            <span className="text-white/30 text-xs">—</span>
+            <span className="text-white/25 text-xs">—</span>
           )}
         </div>
 
         {/* Atlética + atletas */}
         <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h3 className="text-base sm:text-lg uppercase leading-tight truncate" style={fontDisplay}>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <h3
+              className={`uppercase leading-tight ${
+                telao ? 'text-xl sm:text-2xl' : 'text-sm sm:text-lg'
+              }`}
+              style={fontDisplay}
+            >
               {atletica.nome}
             </h3>
             {atletica.sigla && (
-              <span className="text-[9px] uppercase tracking-wider text-white/40 hidden sm:inline">
+              <span className="text-[9px] sm:text-[10px] uppercase tracking-wider text-white/40 hidden sm:inline">
                 · {atletica.sigla}
               </span>
             )}
@@ -162,8 +303,13 @@ function RankingRowItem({
             )}
           </div>
           {atletas.length > 0 && (
-            <p className="mt-0.5 text-[10px] sm:text-xs text-white/50 truncate">
+            <p
+              className={`mt-0.5 text-white/50 truncate ${
+                telao ? 'text-sm' : 'text-[10px] sm:text-xs'
+              }`}
+            >
               {atletas
+                .slice()
                 .sort((a, b) => a.modalidade - b.modalidade)
                 .map(a => a.nome.split(' ')[0])
                 .join(' · ')}
@@ -172,21 +318,28 @@ function RankingRowItem({
         </div>
 
         {/* Tempo */}
-        <div className="text-right">
+        <div className="text-right tabular-nums leading-tight">
           {melhorRun ? (
             <>
               <div
-                className={`font-mono text-base sm:text-xl font-bold tabular-nums ${
+                className={`font-mono font-bold ${
                   totalPenalidades > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
-                }`}
+                } ${telao ? 'text-2xl sm:text-3xl' : 'text-base sm:text-xl'}`}
               >
                 {msParaDisplay(melhorRun.tempo_final_ms)}
               </div>
-              {totalPenalidades > 0 && (
-                <div className="text-[9px] text-white/40 tabular-nums">
-                  bruto {msParaDisplay(melhorRun.tempo_bruto_ms)} + {(totalPenalidades / 1000).toFixed(1)}s
-                </div>
-              )}
+              <div className={`mt-0.5 ${telao ? 'text-xs' : 'text-[9px] sm:text-[10px]'} text-white/40`}>
+                {totalPenalidades > 0 && (
+                  <span>
+                    bruto {msParaDisplay(melhorRun.tempo_bruto_ms)} · +{(totalPenalidades / 1000).toFixed(1)}s
+                  </span>
+                )}
+                {gap != null && (
+                  <span className={totalPenalidades > 0 ? ' · ' : ''}>
+                    +{(gap / 1000).toFixed(2)}s
+                  </span>
+                )}
+              </div>
             </>
           ) : (
             <span className="text-[10px] text-white/30 uppercase tracking-wider">Aguardando</span>
