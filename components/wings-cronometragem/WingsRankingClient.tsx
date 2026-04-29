@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import { Maximize2, Minimize2, Activity } from 'lucide-react'
+import { Maximize2, Minimize2, Activity, Sparkles } from 'lucide-react'
+import Link from 'next/link'
 import { useRanking } from './useRanking'
 import { msParaDisplay } from '@/lib/wings-cronometragem/tempo'
 import type { Fase } from '@/lib/wings-cronometragem/tempo'
@@ -88,6 +89,14 @@ export default function WingsRankingClient() {
             </div>
           </div>
           <div className="flex items-center gap-2 flex-shrink-0">
+            <Link
+              href="/wings/ranking-show"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 min-h-9 bg-wfl-yellow text-wfl-navy text-[10px] font-bold uppercase tracking-wider hover:bg-wfl-yellow/90 transition-colors"
+              title="Ranking show animado"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Show</span>
+            </Link>
             {/* Status realtime */}
             <span
               className={`flex items-center gap-1.5 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${
