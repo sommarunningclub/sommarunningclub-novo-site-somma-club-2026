@@ -58,7 +58,21 @@ export default function WingsPage() {
       <footer className="bg-wfl-navy text-white/70 py-8 sm:py-10 px-4 sm:px-8 pb-24 sm:pb-10" style={fontBody}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-xs">
           <p className="tracking-[0.2em] uppercase">Somma × Wings for Life × Red Bull</p>
-          <p>© 2026 Somma Running Club</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5">
+            <a
+              href="/wings/ranking"
+              className="tracking-[0.2em] uppercase text-wfl-yellow hover:text-white transition-colors"
+            >
+              Ranking ao vivo →
+            </a>
+            <a
+              href="/wings/admin"
+              className="tracking-[0.2em] uppercase text-white/50 hover:text-wfl-yellow transition-colors"
+            >
+              Acesso Somma →
+            </a>
+            <p>© 2026 Somma Running Club</p>
+          </div>
         </div>
       </footer>
 
