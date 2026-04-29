@@ -22,6 +22,8 @@ export type RunComp = {
   id: string
   atletica_id: string
   fase: Fase
+  bateria: number | null
+  raia: number | null
   tempo_bruto_ms: number
   penalidade_1_ms: number
   penalidade_2_ms: number

@@ -27,12 +27,34 @@ export async function POST(req: NextRequest) {
   }
   const fase = body.fase === 'final' ? 'final' : 'classificatoria'
 
+  // bateria: int >= 1 (ou null), raia: int 1-8 (ou null)
+  const bateria =
+    body.bateria === '' || body.bateria == null
+      ? null
+      : Number.isInteger(Number(body.bateria)) && Number(body.bateria) >= 1
+        ? Number(body.bateria)
+        : null
+  const raia =
+    body.raia === '' || body.raia == null
+      ? null
+      : Number.isInteger(Number(body.raia)) && Number(body.raia) >= 1 && Number(body.raia) <= 8
+        ? Number(body.raia)
+        : null
+  if (body.raia != null && body.raia !== '' && raia == null) {
+    return NextResponse.json({ error: 'Raia deve ser um inteiro entre 1 e 8.' }, { status: 400 })
+  }
+  if (body.bateria != null && body.bateria !== '' && bateria == null) {
+    return NextResponse.json({ error: 'Bateria deve ser um inteiro >= 1.' }, { status: 400 })
+  }
+
   const supabase = getServiceClient()
   const { data, error } = await supabase
     .from('wings_comp_runs')
     .insert({
       atletica_id: body.atletica_id,
       fase,
+      bateria,
+      raia,
       tempo_bruto_ms: Math.round(body.tempo_bruto_ms),
       penalidade_1_ms: Math.round(body.penalidade_1_ms ?? 0),
       penalidade_2_ms: Math.round(body.penalidade_2_ms ?? 0),
@@ -58,6 +80,22 @@ export async function PATCH(req: NextRequest) {
   if (body.fase === 'classificatoria' || body.fase === 'final') update.fase = body.fase
   if (typeof body.tempo_bruto_ms === 'number' && body.tempo_bruto_ms >= 0) {
     update.tempo_bruto_ms = Math.round(body.tempo_bruto_ms)
+  }
+  if ('bateria' in body) {
+    if (body.bateria === null || body.bateria === '') update.bateria = null
+    else if (Number.isInteger(Number(body.bateria)) && Number(body.bateria) >= 1) {
+      update.bateria = Number(body.bateria)
+    } else {
+      return NextResponse.json({ error: 'Bateria inválida.' }, { status: 400 })
+    }
+  }
+  if ('raia' in body) {
+    if (body.raia === null || body.raia === '') update.raia = null
+    else if (Number.isInteger(Number(body.raia)) && Number(body.raia) >= 1 && Number(body.raia) <= 8) {
+      update.raia = Number(body.raia)
+    } else {
+      return NextResponse.json({ error: 'Raia deve ser entre 1 e 8.' }, { status: 400 })
+    }
   }
   for (const k of ['penalidade_1_ms', 'penalidade_2_ms', 'penalidade_3_ms', 'penalidade_4_ms'] as const) {
     if (typeof body[k] === 'number' && body[k] >= 0) update[k] = Math.round(body[k])

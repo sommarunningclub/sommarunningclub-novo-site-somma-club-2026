@@ -309,6 +309,8 @@ function ColunaRegistrarRun({
 }) {
   const [atleticaId, setAtleticaId] = useState('')
   const [fase, setFase] = useState<Fase>('classificatoria')
+  const [bateriaStr, setBateriaStr] = useState('')
+  const [raiaStr, setRaiaStr] = useState('')
   const [tempoStr, setTempoStr] = useState('')
   const [pen, setPen] = useState<[string, string, string, string]>(['0', '0', '0', '0'])
   const [obs, setObs] = useState('')
@@ -342,6 +344,8 @@ function ColunaRegistrarRun({
         body: JSON.stringify({
           atletica_id: atleticaId,
           fase,
+          bateria: bateriaStr ? Number(bateriaStr) : null,
+          raia: raiaStr ? Number(raiaStr) : null,
           tempo_bruto_ms: tempoBrutoMs,
           penalidade_1_ms: penalidadesMs[0],
           penalidade_2_ms: penalidadesMs[1],
@@ -356,6 +360,8 @@ function ColunaRegistrarRun({
       setTempoStr('')
       setPen(['0', '0', '0', '0'])
       setObs('')
+      // bateria fica preenchida pra próxima run (mesmo bateria, equipe diferente)
+      setRaiaStr('')
       await onSaved()
     } finally {
       setSalvando(false)
@@ -416,6 +422,42 @@ function ColunaRegistrarRun({
                 {f === 'classificatoria' ? 'Classificatória' : 'Final'}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label htmlFor="input-bateria" className="text-[10px] uppercase tracking-wider text-white/60">
+              Bateria <span className="text-white/30">(opcional)</span>
+            </label>
+            <input
+              id="input-bateria"
+              type="number"
+              inputMode="numeric"
+              min="1"
+              step="1"
+              value={bateriaStr}
+              onChange={e => setBateriaStr(e.target.value)}
+              placeholder="1"
+              className="mt-1 w-full min-h-12 bg-black/40 border border-white/15 px-3 text-base text-white outline-none focus:border-wfl-yellow tabular-nums"
+            />
+          </div>
+          <div>
+            <label htmlFor="input-raia" className="text-[10px] uppercase tracking-wider text-white/60">
+              Raia <span className="text-white/30">(1–8)</span>
+            </label>
+            <input
+              id="input-raia"
+              type="number"
+              inputMode="numeric"
+              min="1"
+              max="8"
+              step="1"
+              value={raiaStr}
+              onChange={e => setRaiaStr(e.target.value)}
+              placeholder="1"
+              className="mt-1 w-full min-h-12 bg-black/40 border border-white/15 px-3 text-base text-white outline-none focus:border-wfl-yellow tabular-nums"
+            />
           </div>
         </div>
 
@@ -888,7 +930,10 @@ function ColunaRunsSalvas({
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold truncate">{a?.nome ?? '—'}</p>
                 <p className="text-[10px] uppercase tracking-wider text-white/40">
-                  {r.fase === 'classificatoria' ? 'Class.' : 'Final'} ·{' '}
+                  {r.fase === 'classificatoria' ? 'Class.' : 'Final'}
+                  {r.bateria != null && <> · Bat. {r.bateria}</>}
+                  {r.raia != null && <> · R{r.raia}</>}
+                  {' · '}
                   {new Date(r.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
@@ -1349,6 +1394,8 @@ function ModalEditarRun({
   showToast: (t: NonNullable<Toast>) => void
 }) {
   const [fase, setFase] = useState<Fase>(run.fase)
+  const [bateriaStr, setBateriaStr] = useState(run.bateria != null ? String(run.bateria) : '')
+  const [raiaStr, setRaiaStr] = useState(run.raia != null ? String(run.raia) : '')
   const [tempoStr, setTempoStr] = useState(msParaDisplay(run.tempo_bruto_ms))
   const [pen, setPen] = useState<[string, string, string, string]>([
     (run.penalidade_1_ms / 1000).toString(),
@@ -1377,6 +1424,8 @@ function ModalEditarRun({
         body: JSON.stringify({
           id: run.id,
           fase,
+          bateria: bateriaStr === '' ? null : Number(bateriaStr),
+          raia: raiaStr === '' ? null : Number(raiaStr),
           tempo_bruto_ms: tempoBrutoMs,
           penalidade_1_ms: penMs[0],
           penalidade_2_ms: penMs[1],
@@ -1411,6 +1460,38 @@ function ModalEditarRun({
                 {f === 'classificatoria' ? 'Classificatória' : 'Final'}
               </button>
             ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-white/60">
+              Bateria <span className="text-white/30">(opcional)</span>
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min="1"
+              step="1"
+              value={bateriaStr}
+              onChange={e => setBateriaStr(e.target.value)}
+              className="mt-1 w-full min-h-12 bg-black/40 border border-white/15 px-3 text-base text-white outline-none focus:border-wfl-yellow tabular-nums"
+            />
+          </div>
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-white/60">
+              Raia <span className="text-white/30">(1–8)</span>
+            </label>
+            <input
+              type="number"
+              inputMode="numeric"
+              min="1"
+              max="8"
+              step="1"
+              value={raiaStr}
+              onChange={e => setRaiaStr(e.target.value)}
+              className="mt-1 w-full min-h-12 bg-black/40 border border-white/15 px-3 text-base text-white outline-none focus:border-wfl-yellow tabular-nums"
+            />
           </div>
         </div>
 
@@ -1500,7 +1581,7 @@ function ModalConfig({
 
   function exportarCSV() {
     const linhas = [
-      ['Atletica', 'Sigla', 'Fase', 'Tempo Bruto (ms)', 'Pen 1', 'Pen 2', 'Pen 3', 'Pen 4', 'Tempo Final (ms)', 'Observações', 'Criado em'],
+      ['Atletica', 'Sigla', 'Fase', 'Bateria', 'Raia', 'Tempo Bruto (ms)', 'Pen 1', 'Pen 2', 'Pen 3', 'Pen 4', 'Tempo Final (ms)', 'Observações', 'Criado em'],
     ]
     const ordenadas = runs
       .slice()
@@ -1511,6 +1592,8 @@ function ModalConfig({
         a?.nome ?? '—',
         a?.sigla ?? '',
         r.fase,
+        r.bateria != null ? String(r.bateria) : '',
+        r.raia != null ? String(r.raia) : '',
         String(r.tempo_bruto_ms),
         String(r.penalidade_1_ms),
         String(r.penalidade_2_ms),
