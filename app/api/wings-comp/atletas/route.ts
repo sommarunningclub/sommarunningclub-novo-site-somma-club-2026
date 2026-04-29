@@ -66,6 +66,61 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ atleta: data })
 }
 
+export async function PATCH(req: NextRequest) {
+  if (!isStaffAuthorized()) {
+    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
+  }
+  const body = await req.json().catch(() => null)
+  if (!body?.id) return NextResponse.json({ error: 'id obrigatório' }, { status: 400 })
+
+  const update: Record<string, unknown> = {}
+  if (typeof body.nome === 'string') update.nome = body.nome.trim()
+  if (body.sexo === 'M' || body.sexo === 'F') update.sexo = body.sexo
+  if (Number.isInteger(body.modalidade) && body.modalidade >= 1 && body.modalidade <= 4) {
+    update.modalidade = body.modalidade
+  }
+
+  const supabase = getServiceClient()
+
+  // Se trocou sexo ou modalidade, valida 2M+2F e modalidade única no time
+  if (update.sexo || update.modalidade) {
+    const { data: alvo } = await supabase
+      .from('wings_comp_atletas')
+      .select('atletica_id, sexo, modalidade')
+      .eq('id', body.id)
+      .single()
+    if (!alvo) return NextResponse.json({ error: 'Atleta não encontrado.' }, { status: 404 })
+
+    const { data: outros } = await supabase
+      .from('wings_comp_atletas')
+      .select('id, sexo, modalidade')
+      .eq('atletica_id', alvo.atletica_id)
+      .neq('id', body.id)
+
+    const novoSexo = (update.sexo as string) ?? alvo.sexo
+    const novaMod = (update.modalidade as number) ?? alvo.modalidade
+
+    const masc = (outros ?? []).filter(o => o.sexo === 'M').length + (novoSexo === 'M' ? 1 : 0)
+    const fem = (outros ?? []).filter(o => o.sexo === 'F').length + (novoSexo === 'F' ? 1 : 0)
+    if (masc > 2) return NextResponse.json({ error: 'Máximo 2 atletas masculinos.' }, { status: 400 })
+    if (fem > 2) return NextResponse.json({ error: 'Máximo 2 atletas femininas.' }, { status: 400 })
+
+    if ((outros ?? []).some(o => o.modalidade === novaMod)) {
+      return NextResponse.json({ error: 'Outro atleta já está nessa modalidade.' }, { status: 400 })
+    }
+  }
+
+  const { data, error } = await supabase
+    .from('wings_comp_atletas')
+    .update(update)
+    .eq('id', body.id)
+    .select('*')
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ atleta: data })
+}
+
 export async function DELETE(req: NextRequest) {
   if (!isStaffAuthorized()) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })

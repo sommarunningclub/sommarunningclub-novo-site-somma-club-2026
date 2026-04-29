@@ -254,8 +254,10 @@ function RankingRowItem({
       }}
     >
       <div
-        className={`grid grid-cols-[44px_1fr_auto] items-center gap-2 sm:gap-3 ${
-          telao ? 'px-4 sm:px-5 py-3 sm:py-4' : 'px-3 sm:px-4 py-2.5 sm:py-3'
+        className={`grid items-center gap-2 sm:gap-3 ${
+          telao
+            ? 'grid-cols-[44px_56px_1fr_auto] sm:grid-cols-[52px_72px_1fr_auto] px-4 sm:px-5 py-3 sm:py-4'
+            : 'grid-cols-[36px_44px_1fr_auto] sm:grid-cols-[44px_52px_1fr_auto] px-2.5 sm:px-4 py-2.5 sm:py-3'
         }`}
       >
         {/* Posição / medalha */}
@@ -277,6 +279,33 @@ function RankingRowItem({
             )
           ) : (
             <span className="text-white/25 text-xs">—</span>
+          )}
+        </div>
+
+        {/* Avatar da atlética */}
+        <div
+          className={`relative overflow-hidden bg-black/40 border-2 ${
+            telao ? 'w-12 h-12 sm:w-16 sm:h-16' : 'w-10 h-10 sm:w-12 sm:h-12'
+          }`}
+          style={{ borderColor: atletica.cor, borderRadius: '9999px' }}
+        >
+          {atletica.foto_url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={atletica.foto_url}
+              alt={atletica.nome}
+              className="w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : (
+            <div
+              className="w-full h-full flex items-center justify-center font-bold text-white/70"
+              style={{ backgroundColor: `${atletica.cor}33` }}
+            >
+              <span className="text-xs sm:text-sm" style={fontDisplay}>
+                {(atletica.sigla || atletica.nome).slice(0, 2).toUpperCase()}
+              </span>
+            </div>
           )}
         </div>
 

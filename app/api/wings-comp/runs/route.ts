@@ -47,6 +47,37 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ run: data })
 }
 
+export async function PATCH(req: NextRequest) {
+  if (!isStaffAuthorized()) {
+    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
+  }
+  const body = await req.json().catch(() => null)
+  if (!body?.id) return NextResponse.json({ error: 'id obrigatório' }, { status: 400 })
+
+  const update: Record<string, unknown> = {}
+  if (body.fase === 'classificatoria' || body.fase === 'final') update.fase = body.fase
+  if (typeof body.tempo_bruto_ms === 'number' && body.tempo_bruto_ms >= 0) {
+    update.tempo_bruto_ms = Math.round(body.tempo_bruto_ms)
+  }
+  for (const k of ['penalidade_1_ms', 'penalidade_2_ms', 'penalidade_3_ms', 'penalidade_4_ms'] as const) {
+    if (typeof body[k] === 'number' && body[k] >= 0) update[k] = Math.round(body[k])
+  }
+  if (typeof body.observacoes === 'string' || body.observacoes === null) {
+    update.observacoes = body.observacoes?.trim() || null
+  }
+
+  const supabase = getServiceClient()
+  const { data, error } = await supabase
+    .from('wings_comp_runs')
+    .update(update)
+    .eq('id', body.id)
+    .select('*')
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ run: data })
+}
+
 export async function DELETE(req: NextRequest) {
   if (!isStaffAuthorized()) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })

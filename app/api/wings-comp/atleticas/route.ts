@@ -28,7 +28,37 @@ export async function POST(req: NextRequest) {
       nome: body.nome.trim(),
       sigla: body.sigla?.trim() || null,
       cor: body.cor || '#E30D3F',
+      foto_url: body.foto_url || null,
     })
+    .select('*')
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json({ atletica: data })
+}
+
+export async function PATCH(req: NextRequest) {
+  if (!isStaffAuthorized()) {
+    return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
+  }
+  const body = await req.json().catch(() => null)
+  if (!body?.id) return NextResponse.json({ error: 'id obrigatório' }, { status: 400 })
+
+  const update: Record<string, unknown> = {}
+  if (typeof body.nome === 'string') update.nome = body.nome.trim()
+  if (typeof body.sigla === 'string' || body.sigla === null) {
+    update.sigla = body.sigla?.trim() || null
+  }
+  if (typeof body.cor === 'string') update.cor = body.cor
+  if (typeof body.foto_url === 'string' || body.foto_url === null) {
+    update.foto_url = body.foto_url || null
+  }
+
+  const supabase = getServiceClient()
+  const { data, error } = await supabase
+    .from('wings_comp_atleticas')
+    .update(update)
+    .eq('id', body.id)
     .select('*')
     .single()
 

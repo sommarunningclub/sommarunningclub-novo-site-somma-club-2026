@@ -5,6 +5,7 @@ export type AtleticaComp = {
   nome: string
   sigla: string | null
   cor: string
+  foto_url: string | null
   created_at: string
 }
 
