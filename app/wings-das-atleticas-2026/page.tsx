@@ -6,7 +6,7 @@ import WingsCompetition from '@/components/wings/WingsCompetition'
 import WingsCadastroEquipe from '@/components/wings/WingsCadastroEquipe'
 import WingsAddToCalendar from '@/components/wings/WingsAddToCalendar'
 import WingsFollowSomma from '@/components/wings/WingsFollowSomma'
-import WingsFloatingCTA from '@/components/wings/WingsFloatingCTA'
+import WingsCadastroFlutuante from '@/components/wings/WingsCadastroFlutuante'
 import WingsRegistrationForm from '@/components/wings/WingsRegistrationForm'
 
 export const dynamic = 'force-dynamic'
@@ -78,7 +78,7 @@ export default function WingsPage() {
         </div>
       </footer>
 
-      <WingsFloatingCTA />
+      <WingsCadastroFlutuante />
     </main>
   )
 }
