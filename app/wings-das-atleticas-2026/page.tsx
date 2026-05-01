@@ -3,6 +3,7 @@ import WingsLocationSection from '@/components/wings/WingsLocationSection'
 import WingsEventInfo from '@/components/wings/WingsEventInfo'
 import WingsSchedule from '@/components/wings/WingsSchedule'
 import WingsCompetition from '@/components/wings/WingsCompetition'
+import WingsCadastroEquipe from '@/components/wings/WingsCadastroEquipe'
 import WingsAddToCalendar from '@/components/wings/WingsAddToCalendar'
 import WingsFollowSomma from '@/components/wings/WingsFollowSomma'
 import WingsFloatingCTA from '@/components/wings/WingsFloatingCTA'
@@ -21,6 +22,7 @@ export default function WingsPage() {
       <WingsEventInfo />
       <WingsSchedule />
       <WingsCompetition />
+      <WingsCadastroEquipe />
       <WingsAddToCalendar />
 
       <section
