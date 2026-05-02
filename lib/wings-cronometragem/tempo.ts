@@ -42,7 +42,7 @@ export function segundosParaMs(s: number): number {
 }
 
 export const MODALIDADES = [
-  { num: 1, nome: 'Um pé só' },
+  { num: 1, nome: 'Corrida lateral' },
   { num: 2, nome: 'Dois pés juntos saltando' },
   { num: 3, nome: 'Corrida de costas' },
   { num: 4, nome: 'Engatinhando em 4 apoios' },

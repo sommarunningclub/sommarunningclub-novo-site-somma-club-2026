@@ -100,7 +100,7 @@ export default function WingsCadastroEquipe() {
               Cada um vai correr <strong>100m em uma modalidade diferente</strong>.
             </PassoLista>
             <PassoLista numero={2}>
-              <strong>Cada modalidade tem sua regra</strong>: um pé só, dois pés saltando, corrida de
+              <strong>Cada modalidade tem sua regra</strong>: corrida lateral, dois pés saltando, corrida de
               costas e engatinhando. Definam quem faz o quê <em>antes</em> de cadastrar.
             </PassoLista>
             <PassoLista numero={3}>

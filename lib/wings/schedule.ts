@@ -112,7 +112,7 @@ export const WINGS_SCHEDULE: ScheduleBlock[] = [
       'FORMATO: Revezamento 4×100m misto — 2 masculino + 2 feminino por equipe',
       'Cada atleta corre 100m em uma das 4 modalidades obrigatórias',
       '4 equipes competem por bateria · 1 staff cronometrista por equipe',
-      'MODALIDADE 1 — UM PÉ SÓ: participante escolhe um pé antes de largar e não pode trocar',
+      'MODALIDADE 1 — CORRIDA LATERAL: percorre os 100m correndo de lado, sem girar o tronco para frente',
       'MODALIDADE 2 — DOIS PÉS JUNTOS SALTANDO: avançar somente em saltos com os dois pés juntos',
       'MODALIDADE 3 — CORRIDA DE COSTAS: pode olhar para trás, proibido girar o tronco para frente',
       'MODALIDADE 4 — ENGATINHANDO 4 APOIOS: pés e mãos no chão o tempo todo, joelhos não obrigatórios',

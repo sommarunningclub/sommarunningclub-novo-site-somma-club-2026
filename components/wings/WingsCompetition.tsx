@@ -15,8 +15,8 @@ const summaryCards = [
 const modalities = [
   {
     n: 1,
-    title: 'Um pé só',
-    body: 'O participante escolhe um pé antes de largar e não pode trocar durante toda a passagem.',
+    title: 'Corrida lateral',
+    body: 'O participante percorre os 100m correndo de lado, sem girar o tronco para a direção da pista.',
   },
   {
     n: 2,
