@@ -16,7 +16,15 @@ const MEDALHAS = ['🥇', '🥈', '🥉']
 
 export default function WingsRankingClient() {
   const [fase, setFase] = useState<Fase>('classificatoria')
-  const { ranking, loading, aoVivo, runs } = useRanking(fase)
+  const { ranking, loading, aoVivo, runs, finalLiberada } = useRanking(fase)
+
+  // Quando público pede a aba "final" mas o admin ainda não liberou,
+  // forçamos volta para classificatória
+  useEffect(() => {
+    if (fase === 'final' && !finalLiberada) {
+      setFase('classificatoria')
+    }
+  }, [fase, finalLiberada])
   const [telao, setTelao] = useState(false)
   const [agora, setAgora] = useState(() => Date.now())
 
@@ -141,21 +149,38 @@ export default function WingsRankingClient() {
             }`}
             role="tablist"
           >
-            {(['classificatoria', 'final'] as Fase[]).map(f => (
-              <button
-                key={f}
-                role="tab"
-                aria-selected={fase === f}
-                onClick={() => setFase(f)}
-                className={`min-h-11 text-xs sm:text-sm font-bold uppercase tracking-[0.15em] transition-colors ${
-                  fase === f
-                    ? 'bg-wfl-red text-white'
-                    : 'bg-transparent text-white/60 hover:bg-white/5'
-                }`}
-              >
-                {f === 'classificatoria' ? 'Classificatórias' : 'Final'}
-              </button>
-            ))}
+            {(['classificatoria', 'final'] as Fase[]).map(f => {
+              const desabilitada = f === 'final' && !finalLiberada
+              if (desabilitada) {
+                return (
+                  <button
+                    key={f}
+                    role="tab"
+                    aria-selected={false}
+                    disabled
+                    className="min-h-11 text-xs sm:text-sm font-bold uppercase tracking-[0.15em] bg-transparent text-white/30 cursor-not-allowed"
+                    title="Aguardando liberação do staff"
+                  >
+                    Final · 🔒
+                  </button>
+                )
+              }
+              return (
+                <button
+                  key={f}
+                  role="tab"
+                  aria-selected={fase === f}
+                  onClick={() => setFase(f)}
+                  className={`min-h-11 text-xs sm:text-sm font-bold uppercase tracking-[0.15em] transition-colors ${
+                    fase === f
+                      ? 'bg-wfl-red text-white'
+                      : 'bg-transparent text-white/60 hover:bg-white/5'
+                  }`}
+                >
+                  {f === 'classificatoria' ? 'Classificatórias' : 'Final'}
+                </button>
+              )
+            })}
           </div>
         </div>
       </header>

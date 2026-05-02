@@ -55,8 +55,12 @@ function buildOvalPath(
 
 export default function WingsRankingShowClient() {
   const [fase, setFase] = useState<Fase>('classificatoria')
-  const { ranking, loading, aoVivo, runs } = useRanking(fase)
+  const { ranking, loading, aoVivo, runs, finalLiberada } = useRanking(fase)
   const [telao, setTelao] = useState(false)
+
+  useEffect(() => {
+    if (fase === 'final' && !finalLiberada) setFase('classificatoria')
+  }, [fase, finalLiberada])
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const corredoresRef = useRef<Corredor[]>([])
@@ -471,19 +475,26 @@ export default function WingsRankingShowClient() {
         {/* Tabs */}
         <div className="mt-3 max-w-md">
           <div className="grid grid-cols-2 gap-1.5 bg-black/30 p-1">
-            {(['classificatoria', 'final'] as Fase[]).map(f => (
-              <button
-                key={f}
-                onClick={() => setFase(f)}
-                className={`min-h-10 text-xs font-bold uppercase tracking-[0.15em] transition-colors ${
-                  fase === f
-                    ? 'bg-wfl-red text-white'
-                    : 'bg-transparent text-white/60 hover:bg-white/5'
-                }`}
-              >
-                {f === 'classificatoria' ? 'Classific.' : 'Final'}
-              </button>
-            ))}
+            {(['classificatoria', 'final'] as Fase[]).map(f => {
+              const desabilitada = f === 'final' && !finalLiberada
+              return (
+                <button
+                  key={f}
+                  onClick={() => !desabilitada && setFase(f)}
+                  disabled={desabilitada}
+                  className={`min-h-10 text-xs font-bold uppercase tracking-[0.15em] transition-colors ${
+                    desabilitada
+                      ? 'bg-transparent text-white/30 cursor-not-allowed'
+                      : fase === f
+                        ? 'bg-wfl-red text-white'
+                        : 'bg-transparent text-white/60 hover:bg-white/5'
+                  }`}
+                  title={desabilitada ? 'Aguardando liberação do staff' : undefined}
+                >
+                  {f === 'classificatoria' ? 'Classific.' : desabilitada ? 'Final · 🔒' : 'Final'}
+                </button>
+              )
+            })}
           </div>
         </div>
       </header>

@@ -99,6 +99,7 @@ export function useRanking(fase: Fase) {
   const [atleticas, setAtleticas] = useState<AtleticaComp[]>([])
   const [atletas, setAtletas] = useState<AtletaComp[]>([])
   const [runs, setRuns] = useState<RunComp[]>([])
+  const [finalLiberada, setFinalLiberada] = useState(false)
   const [loading, setLoading] = useState(true)
   const [aoVivo, setAoVivo] = useState(false)
 
@@ -106,15 +107,17 @@ export function useRanking(fase: Fase) {
     let cancelado = false
     async function carregar() {
       try {
-        const [aR, atR, rR] = await Promise.all([
+        const [aR, atR, rR, cR] = await Promise.all([
           fetch('/api/wings-comp/atleticas').then(r => r.json()),
           fetch('/api/wings-comp/atletas').then(r => r.json()),
           fetch('/api/wings-comp/runs').then(r => r.json()),
+          fetch('/api/wings-comp/config').then(r => r.json()).catch(() => ({ config: null })),
         ])
         if (cancelado) return
         setAtleticas(aR.atleticas ?? [])
         setAtletas(atR.atletas ?? [])
         setRuns(rR.runs ?? [])
+        setFinalLiberada(!!cR?.config?.final_liberada)
       } finally {
         if (!cancelado) setLoading(false)
       }
@@ -166,6 +169,12 @@ export function useRanking(fase: Fase) {
           return prev
         })
       })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'wings_comp_config' }, payload => {
+        if (payload.eventType === 'UPDATE' || payload.eventType === 'INSERT') {
+          const novo = payload.new as { final_liberada?: boolean }
+          setFinalLiberada(!!novo.final_liberada)
+        }
+      })
       .subscribe(status => {
         setAoVivo(status === 'SUBSCRIBED')
       })
@@ -177,5 +186,5 @@ export function useRanking(fase: Fase) {
 
   const ranking = montarRanking(atleticas, atletas, runs, fase)
 
-  return { ranking, loading, aoVivo, atleticas, atletas, runs }
+  return { ranking, loading, aoVivo, atleticas, atletas, runs, finalLiberada }
 }

@@ -836,8 +836,44 @@ function BarraClassificatoria({
   showToast: (t: NonNullable<Toast>) => void
 }) {
   const [carregando, setCarregando] = useState(false)
+  const [finalLiberada, setFinalLiberada] = useState(false)
+  const [carregandoLiberar, setCarregandoLiberar] = useState(false)
   const classificadas = atleticas.filter(a => a.classificada_final)
   const fechada = classificadas.length > 0
+
+  useEffect(() => {
+    let cancelado = false
+    fetch('/api/wings-comp/config')
+      .then(r => r.json())
+      .then(j => {
+        if (!cancelado) setFinalLiberada(!!j?.config?.final_liberada)
+      })
+      .catch(() => {})
+    return () => { cancelado = true }
+  }, [])
+
+  async function alternarLiberacao() {
+    const novo = !finalLiberada
+    if (novo && !confirm('Liberar resultado da final ao público?\nA aba "Final" fica visível no ranking ao vivo.')) return
+    if (!novo && !confirm('Ocultar resultado da final do público?\nO ao vivo volta a mostrar apenas a classificatória.')) return
+    setCarregandoLiberar(true)
+    try {
+      const res = await fetch('/api/wings-comp/config', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ final_liberada: novo }),
+      })
+      const j = await res.json()
+      if (!res.ok) {
+        showToast({ tipo: 'erro', msg: j.error || 'Erro ao atualizar.' })
+        return
+      }
+      setFinalLiberada(novo)
+      showToast({ tipo: 'ok', msg: novo ? '🎉 Final liberada para o público.' : 'Final oculta do público.' })
+    } finally {
+      setCarregandoLiberar(false)
+    }
+  }
 
   async function fechar() {
     if (!confirm('Fechar a classificatória?\nIsso trava o top 8 com base no ranking atual. Você pode reabrir depois.')) return
@@ -907,6 +943,40 @@ function BarraClassificatoria({
               {carregando ? '…' : 'Fechar classificatória'}
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Linha 2 — controle de liberação do resultado da final */}
+      <div
+        className={`border-t ${
+          finalLiberada ? 'bg-emerald-500/15 border-emerald-400/30' : 'bg-black/30 border-white/10'
+        }`}
+      >
+        <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-1.5 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2 min-w-0">
+            <span className="text-base">{finalLiberada ? '📡' : '👁️‍🗨️'}</span>
+            <div className="min-w-0">
+              <p className={`text-[10px] uppercase tracking-[0.2em] font-bold ${finalLiberada ? 'text-emerald-300' : 'text-white/60'}`}>
+                {finalLiberada ? 'Final visível ao público' : 'Final só preview (admin)'}
+              </p>
+              <p className="text-[10px] text-white/50 truncate">
+                {finalLiberada
+                  ? 'Resultado da final está aparecendo no ranking ao vivo.'
+                  : 'Ranking público mostra apenas classificatória. Você pode revisar antes de liberar.'}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={alternarLiberacao}
+            disabled={carregandoLiberar}
+            className={`flex-shrink-0 min-h-9 px-3 text-[10px] font-bold uppercase tracking-wider transition-colors disabled:opacity-50 ${
+              finalLiberada
+                ? 'bg-white/10 hover:bg-white/20 text-white'
+                : 'bg-emerald-500 hover:bg-emerald-400 text-emerald-950'
+            }`}
+          >
+            {carregandoLiberar ? '…' : finalLiberada ? 'Ocultar do público' : 'Liberar resultado'}
+          </button>
         </div>
       </div>
     </div>
