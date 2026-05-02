@@ -21,11 +21,26 @@ export async function POST(req: NextRequest) {
   if (!body?.nome || typeof body.nome !== 'string') {
     return NextResponse.json({ error: 'Nome obrigatório.' }, { status: 400 })
   }
+  const nome = body.nome.trim()
   const supabase = getServiceClient()
+
+  // Bloqueia duplicata case-insensitive
+  const { data: existente } = await supabase
+    .from('wings_comp_atleticas')
+    .select('id, nome')
+    .ilike('nome', nome)
+    .limit(1)
+  if (existente && existente.length > 0) {
+    return NextResponse.json(
+      { error: `Já existe uma equipe "${existente[0].nome}". Edite a existente.` },
+      { status: 409 }
+    )
+  }
+
   const { data, error } = await supabase
     .from('wings_comp_atleticas')
     .insert({
-      nome: body.nome.trim(),
+      nome,
       sigla: body.sigla?.trim() || null,
       cor: body.cor || '#E30D3F',
       foto_url: body.foto_url || null,
@@ -55,6 +70,22 @@ export async function PATCH(req: NextRequest) {
   }
 
   const supabase = getServiceClient()
+
+  // Se está mudando o nome, bloqueia colisão case-insensitive com outra equipe
+  if (typeof update.nome === 'string') {
+    const { data: existente } = await supabase
+      .from('wings_comp_atleticas')
+      .select('id, nome')
+      .ilike('nome', update.nome as string)
+      .neq('id', body.id)
+      .limit(1)
+    if (existente && existente.length > 0) {
+      return NextResponse.json(
+        { error: `Já existe outra equipe "${existente[0].nome}".` },
+        { status: 409 }
+      )
+    }
+  }
   const { data, error } = await supabase
     .from('wings_comp_atleticas')
     .update(update)
