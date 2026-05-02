@@ -55,18 +55,17 @@ export default function WingsCadastroEquipe() {
       <div className="max-w-5xl mx-auto relative z-[1]">
         <div className="text-center mb-8 sm:mb-12">
           <p className="text-[10px] sm:text-sm font-semibold tracking-[0.3em] uppercase text-wfl-yellow">
-            Sua equipe na pista
+            Wings das Atléticas 2026
           </p>
           <h2
             className="mt-2 text-3xl sm:text-6xl uppercase leading-none text-white"
             style={fontDisplay}
           >
-            Cadastre sua equipe<br className="hidden sm:block" /> competidora
+            Evento concluído<br className="hidden sm:block" /> com sucesso
           </h2>
           <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/85 max-w-xl mx-auto">
-            Forme um time de 4 atletas (2M + 2F) pra disputar 2 revezamentos 4×100m:
-            um de atletismo normal e outro dinâmico. A soma dos tempos define o resultado
-            — top 3 atléticas levam premiação no pódio.
+            31 atléticas competiram em 2 revezamentos 4×100m (atletismo + dinâmica)
+            no Centro Olímpico da UnB. Confira o resultado final abaixo.
           </p>
         </div>
 
@@ -125,79 +124,39 @@ export default function WingsCadastroEquipe() {
           </div>
         </div>
 
-        {/* CTA principal */}
-        {jaCadastrou ? (
-          <div className="bg-emerald-600/20 border border-emerald-400/50 p-5 sm:p-7 text-center backdrop-blur-sm">
-            <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto mb-2" />
-            <h3 className="text-xl sm:text-2xl uppercase leading-none" style={fontDisplay}>
-              Equipe cadastrada
-            </h3>
-            {equipeNome && (
-              <p className="mt-1.5 text-sm text-white/80">
-                <strong>{equipeNome}</strong> já está no painel.
-              </p>
-            )}
-            <p className="mt-1.5 text-xs text-white/50">
-              Acompanhe o ranking ao vivo durante o evento.
+        {/* Inscrições encerradas */}
+        <div className="bg-black/40 border border-wfl-yellow/40 p-5 sm:p-7 text-center backdrop-blur-sm">
+          <Trophy className="w-10 h-10 text-wfl-yellow mx-auto mb-2" />
+          <p className="text-[10px] sm:text-xs tracking-[0.3em] uppercase text-wfl-yellow font-bold mb-1">
+            Evento Encerrado
+          </p>
+          <h3 className="text-2xl sm:text-3xl uppercase leading-none" style={fontDisplay}>
+            Inscrições encerradas
+          </h3>
+          {jaCadastrou && equipeNome && (
+            <p className="mt-3 text-sm text-white/80">
+              Obrigado por participar com a equipe <strong>{equipeNome}</strong>! 🏆
             </p>
-            <div className="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
-              <a
-                href="/wings/ranking"
-                className="inline-flex items-center justify-center gap-1.5 bg-wfl-red hover:bg-wfl-red/90 text-white px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors"
-              >
-                <Activity className="w-4 h-4" /> Ranking ao vivo
-              </a>
-              <a
-                href="/wings/ranking-show"
-                className="inline-flex items-center justify-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors"
-              >
-                <Sparkles className="w-4 h-4" /> Ranking show
-              </a>
-            </div>
-            <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 text-xs">
-              <button
-                onClick={() => setEditarAberto(true)}
-                className="inline-flex items-center gap-1.5 text-wfl-yellow hover:underline uppercase tracking-wider font-bold"
-              >
-                <Pencil className="w-3.5 h-3.5" /> Editar minha equipe
-              </button>
-              <span className="hidden sm:inline text-white/30">·</span>
-              <button
-                onClick={() => {
-                  if (
-                    confirm(
-                      'Sua equipe já está cadastrada. Cadastrar uma segunda equipe?\nIsso só faz sentido se você for de OUTRA atlética.'
-                    )
-                  ) {
-                    setAberto(true)
-                  }
-                }}
-                className="text-white/40 hover:text-white uppercase tracking-wider"
-              >
-                Cadastrar outra equipe
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="text-center">
-            <button
-              onClick={() => setAberto(true)}
-              className="inline-flex items-center gap-2 bg-wfl-navy hover:bg-black active:bg-black text-white px-7 py-4 sm:px-10 sm:py-5 text-sm sm:text-base font-bold tracking-[0.2em] uppercase transition-colors shadow-2xl shadow-black/30"
+          )}
+          <p className="mt-3 text-sm text-white/70 max-w-lg mx-auto">
+            O Wings das Atléticas 2026 já aconteceu. Confira o resultado final no ranking
+            e fique de olho nas próximas edições do Somma Club.
+          </p>
+          <div className="mt-5 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2">
+            <a
+              href="/wings/ranking"
+              className="inline-flex items-center justify-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors"
             >
-              <Users className="w-5 h-5" /> Cadastrar equipe agora
-              <ChevronRight className="w-4 h-4" />
-            </button>
-            <p className="mt-3 text-[11px] text-white/70 uppercase tracking-wider">
-              Inscrição gratuita · 4 atletas · 2M + 2F · 4 modalidades
-            </p>
-            <button
-              onClick={() => setEditarAberto(true)}
-              className="mt-4 inline-flex items-center gap-1.5 text-xs text-wfl-yellow hover:underline uppercase tracking-wider font-bold"
+              <Trophy className="w-4 h-4" /> Ver resultado final
+            </a>
+            <a
+              href="/wings/ranking-show"
+              className="inline-flex items-center justify-center gap-1.5 bg-white/10 hover:bg-white/20 text-white px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] transition-colors"
             >
-              <Search className="w-3.5 h-3.5" /> Já cadastrou? Edite pela sigla
-            </button>
+              <Sparkles className="w-4 h-4" /> Ranking show
+            </a>
           </div>
-        )}
+        </div>
 
         {/* Atalhos pro ranking */}
         <div className="mt-8 sm:mt-12 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
