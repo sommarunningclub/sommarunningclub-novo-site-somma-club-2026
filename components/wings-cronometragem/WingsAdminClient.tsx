@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Lock, LogOut, Plus, Trash2, Users, Trophy, Save, AlertCircle,
   ChevronDown, X, Eye, EyeOff, Pencil, Copy, Camera, ImageIcon,
@@ -492,8 +492,8 @@ function ColunaRegistrarRun({
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label htmlFor="input-bateria" className="text-[10px] uppercase tracking-wider text-white/60">
-              Bateria <span className="text-white/30">(opcional)</span>
+            <label htmlFor="input-bateria" className="text-[10px] uppercase tracking-wider text-wfl-yellow font-bold">
+              Bateria <span className="text-white/40 font-normal">(qual rodada?)</span>
             </label>
             <input
               id="input-bateria"
@@ -503,9 +503,10 @@ function ColunaRegistrarRun({
               step="1"
               value={bateriaStr}
               onChange={e => setBateriaStr(e.target.value)}
-              placeholder="1"
-              className="mt-1 w-full min-h-12 bg-black/40 border border-white/15 px-3 text-base text-white outline-none focus:border-wfl-yellow tabular-nums"
+              placeholder="1, 2, 3…"
+              className="mt-1 w-full min-h-12 bg-black/40 border-2 border-wfl-yellow/40 px-3 text-base text-white outline-none focus:border-wfl-yellow tabular-nums font-bold"
             />
+            <p className="mt-1 text-[9px] text-white/50">Identifica em qual rodada a equipe correu</p>
           </div>
           <div>
             <label htmlFor="input-raia" className="text-[10px] uppercase tracking-wider text-white/60">
@@ -945,11 +946,19 @@ function ColunaRunsSalvas({
 }) {
   const [filtroFase, setFiltroFase] = useState<'todas' | Fase>('todas')
   const [filtroTipo, setFiltroTipo] = useState<'todos' | TipoProva>('todos')
+  const [filtroBateria, setFiltroBateria] = useState<'todas' | number>('todas')
   const [editar, setEditar] = useState<RunComp | null>(null)
+
+  const bateriasDisponiveis = useMemo(() => {
+    const set = new Set<number>()
+    runs.forEach(r => { if (r.bateria != null) set.add(r.bateria) })
+    return Array.from(set).sort((a, b) => a - b)
+  }, [runs])
 
   const runsFiltradas = runs
     .filter(r => filtroFase === 'todas' || r.fase === filtroFase)
     .filter(r => filtroTipo === 'todos' || r.tipo_prova === filtroTipo)
+    .filter(r => filtroBateria === 'todas' || r.bateria === filtroBateria)
     .slice()
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
@@ -1007,6 +1016,33 @@ function ColunaRunsSalvas({
         ))}
       </div>
 
+      {bateriasDisponiveis.length > 0 && (
+        <div className="mb-3">
+          <p className="text-[9px] uppercase tracking-wider text-white/40 mb-1">Filtrar por bateria</p>
+          <div className="flex flex-wrap gap-1">
+            <button
+              onClick={() => setFiltroBateria('todas')}
+              className={`min-h-9 px-3 text-[10px] font-bold uppercase tracking-wider transition-colors ${
+                filtroBateria === 'todas' ? 'bg-wfl-yellow text-wfl-navy' : 'bg-black/40 text-white/60 hover:bg-black/60'
+              }`}
+            >
+              Todas
+            </button>
+            {bateriasDisponiveis.map(b => (
+              <button
+                key={b}
+                onClick={() => setFiltroBateria(b)}
+                className={`min-h-9 min-w-9 px-2 text-xs font-bold tabular-nums transition-colors ${
+                  filtroBateria === b ? 'bg-wfl-yellow text-wfl-navy' : 'bg-black/40 text-white/60 hover:bg-black/60'
+                }`}
+              >
+                Bat. {b}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <ul className="space-y-1.5 max-h-[60vh] overflow-y-auto pr-1">
         {runsFiltradas.length === 0 && (
           <li className="text-sm text-white/40 text-center py-8 border border-dashed border-white/10">
@@ -1020,6 +1056,20 @@ function ColunaRunsSalvas({
           return (
             <li key={r.id} className="flex items-center gap-2 bg-black/30 border border-white/5 px-2 py-2">
               {a && <AvatarAtletica a={a} size={32} />}
+              {r.bateria != null ? (
+                <div
+                  className="flex-shrink-0 w-10 h-10 flex flex-col items-center justify-center bg-wfl-yellow text-wfl-navy font-bold leading-none"
+                  title={`Bateria ${r.bateria}`}
+                >
+                  <span className="text-[8px] uppercase tracking-wider">Bat</span>
+                  <span className="text-base tabular-nums">{r.bateria}</span>
+                </div>
+              ) : (
+                <div className="flex-shrink-0 w-10 h-10 flex flex-col items-center justify-center bg-black/40 border border-dashed border-white/15 text-white/30 leading-none">
+                  <span className="text-[8px] uppercase tracking-wider">Bat</span>
+                  <span className="text-base">?</span>
+                </div>
+              )}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <p className="text-sm font-semibold truncate">{a?.nome ?? '—'}</p>
@@ -1035,8 +1085,7 @@ function ColunaRunsSalvas({
                 </div>
                 <p className="text-[10px] uppercase tracking-wider text-white/40">
                   {r.fase === 'classificatoria' ? 'Class.' : 'Final'}
-                  {r.bateria != null && <> · Bat. {r.bateria}</>}
-                  {r.raia != null && <> · R{r.raia}</>}
+                  {r.raia != null && <> · Raia {r.raia}</>}
                   {' · '}
                   {new Date(r.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                 </p>
