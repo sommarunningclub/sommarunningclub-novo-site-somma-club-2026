@@ -1071,10 +1071,12 @@ function ColunaRunsSalvas({
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-semibold truncate">{a?.nome ?? '—'}</p>
+                <p className="text-sm sm:text-base font-semibold leading-tight break-words" title={a?.nome ?? ''}>
+                  {a?.nome ?? '—'}
+                </p>
+                <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px] uppercase tracking-wider text-white/40">
                   <span
-                    className={`flex-shrink-0 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                    className={`px-1.5 py-0.5 text-[9px] font-bold ${
                       r.tipo_prova === 'normal'
                         ? 'bg-wfl-yellow/20 text-wfl-yellow'
                         : 'bg-wfl-red/30 text-white'
@@ -1082,13 +1084,13 @@ function ColunaRunsSalvas({
                   >
                     {r.tipo_prova === 'normal' ? 'Atletismo' : 'Dinâmica'}
                   </span>
+                  <span>
+                    {r.fase === 'classificatoria' ? 'Class.' : 'Final'}
+                    {r.raia != null && <> · Raia {r.raia}</>}
+                    {' · '}
+                    {new Date(r.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                  </span>
                 </div>
-                <p className="text-[10px] uppercase tracking-wider text-white/40">
-                  {r.fase === 'classificatoria' ? 'Class.' : 'Final'}
-                  {r.raia != null && <> · Raia {r.raia}</>}
-                  {' · '}
-                  {new Date(r.created_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                </p>
               </div>
               <div className="text-right tabular-nums">
                 <div className={`font-mono text-sm font-bold ${totalPen > 0 ? 'text-wfl-red' : 'text-wfl-yellow'}`}>
