@@ -234,7 +234,7 @@ export default function WingsAdminClient() {
       </header>
 
       <div
-        className="max-w-7xl mx-auto px-3 sm:px-6 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6"
+        className="max-w-[1600px] mx-auto px-3 sm:px-6 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-[1fr_1fr_1.7fr] gap-4 sm:gap-6"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)' }}
       >
         <div className={`${aba === 'registrar' ? 'block' : 'hidden'} lg:block lg:order-1`}>
