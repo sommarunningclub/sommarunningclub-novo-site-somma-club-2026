@@ -9,6 +9,7 @@ import {
 import Cronometro from './Cronometro'
 import PodioPreview from './PodioPreview'
 import EventosArquivados from './EventosArquivados'
+import ArquivoBrowser from './ArquivoBrowser'
 import { msParaDisplay, displayParaMs, segundosParaMs, MODALIDADES, TIPO_PROVA_LABEL } from '@/lib/wings-cronometragem/tempo'
 import type { AtleticaComp, AtletaComp, RunComp } from '@/lib/wings-cronometragem/types'
 import type { Fase, Sexo, Modalidade, TipoProva } from '@/lib/wings-cronometragem/tempo'
@@ -32,8 +33,14 @@ export default function WingsAdminClient() {
   const [toast, setToast] = useState<Toast>(null)
   const [modalConfig, setModalConfig] = useState(false)
   const [modalArquivos, setModalArquivos] = useState(false)
+  const [forcarModoEvento, setForcarModoEvento] = useState(false)
 
   const [aba, setAba] = useState<Aba>('registrar')
+
+  // "Modo arquivo" = não há evento ativo (zero atléticas, zero runs).
+  // Nesse caso, esconde todo o admin de cronometragem e mostra só
+  // o navegador de pastas (eventos arquivados).
+  const modoArquivo = !forcarModoEvento && atleticas.length === 0 && runs.length === 0
 
   useEffect(() => {
     let cancelado = false
@@ -173,39 +180,45 @@ export default function WingsAdminClient() {
           <div className="min-w-0">
             <p className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-wfl-yellow font-bold">Acesso Somma</p>
             <h1 className="text-lg sm:text-2xl uppercase leading-none truncate" style={fontDisplay}>
-              Cronometragem
+              {modoArquivo ? 'Arquivo de Eventos' : 'Cronometragem'}
             </h1>
           </div>
           <div className="flex items-center gap-1 flex-shrink-0">
-            <a
-              href="/wings/ranking"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs font-semibold uppercase tracking-wider text-wfl-yellow hover:bg-white/5 rounded transition-colors"
-              aria-label="Abrir ranking ao vivo"
-              title="Ranking ao vivo"
-            >
-              <Trophy className="w-4 h-4" />
-              <span className="hidden sm:inline">Ranking</span>
-            </a>
-            <button
-              onClick={() => setModalArquivos(true)}
-              className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-wfl-yellow hover:bg-wfl-yellow/10 rounded transition-colors"
-              aria-label="Eventos arquivados"
-              title="Eventos arquivados"
-            >
-              <Archive className="w-4 h-4" />
-              <span className="hidden sm:inline">Arquivos</span>
-            </button>
-            <button
-              onClick={() => setModalConfig(true)}
-              className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-white/60 hover:text-white hover:bg-white/5 rounded transition-colors"
-              aria-label="Configurações"
-              title="Configurações"
-            >
-              <Settings className="w-4 h-4" />
-              <span className="hidden sm:inline">Config</span>
-            </button>
+            {!modoArquivo && (
+              <a
+                href="/wings/ranking"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs font-semibold uppercase tracking-wider text-wfl-yellow hover:bg-white/5 rounded transition-colors"
+                aria-label="Abrir ranking ao vivo"
+                title="Ranking ao vivo"
+              >
+                <Trophy className="w-4 h-4" />
+                <span className="hidden sm:inline">Ranking</span>
+              </a>
+            )}
+            {!modoArquivo && (
+              <button
+                onClick={() => setModalArquivos(true)}
+                className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-wfl-yellow hover:bg-wfl-yellow/10 rounded transition-colors"
+                aria-label="Eventos arquivados"
+                title="Eventos arquivados"
+              >
+                <Archive className="w-4 h-4" />
+                <span className="hidden sm:inline">Arquivos</span>
+              </button>
+            )}
+            {!modoArquivo && (
+              <button
+                onClick={() => setModalConfig(true)}
+                className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-white/60 hover:text-white hover:bg-white/5 rounded transition-colors"
+                aria-label="Configurações"
+                title="Configurações"
+              >
+                <Settings className="w-4 h-4" />
+                <span className="hidden sm:inline">Config</span>
+              </button>
+            )}
             <button
               onClick={logout}
               className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-white/60 hover:text-white hover:bg-white/5 rounded transition-colors"
@@ -219,6 +232,7 @@ export default function WingsAdminClient() {
         </div>
 
         {/* Tabs (só mobile) */}
+        {!modoArquivo && (
         <nav className="lg:hidden border-t border-white/10 grid grid-cols-3" role="tablist">
           {([
             { id: 'registrar', label: 'Run', Icon: Trophy },
@@ -243,8 +257,16 @@ export default function WingsAdminClient() {
             </button>
           ))}
         </nav>
+        )}
       </header>
 
+      {modoArquivo ? (
+        <ArquivoBrowser
+          showToast={showToast}
+          onNovoEvento={() => setForcarModoEvento(true)}
+        />
+      ) : (
+        <>
       <BarraClassificatoria atleticas={atleticas} onChange={carregarTudo} showToast={showToast} />
 
       <div
@@ -277,6 +299,8 @@ export default function WingsAdminClient() {
           />
         </div>
       </div>
+        </>
+      )}
 
       {modalConfig && (
         <ModalConfig
@@ -291,7 +315,11 @@ export default function WingsAdminClient() {
 
       {modalArquivos && (
         <EventosArquivados
-          onClose={() => setModalArquivos(false)}
+          onClose={() => {
+            setModalArquivos(false)
+            // Recarrega — pode ter limpado o evento ativo
+            carregarTudo()
+          }}
           showToast={showToast}
         />
       )}

@@ -90,6 +90,28 @@ export default function EventosArquivados({
     }
   }
 
+  async function limparEventoAtual() {
+    if (
+      !confirm(
+        'Limpar evento atual?\n\nIsso APAGA todas as atléticas, atletas e runs ativas.\nRecomendado APENAS depois de arquivar o evento.\n\nO admin volta para o modo arquivo (só pastas).'
+      )
+    ) return
+    if (!confirm('Confirme novamente: APAGAR todos os dados ativos?')) return
+    const res = await fetch('/api/wings-comp/reset', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ escopo: 'tudo', confirmacao: 'ZERAR' }),
+    })
+    const j = await res.json()
+    if (!res.ok) {
+      showToast({ tipo: 'erro', msg: j.error || 'Erro ao limpar.' })
+      return
+    }
+    showToast({ tipo: 'ok', msg: '🗑️ Evento ativo limpo. Admin entrará em modo arquivo.' })
+    // Fecha modal pra parent recarregar e detectar estado vazio
+    onClose()
+  }
+
   async function excluir(e: EventoLista) {
     if (!confirm(`Excluir o arquivo "${e.nome}"?\nIsso é irreversível.`)) return
     const res = await fetch(`/api/wings-comp/eventos-arquivados?id=${e.id}`, { method: 'DELETE' })
@@ -126,16 +148,25 @@ export default function EventosArquivados({
 
           <div className="p-4 sm:p-6">
             {!criandoNovo && (
-              <div className="mb-4 flex items-center justify-between gap-2">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <p className="text-xs text-white/50">
                   {eventos.length} evento{eventos.length === 1 ? '' : 's'} arquivado{eventos.length === 1 ? '' : 's'}
                 </p>
-                <button
-                  onClick={() => setCriandoNovo(true)}
-                  className="inline-flex items-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy text-[10px] font-bold uppercase tracking-wider px-3 py-2 min-h-9"
-                >
-                  <Plus className="w-3.5 h-3.5" /> Arquivar evento atual
-                </button>
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <button
+                    onClick={limparEventoAtual}
+                    className="inline-flex items-center gap-1.5 bg-wfl-red/80 hover:bg-wfl-red text-white text-[10px] font-bold uppercase tracking-wider px-3 py-2 min-h-9"
+                    title="Apaga o evento ativo (use depois de arquivar)"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" /> Limpar evento atual
+                  </button>
+                  <button
+                    onClick={() => setCriandoNovo(true)}
+                    className="inline-flex items-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy text-[10px] font-bold uppercase tracking-wider px-3 py-2 min-h-9"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Arquivar evento atual
+                  </button>
+                </div>
               </div>
             )}
 
