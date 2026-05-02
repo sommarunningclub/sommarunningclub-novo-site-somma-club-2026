@@ -7,9 +7,9 @@ import {
   Settings, Download, RotateCw, ListOrdered,
 } from 'lucide-react'
 import Cronometro from './Cronometro'
-import { msParaDisplay, displayParaMs, segundosParaMs, MODALIDADES } from '@/lib/wings-cronometragem/tempo'
+import { msParaDisplay, displayParaMs, segundosParaMs, MODALIDADES, TIPO_PROVA_LABEL } from '@/lib/wings-cronometragem/tempo'
 import type { AtleticaComp, AtletaComp, RunComp } from '@/lib/wings-cronometragem/types'
-import type { Fase, Sexo, Modalidade } from '@/lib/wings-cronometragem/tempo'
+import type { Fase, Sexo, Modalidade, TipoProva } from '@/lib/wings-cronometragem/tempo'
 
 const fontDisplay = { fontFamily: 'var(--font-bebas), sans-serif' }
 const fontBody = { fontFamily: 'var(--font-dm-sans-wfl), sans-serif' }
@@ -241,6 +241,7 @@ export default function WingsAdminClient() {
           <ColunaRegistrarRun
             atleticas={atleticas}
             atletasPorAtletica={atletasPorAtletica}
+            runs={runs}
             showToast={showToast}
             onSaved={carregarTudo}
           />
@@ -299,16 +300,19 @@ export default function WingsAdminClient() {
 function ColunaRegistrarRun({
   atleticas,
   atletasPorAtletica,
+  runs,
   showToast,
   onSaved,
 }: {
   atleticas: AtleticaComp[]
   atletasPorAtletica: Record<string, AtletaComp[]>
+  runs: RunComp[]
   showToast: (t: NonNullable<Toast>) => void
   onSaved: () => Promise<void>
 }) {
   const [atleticaId, setAtleticaId] = useState('')
   const [fase, setFase] = useState<Fase>('classificatoria')
+  const [tipoProva, setTipoProva] = useState<TipoProva>('normal')
   const [bateriaStr, setBateriaStr] = useState('')
   const [raiaStr, setRaiaStr] = useState('')
   const [tempoStr, setTempoStr] = useState('')
@@ -318,10 +322,13 @@ function ColunaRegistrarRun({
 
   const tempoBrutoMs = displayParaMs(tempoStr)
   const tempoBrutoValido = !isNaN(tempoBrutoMs) && tempoBrutoMs > 0
-  const penalidadesMs = pen.map(s => {
-    const n = Number(String(s).replace(',', '.'))
-    return isNaN(n) ? 0 : segundosParaMs(n)
-  }) as [number, number, number, number]
+  // Penalidades só fazem sentido na prova dinâmica
+  const penalidadesMs = (tipoProva === 'dinamico'
+    ? pen.map(s => {
+        const n = Number(String(s).replace(',', '.'))
+        return isNaN(n) ? 0 : segundosParaMs(n)
+      })
+    : [0, 0, 0, 0]) as [number, number, number, number]
   const totalPenalidades = penalidadesMs.reduce((a, b) => a + b, 0)
   const tempoFinalMs = tempoBrutoValido ? tempoBrutoMs + totalPenalidades : 0
 
@@ -331,6 +338,13 @@ function ColunaRegistrarRun({
     atleticaId &&
     (atletasDaAtletica.filter(a => a.sexo === 'M').length < 2 ||
       atletasDaAtletica.filter(a => a.sexo === 'F').length < 2)
+
+  // Indicador de progresso da equipe selecionada nesta fase
+  const runsDaEquipeNaFase = atleticaId
+    ? runs.filter(r => r.atletica_id === atleticaId && r.fase === fase)
+    : []
+  const temNormal = runsDaEquipeNaFase.some(r => r.tipo_prova === 'normal')
+  const temDinamico = runsDaEquipeNaFase.some(r => r.tipo_prova === 'dinamico')
 
   async function salvar(e: React.FormEvent) {
     e.preventDefault()
@@ -344,6 +358,7 @@ function ColunaRegistrarRun({
         body: JSON.stringify({
           atletica_id: atleticaId,
           fase,
+          tipo_prova: tipoProva,
           bateria: bateriaStr ? Number(bateriaStr) : null,
           raia: raiaStr ? Number(raiaStr) : null,
           tempo_bruto_ms: tempoBrutoMs,
@@ -356,7 +371,7 @@ function ColunaRegistrarRun({
       })
       const j = await res.json()
       if (!res.ok) return showToast({ tipo: 'erro', msg: j.error || 'Erro ao salvar.' })
-      showToast({ tipo: 'ok', msg: `✅ Run da ${atleticaSelecionada?.nome ?? 'equipe'} salvo!` })
+      showToast({ tipo: 'ok', msg: `✅ ${TIPO_PROVA_LABEL[tipoProva]} da ${atleticaSelecionada?.nome ?? 'equipe'} salva!` })
       setTempoStr('')
       setPen(['0', '0', '0', '0'])
       setObs('')
@@ -405,6 +420,29 @@ function ColunaRegistrarRun({
               <AlertCircle className="w-3 h-3" /> Equipe ainda não está completa (mínimo 2M + 2F).
             </p>
           )}
+
+          {/* Indicador de progresso da equipe na fase: ✓ Normal · ⏳ Dinâmica */}
+          {atleticaId && (
+            <div className="mt-2 flex items-center gap-2 text-[10px] uppercase tracking-wider">
+              <span
+                className={`inline-flex items-center gap-1 px-1.5 py-0.5 ${
+                  temNormal ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                {temNormal ? '✓' : '○'} Normal
+              </span>
+              <span
+                className={`inline-flex items-center gap-1 px-1.5 py-0.5 ${
+                  temDinamico ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/5 text-white/40'
+                }`}
+              >
+                {temDinamico ? '✓' : '○'} Dinâmica
+              </span>
+              {temNormal && temDinamico && (
+                <span className="text-emerald-400">· combinada disponível</span>
+              )}
+            </div>
+          )}
         </div>
 
         <div>
@@ -423,6 +461,33 @@ function ColunaRegistrarRun({
               </button>
             ))}
           </div>
+        </div>
+
+        <div>
+          <label className="text-[10px] uppercase tracking-wider text-white/60">Tipo da prova</label>
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            {(['normal', 'dinamico'] as TipoProva[]).map(t => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTipoProva(t)}
+                className={`min-h-11 text-xs font-bold uppercase tracking-wider transition-colors ${
+                  tipoProva === t
+                    ? t === 'normal'
+                      ? 'bg-wfl-yellow text-wfl-navy'
+                      : 'bg-wfl-red text-white'
+                    : 'bg-black/40 text-white/60 hover:bg-black/60'
+                }`}
+              >
+                {t === 'normal' ? 'Atletismo' : 'Dinâmica'}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1 text-[10px] text-white/40">
+            {tipoProva === 'normal'
+              ? '4×100m corrida tradicional. Sem penalidades por modalidade.'
+              : '4×100m com 4 estilos: saltada · lateral E · costas · lateral D.'}
+          </p>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -478,35 +543,37 @@ function ColunaRegistrarRun({
           )}
         </div>
 
-        <div>
-          <label className="text-[10px] uppercase tracking-wider text-white/60">
-            Penalidades por modalidade (segundos)
-          </label>
-          <div className="mt-1 space-y-1.5">
-            {MODALIDADES.map((m, i) => (
-              <div key={m.num} className="flex items-center gap-2 bg-black/30 border border-white/5 px-2 py-1.5">
-                <span className="w-7 h-7 flex-shrink-0 flex items-center justify-center bg-wfl-yellow/20 text-wfl-yellow text-xs font-bold">
-                  {m.num}
-                </span>
-                <span className="flex-1 text-xs text-white/70 truncate">{m.nome}</span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  step="0.1"
-                  min="0"
-                  value={pen[i]}
-                  onChange={e => {
-                    const novo = [...pen] as typeof pen
-                    novo[i] = e.target.value
-                    setPen(novo)
-                  }}
-                  className="w-20 min-h-9 bg-black/50 border border-white/10 px-2 text-sm text-white outline-none focus:border-wfl-yellow text-right tabular-nums"
-                />
-                <span className="text-[10px] text-white/40 w-2">s</span>
-              </div>
-            ))}
+        {tipoProva === 'dinamico' && (
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-white/60">
+              Penalidades por modalidade (segundos)
+            </label>
+            <div className="mt-1 space-y-1.5">
+              {MODALIDADES.map((m, i) => (
+                <div key={m.num} className="flex items-center gap-2 bg-black/30 border border-white/5 px-2 py-1.5">
+                  <span className="w-7 h-7 flex-shrink-0 flex items-center justify-center bg-wfl-yellow/20 text-wfl-yellow text-xs font-bold">
+                    {m.num}
+                  </span>
+                  <span className="flex-1 text-xs text-white/70 truncate">{m.nome}</span>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    step="0.1"
+                    min="0"
+                    value={pen[i]}
+                    onChange={e => {
+                      const novo = [...pen] as typeof pen
+                      novo[i] = e.target.value
+                      setPen(novo)
+                    }}
+                    className="w-20 min-h-9 bg-black/50 border border-white/10 px-2 text-sm text-white outline-none focus:border-wfl-yellow text-right tabular-nums"
+                  />
+                  <span className="text-[10px] text-white/40 w-2">s</span>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div>
           <label htmlFor="input-obs" className="text-[10px] uppercase tracking-wider text-white/60">
@@ -527,12 +594,16 @@ function ColunaRegistrarRun({
               {tempoBrutoValido ? msParaDisplay(tempoBrutoMs) : '--:--.---'}
             </span>
           </div>
-          <div className="flex items-baseline justify-between text-[10px] uppercase tracking-wider text-white/50 mt-1">
-            <span>Σ Penalidades</span>
-            <span className="font-mono text-sm text-white tabular-nums">+{(totalPenalidades / 1000).toFixed(2)}s</span>
-          </div>
+          {tipoProva === 'dinamico' && (
+            <div className="flex items-baseline justify-between text-[10px] uppercase tracking-wider text-white/50 mt-1">
+              <span>Σ Penalidades</span>
+              <span className="font-mono text-sm text-white tabular-nums">+{(totalPenalidades / 1000).toFixed(2)}s</span>
+            </div>
+          )}
           <div className="flex items-baseline justify-between mt-2 pt-2 border-t border-white/10">
-            <span className="text-[10px] uppercase tracking-wider text-wfl-yellow font-bold">Tempo final</span>
+            <span className="text-[10px] uppercase tracking-wider text-wfl-yellow font-bold">
+              Tempo {tipoProva === 'normal' ? '(atletismo)' : '(dinâmica)'}
+            </span>
             <span
               className={`font-mono text-3xl font-bold tabular-nums leading-none ${
                 totalPenalidades > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
@@ -870,10 +941,12 @@ function ColunaRunsSalvas({
   showToast: (t: NonNullable<Toast>) => void
 }) {
   const [filtroFase, setFiltroFase] = useState<'todas' | Fase>('todas')
+  const [filtroTipo, setFiltroTipo] = useState<'todos' | TipoProva>('todos')
   const [editar, setEditar] = useState<RunComp | null>(null)
 
   const runsFiltradas = runs
     .filter(r => filtroFase === 'todas' || r.fase === filtroFase)
+    .filter(r => filtroTipo === 'todos' || r.tipo_prova === filtroTipo)
     .slice()
     .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
@@ -900,7 +973,7 @@ function ColunaRunsSalvas({
         </h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-1 mb-3">
+      <div className="grid grid-cols-3 gap-1 mb-2">
         {(['todas', 'classificatoria', 'final'] as const).map(f => (
           <button
             key={f}
@@ -910,6 +983,23 @@ function ColunaRunsSalvas({
             }`}
           >
             {f === 'todas' ? 'Todas' : f === 'classificatoria' ? 'Classific.' : 'Final'}
+          </button>
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-1 mb-3">
+        {(['todos', 'normal', 'dinamico'] as const).map(t => (
+          <button
+            key={t}
+            onClick={() => setFiltroTipo(t)}
+            className={`min-h-9 text-[10px] font-bold uppercase tracking-wider transition-colors ${
+              filtroTipo === t
+                ? t === 'normal'
+                  ? 'bg-wfl-yellow text-wfl-navy'
+                  : 'bg-wfl-red text-white'
+                : 'bg-black/40 text-white/60 hover:bg-black/60'
+            }`}
+          >
+            {t === 'todos' ? 'Tipo: todos' : t === 'normal' ? 'Atletismo' : 'Dinâmica'}
           </button>
         ))}
       </div>
@@ -928,7 +1018,18 @@ function ColunaRunsSalvas({
             <li key={r.id} className="flex items-center gap-2 bg-black/30 border border-white/5 px-2 py-2">
               {a && <AvatarAtletica a={a} size={32} />}
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold truncate">{a?.nome ?? '—'}</p>
+                <div className="flex items-center gap-1.5">
+                  <p className="text-sm font-semibold truncate">{a?.nome ?? '—'}</p>
+                  <span
+                    className={`flex-shrink-0 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
+                      r.tipo_prova === 'normal'
+                        ? 'bg-wfl-yellow/20 text-wfl-yellow'
+                        : 'bg-wfl-red/30 text-white'
+                    }`}
+                  >
+                    {r.tipo_prova === 'normal' ? 'Atletismo' : 'Dinâmica'}
+                  </span>
+                </div>
                 <p className="text-[10px] uppercase tracking-wider text-white/40">
                   {r.fase === 'classificatoria' ? 'Class.' : 'Final'}
                   {r.bateria != null && <> · Bat. {r.bateria}</>}
@@ -1394,6 +1495,7 @@ function ModalEditarRun({
   showToast: (t: NonNullable<Toast>) => void
 }) {
   const [fase, setFase] = useState<Fase>(run.fase)
+  const [tipoProva, setTipoProva] = useState<TipoProva>(run.tipo_prova)
   const [bateriaStr, setBateriaStr] = useState(run.bateria != null ? String(run.bateria) : '')
   const [raiaStr, setRaiaStr] = useState(run.raia != null ? String(run.raia) : '')
   const [tempoStr, setTempoStr] = useState(msParaDisplay(run.tempo_bruto_ms))
@@ -1424,6 +1526,7 @@ function ModalEditarRun({
         body: JSON.stringify({
           id: run.id,
           fase,
+          tipo_prova: tipoProva,
           bateria: bateriaStr === '' ? null : Number(bateriaStr),
           raia: raiaStr === '' ? null : Number(raiaStr),
           tempo_bruto_ms: tempoBrutoMs,
@@ -1458,6 +1561,28 @@ function ModalEditarRun({
                 }`}
               >
                 {f === 'classificatoria' ? 'Classificatória' : 'Final'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <label className="text-[10px] uppercase tracking-wider text-white/60">Tipo da prova</label>
+          <div className="mt-1 grid grid-cols-2 gap-2">
+            {(['normal', 'dinamico'] as TipoProva[]).map(t => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setTipoProva(t)}
+                className={`min-h-11 text-xs font-bold uppercase tracking-wider transition-colors ${
+                  tipoProva === t
+                    ? t === 'normal'
+                      ? 'bg-wfl-yellow text-wfl-navy'
+                      : 'bg-wfl-red text-white'
+                    : 'bg-black/40 text-white/60 hover:bg-black/60'
+                }`}
+              >
+                {t === 'normal' ? 'Atletismo' : 'Dinâmica'}
               </button>
             ))}
           </div>
@@ -1505,32 +1630,34 @@ function ModalEditarRun({
           />
         </div>
 
-        <div>
-          <label className="text-[10px] uppercase tracking-wider text-white/60">Penalidades (s)</label>
-          <div className="mt-1 space-y-1.5">
-            {MODALIDADES.map((m, i) => (
-              <div key={m.num} className="flex items-center gap-2 bg-black/30 border border-white/5 px-2 py-1.5">
-                <span className="w-7 h-7 flex-shrink-0 flex items-center justify-center bg-wfl-yellow/20 text-wfl-yellow text-xs font-bold">
-                  {m.num}
-                </span>
-                <span className="flex-1 text-xs text-white/70 truncate">{m.nome}</span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  step="0.1"
-                  min="0"
-                  value={pen[i]}
-                  onChange={e => {
-                    const novo = [...pen] as typeof pen
-                    novo[i] = e.target.value
-                    setPen(novo)
-                  }}
-                  className="w-20 min-h-9 bg-black/50 border border-white/10 px-2 text-sm text-white outline-none focus:border-wfl-yellow text-right tabular-nums"
-                />
-              </div>
-            ))}
+        {tipoProva === 'dinamico' && (
+          <div>
+            <label className="text-[10px] uppercase tracking-wider text-white/60">Penalidades (s)</label>
+            <div className="mt-1 space-y-1.5">
+              {MODALIDADES.map((m, i) => (
+                <div key={m.num} className="flex items-center gap-2 bg-black/30 border border-white/5 px-2 py-1.5">
+                  <span className="w-7 h-7 flex-shrink-0 flex items-center justify-center bg-wfl-yellow/20 text-wfl-yellow text-xs font-bold">
+                    {m.num}
+                  </span>
+                  <span className="flex-1 text-xs text-white/70 truncate">{m.nome}</span>
+                  <input
+                    type="number"
+                    inputMode="decimal"
+                    step="0.1"
+                    min="0"
+                    value={pen[i]}
+                    onChange={e => {
+                      const novo = [...pen] as typeof pen
+                      novo[i] = e.target.value
+                      setPen(novo)
+                    }}
+                    className="w-20 min-h-9 bg-black/50 border border-white/10 px-2 text-sm text-white outline-none focus:border-wfl-yellow text-right tabular-nums"
+                  />
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         <div>
           <label className="text-[10px] uppercase tracking-wider text-white/60">Observações</label>
@@ -1581,7 +1708,7 @@ function ModalConfig({
 
   function exportarCSV() {
     const linhas = [
-      ['Atletica', 'Sigla', 'Fase', 'Bateria', 'Raia', 'Tempo Bruto (ms)', 'Pen 1', 'Pen 2', 'Pen 3', 'Pen 4', 'Tempo Final (ms)', 'Observações', 'Criado em'],
+      ['Atletica', 'Sigla', 'Fase', 'Tipo', 'Bateria', 'Raia', 'Tempo Bruto (ms)', 'Pen 1', 'Pen 2', 'Pen 3', 'Pen 4', 'Tempo Final (ms)', 'Observações', 'Criado em'],
     ]
     const ordenadas = runs
       .slice()
@@ -1592,6 +1719,7 @@ function ModalConfig({
         a?.nome ?? '—',
         a?.sigla ?? '',
         r.fase,
+        r.tipo_prova,
         r.bateria != null ? String(r.bateria) : '',
         r.raia != null ? String(r.raia) : '',
         String(r.tempo_bruto_ms),

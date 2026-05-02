@@ -26,15 +26,16 @@ export default function WingsRankingClient() {
     return () => clearInterval(id)
   }, [])
 
-  // Atléticas classificadas para final = top 8 das classificatórias
+  // Atléticas classificadas para final = top 8 das classificatórias COMPLETAS
   const classificadasParaFinal = (() => {
     if (fase !== 'classificatoria') return new Set<string>()
-    const comTempo = ranking.filter(r => r.melhorRun)
-    return new Set(comTempo.slice(0, 8).map(r => r.atletica.id))
+    const completas = ranking.filter(r => r.estado === 'completo')
+    return new Set(completas.slice(0, 8).map(r => r.atletica.id))
   })()
 
-  // Tempo do líder pra calcular gap
-  const tempoLider = ranking.find(r => r.melhorRun)?.melhorRun?.tempo_final_ms ?? null
+  // Tempo do líder (combinado) pra calcular gap
+  const tempoLider =
+    ranking.find(r => r.estado === 'completo')?.tempoCombinadoMs ?? null
 
   // Última atualização
   const ultimaRunMs = runs.reduce((max, r) => {
@@ -190,7 +191,7 @@ export default function WingsRankingClient() {
 
         {/* Meta */}
         <div className="mt-5 sm:mt-7 flex flex-col sm:flex-row sm:justify-between items-center gap-2 text-[10px] sm:text-xs text-white/40 uppercase tracking-wider">
-          <span>Tempo final = bruto + soma das penalidades</span>
+          <span>Tempo combinado = atletismo + dinâmica</span>
           {segDesdeUpdate != null && (
             <span className="tabular-nums">
               Última run há {segDesdeUpdate < 60 ? `${segDesdeUpdate}s` : `${Math.floor(segDesdeUpdate / 60)}min`}
@@ -223,26 +224,19 @@ function RankingRowItem({
   classificadaParaFinal: boolean
   telao: boolean
 }) {
-  const { atletica, atletas, melhorRun, posicao } = linha
-  const top3 = posicao >= 1 && posicao <= 3
-  const totalPenalidades = melhorRun
-    ? melhorRun.penalidade_1_ms +
-      melhorRun.penalidade_2_ms +
-      melhorRun.penalidade_3_ms +
-      melhorRun.penalidade_4_ms
-    : 0
+  const { atletica, atletas, melhorRunNormal, melhorRunDinamico, tempoCombinadoMs, totalPenalidadesMs, estado, posicao } = linha
+  const top3 = estado === 'completo' && posicao >= 1 && posicao <= 3
   const gap =
-    melhorRun && tempoLider != null && melhorRun.tempo_final_ms !== tempoLider
-      ? melhorRun.tempo_final_ms - tempoLider
+    estado === 'completo' && tempoLider != null && tempoCombinadoMs != null && tempoCombinadoMs !== tempoLider
+      ? tempoCombinadoMs - tempoLider
       : null
 
-  // Anim subtle quando posição muda — usa key + animação CSS
+  // Anim subtle quando posição muda
   const ref = useRef<HTMLLIElement>(null)
   const posRef = useRef(posicao)
   useEffect(() => {
     if (posRef.current !== posicao && ref.current) {
       ref.current.classList.remove('ring-2', 'ring-wfl-yellow')
-      // force reflow
       void ref.current.offsetWidth
       ref.current.classList.add('ring-2', 'ring-wfl-yellow')
       const t = setTimeout(() => {
@@ -254,13 +248,18 @@ function RankingRowItem({
     posRef.current = posicao
   }, [posicao])
 
+  const corBorda =
+    estado === 'completo'
+      ? atletica.cor
+      : estado === 'parcial'
+        ? 'rgba(245,158,11,0.6)' // amber
+        : 'rgba(255,255,255,0.1)'
+
   return (
     <li
       ref={ref}
       className="relative bg-white/5 border-l-4 transition-all duration-500"
-      style={{
-        borderLeftColor: melhorRun ? atletica.cor : 'rgba(255,255,255,0.1)',
-      }}
+      style={{ borderLeftColor: corBorda }}
     >
       <div
         className={`grid items-center gap-2 sm:gap-3 ${
@@ -271,7 +270,7 @@ function RankingRowItem({
       >
         {/* Posição / medalha */}
         <div className="flex items-center justify-center">
-          {melhorRun ? (
+          {estado === 'completo' ? (
             top3 ? (
               <span className={telao ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'} aria-label={`${posicao}º lugar`}>
                 {MEDALHAS[posicao - 1]}
@@ -286,6 +285,8 @@ function RankingRowItem({
                 {posicao}º
               </span>
             )
+          ) : estado === 'parcial' ? (
+            <span className="text-amber-400 text-[10px] uppercase tracking-wider font-bold">1/2</span>
           ) : (
             <span className="text-white/25 text-xs">—</span>
           )}
@@ -339,8 +340,24 @@ function RankingRowItem({
                 Final
               </span>
             )}
+            {estado === 'parcial' && (
+              <span className="px-1.5 py-0.5 bg-amber-500/30 text-amber-200 text-[9px] font-bold uppercase tracking-wider">
+                {melhorRunNormal ? 'Falta dinâmica' : 'Falta atletismo'}
+              </span>
+            )}
           </div>
-          {atletas.length > 0 && (
+          {/* Breakdown ou atletas */}
+          {estado === 'completo' && melhorRunNormal && melhorRunDinamico ? (
+            <p
+              className={`mt-0.5 text-white/55 tabular-nums ${
+                telao ? 'text-sm' : 'text-[10px] sm:text-xs'
+              }`}
+            >
+              <span className="text-wfl-yellow">A</span> {msParaDisplay(melhorRunNormal.tempo_final_ms)}
+              {' · '}
+              <span className="text-wfl-red">D</span> {msParaDisplay(melhorRunDinamico.tempo_final_ms)}
+            </p>
+          ) : atletas.length > 0 ? (
             <p
               className={`mt-0.5 text-white/50 truncate ${
                 telao ? 'text-sm' : 'text-[10px] sm:text-xs'
@@ -352,31 +369,42 @@ function RankingRowItem({
                 .map(a => a.nome.split(' ')[0])
                 .join(' · ')}
             </p>
-          )}
+          ) : null}
         </div>
 
         {/* Tempo */}
         <div className="text-right tabular-nums leading-tight">
-          {melhorRun ? (
+          {estado === 'completo' && tempoCombinadoMs != null ? (
             <>
               <div
                 className={`font-mono font-bold ${
-                  totalPenalidades > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
+                  totalPenalidadesMs > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
                 } ${telao ? 'text-2xl sm:text-3xl' : 'text-base sm:text-xl'}`}
               >
-                {msParaDisplay(melhorRun.tempo_final_ms)}
+                {msParaDisplay(tempoCombinadoMs)}
               </div>
               <div className={`mt-0.5 ${telao ? 'text-xs' : 'text-[9px] sm:text-[10px]'} text-white/40`}>
-                {totalPenalidades > 0 && (
-                  <span>
-                    bruto {msParaDisplay(melhorRun.tempo_bruto_ms)} · +{(totalPenalidades / 1000).toFixed(1)}s
-                  </span>
+                {totalPenalidadesMs > 0 && (
+                  <span>+{(totalPenalidadesMs / 1000).toFixed(1)}s pen</span>
                 )}
                 {gap != null && (
-                  <span className={totalPenalidades > 0 ? ' · ' : ''}>
+                  <span className={totalPenalidadesMs > 0 ? ' · ' : ''}>
                     +{(gap / 1000).toFixed(2)}s
                   </span>
                 )}
+              </div>
+            </>
+          ) : estado === 'parcial' ? (
+            <>
+              <div
+                className={`font-mono font-bold text-white/70 ${
+                  telao ? 'text-xl sm:text-2xl' : 'text-sm sm:text-base'
+                }`}
+              >
+                {msParaDisplay((melhorRunNormal ?? melhorRunDinamico)!.tempo_final_ms)}
+              </div>
+              <div className={`mt-0.5 ${telao ? 'text-xs' : 'text-[9px] sm:text-[10px]'} text-amber-300`}>
+                Aguarda 2ª prova
               </div>
             </>
           ) : (

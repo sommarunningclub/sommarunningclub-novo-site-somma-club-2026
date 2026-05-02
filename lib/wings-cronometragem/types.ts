@@ -1,4 +1,4 @@
-import type { Fase, Modalidade, Sexo } from './tempo'
+import type { Fase, Modalidade, Sexo, TipoProva } from './tempo'
 
 export type AtleticaComp = {
   id: string
@@ -22,6 +22,7 @@ export type RunComp = {
   id: string
   atletica_id: string
   fase: Fase
+  tipo_prova: TipoProva
   bateria: number | null
   raia: number | null
   tempo_bruto_ms: number
@@ -34,9 +35,23 @@ export type RunComp = {
   created_at: string
 }
 
+export type EstadoEquipe = 'completo' | 'parcial' | 'sem-tempo'
+
 export type RankingRow = {
   atletica: AtleticaComp
   atletas: AtletaComp[]
-  melhorRun: RunComp | null
+  melhorRunNormal: RunComp | null
+  melhorRunDinamico: RunComp | null
+  /** Soma dos tempos finais de normal + dinâmica. null se faltar uma. */
+  tempoCombinadoMs: number | null
+  /** Total de penalidades acumulado nas runs. */
+  totalPenalidadesMs: number
+  estado: EstadoEquipe
   posicao: number
+  /**
+   * Mantido por compat com componentes antigos do show.
+   * Aponta pra "melhor referência" pra animação:
+   * preferência: dinâmico > normal > null.
+   */
+  melhorRun: RunComp | null
 }

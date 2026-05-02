@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Tempo inválido.' }, { status: 400 })
   }
   const fase = body.fase === 'final' ? 'final' : 'classificatoria'
+  const tipo_prova = body.tipo_prova === 'normal' ? 'normal' : 'dinamico'
 
   // bateria: int >= 1 (ou null), raia: int 1-8 (ou null)
   const bateria =
@@ -47,19 +48,28 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Bateria deve ser um inteiro >= 1.' }, { status: 400 })
   }
 
+  // Penalidades só fazem sentido na prova dinâmica (que tem 4 modalidades).
+  // Na prova normal, força tudo a 0.
+  const pen = tipo_prova === 'dinamico'
+    ? {
+        penalidade_1_ms: Math.round(body.penalidade_1_ms ?? 0),
+        penalidade_2_ms: Math.round(body.penalidade_2_ms ?? 0),
+        penalidade_3_ms: Math.round(body.penalidade_3_ms ?? 0),
+        penalidade_4_ms: Math.round(body.penalidade_4_ms ?? 0),
+      }
+    : { penalidade_1_ms: 0, penalidade_2_ms: 0, penalidade_3_ms: 0, penalidade_4_ms: 0 }
+
   const supabase = getServiceClient()
   const { data, error } = await supabase
     .from('wings_comp_runs')
     .insert({
       atletica_id: body.atletica_id,
       fase,
+      tipo_prova,
       bateria,
       raia,
       tempo_bruto_ms: Math.round(body.tempo_bruto_ms),
-      penalidade_1_ms: Math.round(body.penalidade_1_ms ?? 0),
-      penalidade_2_ms: Math.round(body.penalidade_2_ms ?? 0),
-      penalidade_3_ms: Math.round(body.penalidade_3_ms ?? 0),
-      penalidade_4_ms: Math.round(body.penalidade_4_ms ?? 0),
+      ...pen,
       observacoes: body.observacoes?.trim() || null,
     })
     .select('*')
@@ -78,6 +88,16 @@ export async function PATCH(req: NextRequest) {
 
   const update: Record<string, unknown> = {}
   if (body.fase === 'classificatoria' || body.fase === 'final') update.fase = body.fase
+  if (body.tipo_prova === 'normal' || body.tipo_prova === 'dinamico') {
+    update.tipo_prova = body.tipo_prova
+    // Trocou pra normal? zera penalidades automaticamente
+    if (body.tipo_prova === 'normal') {
+      update.penalidade_1_ms = 0
+      update.penalidade_2_ms = 0
+      update.penalidade_3_ms = 0
+      update.penalidade_4_ms = 0
+    }
+  }
   if (typeof body.tempo_bruto_ms === 'number' && body.tempo_bruto_ms >= 0) {
     update.tempo_bruto_ms = Math.round(body.tempo_bruto_ms)
   }
@@ -97,8 +117,12 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'Raia deve ser entre 1 e 8.' }, { status: 400 })
     }
   }
-  for (const k of ['penalidade_1_ms', 'penalidade_2_ms', 'penalidade_3_ms', 'penalidade_4_ms'] as const) {
-    if (typeof body[k] === 'number' && body[k] >= 0) update[k] = Math.round(body[k])
+  // Só aceita penalidades do body se NÃO está trocando pra 'normal'
+  // (caso contrário forçamos zero acima).
+  if (body.tipo_prova !== 'normal') {
+    for (const k of ['penalidade_1_ms', 'penalidade_2_ms', 'penalidade_3_ms', 'penalidade_4_ms'] as const) {
+      if (typeof body[k] === 'number' && body[k] >= 0) update[k] = Math.round(body[k])
+    }
   }
   if (typeof body.observacoes === 'string' || body.observacoes === null) {
     update.observacoes = body.observacoes?.trim() || null

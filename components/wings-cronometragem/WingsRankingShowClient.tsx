@@ -108,7 +108,12 @@ export default function WingsRankingShowClient() {
     ranking.forEach((linha, idx) => {
       const id = linha.atletica.id
       let c = carros.find(x => x.atleticaId === id)
-      const tempo = linha.melhorRun?.tempo_final_ms ?? null
+      // No show usamos o tempo combinado (se completo) ou o melhor disponível
+      const tempo =
+        linha.tempoCombinadoMs ??
+        linha.melhorRunNormal?.tempo_final_ms ??
+        linha.melhorRunDinamico?.tempo_final_ms ??
+        null
       const posAlvo = posPorAtletica.get(id) ?? idx + 1
 
       if (!c) {
@@ -461,7 +466,7 @@ export default function WingsRankingShowClient() {
           <div className="px-3 py-2 border-b border-white/10 flex items-center gap-2">
             <span className="text-[10px] uppercase tracking-[0.25em] text-wfl-yellow font-bold">Top</span>
             <span className="text-[10px] uppercase tracking-wider text-white/40">
-              {ranking.filter(r => r.melhorRun).length}/{ranking.length}
+              {ranking.filter(r => r.estado === 'completo').length}/{ranking.length} completos
             </span>
           </div>
           {loading ? (
@@ -471,13 +476,16 @@ export default function WingsRankingShowClient() {
           ) : (
             <ul>
               {ranking.slice(0, 12).map(linha => {
-                const totalPen = linha.melhorRun
-                  ? linha.melhorRun.penalidade_1_ms +
-                    linha.melhorRun.penalidade_2_ms +
-                    linha.melhorRun.penalidade_3_ms +
-                    linha.melhorRun.penalidade_4_ms
-                  : 0
-                const top3 = linha.posicao >= 1 && linha.posicao <= 3
+                const top3 = linha.estado === 'completo' && linha.posicao >= 1 && linha.posicao <= 3
+                const tempoExibido =
+                  linha.tempoCombinadoMs ??
+                  linha.melhorRunNormal?.tempo_final_ms ??
+                  linha.melhorRunDinamico?.tempo_final_ms ??
+                  null
+                const corTempo =
+                  linha.estado === 'completo'
+                    ? linha.totalPenalidadesMs > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
+                    : 'text-amber-300'
                 return (
                   <li
                     key={linha.atletica.id}
@@ -487,20 +495,19 @@ export default function WingsRankingShowClient() {
                     <div className="min-w-0 flex-1">
                       <p className="text-xs font-semibold truncate flex items-center gap-1.5">
                         {top3 && <span aria-hidden>{['🥇','🥈','🥉'][linha.posicao - 1]}</span>}
-                        {!top3 && linha.melhorRun && (
+                        {!top3 && linha.estado === 'completo' && (
                           <span className="text-white/50 text-[10px] tabular-nums w-4">
                             {linha.posicao}º
                           </span>
                         )}
+                        {linha.estado === 'parcial' && (
+                          <span className="text-amber-400 text-[9px] font-bold tabular-nums w-6">1/2</span>
+                        )}
                         <span className="truncate">{linha.atletica.nome}</span>
                       </p>
                     </div>
-                    <span
-                      className={`font-mono text-[11px] font-bold tabular-nums ${
-                        totalPen > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
-                      }`}
-                    >
-                      {linha.melhorRun ? msParaDisplay(linha.melhorRun.tempo_final_ms) : '—'}
+                    <span className={`font-mono text-[11px] font-bold tabular-nums ${corTempo}`}>
+                      {tempoExibido != null ? msParaDisplay(tempoExibido) : '—'}
                     </span>
                   </li>
                 )
@@ -582,7 +589,9 @@ function UltimaRunBanner({
       <div className="flex items-center gap-3 bg-black/80 backdrop-blur border border-wfl-yellow/40 px-4 py-2.5 shadow-2xl">
         <MiniAvatar a={linha.atletica} size={36} />
         <div>
-          <p className="text-[9px] uppercase tracking-[0.25em] text-wfl-yellow font-bold">Nova run</p>
+          <p className="text-[9px] uppercase tracking-[0.25em] text-wfl-yellow font-bold">
+            Nova run · {ultima.tipo_prova === 'normal' ? 'Atletismo' : 'Dinâmica'}
+          </p>
           <p className="text-sm font-semibold leading-tight">{linha.atletica.nome}</p>
         </div>
         <div className="text-right">

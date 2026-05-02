@@ -42,12 +42,18 @@ export function segundosParaMs(s: number): number {
 }
 
 export const MODALIDADES = [
-  { num: 1, nome: 'Corrida lateral' },
-  { num: 2, nome: 'Dois pés juntos saltando' },
+  { num: 1, nome: 'Corrida saltada' },
+  { num: 2, nome: 'Corrida lateral esquerda' },
   { num: 3, nome: 'Corrida de costas' },
-  { num: 4, nome: 'Engatinhando em 4 apoios' },
+  { num: 4, nome: 'Corrida lateral direita' },
 ] as const
 
 export type Modalidade = 1 | 2 | 3 | 4
 export type Fase = 'classificatoria' | 'final'
 export type Sexo = 'M' | 'F'
+export type TipoProva = 'normal' | 'dinamico'
+
+export const TIPO_PROVA_LABEL: Record<TipoProva, string> = {
+  normal: 'Atletismo normal',
+  dinamico: 'Dinâmica',
+}

@@ -1,37 +1,37 @@
-import { Footprints, Ruler, Users, Trophy, Award, ClipboardCheck } from 'lucide-react'
+import { Footprints, Ruler, Users, Trophy, Award, Sigma } from 'lucide-react'
 
 const fontDisplay = { fontFamily: 'var(--font-bebas), sans-serif' }
 const fontBody = { fontFamily: 'var(--font-dm-sans-wfl), sans-serif' }
 
 const summaryCards = [
-  { icon: Footprints, title: 'Formato', body: '2 masculino + 2 feminino por equipe' },
-  { icon: Ruler, title: 'Distância', body: '100m por atleta = 400m total' },
-  { icon: Users, title: 'Baterias', body: '4 equipes por bateria' },
-  { icon: Trophy, title: 'Classificação', body: '8 melhores tempos vão às finais' },
+  { icon: Footprints, title: 'Formato', body: '4 atletas por equipe (2M + 2F)' },
+  { icon: Ruler, title: 'Distância', body: '100m por atleta · 400m por prova' },
+  { icon: Sigma, title: 'Resultado', body: 'Soma do tempo das 2 provas' },
+  { icon: Users, title: 'Baterias', body: '4 equipes por bateria · 1 staff por equipe' },
+  { icon: Trophy, title: 'Classificação', body: '8 menores somas vão à final' },
   { icon: Award, title: 'Premiação', body: 'Top 3 atléticas levam prêmios' },
-  { icon: ClipboardCheck, title: 'Staff', body: '1 responsável por equipe' },
 ]
 
-const modalities = [
+const dinamicas = [
   {
     n: 1,
-    title: 'Corrida lateral',
-    body: 'O participante percorre os 100m correndo de lado, sem girar o tronco para a direção da pista.',
+    title: 'Corrida saltada',
+    body: 'Avança em saltos consecutivos com os dois pés juntos.',
   },
   {
     n: 2,
-    title: 'Dois pés juntos saltando',
-    body: 'Deve avançar sempre com os dois pés juntos em cada salto. Sem salto alternado.',
+    title: 'Corrida lateral esquerda',
+    body: 'Percorre os 100m correndo de lado, deslocando para o lado esquerdo.',
   },
   {
     n: 3,
     title: 'Corrida de costas',
-    body: 'Pode olhar para trás, porém é proibido girar o tronco para a frente durante o percurso.',
+    body: 'Pode olhar pra trás, mas é proibido girar o tronco para a frente.',
   },
   {
     n: 4,
-    title: 'Engatinhando em 4 apoios',
-    body: 'Pés e mãos sempre no chão. Joelhos não precisam tocar a pista.',
+    title: 'Corrida lateral direita',
+    body: 'Percorre os 100m correndo de lado, deslocando para o lado direito.',
   },
 ]
 
@@ -39,14 +39,16 @@ export default function WingsCompetition() {
   return (
     <section className="bg-white py-12 sm:py-24 px-4 sm:px-8" style={fontBody}>
       <div className="max-w-6xl mx-auto">
-        {/* Cabeçalho com fundo amarelo */}
+        {/* Cabeçalho */}
         <div className="inline-block bg-wfl-yellow px-3 py-2 sm:px-4 max-w-full">
-          <h2
-            className="text-sm sm:text-xl font-extrabold tracking-wider uppercase text-wfl-navy leading-tight"
-          >
-            Atividade competitiva — Revezamento 4×100m misto
+          <h2 className="text-sm sm:text-xl font-extrabold tracking-wider uppercase text-wfl-navy leading-tight">
+            Atividade competitiva — 2 revezamentos 4×100m
           </h2>
         </div>
+        <p className="mt-3 sm:mt-4 text-sm sm:text-base text-wfl-dark/70 max-w-2xl">
+          A competição é composta por <strong>duas provas independentes</strong> que somam pra um
+          único resultado da equipe. O <strong>menor tempo combinado</strong> vence.
+        </p>
 
         {/* Cards de resumo */}
         <div className="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
@@ -57,28 +59,52 @@ export default function WingsCompetition() {
             >
               <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-wfl-red mb-1.5 sm:mb-2" aria-hidden="true" />
               <p className="text-xs sm:text-sm font-bold text-wfl-navy">{title}</p>
-              <p className="mt-1 text-xs text-wfl-dark/70 leading-snug">
-                {body}
-              </p>
+              <p className="mt-1 text-xs text-wfl-dark/70 leading-snug">{body}</p>
             </div>
           ))}
         </div>
 
-        {/* Modalidades */}
-        <div className="mt-8 sm:mt-10">
-          <h3
-            className="text-2xl sm:text-4xl uppercase text-wfl-navy leading-none"
-            style={fontDisplay}
-          >
-            As 4 modalidades obrigatórias
-          </h3>
-          <p className="mt-2 text-sm text-wfl-dark/60 max-w-2xl">
-            Cada atleta da equipe corre 100m em uma modalidade diferente. A ordem é
-            decidida pela própria equipe antes de cada bateria.
+        {/* Prova 1 */}
+        <div className="mt-10 sm:mt-14">
+          <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
+            <span
+              className="bg-wfl-navy text-wfl-yellow px-2.5 py-1 text-xs sm:text-sm font-extrabold tracking-wider uppercase"
+            >
+              Prova 1
+            </span>
+            <h3
+              className="text-2xl sm:text-4xl uppercase text-wfl-navy leading-none"
+              style={fontDisplay}
+            >
+              Revezamento 4×100m atletismo
+            </h3>
+          </div>
+          <p className="mt-2 sm:mt-3 text-sm text-wfl-dark/70 max-w-2xl">
+            Revezamento tradicional de atletismo. 4 atletas, 100m cada, corrida normal.
+            <strong> Resultado:</strong> tempo total da equipe.
+          </p>
+        </div>
+
+        {/* Prova 2 */}
+        <div className="mt-10 sm:mt-14">
+          <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap">
+            <span className="bg-wfl-red text-white px-2.5 py-1 text-xs sm:text-sm font-extrabold tracking-wider uppercase">
+              Prova 2
+            </span>
+            <h3
+              className="text-2xl sm:text-4xl uppercase text-wfl-navy leading-none"
+              style={fontDisplay}
+            >
+              Revezamento 4×100m dinâmico
+            </h3>
+          </div>
+          <p className="mt-2 sm:mt-3 text-sm text-wfl-dark/70 max-w-2xl">
+            Cada atleta corre 100m em um estilo diferente. A ordem é fixa por modalidade — sua
+            equipe define quem faz cada uma antes da bateria.
           </p>
 
           <ol className="mt-5 sm:mt-6 space-y-2.5 sm:space-y-3">
-            {modalities.map(m => (
+            {dinamicas.map(m => (
               <li
                 key={m.n}
                 className="flex items-start gap-3 sm:gap-4 border border-wfl-border bg-white hover:bg-wfl-card/40 transition-colors px-4 py-3.5 sm:px-6 sm:py-5 rounded-2xl sm:rounded-full"
@@ -90,42 +116,52 @@ export default function WingsCompetition() {
                   {m.n}
                 </span>
                 <div className="min-w-0">
-                  <p className="text-sm sm:text-lg font-bold text-wfl-navy leading-tight">
-                    {m.title}
-                  </p>
-                  <p className="mt-1 text-xs sm:text-sm text-wfl-dark/70 leading-relaxed">
-                    {m.body}
-                  </p>
+                  <p className="text-sm sm:text-lg font-bold text-wfl-navy leading-tight">{m.title}</p>
+                  <p className="mt-1 text-xs sm:text-sm text-wfl-dark/70 leading-relaxed">{m.body}</p>
                 </div>
               </li>
             ))}
           </ol>
         </div>
 
+        {/* Cálculo do resultado */}
+        <div className="mt-10 sm:mt-14 bg-wfl-navy text-white p-5 sm:p-7">
+          <p className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-wfl-yellow">
+            Cálculo do resultado
+          </p>
+          <p
+            className="mt-3 text-2xl sm:text-3xl leading-tight"
+            style={fontDisplay}
+          >
+            <span className="text-wfl-yellow">Tempo combinado</span> = Atletismo + Dinâmica
+          </p>
+          <p className="mt-2 text-sm text-white/80">
+            O <strong>menor tempo combinado</strong> = melhor colocação. Cronometragem oficial é
+            feita pelo staff Somma e atualiza o ranking ao vivo na hora.
+          </p>
+        </div>
+
         {/* Linha de regras finais */}
-        <div className="mt-8 sm:mt-10 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-          <div className="bg-wfl-navy text-white p-4 sm:p-6">
-            <p
-              className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-wfl-yellow"
-            >
+        <div className="mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+          <div className="bg-wfl-card border border-wfl-border p-4 sm:p-6">
+            <p className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-wfl-red">
               Classificatórias
             </p>
-            <p className="mt-2 text-sm text-white/80 leading-relaxed">
-              Os <span className="text-wfl-yellow font-semibold">8 melhores tempos
-              totais</span> dos 400m avançam para a final. Cronometragem oficial feita
-              pelo staff de cada equipe.
+            <p className="mt-2 text-sm text-wfl-dark/80 leading-relaxed">
+              Cada equipe corre as 2 provas. As{' '}
+              <span className="text-wfl-red font-semibold">8 menores somas combinadas</span>{' '}
+              avançam para a final.
             </p>
           </div>
           <div className="bg-wfl-red text-white p-4 sm:p-6">
-            <p
-              className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-wfl-yellow"
-            >
+            <p className="text-[10px] sm:text-xs font-semibold tracking-[0.3em] uppercase text-wfl-yellow">
               Final
             </p>
             <p className="mt-2 text-sm text-white/90 leading-relaxed">
-              As <span className="text-wfl-yellow font-semibold">3 atléticas</span> com
-              melhor tempo total no revezamento levam <span className="text-wfl-yellow font-semibold">premiações no pódio</span>.
-              Resultado afixado em placar ao vivo.
+              Mesma estrutura: 2 provas combinadas. As{' '}
+              <span className="text-wfl-yellow font-semibold">3 atléticas</span> com menor tempo
+              total levam{' '}
+              <span className="text-wfl-yellow font-semibold">premiação no pódio</span>.
             </p>
           </div>
         </div>

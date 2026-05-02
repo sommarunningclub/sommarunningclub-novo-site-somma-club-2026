@@ -64,9 +64,9 @@ export default function WingsCadastroEquipe() {
             Cadastre sua equipe<br className="hidden sm:block" /> competidora
           </h2>
           <p className="mt-3 sm:mt-4 text-sm sm:text-base text-white/85 max-w-xl mx-auto">
-            Forme um time de 4 atletas (2M + 2F) pra disputar o Revezamento 4×100m
-            misto. Cada equipe corre por sua atlética — e os 3 melhores tempos
-            levam premiação no pódio.
+            Forme um time de 4 atletas (2M + 2F) pra disputar 2 revezamentos 4×100m:
+            um de atletismo normal e outro dinâmico. A soma dos tempos define o resultado
+            — top 3 atléticas levam premiação no pódio.
           </p>
         </div>
 
@@ -97,19 +97,19 @@ export default function WingsCadastroEquipe() {
           <ol className="space-y-3 text-sm text-white/90">
             <PassoLista numero={1}>
               <strong>Junte 4 atletas</strong> da sua atlética: <strong>2 masculinos + 2 femininas</strong>.
-              Cada um vai correr <strong>100m em uma modalidade diferente</strong>.
             </PassoLista>
             <PassoLista numero={2}>
-              <strong>Cada modalidade tem sua regra</strong>: corrida lateral, dois pés saltando, corrida de
-              costas e engatinhando. Definam quem faz o quê <em>antes</em> de cadastrar.
+              <strong>Vão ter 2 provas combinadas</strong>: o 4×100m normal de atletismo e o 4×100m
+              dinâmico (cada atleta em um estilo: saltada, lateral E, costas, lateral D).
+              <strong> A soma das 2 = resultado final.</strong>
             </PassoLista>
             <PassoLista numero={3}>
-              <strong>Cadastre aqui agora</strong>. A equipe já cai no nosso painel e aparece no
-              ranking público assim que a primeira run for cronometrada.
+              <strong>Definam quem faz cada estilo</strong> da prova dinâmica antes de cadastrar.
+              No cadastro vocês escolhem qual atleta vai em cada modalidade (1 a 4).
             </PassoLista>
             <PassoLista numero={4}>
-              <strong>No dia do evento</strong>, o staff Somma chama sua equipe pra correr na bateria
-              e raia definidas. Os tempos atualizam o ranking ao vivo.
+              <strong>Cadastre aqui agora</strong>. A equipe cai direto no painel da Somma e aparece
+              no ranking público em tempo real durante o evento.
             </PassoLista>
           </ol>
 
