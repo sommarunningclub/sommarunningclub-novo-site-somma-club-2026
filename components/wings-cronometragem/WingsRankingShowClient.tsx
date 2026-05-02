@@ -11,66 +11,45 @@ import type { AtleticaComp, RunComp } from '@/lib/wings-cronometragem/types'
 const fontDisplay = { fontFamily: 'var(--font-bebas), sans-serif' }
 const fontBody = { fontFamily: 'var(--font-dm-sans-wfl), sans-serif' }
 
-const CAR_W = 56
-const CAR_H = 38
-const CAR_PHOTO_R = 18
-const MAX_FIRE = 600
-const SPEED = 0.55
-const PARALLAX_OFFSET_FACTOR = 80
+const NUM_LANES = 8
+const LANE_WIDTH = 22
+const RUNNER_R = 11
+const TRACK_MARGIN = 80
+const TRACK_BOTTOM_MARGIN = 40
 
-type Carro = {
+// "Linha de chegada" é o ponto angular onde fica o líder.
+// Em coords paramétricas (parâmetro u ∈ [0,1)) escolhemos u = 0.75
+// que corresponde ao topo do oval (12h) — fica visível e dramático.
+const FINISH_U = 0.75
+
+type Corredor = {
   atleticaId: string
   cor: string
+  nome: string
+  sigla: string | null
   foto: HTMLImageElement | null
   fotoOk: boolean
-  posReal: number      // float interpolada (1.0 = 1º lugar)
-  posAlvo: number      // posição alvo
-  tWave: number        // offset da fase pra cada carro flutuar diferente
-  velocidadeMs: number | null
-  pulseEm: number      // frames de fogo extra após mudar de posição
+  posReal: number       // float interpolada (1 = líder)
+  posAlvo: number       // posição alvo do ranking
+  estado: 'completo' | 'parcial' | 'sem-tempo'
+  bobOffset: number     // fase pessoal de "respiração" da bolinha
+  pulseEm: number       // frames de glow após mudar posição
 }
 
-type Particula = {
-  x: number
-  y: number
-  vx: number
-  vy: number
-  r: number
-  l: number
-  c: number
-  hue: number
-  alpha: number
-  life: number
-  maxLife: number
-}
-
-function hexParaHue(hex: string): number {
-  const m = hex.match(/^#?([a-f0-9]{6})$/i)
-  if (!m) return 0
-  const r = parseInt(m[1].slice(0, 2), 16) / 255
-  const g = parseInt(m[1].slice(2, 4), 16) / 255
-  const b = parseInt(m[1].slice(4, 6), 16) / 255
-  const max = Math.max(r, g, b)
-  const min = Math.min(r, g, b)
-  const d = max - min
-  if (d === 0) return 0
-  let h: number
-  if (max === r) h = ((g - b) / d) % 6
-  else if (max === g) h = (b - r) / d + 2
-  else h = (r - g) / d + 4
-  h *= 60
-  if (h < 0) h += 360
-  return h
-}
-
-function ctxRoundRect(
-  ctx: CanvasRenderingContext2D,
-  x: number, y: number, w: number, h: number, r: number
+function buildOvalPath(
+  cx: number, cy: number, rx: number, ry: number, phase: number
 ) {
-  if ('roundRect' in ctx) {
-    ;(ctx as unknown as { roundRect: (x: number, y: number, w: number, h: number, r: number) => void }).roundRect(x, y, w, h, r)
-  } else {
-    ctx.rect(x, y, w, h)
+  // Retorna função u → {x, y, tangent} para parametrizar o oval.
+  // Usamos elipse simples; phase rotaciona a origem do parâmetro.
+  return (u: number) => {
+    const theta = (u + phase) * Math.PI * 2
+    const x = cx + Math.cos(theta) * rx
+    const y = cy + Math.sin(theta) * ry
+    // tangente (derivada) para orientar o corredor
+    const tx = -Math.sin(theta) * rx
+    const ty = Math.cos(theta) * ry
+    const tlen = Math.hypot(tx, ty) || 1
+    return { x, y, tx: tx / tlen, ty: ty / tlen }
   }
 }
 
@@ -80,12 +59,10 @@ export default function WingsRankingShowClient() {
   const [telao, setTelao] = useState(false)
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const carrosRef = useRef<Carro[]>([])
-  const fogoRef = useRef<Particula[]>([])
+  const corredoresRef = useRef<Corredor[]>([])
   const tickRef = useRef(0)
   const sizeRef = useRef({ w: 0, h: 0 })
 
-  // Mapa atleticaId → posição no ranking (1-based)
   const posPorAtletica = useMemo(() => {
     const m = new Map<string, number>()
     ranking.forEach((linha, idx) => {
@@ -94,38 +71,33 @@ export default function WingsRankingShowClient() {
     return m
   }, [ranking])
 
-  // Sincroniza carros com lista atual sempre que ranking mudar
+  // Sincroniza corredores com o ranking atual
   useEffect(() => {
-    const carros = carrosRef.current
+    const lista = corredoresRef.current
     const idsAtuais = new Set(ranking.map(r => r.atletica.id))
 
     // Remove sumidos
-    for (let i = carros.length - 1; i >= 0; i--) {
-      if (!idsAtuais.has(carros[i].atleticaId)) carros.splice(i, 1)
+    for (let i = lista.length - 1; i >= 0; i--) {
+      if (!idsAtuais.has(lista[i].atleticaId)) lista.splice(i, 1)
     }
 
-    // Cria/atualiza
     ranking.forEach((linha, idx) => {
       const id = linha.atletica.id
-      let c = carros.find(x => x.atleticaId === id)
-      // No show usamos o tempo combinado (se completo) ou o melhor disponível
-      const tempo =
-        linha.tempoCombinadoMs ??
-        linha.melhorRunNormal?.tempo_final_ms ??
-        linha.melhorRunDinamico?.tempo_final_ms ??
-        null
       const posAlvo = posPorAtletica.get(id) ?? idx + 1
+      let c = lista.find(x => x.atleticaId === id)
 
       if (!c) {
         c = {
           atleticaId: id,
           cor: linha.atletica.cor,
+          nome: linha.atletica.nome,
+          sigla: linha.atletica.sigla ?? null,
           foto: null,
           fotoOk: false,
           posReal: posAlvo,
           posAlvo,
-          tWave: Math.random() * Math.PI * 2,
-          velocidadeMs: tempo,
+          estado: linha.estado,
+          bobOffset: Math.random() * Math.PI * 2,
           pulseEm: 0,
         }
         if (linha.atletica.foto_url) {
@@ -135,9 +107,12 @@ export default function WingsRankingShowClient() {
           img.src = linha.atletica.foto_url
           c.foto = img
         }
-        carros.push(c)
+        lista.push(c)
       } else {
         c.cor = linha.atletica.cor
+        c.nome = linha.atletica.nome
+        c.sigla = linha.atletica.sigla ?? null
+        c.estado = linha.estado
         const urlAtual = c.foto?.src ?? null
         const urlNova = linha.atletica.foto_url
         if (urlNova && urlNova !== urlAtual) {
@@ -151,11 +126,10 @@ export default function WingsRankingShowClient() {
           c.foto = null
           c.fotoOk = false
         }
-        if (c.posAlvo !== posAlvo && tempo != null) {
-          c.pulseEm = 28
+        if (c.posAlvo !== posAlvo) {
+          c.pulseEm = 36
         }
         c.posAlvo = posAlvo
-        c.velocidadeMs = tempo
       }
     })
   }, [ranking, posPorAtletica])
@@ -182,123 +156,177 @@ export default function WingsRankingShowClient() {
     const ro = new ResizeObserver(resize)
     ro.observe(canvas)
 
-    function emitirFogo(
-      x: number, y: number, headingRad: number, corHex: string, intenso: boolean
-    ) {
-      const list = fogoRef.current
-      const emit = intenso ? 6 : 2
-      for (let i = 0; i < emit; i++) {
-        if (list.length > MAX_FIRE) break
-        const speed = 1.0 + Math.random() * (intenso ? 3.5 : 1.6)
-        const spread = (Math.random() - 0.5) * 0.5
-        list.push({
-          x: x + (Math.random() - 0.5) * 4,
-          y: y + (Math.random() - 0.5) * 4,
-          vx: -Math.cos(headingRad + spread) * speed,
-          vy: -Math.sin(headingRad + spread) * speed - 0.3,
-          r: 3 + Math.random() * 4,
-          l: intenso ? 0.78 : 0.66,
-          c: intenso ? 0.22 : 0.16,
-          hue: hexParaHue(corHex),
-          alpha: intenso ? 0.95 : 0.7,
-          life: 0,
-          maxLife: 18 + Math.random() * 18,
-        })
+    function desenharPista(cx: number, cy: number, rxOuter: number, ryOuter: number) {
+      // Grama central
+      ctx!.save()
+      ctx!.fillStyle = 'rgba(20, 80, 40, 0.25)'
+      ctx!.beginPath()
+      ctx!.ellipse(cx, cy, rxOuter - NUM_LANES * LANE_WIDTH - 8, ryOuter - NUM_LANES * LANE_WIDTH - 8, 0, 0, Math.PI * 2)
+      ctx!.fill()
+      ctx!.restore()
+
+      // Asfalto da pista (preenche entre borda externa e interna)
+      ctx!.save()
+      ctx!.fillStyle = 'rgba(180, 60, 50, 0.55)' // tom terracota tipo tartan
+      ctx!.beginPath()
+      ctx!.ellipse(cx, cy, rxOuter, ryOuter, 0, 0, Math.PI * 2)
+      ctx!.ellipse(cx, cy, rxOuter - NUM_LANES * LANE_WIDTH, ryOuter - NUM_LANES * LANE_WIDTH, 0, 0, Math.PI * 2, true)
+      ctx!.fill('evenodd')
+      ctx!.restore()
+
+      // Linhas das raias (brancas)
+      ctx!.save()
+      ctx!.strokeStyle = 'rgba(255,255,255,0.55)'
+      ctx!.lineWidth = 1.5
+      for (let i = 0; i <= NUM_LANES; i++) {
+        const rx = rxOuter - i * LANE_WIDTH
+        const ry = ryOuter - i * LANE_WIDTH
+        ctx!.beginPath()
+        ctx!.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2)
+        ctx!.stroke()
       }
+      ctx!.restore()
+
+      // Linha de chegada — barra branca radial no topo (FINISH_U = 0.75 → topo)
+      const theta = FINISH_U * Math.PI * 2
+      const cosT = Math.cos(theta)
+      const sinT = Math.sin(theta)
+      const xOut = cx + cosT * rxOuter
+      const yOut = cy + sinT * ryOuter
+      const xIn = cx + cosT * (rxOuter - NUM_LANES * LANE_WIDTH)
+      const yIn = cy + sinT * (ryOuter - NUM_LANES * LANE_WIDTH)
+      ctx!.save()
+      ctx!.strokeStyle = '#ffffff'
+      ctx!.lineWidth = 4
+      ctx!.setLineDash([6, 4])
+      ctx!.beginPath()
+      ctx!.moveTo(xOut, yOut)
+      ctx!.lineTo(xIn, yIn)
+      ctx!.stroke()
+      ctx!.restore()
+
+      // Label CHEGADA
+      ctx!.save()
+      ctx!.fillStyle = 'rgba(255, 220, 0, 0.95)'
+      ctx!.font = 'bold 11px var(--font-dm-sans-wfl), sans-serif'
+      ctx!.textAlign = 'center'
+      ctx!.textBaseline = 'bottom'
+      ctx!.fillText('🏁 CHEGADA', cx, cy - ryOuter - 8)
+      ctx!.restore()
     }
 
-    function desenharFogo() {
-      const list = fogoRef.current
-      for (let i = list.length - 1; i >= 0; i--) {
-        const p = list[i]
-        p.x += p.vx
-        p.y += p.vy
-        p.vx *= 0.94
-        p.vy = p.vy * 0.94 + 0.04
-        p.life += 1
-        const prog = p.life / p.maxLife
-        const ease = 1 - Math.pow(1 - prog, 2)
-        const r = p.r * (1 + prog * 0.7)
-        const a = p.alpha * (1 - ease)
-        if (a <= 0.02 || p.life >= p.maxLife) {
-          list.splice(i, 1)
-          continue
-        }
-        const l = Math.min(p.l + prog * 0.18, 0.96)
-        const c = p.c * (1 - prog * 0.5)
-        const grad = ctx!.createRadialGradient(p.x, p.y, 0, p.x, p.y, r)
-        grad.addColorStop(0, `oklch(${(l + 0.08).toFixed(2)} ${(c * 0.5).toFixed(3)} ${Math.round(p.hue)} / ${a.toFixed(3)})`)
-        grad.addColorStop(0.4, `oklch(${l.toFixed(2)} ${c.toFixed(3)} ${Math.round(p.hue)} / ${(a * 0.7).toFixed(3)})`)
-        grad.addColorStop(1, `oklch(${l.toFixed(2)} ${c.toFixed(3)} ${Math.round(p.hue)} / 0)`)
-        ctx!.beginPath()
-        ctx!.arc(p.x, p.y, r, 0, Math.PI * 2)
+    function desenharCorredor(
+      x: number, y: number, c: Corredor, destaque: number, posicao: number
+    ) {
+      // glow se subiu posição recentemente OU se está no top 3
+      const top3 = posicao >= 1 && posicao <= 3
+      const glowAlpha = c.pulseEm > 0 ? 0.6 * (c.pulseEm / 36) : top3 ? 0.35 : 0
+      if (glowAlpha > 0) {
+        const grad = ctx!.createRadialGradient(x, y, 0, x, y, RUNNER_R * 3)
+        grad.addColorStop(0, c.cor + Math.round(glowAlpha * 255).toString(16).padStart(2, '0'))
+        grad.addColorStop(1, c.cor + '00')
         ctx!.fillStyle = grad
+        ctx!.beginPath()
+        ctx!.arc(x, y, RUNNER_R * 3, 0, Math.PI * 2)
         ctx!.fill()
       }
-    }
-
-    function desenharCarro(
-      x: number, y: number, headingRad: number, corHex: string,
-      foto: HTMLImageElement | null, fotoOk: boolean
-    ) {
-      ctx!.save()
-      ctx!.translate(x, y)
-      ctx!.rotate(headingRad)
 
       // sombra
       ctx!.save()
-      ctx!.fillStyle = 'rgba(0,0,0,0.35)'
+      ctx!.fillStyle = 'rgba(0,0,0,0.4)'
       ctx!.beginPath()
-      ctx!.ellipse(0, CAR_H / 2 + 4, CAR_W * 0.45, 5, 0, 0, Math.PI * 2)
+      ctx!.ellipse(x, y + RUNNER_R + 3, RUNNER_R * 0.85, 3, 0, 0, Math.PI * 2)
       ctx!.fill()
       ctx!.restore()
 
-      // chassi
-      ctx!.fillStyle = corHex
-      ctx!.beginPath()
-      ctxRoundRect(ctx!, -CAR_W / 2, -CAR_H / 2, CAR_W, CAR_H, 8)
-      ctx!.fill()
-
-      // janela frontal
-      ctx!.fillStyle = 'rgba(255,255,255,0.18)'
-      ctx!.beginPath()
-      ctxRoundRect(ctx!, CAR_W / 2 - 18, -CAR_H / 2 + 4, 14, CAR_H - 8, 4)
-      ctx!.fill()
-
-      // foto (avatar circular)
+      // bolinha
+      const r = RUNNER_R + (top3 ? 2 : 0)
       ctx!.save()
       ctx!.beginPath()
-      ctx!.arc(-CAR_W / 2 + CAR_PHOTO_R + 2, 0, CAR_PHOTO_R, 0, Math.PI * 2)
-      ctx!.closePath()
-      ctx!.clip()
-      if (foto && fotoOk) {
-        ctx!.drawImage(foto, -CAR_W / 2 + 2, -CAR_PHOTO_R, CAR_PHOTO_R * 2, CAR_PHOTO_R * 2)
+      ctx!.arc(x, y, r, 0, Math.PI * 2)
+      ctx!.fillStyle = c.cor
+      ctx!.fill()
+
+      // foto recortada se houver
+      if (c.foto && c.fotoOk) {
+        ctx!.save()
+        ctx!.beginPath()
+        ctx!.arc(x, y, r - 1.5, 0, Math.PI * 2)
+        ctx!.clip()
+        ctx!.drawImage(c.foto, x - r, y - r, r * 2, r * 2)
+        ctx!.restore()
       } else {
-        ctx!.fillStyle = 'rgba(255,255,255,0.85)'
-        ctx!.fillRect(-CAR_W / 2 + 2, -CAR_PHOTO_R, CAR_PHOTO_R * 2, CAR_PHOTO_R * 2)
+        // sigla dentro da bolinha
+        const txt = (c.sigla?.trim() || c.nome).slice(0, 3).toUpperCase()
+        ctx!.fillStyle = '#ffffff'
+        ctx!.font = `bold ${Math.round(r * 0.85)}px var(--font-bebas), sans-serif`
+        ctx!.textAlign = 'center'
+        ctx!.textBaseline = 'middle'
+        ctx!.fillText(txt, x, y + 1)
       }
+
+      // borda branca
+      ctx!.strokeStyle = top3 ? '#ffd400' : 'rgba(255,255,255,0.95)'
+      ctx!.lineWidth = top3 ? 2.5 : 1.5
+      ctx!.beginPath()
+      ctx!.arc(x, y, r, 0, Math.PI * 2)
+      ctx!.stroke()
       ctx!.restore()
 
-      ctx!.strokeStyle = 'rgba(255,255,255,0.95)'
-      ctx!.lineWidth = 2
+      // badge da posição em cima da bolinha
+      {
+        const badgeR = top3 ? 11 : 9
+        const bx = x
+        const by = y - r - badgeR - 2
+        ctx!.save()
+        ctx!.beginPath()
+        ctx!.arc(bx, by, badgeR, 0, Math.PI * 2)
+        ctx!.fillStyle = top3
+          ? ['#ffd400', '#d6d6d6', '#cd7f32'][posicao - 1]
+          : '#ffffff'
+        ctx!.fill()
+        ctx!.strokeStyle = 'rgba(0,0,0,0.6)'
+        ctx!.lineWidth = 1.5
+        ctx!.beginPath()
+        ctx!.arc(bx, by, badgeR, 0, Math.PI * 2)
+        ctx!.stroke()
+        ctx!.fillStyle = '#0a0a0a'
+        ctx!.font = `bold ${top3 ? 13 : 11}px var(--font-bebas), sans-serif`
+        ctx!.textAlign = 'center'
+        ctx!.textBaseline = 'middle'
+        ctx!.fillText(String(posicao), bx, by + 1)
+        ctx!.restore()
+      }
+
+      // label nome/sigla embaixo
+      const label = (c.sigla?.trim() || c.nome).toUpperCase()
+      ctx!.save()
+      ctx!.font = `bold ${destaque > 0 ? 12 : 10}px var(--font-dm-sans-wfl), sans-serif`
+      ctx!.textAlign = 'center'
+      ctx!.textBaseline = 'top'
+      const tw = ctx!.measureText(label).width
+      const padX = 5
+      const padY = 2
+      const bx = x - tw / 2 - padX
+      const by = y + r + 6
+      ctx!.fillStyle = 'rgba(0,0,0,0.7)'
       ctx!.beginPath()
-      ctx!.arc(-CAR_W / 2 + CAR_PHOTO_R + 2, 0, CAR_PHOTO_R, 0, Math.PI * 2)
+      const rect = (rx: number, ry: number, rw: number, rh: number, rr: number) => {
+        if ('roundRect' in ctx!) {
+          ;(ctx! as unknown as { roundRect: (x: number, y: number, w: number, h: number, r: number) => void }).roundRect(rx, ry, rw, rh, rr)
+        } else {
+          ctx!.rect(rx, ry, rw, rh)
+        }
+      }
+      rect(bx, by, tw + padX * 2, 14 + padY, 3)
+      ctx!.fill()
+      ctx!.strokeStyle = c.cor
+      ctx!.lineWidth = 1
+      ctx!.beginPath()
+      rect(bx, by, tw + padX * 2, 14 + padY, 3)
       ctx!.stroke()
-
-      // rodas
-      ctx!.fillStyle = '#0a0a0a'
-      for (const wx of [-CAR_W / 2 + 12, CAR_W / 2 - 12]) {
-        ctx!.beginPath()
-        ctx!.arc(wx, CAR_H / 2 - 2, 5, 0, Math.PI * 2)
-        ctx!.fill()
-      }
-      ctx!.fillStyle = 'rgba(255,255,255,0.35)'
-      for (const wx of [-CAR_W / 2 + 12, CAR_W / 2 - 12]) {
-        ctx!.beginPath()
-        ctx!.arc(wx - 1, CAR_H / 2 - 3, 1.5, 0, Math.PI * 2)
-        ctx!.fill()
-      }
-
+      ctx!.fillStyle = '#fff'
+      ctx!.fillText(label, x, by + padY + 1)
       ctx!.restore()
     }
 
@@ -308,62 +336,68 @@ export default function WingsRankingShowClient() {
       const { w, h } = sizeRef.current
       ctx!.clearRect(0, 0, w, h)
 
-      const grad = ctx!.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, Math.max(w, h))
-      grad.addColorStop(0, 'rgba(255,255,255,0.04)')
-      grad.addColorStop(1, 'rgba(0,0,0,0.35)')
-      ctx!.fillStyle = grad
+      // gradiente de fundo
+      const bg = ctx!.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, Math.max(w, h))
+      bg.addColorStop(0, 'rgba(255,255,255,0.04)')
+      bg.addColorStop(1, 'rgba(0,0,0,0.4)')
+      ctx!.fillStyle = bg
       ctx!.fillRect(0, 0, w, h)
 
-      const carros = carrosRef.current
-      const total = carros.length
+      const corredores = corredoresRef.current
+      const total = corredores.length
+
+      // dimensões do oval
+      const cx = w / 2
+      const cy = h / 2 + 10
+      const rxOuter = Math.max(140, (w - TRACK_MARGIN * 2) / 2)
+      const ryOuter = Math.max(110, (h - TRACK_BOTTOM_MARGIN * 2) / 2)
+
+      desenharPista(cx, cy, rxOuter, ryOuter)
+
       if (total === 0) {
         raf = requestAnimationFrame(loop)
         return
       }
 
-      const topY = h * 0.18
-      const botY = h * 0.86
-      const espaco = (botY - topY) / Math.max(total, 1)
+      // Cada corredor ocupa uma raia (limitamos a NUM_LANES; se houver mais
+      // atléticas que raias, "empilhamos" 2 por raia separados radialmente).
+      // Posição angular: u = FINISH_U - (posReal - 1) * gap
+      // gap controla quão espalhados ficam — um pouco menos que 1/total pra
+      // não dar volta inteira (último ainda visível atrás do líder).
+      const gap = Math.min(0.85 / Math.max(total, 1), 0.06)
 
-      // Desenha de trás pra frente (último primeiro, líder por cima)
-      const ordem = carros
-        .slice()
-        .sort((a, b) => b.posAlvo - a.posAlvo)
+      // Animação contínua: o "ritmo" da corrida faz tudo girar lentamente
+      const drift = (t * 0.0006) % 1
+      const path = buildOvalPath(cx, cy, 0, 0, drift) // só pra calcular phase global
+
+      // Ordena pra desenhar últimos primeiro (líder por cima)
+      const ordem = corredores.slice().sort((a, b) => b.posAlvo - a.posAlvo)
 
       ordem.forEach(c => {
-        c.posReal += (c.posAlvo - c.posReal) * 0.05
+        // Easing pro posReal alcançar posAlvo
+        c.posReal += (c.posAlvo - c.posReal) * 0.06
 
-        const yBase = topY + espaco * (c.posReal - 0.5)
-        const waveAmp = Math.max(8, espaco * 0.35)
-        const phase = t * 0.022 + c.tWave
-        const yWave = Math.sin(phase) * waveAmp
-        const y = yBase + yWave
+        const lane = (Math.round(c.posReal) - 1) % NUM_LANES
+        const rx = rxOuter - (lane + 0.5) * LANE_WIDTH
+        const ry = ryOuter - (lane + 0.5) * LANE_WIDTH
 
-        const speedFactor = c.velocidadeMs ? 1 + (1 - Math.min(c.posAlvo / total, 1)) * 0.6 : 0.45
-        const xLoopPeriod = w + CAR_W * 2
-        const x = ((t * SPEED * speedFactor + c.tWave * PARALLAX_OFFSET_FACTOR) % xLoopPeriod) - CAR_W
-        const xw = x < -CAR_W ? x + xLoopPeriod : x
+        const u = (FINISH_U - (c.posReal - 1) * gap + 1) % 1
+        const theta = (u + drift) * Math.PI * 2
+        let x = cx + Math.cos(theta) * rx
+        let y = cy + Math.sin(theta) * ry
 
-        const headingRad = Math.atan2(Math.cos(phase) * waveAmp * 0.022, 1)
+        // pequeno bob vertical pra dar vida
+        const bob = Math.sin(t * 0.08 + c.bobOffset) * 1.2
+        y += bob
 
-        // rastro fino na pista
-        ctx!.strokeStyle = c.cor + '55'
-        ctx!.lineWidth = 2
-        ctx!.beginPath()
-        ctx!.moveTo(xw - 60, y + waveAmp * 0.6 + 6)
-        ctx!.lineTo(xw, y + waveAmp * 0.6 + 6)
-        ctx!.stroke()
-
-        // emite fogo
-        const exhaustX = xw - CAR_W * 0.5
-        const exhaustY = y + 4
-        emitirFogo(exhaustX, exhaustY, headingRad, c.cor, c.pulseEm > 0)
         if (c.pulseEm > 0) c.pulseEm -= 1
 
-        desenharCarro(xw, y, headingRad, c.cor, c.foto, c.fotoOk)
-      })
+        const posicao = Math.round(c.posReal)
+        desenharCorredor(x, y, c, c.pulseEm, posicao)
 
-      desenharFogo()
+        // suprime warning do path não usado
+        void path
+      })
 
       raf = requestAnimationFrame(loop)
     }
