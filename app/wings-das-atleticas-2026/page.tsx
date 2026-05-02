@@ -1,3 +1,5 @@
+import Link from 'next/link'
+import { Trophy } from 'lucide-react'
 import WingsHero from '@/components/wings/WingsHero'
 import WingsLocationSection from '@/components/wings/WingsLocationSection'
 import WingsEventInfo from '@/components/wings/WingsEventInfo'
@@ -6,17 +8,37 @@ import WingsCompetition from '@/components/wings/WingsCompetition'
 import WingsCadastroEquipe from '@/components/wings/WingsCadastroEquipe'
 import WingsAddToCalendar from '@/components/wings/WingsAddToCalendar'
 import WingsFollowSomma from '@/components/wings/WingsFollowSomma'
-import WingsCadastroFlutuante from '@/components/wings/WingsCadastroFlutuante'
-import WingsRegistrationForm from '@/components/wings/WingsRegistrationForm'
 
 export const dynamic = 'force-dynamic'
 
-const fontDisplay = { fontFamily: 'var(--font-bebas), sans-serif' }
 const fontBody = { fontFamily: 'var(--font-dm-sans-wfl), sans-serif' }
 
 export default function WingsPage() {
   return (
     <main className="bg-white text-wfl-dark min-h-screen" style={fontBody}>
+      {/* Banner de evento encerrado */}
+      <div className="bg-wfl-navy text-white border-b-4 border-wfl-yellow">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 py-3 sm:py-3.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="text-lg sm:text-xl">🏁</span>
+            <div className="min-w-0">
+              <p className="text-[9px] sm:text-[10px] tracking-[0.3em] uppercase text-wfl-yellow font-bold leading-tight">
+                Evento encerrado
+              </p>
+              <p className="text-xs sm:text-sm leading-tight">
+                Wings das Atléticas 2026 — realizado em 02/05/2026.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/wings/ranking"
+            className="inline-flex items-center gap-1.5 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy px-3 sm:px-4 py-2 text-[10px] sm:text-xs font-bold uppercase tracking-[0.15em] transition-colors flex-shrink-0"
+          >
+            <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Resultado final
+          </Link>
+        </div>
+      </div>
+
       <WingsHero />
       <WingsLocationSection />
       <WingsEventInfo />
@@ -24,40 +46,9 @@ export default function WingsPage() {
       <WingsCompetition />
       <WingsCadastroEquipe />
       <WingsAddToCalendar />
-
-      <section
-        id="wings-inscricao"
-        className="bg-wfl-card py-12 sm:py-24 px-4 sm:px-8 scroll-mt-8"
-      >
-        <div className="max-w-2xl mx-auto">
-          <p
-            className="text-[10px] sm:text-sm font-semibold tracking-[0.3em] uppercase text-wfl-red text-center"
-            style={fontBody}
-          >
-            Sua vaga
-          </p>
-          <h2
-            className="mt-2 text-3xl sm:text-6xl text-wfl-red text-center uppercase leading-none"
-            style={fontDisplay}
-          >
-            Inscreva sua equipe
-          </h2>
-          <p
-            className="mt-2 sm:mt-3 text-center text-sm sm:text-base text-wfl-dark/70 max-w-md mx-auto"
-            style={fontBody}
-          >
-            Quanto mais gente da sua atlética presente, mais forte a torcida e maior a chance de levar o troféu de Atlética Mais Engajada. Bora reunir a galera.
-          </p>
-
-          <div className="mt-6 sm:mt-10 bg-white border border-wfl-border p-4 sm:p-10">
-            <WingsRegistrationForm />
-          </div>
-        </div>
-      </section>
-
       <WingsFollowSomma />
 
-      <footer className="bg-wfl-navy text-white/70 py-8 sm:py-10 px-4 sm:px-8 pb-24 sm:pb-10" style={fontBody}>
+      <footer className="bg-wfl-navy text-white/70 py-8 sm:py-10 px-4 sm:px-8" style={fontBody}>
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 text-[10px] sm:text-xs">
           <p className="tracking-[0.2em] uppercase">Somma × Wings for Life × Red Bull</p>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-5">
@@ -65,20 +56,12 @@ export default function WingsPage() {
               href="/wings/ranking"
               className="tracking-[0.2em] uppercase text-wfl-yellow hover:text-white transition-colors"
             >
-              Ranking ao vivo →
-            </a>
-            <a
-              href="/wings/admin"
-              className="tracking-[0.2em] uppercase text-white/50 hover:text-wfl-yellow transition-colors"
-            >
-              Acesso Somma →
+              Resultado final →
             </a>
             <p>© 2026 Somma Running Club</p>
           </div>
         </div>
       </footer>
-
-      <WingsCadastroFlutuante />
     </main>
   )
 }
