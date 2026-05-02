@@ -8,6 +8,8 @@ export type AtleticaComp = {
   foto_url: string | null
   /** Barras feitas pelo casal — cada barra desconta 1s do tempo combinado. */
   barras: number
+  /** True quando o staff "fecha" a classificatória e trava o top 8. */
+  classificada_final: boolean
   created_at: string
 }
 

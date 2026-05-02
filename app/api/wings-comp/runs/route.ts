@@ -60,6 +60,22 @@ export async function POST(req: NextRequest) {
     : { penalidade_1_ms: 0, penalidade_2_ms: 0, penalidade_3_ms: 0, penalidade_4_ms: 0 }
 
   const supabase = getServiceClient()
+
+  // Bloqueia run de final se a atlética não foi classificada
+  if (fase === 'final') {
+    const { data: at } = await supabase
+      .from('wings_comp_atleticas')
+      .select('classificada_final, nome')
+      .eq('id', body.atletica_id)
+      .single()
+    if (!at?.classificada_final) {
+      return NextResponse.json(
+        { error: `${at?.nome ?? 'Esta equipe'} não está classificada para a final.` },
+        { status: 400 }
+      )
+    }
+  }
+
   const { data, error } = await supabase
     .from('wings_comp_runs')
     .insert({

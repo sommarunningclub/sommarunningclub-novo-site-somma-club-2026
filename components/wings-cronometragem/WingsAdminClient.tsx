@@ -233,6 +233,8 @@ export default function WingsAdminClient() {
         </nav>
       </header>
 
+      <BarraClassificatoria atleticas={atleticas} onChange={carregarTudo} showToast={showToast} />
+
       <div
         className="max-w-[1600px] mx-auto px-3 sm:px-6 py-4 sm:py-6 grid grid-cols-1 lg:grid-cols-[1fr_1fr_1.7fr] gap-4 sm:gap-6"
         style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1.5rem)' }}
@@ -821,6 +823,93 @@ function ColunaAtleticas({
         />
       )}
     </section>
+  )
+}
+
+function BarraClassificatoria({
+  atleticas,
+  onChange,
+  showToast,
+}: {
+  atleticas: AtleticaComp[]
+  onChange: () => Promise<void>
+  showToast: (t: NonNullable<Toast>) => void
+}) {
+  const [carregando, setCarregando] = useState(false)
+  const classificadas = atleticas.filter(a => a.classificada_final)
+  const fechada = classificadas.length > 0
+
+  async function fechar() {
+    if (!confirm('Fechar a classificatória?\nIsso trava o top 8 com base no ranking atual. Você pode reabrir depois.')) return
+    setCarregando(true)
+    try {
+      const res = await fetch('/api/wings-comp/fechar-classificatoria', { method: 'POST' })
+      const j = await res.json()
+      if (!res.ok) {
+        showToast({ tipo: 'erro', msg: j.error || 'Erro ao fechar.' })
+        return
+      }
+      showToast({ tipo: 'ok', msg: `🏆 ${j.classificadas.length} equipes classificadas para a final.` })
+      await onChange()
+    } finally {
+      setCarregando(false)
+    }
+  }
+
+  async function reabrir() {
+    if (!confirm('Reabrir a classificatória?\nIsso desfaz o travamento — staff pode registrar novas runs e refazer o top 8.')) return
+    setCarregando(true)
+    try {
+      const res = await fetch('/api/wings-comp/fechar-classificatoria', { method: 'DELETE' })
+      const j = await res.json()
+      if (!res.ok) {
+        showToast({ tipo: 'erro', msg: j.error || 'Erro ao reabrir.' })
+        return
+      }
+      showToast({ tipo: 'ok', msg: 'Classificatória reaberta.' })
+      await onChange()
+    } finally {
+      setCarregando(false)
+    }
+  }
+
+  return (
+    <div className={`border-b ${fechada ? 'bg-wfl-yellow/10 border-wfl-yellow/40' : 'bg-black/20 border-white/10'}`}>
+      <div className="max-w-[1600px] mx-auto px-3 sm:px-6 py-2 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className={`text-base ${fechada ? '' : 'opacity-50'}`}>{fechada ? '🏆' : '⏱️'}</span>
+          <div className="min-w-0">
+            <p className={`text-[10px] uppercase tracking-[0.2em] font-bold ${fechada ? 'text-wfl-yellow' : 'text-white/60'}`}>
+              {fechada ? 'Final travada' : 'Classificatória aberta'}
+            </p>
+            <p className="text-[10px] text-white/50 truncate">
+              {fechada
+                ? `${classificadas.length} equipe${classificadas.length === 1 ? '' : 's'} na final: ${classificadas.map(a => a.sigla || a.nome).join(' · ')}`
+                : 'Quando estiver pronto, fechar trava o top 8 atual e libera runs da final.'}
+            </p>
+          </div>
+        </div>
+        <div className="flex-shrink-0">
+          {fechada ? (
+            <button
+              onClick={reabrir}
+              disabled={carregando}
+              className="min-h-9 px-3 bg-white/10 hover:bg-white/20 disabled:opacity-50 text-white text-[10px] font-bold uppercase tracking-wider transition-colors"
+            >
+              {carregando ? '…' : 'Reabrir'}
+            </button>
+          ) : (
+            <button
+              onClick={fechar}
+              disabled={carregando}
+              className="min-h-9 px-3 bg-wfl-yellow hover:bg-wfl-yellow/90 disabled:opacity-50 text-wfl-navy text-[10px] font-bold uppercase tracking-wider transition-colors"
+            >
+              {carregando ? '…' : 'Fechar classificatória'}
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
 

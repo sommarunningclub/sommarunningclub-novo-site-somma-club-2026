@@ -26,8 +26,13 @@ export default function WingsRankingClient() {
     return () => clearInterval(id)
   }, [])
 
-  // Atléticas classificadas para final = top 8 das classificatórias COMPLETAS
+  // Atléticas classificadas para final.
+  // Se houver alguma atlética com classificada_final=true, usa essa lista (travada pelo staff).
+  // Senão, calcula projeção: top 8 das completas atuais.
+  const classificadasTravadas = ranking.filter(r => r.atletica.classificada_final).map(r => r.atletica.id)
+  const haTravamento = classificadasTravadas.length > 0
   const classificadasParaFinal = (() => {
+    if (haTravamento) return new Set(classificadasTravadas)
     if (fase !== 'classificatoria') return new Set<string>()
     const completas = ranking.filter(r => r.estado === 'completo')
     return new Set(completas.slice(0, 8).map(r => r.atletica.id))
