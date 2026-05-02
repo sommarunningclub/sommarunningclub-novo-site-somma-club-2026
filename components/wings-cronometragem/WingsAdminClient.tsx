@@ -4,10 +4,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   Lock, LogOut, Plus, Trash2, Users, Trophy, Save, AlertCircle,
   ChevronDown, X, Eye, EyeOff, Pencil, Copy, Camera, ImageIcon,
-  Settings, Download, RotateCw, ListOrdered,
+  Settings, Download, RotateCw, ListOrdered, Archive,
 } from 'lucide-react'
 import Cronometro from './Cronometro'
 import PodioPreview from './PodioPreview'
+import EventosArquivados from './EventosArquivados'
 import { msParaDisplay, displayParaMs, segundosParaMs, MODALIDADES, TIPO_PROVA_LABEL } from '@/lib/wings-cronometragem/tempo'
 import type { AtleticaComp, AtletaComp, RunComp } from '@/lib/wings-cronometragem/types'
 import type { Fase, Sexo, Modalidade, TipoProva } from '@/lib/wings-cronometragem/tempo'
@@ -30,6 +31,7 @@ export default function WingsAdminClient() {
   const [runs, setRuns] = useState<RunComp[]>([])
   const [toast, setToast] = useState<Toast>(null)
   const [modalConfig, setModalConfig] = useState(false)
+  const [modalArquivos, setModalArquivos] = useState(false)
 
   const [aba, setAba] = useState<Aba>('registrar')
 
@@ -187,6 +189,15 @@ export default function WingsAdminClient() {
               <span className="hidden sm:inline">Ranking</span>
             </a>
             <button
+              onClick={() => setModalArquivos(true)}
+              className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-wfl-yellow hover:bg-wfl-yellow/10 rounded transition-colors"
+              aria-label="Eventos arquivados"
+              title="Eventos arquivados"
+            >
+              <Archive className="w-4 h-4" />
+              <span className="hidden sm:inline">Arquivos</span>
+            </button>
+            <button
               onClick={() => setModalConfig(true)}
               className="inline-flex items-center justify-center min-h-9 min-w-9 sm:px-3 sm:gap-1.5 text-xs text-white/60 hover:text-white hover:bg-white/5 rounded transition-colors"
               aria-label="Configurações"
@@ -274,6 +285,13 @@ export default function WingsAdminClient() {
           runs={runs}
           onClose={() => setModalConfig(false)}
           onChange={carregarTudo}
+          showToast={showToast}
+        />
+      )}
+
+      {modalArquivos && (
+        <EventosArquivados
+          onClose={() => setModalArquivos(false)}
           showToast={showToast}
         />
       )}
