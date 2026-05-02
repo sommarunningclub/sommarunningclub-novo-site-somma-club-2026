@@ -7,6 +7,7 @@ import {
   Settings, Download, RotateCw, ListOrdered,
 } from 'lucide-react'
 import Cronometro from './Cronometro'
+import PodioPreview from './PodioPreview'
 import { msParaDisplay, displayParaMs, segundosParaMs, MODALIDADES, TIPO_PROVA_LABEL } from '@/lib/wings-cronometragem/tempo'
 import type { AtleticaComp, AtletaComp, RunComp } from '@/lib/wings-cronometragem/types'
 import type { Fase, Sexo, Modalidade, TipoProva } from '@/lib/wings-cronometragem/tempo'
@@ -838,6 +839,7 @@ function BarraClassificatoria({
   const [carregando, setCarregando] = useState(false)
   const [finalLiberada, setFinalLiberada] = useState(false)
   const [carregandoLiberar, setCarregandoLiberar] = useState(false)
+  const [mostrarPodio, setMostrarPodio] = useState(false)
   const classificadas = atleticas.filter(a => a.classificada_final)
   const fechada = classificadas.length > 0
 
@@ -966,19 +968,29 @@ function BarraClassificatoria({
               </p>
             </div>
           </div>
-          <button
-            onClick={alternarLiberacao}
-            disabled={carregandoLiberar}
-            className={`flex-shrink-0 min-h-9 px-3 text-[10px] font-bold uppercase tracking-wider transition-colors disabled:opacity-50 ${
-              finalLiberada
-                ? 'bg-white/10 hover:bg-white/20 text-white'
-                : 'bg-emerald-500 hover:bg-emerald-400 text-emerald-950'
-            }`}
-          >
-            {carregandoLiberar ? '…' : finalLiberada ? 'Ocultar do público' : 'Liberar resultado'}
-          </button>
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <button
+              onClick={() => setMostrarPodio(true)}
+              className="min-h-9 px-3 bg-wfl-yellow hover:bg-wfl-yellow/90 text-wfl-navy text-[10px] font-bold uppercase tracking-wider transition-colors inline-flex items-center gap-1.5"
+            >
+              <Trophy className="w-3.5 h-3.5" /> Ver pódio
+            </button>
+            <button
+              onClick={alternarLiberacao}
+              disabled={carregandoLiberar}
+              className={`min-h-9 px-3 text-[10px] font-bold uppercase tracking-wider transition-colors disabled:opacity-50 ${
+                finalLiberada
+                  ? 'bg-white/10 hover:bg-white/20 text-white'
+                  : 'bg-emerald-500 hover:bg-emerald-400 text-emerald-950'
+              }`}
+            >
+              {carregandoLiberar ? '…' : finalLiberada ? 'Ocultar do público' : 'Liberar resultado'}
+            </button>
+          </div>
         </div>
       </div>
+
+      {mostrarPodio && <PodioPreview onClose={() => setMostrarPodio(false)} />}
     </div>
   )
 }
