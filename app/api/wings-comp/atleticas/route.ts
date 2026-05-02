@@ -37,6 +37,10 @@ export async function POST(req: NextRequest) {
     )
   }
 
+  const barras =
+    body.barras != null && body.barras !== '' && Number.isFinite(Number(body.barras))
+      ? Math.max(0, Math.min(999, Math.floor(Number(body.barras))))
+      : 0
   const { data, error } = await supabase
     .from('wings_comp_atleticas')
     .insert({
@@ -44,6 +48,7 @@ export async function POST(req: NextRequest) {
       sigla: body.sigla?.trim() || null,
       cor: body.cor || '#E30D3F',
       foto_url: body.foto_url || null,
+      barras,
     })
     .select('*')
     .single()
@@ -67,6 +72,12 @@ export async function PATCH(req: NextRequest) {
   if (typeof body.cor === 'string') update.cor = body.cor
   if (typeof body.foto_url === 'string' || body.foto_url === null) {
     update.foto_url = body.foto_url || null
+  }
+  if ('barras' in body) {
+    if (body.barras === '' || body.barras == null) update.barras = 0
+    else if (Number.isFinite(Number(body.barras))) {
+      update.barras = Math.max(0, Math.min(999, Math.floor(Number(body.barras))))
+    }
   }
 
   const supabase = getServiceClient()

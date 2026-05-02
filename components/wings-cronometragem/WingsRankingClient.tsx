@@ -224,7 +224,8 @@ function RankingRowItem({
   classificadaParaFinal: boolean
   telao: boolean
 }) {
-  const { atletica, atletas, melhorRunNormal, melhorRunDinamico, tempoCombinadoMs, totalPenalidadesMs, estado, posicao } = linha
+  const { atletica, atletas, melhorRunNormal, melhorRunDinamico, tempoCombinadoMs, tempoCombinadoBrutoMs, descontoBarrasMs, totalPenalidadesMs, estado, posicao } = linha
+  const barras = atletica.barras ?? 0
   const top3 = estado === 'completo' && posicao >= 1 && posicao <= 3
   const gap =
     estado === 'completo' && tempoLider != null && tempoCombinadoMs != null && tempoCombinadoMs !== tempoLider
@@ -356,6 +357,12 @@ function RankingRowItem({
               <span className="text-wfl-yellow">A</span> {msParaDisplay(melhorRunNormal.tempo_final_ms)}
               {' · '}
               <span className="text-wfl-red">D</span> {msParaDisplay(melhorRunDinamico.tempo_final_ms)}
+              {barras > 0 && (
+                <>
+                  {' · '}
+                  <span className="text-wfl-yellow font-bold">🏋️ {barras} −{barras}s</span>
+                </>
+              )}
             </p>
           ) : atletas.length > 0 ? (
             <p
@@ -376,6 +383,11 @@ function RankingRowItem({
         <div className="text-right tabular-nums leading-tight">
           {estado === 'completo' && tempoCombinadoMs != null ? (
             <>
+              {descontoBarrasMs > 0 && tempoCombinadoBrutoMs != null && (
+                <div className={`${telao ? 'text-sm' : 'text-[10px] sm:text-xs'} text-white/30 line-through font-mono`}>
+                  {msParaDisplay(tempoCombinadoBrutoMs)}
+                </div>
+              )}
               <div
                 className={`font-mono font-bold ${
                   totalPenalidadesMs > 0 ? 'text-wfl-red' : 'text-wfl-yellow'
@@ -384,11 +396,14 @@ function RankingRowItem({
                 {msParaDisplay(tempoCombinadoMs)}
               </div>
               <div className={`mt-0.5 ${telao ? 'text-xs' : 'text-[9px] sm:text-[10px]'} text-white/40`}>
+                {descontoBarrasMs > 0 && (
+                  <span className="text-wfl-yellow">−{descontoBarrasMs / 1000}s barras</span>
+                )}
                 {totalPenalidadesMs > 0 && (
-                  <span>+{(totalPenalidadesMs / 1000).toFixed(1)}s pen</span>
+                  <span className={descontoBarrasMs > 0 ? ' · ' : ''}>+{(totalPenalidadesMs / 1000).toFixed(1)}s pen</span>
                 )}
                 {gap != null && (
-                  <span className={totalPenalidadesMs > 0 ? ' · ' : ''}>
+                  <span className={(descontoBarrasMs > 0 || totalPenalidadesMs > 0) ? ' · ' : ''}>
                     +{(gap / 1000).toFixed(2)}s
                   </span>
                 )}

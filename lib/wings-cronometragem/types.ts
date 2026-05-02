@@ -6,6 +6,8 @@ export type AtleticaComp = {
   sigla: string | null
   cor: string
   foto_url: string | null
+  /** Barras feitas pelo casal — cada barra desconta 1s do tempo combinado. */
+  barras: number
   created_at: string
 }
 
@@ -42,8 +44,12 @@ export type RankingRow = {
   atletas: AtletaComp[]
   melhorRunNormal: RunComp | null
   melhorRunDinamico: RunComp | null
-  /** Soma dos tempos finais de normal + dinâmica. null se faltar uma. */
+  /** Soma dos tempos finais de normal + dinâmica (sem desconto). null se faltar uma. */
+  tempoCombinadoBrutoMs: number | null
+  /** Soma combinada já com desconto de barras aplicado. null se faltar uma. */
   tempoCombinadoMs: number | null
+  /** Desconto em ms aplicado pelas barras (barras × 1000). */
+  descontoBarrasMs: number
   /** Total de penalidades acumulado nas runs. */
   totalPenalidadesMs: number
   estado: EstadoEquipe

@@ -34,9 +34,15 @@ function montarRanking(
   const linhas: RankingRow[] = atleticas.map(atletica => {
     const slot = melhorPorAtleticaTipo.get(atletica.id) ?? { normal: null, dinamico: null }
     const tem = (slot.normal ? 1 : 0) + (slot.dinamico ? 1 : 0)
-    const tempoCombinadoMs =
+    const tempoCombinadoBrutoMs =
       slot.normal && slot.dinamico
         ? slot.normal.tempo_final_ms + slot.dinamico.tempo_final_ms
+        : null
+    const barras = atletica.barras ?? 0
+    const descontoBarrasMs = barras * 1000
+    const tempoCombinadoMs =
+      tempoCombinadoBrutoMs != null
+        ? Math.max(0, tempoCombinadoBrutoMs - descontoBarrasMs)
         : null
     const totalPenalidadesMs =
       (slot.normal ? slot.normal.penalidade_1_ms + slot.normal.penalidade_2_ms + slot.normal.penalidade_3_ms + slot.normal.penalidade_4_ms : 0) +
@@ -48,7 +54,9 @@ function montarRanking(
       atletas: atletas.filter(a => a.atletica_id === atletica.id),
       melhorRunNormal: slot.normal,
       melhorRunDinamico: slot.dinamico,
+      tempoCombinadoBrutoMs,
       tempoCombinadoMs,
+      descontoBarrasMs,
       totalPenalidadesMs,
       estado,
       posicao: 0,

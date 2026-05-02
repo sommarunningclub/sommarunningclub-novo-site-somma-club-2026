@@ -726,6 +726,11 @@ function ColunaAtleticas({
                         {masc}M · {fem}F
                         {completo && <span aria-hidden>✓</span>}
                       </span>
+                      {a.barras > 0 && (
+                        <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-wfl-yellow/20 text-wfl-yellow font-bold">
+                          🏋️ {a.barras} · −{a.barras}s
+                        </span>
+                      )}
                     </div>
                   </div>
                   <ChevronDown
@@ -737,6 +742,9 @@ function ColunaAtleticas({
 
               {aberta && (
                 <div className="border-t border-white/5 bg-black/30">
+                  {/* Barras (competição de barras → desconto no tempo) */}
+                  <BarrasInline atletica={a} onSaved={onChange} showToast={showToast} />
+
                   {/* Ações */}
                   <div className="px-2 py-2 grid grid-cols-3 gap-1">
                     <button
@@ -813,6 +821,102 @@ function ColunaAtleticas({
         />
       )}
     </section>
+  )
+}
+
+function BarrasInline({
+  atletica,
+  onSaved,
+  showToast,
+}: {
+  atletica: AtleticaComp
+  onSaved: () => Promise<void>
+  showToast: (t: NonNullable<Toast>) => void
+}) {
+  const [valor, setValor] = useState(String(atletica.barras ?? 0))
+  const [salvando, setSalvando] = useState(false)
+
+  useEffect(() => {
+    setValor(String(atletica.barras ?? 0))
+  }, [atletica.barras])
+
+  const numero = Number(valor) || 0
+  const sujou = numero !== (atletica.barras ?? 0)
+
+  async function salvar() {
+    setSalvando(true)
+    try {
+      const res = await fetch('/api/wings-comp/atleticas', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: atletica.id, barras: numero }),
+      })
+      const j = await res.json()
+      if (!res.ok) {
+        showToast({ tipo: 'erro', msg: j.error || 'Erro ao salvar barras.' })
+        return
+      }
+      showToast({ tipo: 'ok', msg: `🏋️ ${numero} barras → −${numero}s no tempo final.` })
+      await onSaved()
+    } finally {
+      setSalvando(false)
+    }
+  }
+
+  function ajuste(delta: number) {
+    const novo = Math.max(0, Math.min(999, numero + delta))
+    setValor(String(novo))
+  }
+
+  return (
+    <div className="px-3 py-2.5 border-b border-white/5 bg-wfl-yellow/5">
+      <div className="flex items-center justify-between gap-2 mb-1.5">
+        <span className="text-[10px] uppercase tracking-[0.15em] text-wfl-yellow font-bold flex items-center gap-1">
+          🏋️ Competição de Barras
+        </span>
+        <span className="text-[10px] text-white/50">1 barra = −1s</span>
+      </div>
+      <div className="flex items-center gap-1.5">
+        <button
+          type="button"
+          onClick={() => ajuste(-1)}
+          className="w-9 h-9 flex-shrink-0 bg-black/40 hover:bg-black/60 text-white text-lg font-bold"
+          aria-label="Diminuir 1"
+        >
+          −
+        </button>
+        <input
+          type="number"
+          inputMode="numeric"
+          min="0"
+          max="999"
+          value={valor}
+          onChange={e => setValor(e.target.value)}
+          className="flex-1 min-h-9 bg-black/40 border border-white/15 px-2 text-center text-base font-mono tabular-nums text-white outline-none focus:border-wfl-yellow"
+        />
+        <button
+          type="button"
+          onClick={() => ajuste(1)}
+          className="w-9 h-9 flex-shrink-0 bg-black/40 hover:bg-black/60 text-white text-lg font-bold"
+          aria-label="Aumentar 1"
+        >
+          +
+        </button>
+        <button
+          type="button"
+          onClick={salvar}
+          disabled={!sujou || salvando}
+          className="min-h-9 px-3 bg-wfl-yellow hover:bg-wfl-yellow/90 disabled:bg-white/10 disabled:text-white/30 text-wfl-navy text-[10px] font-bold uppercase tracking-wider transition-colors"
+        >
+          {salvando ? '…' : 'Salvar'}
+        </button>
+      </div>
+      {numero > 0 && (
+        <p className="mt-1.5 text-[10px] text-white/60">
+          Desconto: <span className="text-wfl-yellow font-bold tabular-nums">−{numero}s</span> no tempo combinado.
+        </p>
+      )}
+    </div>
   )
 }
 
