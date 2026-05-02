@@ -528,18 +528,21 @@ function ColunaRegistrarRun({
 
         <div>
           <label htmlFor="input-tempo" className="text-[10px] uppercase tracking-wider text-white/60">
-            Tempo bruto · MM:SS.ms
+            Tempo bruto
           </label>
           <input
             id="input-tempo"
             value={tempoStr}
             onChange={e => setTempoStr(e.target.value)}
-            placeholder="01:23.456"
+            placeholder="01:23.456 · 0123456 · 23.4"
             inputMode="decimal"
             className="mt-1 w-full min-h-12 bg-black/40 border border-white/15 px-3 text-lg font-mono tabular-nums text-white outline-none focus:border-wfl-yellow"
           />
+          <p className="mt-1 text-[10px] text-white/40">
+            Aceita: 01:23.456 · 01:23:456 · 0123456 · 23456 · 23.4
+          </p>
           {tempoStr && !tempoBrutoValido && (
-            <p className="mt-1 text-[10px] text-wfl-red">Use o formato MM:SS.ms (ex: 01:23.456).</p>
+            <p className="mt-1 text-[10px] text-wfl-red">Tempo inválido — segundos devem ser &lt; 60.</p>
           )}
         </div>
 
@@ -1621,7 +1624,7 @@ function ModalEditarRun({
         </div>
 
         <div>
-          <label className="text-[10px] uppercase tracking-wider text-white/60">Tempo bruto · MM:SS.ms</label>
+          <label className="text-[10px] uppercase tracking-wider text-white/60">Tempo bruto</label>
           <input
             value={tempoStr}
             onChange={e => setTempoStr(e.target.value)}
