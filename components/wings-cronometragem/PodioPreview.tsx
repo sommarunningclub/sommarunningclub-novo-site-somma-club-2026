@@ -1,8 +1,10 @@
 'use client'
 
+import { useState } from 'react'
 import { X, Trophy } from 'lucide-react'
 import { useRanking } from './useRanking'
 import { msParaDisplay } from '@/lib/wings-cronometragem/tempo'
+import type { Fase } from '@/lib/wings-cronometragem/tempo'
 import type { RankingRow } from '@/lib/wings-cronometragem/types'
 
 const fontDisplay = { fontFamily: 'var(--font-bebas), sans-serif' }
@@ -12,8 +14,17 @@ const MEDALHA = ['🥇', '🥈', '🥉']
 const COR_PODIO = ['#FFD400', '#C0C0C0', '#CD7F32']
 
 export default function PodioPreview({ onClose }: { onClose: () => void }) {
-  // Mostra o pódio sempre baseado na FINAL (que é o que decide o resultado)
-  const { ranking, loading } = useRanking('final')
+  // Carrega ranking das duas fases e escolhe a que tem mais dados
+  const finalData = useRanking('final')
+  const classData = useRanking('classificatoria')
+
+  const finalTemCompletos = finalData.ranking.some(r => r.estado === 'completo')
+  // Default automático: usa final se houver pódio formado, senão classificatória
+  const [faseEscolhida, setFaseEscolhida] = useState<Fase>(finalTemCompletos ? 'final' : 'classificatoria')
+
+  const dados = faseEscolhida === 'final' ? finalData : classData
+  const ranking = dados.ranking
+  const loading = dados.loading
 
   const completos = ranking.filter(r => r.estado === 'completo')
   const top3 = completos.slice(0, 3)
@@ -29,20 +40,43 @@ export default function PodioPreview({ onClose }: { onClose: () => void }) {
       <div className="min-h-full flex items-start justify-center px-3 py-6" onClick={e => e.stopPropagation()}>
         <div className="w-full max-w-4xl bg-wfl-navy border border-white/10 shadow-2xl">
           {/* Header */}
-          <header className="sticky top-0 z-10 bg-wfl-navy/95 backdrop-blur border-b border-white/10 px-4 sm:px-6 py-3 flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="text-[10px] tracking-[0.3em] uppercase text-wfl-yellow font-bold">Preview · Admin</p>
-              <h2 className="text-2xl sm:text-3xl uppercase leading-none flex items-center gap-2" style={fontDisplay}>
-                <Trophy className="w-6 h-6 text-wfl-yellow" /> Pódio Final
-              </h2>
+          <header className="sticky top-0 z-10 bg-wfl-navy/95 backdrop-blur border-b border-white/10 px-4 sm:px-6 py-3">
+            <div className="flex items-center justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[10px] tracking-[0.3em] uppercase text-wfl-yellow font-bold">Preview · Admin</p>
+                <h2 className="text-2xl sm:text-3xl uppercase leading-none flex items-center gap-2" style={fontDisplay}>
+                  <Trophy className="w-6 h-6 text-wfl-yellow" />
+                  {faseEscolhida === 'final' ? 'Pódio Final' : 'Pódio · Classificatória'}
+                </h2>
+              </div>
+              <button
+                onClick={onClose}
+                className="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
+                aria-label="Fechar"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
-            <button
-              onClick={onClose}
-              className="w-10 h-10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition-colors"
-              aria-label="Fechar"
-            >
-              <X className="w-5 h-5" />
-            </button>
+
+            {/* Tabs de fase */}
+            <div className="mt-3 grid grid-cols-2 gap-1 bg-black/30 p-1 max-w-md">
+              {(['classificatoria', 'final'] as Fase[]).map(f => {
+                const ativa = faseEscolhida === f
+                const completosFase = (f === 'final' ? finalData : classData).ranking.filter(r => r.estado === 'completo').length
+                return (
+                  <button
+                    key={f}
+                    onClick={() => setFaseEscolhida(f)}
+                    className={`min-h-9 text-[10px] font-bold uppercase tracking-[0.15em] transition-colors ${
+                      ativa ? 'bg-wfl-red text-white' : 'bg-transparent text-white/60 hover:bg-white/5'
+                    }`}
+                  >
+                    {f === 'classificatoria' ? 'Classificatória' : 'Final'}
+                    <span className="ml-1.5 opacity-70 tabular-nums">({completosFase})</span>
+                  </button>
+                )
+              })}
+            </div>
           </header>
 
           <div className="px-4 sm:px-6 py-6 sm:py-8 space-y-8">
@@ -50,7 +84,9 @@ export default function PodioPreview({ onClose }: { onClose: () => void }) {
               <p className="text-center text-white/40 py-12">Carregando…</p>
             ) : completos.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-white/60 text-sm mb-2">Sem equipes completas na final ainda.</p>
+                <p className="text-white/60 text-sm mb-2">
+                  Sem equipes completas {faseEscolhida === 'final' ? 'na final' : 'na classificatória'} ainda.
+                </p>
                 <p className="text-[11px] text-white/40">Cada equipe precisa de 1 run de atletismo + 1 dinâmica para entrar no pódio.</p>
               </div>
             ) : (
@@ -106,7 +142,8 @@ export default function PodioPreview({ onClose }: { onClose: () => void }) {
           </div>
 
           <footer className="border-t border-white/10 px-4 sm:px-6 py-3 text-[10px] text-white/40 text-center">
-            Tempos com desconto de barras já aplicado · Top 3 do pódio · Atualiza em tempo real
+            Fase: <span className="text-white/70 font-bold uppercase">{faseEscolhida === 'final' ? 'Final' : 'Classificatória'}</span>
+            {' · '}Tempos com desconto de barras já aplicado · Atualiza em tempo real
           </footer>
         </div>
       </div>
