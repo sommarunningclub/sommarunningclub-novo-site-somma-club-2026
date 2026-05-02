@@ -1388,6 +1388,7 @@ function ModalAtletica({
   const [sigla, setSigla] = useState(atletica?.sigla ?? '')
   const [cor, setCor] = useState(atletica?.cor ?? '#E30D3F')
   const [fotoUrl, setFotoUrl] = useState<string | null>(atletica?.foto_url ?? null)
+  const [classificadaFinal, setClassificadaFinal] = useState(atletica?.classificada_final ?? false)
   const [salvando, setSalvando] = useState(false)
   const [uploadando, setUploadando] = useState(false)
 
@@ -1421,7 +1422,7 @@ function ModalAtletica({
       const url = '/api/wings-comp/atleticas'
       const method = editando ? 'PATCH' : 'POST'
       const body = editando
-        ? { id: atletica!.id, nome, sigla, cor, foto_url: fotoUrl }
+        ? { id: atletica!.id, nome, sigla, cor, foto_url: fotoUrl, classificada_final: classificadaFinal }
         : { nome, sigla, cor, foto_url: fotoUrl }
       const res = await fetch(url, {
         method,
@@ -1548,6 +1549,31 @@ function ModalAtletica({
             />
           </div>
         </div>
+        {editando && (
+          <label
+            className={`flex items-center gap-3 px-3 py-2.5 cursor-pointer border transition-colors ${
+              classificadaFinal
+                ? 'bg-wfl-yellow/15 border-wfl-yellow/50'
+                : 'bg-black/30 border-white/10 hover:border-white/20'
+            }`}
+          >
+            <input
+              type="checkbox"
+              checked={classificadaFinal}
+              onChange={e => setClassificadaFinal(e.target.checked)}
+              className="w-5 h-5 accent-wfl-yellow flex-shrink-0"
+            />
+            <div className="min-w-0">
+              <p className={`text-xs font-bold uppercase tracking-wider ${classificadaFinal ? 'text-wfl-yellow' : 'text-white/80'}`}>
+                {classificadaFinal ? '🏆 Classificada para a final' : 'Classificar para a final'}
+              </p>
+              <p className="text-[10px] text-white/50">
+                Permite registrar runs com fase=final mesmo após travamento.
+              </p>
+            </div>
+          </label>
+        )}
+
         <div className="grid grid-cols-2 gap-2 pt-2">
           <button
             type="button"

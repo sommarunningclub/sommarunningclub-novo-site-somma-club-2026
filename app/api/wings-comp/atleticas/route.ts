@@ -79,6 +79,9 @@ export async function PATCH(req: NextRequest) {
       update.barras = Math.max(0, Math.min(999, Math.floor(Number(body.barras))))
     }
   }
+  if ('classificada_final' in body) {
+    update.classificada_final = !!body.classificada_final
+  }
 
   const supabase = getServiceClient()
 
