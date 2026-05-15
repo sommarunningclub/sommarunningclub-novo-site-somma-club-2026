@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import { fisherYatesShuffle } from '@/lib/sorteio/utils'
+import { fisherYatesShuffle, gerarHashAuditoria } from '@/lib/sorteio/utils'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -90,6 +90,15 @@ export async function POST(
     const numerados = (pool || []).map((p, i) => ({ ...p, numero: i + 1 }))
     const numeroSorteado = numerados.find(p => p.id === substituto.id)?.numero || 0
 
+    // Hash de auditoria do resorteio
+    const timestamp = new Date().toISOString()
+    const auditHash = await gerarHashAuditoria({
+      candidatoIds: disponiveis.map(p => p.id),
+      ganhadorIds: [substituto.id],
+      timestamp,
+      eventoId: sorteio.evento_id,
+    })
+
     // Inserir novo ganhador
     const { data: novoGanhador, error: ngError } = await supabase
       .from('sorteio_ganhadores')
@@ -99,6 +108,7 @@ export async function POST(
         posicao: ganhadorAusente.posicao,
         numero_sorteado: numeroSorteado,
         status: 'pendente',
+        audit_hash: auditHash,
       })
       .select()
       .single()

@@ -59,5 +59,6 @@ export type Sorteio = {
   total_elegiveis: number
   created_at: string
   criado_por: string
+  audit_hash: string | null
   ganhadores: Ganhador[]
 }

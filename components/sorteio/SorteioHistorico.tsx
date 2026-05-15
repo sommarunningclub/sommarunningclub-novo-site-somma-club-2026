@@ -1,10 +1,9 @@
-// components/sorteio/SorteioHistorico.tsx
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, Clock, Trophy, Users, Trash2, Loader2 } from 'lucide-react'
+import { ChevronDown, Clock, Trophy, Users, Trash2, Loader2, Download, ShieldCheck } from 'lucide-react'
 import type { Sorteio } from '@/lib/sorteio/types'
-import { formatDateTime, descricaoFiltros } from '@/lib/sorteio/utils'
+import { formatDateTime, descricaoFiltros, exportarCSV } from '@/lib/sorteio/utils'
 
 type SorteioHistoricoProps = {
   sorteios: Sorteio[]
@@ -24,6 +23,22 @@ export default function SorteioHistorico({ sorteios, onLimparHistorico }: Sortei
     } finally {
       setLimpando(false)
     }
+  }
+
+  function handleExportarCSV(s: Sorteio) {
+    const rows = s.ganhadores.map(g => ({
+      posicao: g.posicao,
+      nome: g.checkin?.nome_completo || '',
+      email: g.checkin?.email || '',
+      telefone: g.checkin?.telefone || '',
+      cpf: g.checkin?.cpf || '',
+      sexo: g.checkin?.sexo || '',
+      pelotao: g.checkin?.pelotao || '',
+      status: g.status,
+      numero_sorteado: g.numero_sorteado,
+    }))
+    const nomeArquivo = `sorteio-${s.titulo.toLowerCase().replace(/\s+/g, '-')}-${new Date(s.created_at).toISOString().split('T')[0]}`
+    exportarCSV(rows, nomeArquivo)
   }
 
   if (sorteios.length === 0) {
@@ -85,7 +100,30 @@ export default function SorteioHistorico({ sorteios, onLimparHistorico }: Sortei
 
             {aberto && (
               <div className="border-t border-zinc-800 p-4 space-y-2">
-                <p className="text-zinc-500 text-xs mb-2">Operado por: {s.criado_por || '—'}</p>
+                {/* Cabeçalho com operador, hash e exportar */}
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+                  <p className="text-zinc-500 text-xs">Operado por: <span className="text-zinc-400">{s.criado_por || '—'}</span></p>
+                  <button
+                    onClick={() => handleExportarCSV(s)}
+                    className="flex items-center gap-1.5 text-zinc-500 hover:text-white text-xs transition-colors"
+                  >
+                    <Download className="w-3 h-3" />
+                    Exportar CSV
+                  </button>
+                </div>
+
+                {/* Hash de auditoria */}
+                {s.audit_hash && (
+                  <div className="flex items-start gap-2 bg-zinc-800/60 border border-zinc-700 rounded-lg px-3 py-2 mb-3">
+                    <ShieldCheck className="w-3.5 h-3.5 text-green-400 flex-shrink-0 mt-0.5" />
+                    <div className="min-w-0">
+                      <p className="text-green-400 text-xs font-medium">Hash de auditoria SHA-256</p>
+                      <p className="text-zinc-500 text-[10px] font-mono break-all mt-0.5">{s.audit_hash}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Lista de ganhadores */}
                 {s.ganhadores.map(g => {
                   const corStatus = g.status === 'confirmado'
                     ? 'border-green-900/50 bg-green-950/20'

@@ -1,7 +1,6 @@
-// app/api/sorteio/sortear/route.ts
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
-import { fisherYatesShuffle } from '@/lib/sorteio/utils'
+import { fisherYatesShuffle, gerarHashAuditoria } from '@/lib/sorteio/utils'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -60,6 +59,15 @@ export async function POST(req: Request) {
     const embaralhados = fisherYatesShuffle(numerados)
     const sorteados = embaralhados.slice(0, quantidade)
 
+    // Gerar hash de auditoria SHA-256
+    const timestamp = new Date().toISOString()
+    const auditHash = await gerarHashAuditoria({
+      candidatoIds: participantes.map(p => p.id),
+      ganhadorIds: sorteados.map(p => p.id),
+      timestamp,
+      eventoId: evento_id,
+    })
+
     // Criar registro do sorteio
     const { data: sorteio, error: sError } = await supabase
       .from('sorteios')
@@ -69,6 +77,7 @@ export async function POST(req: Request) {
         filtros_aplicados: filtros || {},
         total_elegiveis: participantes.length,
         criado_por: criado_por || null,
+        audit_hash: auditHash,
       })
       .select()
       .single()

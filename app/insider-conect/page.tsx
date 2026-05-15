@@ -5,8 +5,9 @@ import {
   Search, LogOut, Users, ClipboardList, CheckSquare,
   MessageCircle, Check, X, ShieldCheck, ChevronRight,
   ArrowLeft, Loader2, RefreshCw, Lock, ChevronDown,
-  Trophy, Dices, Filter, Clock, Repeat, Plus,
+  Trophy, Dices, Filter, Clock, Repeat, Plus, Eye, EyeOff,
 } from 'lucide-react'
+import type { ParticipanteSorteio } from '@/lib/sorteio/types'
 import SorteioMachine from '@/components/sorteio/SorteioMachine'
 import GanhadorCard from '@/components/sorteio/GanhadorCard'
 import SorteioHistorico from '@/components/sorteio/SorteioHistorico'
@@ -1154,6 +1155,10 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
   const [nomesAnimacao, setNomesAnimacao] = useState<string[]>([])
   const [animacaoCompleta, setAnimacaoCompleta] = useState(false)
 
+  // Preview de participantes
+  const [mostrarPreview, setMostrarPreview] = useState(false)
+  const [participantesPreview, setParticipantesPreview] = useState<ParticipanteSorteio[]>([])
+
   // Histórico
   const [historico, setHistorico] = useState<Sorteio[]>([])
   const [loadingHistorico, setLoadingHistorico] = useState(false)
@@ -1193,6 +1198,7 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
           new Date(p.data_hora_checkin).toISOString().split('T')[0]
         ))].sort() as string[]
         setDatasDisponiveis(datas)
+        setParticipantesPreview(data.participantes)
       }
     } finally {
       setLoading(false)
@@ -1357,6 +1363,42 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Preview de participantes */}
+      {stats && stats.total > 0 && (
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setMostrarPreview(v => !v)}
+            className="w-full flex items-center justify-between p-4 hover:bg-zinc-800/50 transition-colors"
+          >
+            <span className="flex items-center gap-2 text-sm text-white font-medium">
+              {mostrarPreview ? <EyeOff className="w-4 h-4 text-zinc-400" /> : <Eye className="w-4 h-4 text-zinc-400" />}
+              {mostrarPreview ? 'Ocultar' : 'Ver'} participantes elegíveis ({stats.total})
+            </span>
+            <ChevronDown className={`w-4 h-4 text-zinc-500 transition-transform ${mostrarPreview ? 'rotate-180' : ''}`} />
+          </button>
+          {mostrarPreview && (
+            <div className="border-t border-zinc-800 px-4 pb-3 max-h-64 overflow-y-auto">
+              {participantesPreview.slice(0, 50).map(p => (
+                <div key={p.id} className="flex items-center justify-between py-2 border-b border-zinc-800/60 last:border-0">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-zinc-600 text-xs font-mono w-7 flex-shrink-0">#{p.numero}</span>
+                    <span className="text-white text-xs truncate">{p.nome_completo}</span>
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0 ml-2">
+                    {p.pelotao && <span className="text-[10px] text-[#ff2c03] bg-[#ff2c03]/10 px-1.5 py-0.5 rounded">{p.pelotao}</span>}
+                    <span className="text-[10px] text-zinc-500 capitalize">{p.sexo?.charAt(0)?.toUpperCase() || '?'}</span>
+                    {p.validacao_do_checkin && <ShieldCheck className="w-3 h-3 text-green-400" />}
+                  </div>
+                </div>
+              ))}
+              {participantesPreview.length > 50 && (
+                <p className="text-zinc-600 text-xs text-center pt-2">+ {participantesPreview.length - 50} participantes não exibidos</p>
+              )}
+            </div>
+          )}
         </div>
       )}
 
