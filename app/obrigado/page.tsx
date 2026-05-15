@@ -47,20 +47,21 @@ export default function ObrigadoPage() {
         </div>
 
         {/* Botão WhatsApp */}
-        <a 
-          href="https://chat.whatsapp.com/Cw7SxDvVDDW6kAW0fj06FT?mode=gi_t" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="w-full"
+        <Button
+          size="lg"
+          onClick={() => {
+            const links = [
+              'https://chat.whatsapp.com/HqEzvY8SbSvImtGaw3UkEk?mode=gi_t',
+              'https://chat.whatsapp.com/B5MSnH8DoasDVfgMlbuAng?mode=gi_t',
+            ]
+            const link = links[Math.floor(Math.random() * links.length)]
+            window.open(link, '_blank', 'noopener,noreferrer')
+          }}
+          className="w-full bg-green-500 hover:bg-green-600 text-white gap-2 mb-3"
         >
-          <Button 
-            size="lg" 
-            className="w-full bg-green-500 hover:bg-green-600 text-white gap-2 mb-3"
-          >
-            <MessageCircle className="w-5 h-5" />
-            Entrar no Grupo WhatsApp
-          </Button>
-        </a>
+          <MessageCircle className="w-5 h-5" />
+          Entrar no Grupo WhatsApp
+        </Button>
 
         {/* Botão voltar home */}
         <Link href="/" className="w-full">
