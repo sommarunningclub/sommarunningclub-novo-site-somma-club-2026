@@ -732,7 +732,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
       const data = await res.json()
       if (data.eventos?.length) {
         setEventos(data.eventos)
-        if (!selectedEventoId) setSelectedEventoId(data.eventos[0].id)
+        if (!selectedEventoId) setSelectedEventoId(data.evento?.id || data.eventos[0].id)
       }
     } catch (e) {
       console.error('[transferencias] erro eventos:', e)

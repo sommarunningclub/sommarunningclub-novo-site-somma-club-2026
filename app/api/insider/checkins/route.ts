@@ -22,10 +22,10 @@ export async function GET(req: Request) {
       return NextResponse.json({ checkins: [], evento: null, eventos: [] })
     }
 
-    // Se evento_id informado usa ele, senão pega o mais recente
+    // Se evento_id informado usa ele, senão prioriza o evento aberto mais recente
     const eventoSelecionado = eventoId
       ? eventos.find(e => e.id === eventoId) || eventos[0]
-      : eventos[0]
+      : eventos.find(e => e.checkin_status === 'aberto') || eventos[0]
 
     let query = supabase
       .from('checkins')
