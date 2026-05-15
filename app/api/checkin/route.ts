@@ -6,6 +6,54 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+async function syncToCadastroSite(params: {
+  nome_completo: string
+  email: string
+  cpf: string
+  telefone: string
+  sexo: string
+}) {
+  const cpfDigits = String(params.cpf).replace(/\D/g, '')
+  if (cpfDigits.length !== 11) return
+
+  const cpfFormatted = cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+
+  // Verifica se CPF já existe em qualquer formato salvo historicamente
+  const { data: existing, error: checkError } = await supabase
+    .from('cadastro_site')
+    .select('id')
+    .in('cpf', [cpfDigits, cpfFormatted, params.cpf])
+    .limit(1)
+
+  if (checkError) {
+    console.error('[v0] Erro ao verificar cadastro_site:', checkError)
+    return
+  }
+
+  if (existing && existing.length > 0) return
+
+  const dataCadastro = new Date()
+    .toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' })
+    .replace(' ', 'T') + '-03:00'
+
+  const { error: insertError } = await supabase.from('cadastro_site').insert([
+    {
+      nome_completo: params.nome_completo,
+      email: params.email,
+      cpf: cpfFormatted,
+      whatsapp: params.telefone,
+      data_nascimento: null,
+      sexo: params.sexo || null,
+      cep: null,
+      data_de_cadastro: dataCadastro,
+    },
+  ])
+
+  if (insertError && (insertError as { code?: string }).code !== '23505') {
+    console.error('[v0] Erro ao inserir em cadastro_site via checkin:', insertError)
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
@@ -75,6 +123,12 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    // Sincroniza com cadastro_site se o CPF ainda não estiver lá.
+    // Não bloqueia a resposta: falhas aqui não devem afetar o check-in.
+    syncToCadastroSite({ nome_completo, email, cpf, telefone, sexo }).catch((err) => {
+      console.error('[v0] Falha ao sincronizar com cadastro_site:', err)
+    })
 
     return NextResponse.json(
       { success: true, data },

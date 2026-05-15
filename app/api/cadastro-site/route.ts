@@ -13,6 +13,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Normaliza CPF (apenas dígitos) para comparação consistente
+    const cpfDigits = String(cpf).replace(/\D/g, '')
+    if (cpfDigits.length !== 11) {
+      return NextResponse.json(
+        { error: 'CPF inválido. Informe os 11 dígitos.' },
+        { status: 400 }
+      )
+    }
+
     // Criar cliente Supabase
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -27,6 +36,29 @@ export async function POST(request: NextRequest) {
 
     const supabase = createClient(supabaseUrl, supabaseKey)
 
+    // Verificar duplicidade de CPF (compara contra valor formatado e apenas dígitos)
+    const cpfFormatted = cpfDigits.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+    const { data: existing, error: checkError } = await supabase
+      .from('cadastro_site')
+      .select('id')
+      .in('cpf', [cpfDigits, cpfFormatted, cpf])
+      .limit(1)
+
+    if (checkError) {
+      console.error('[v0] Erro ao verificar CPF existente:', checkError)
+      return NextResponse.json(
+        { error: 'Erro ao validar cadastro: ' + checkError.message },
+        { status: 500 }
+      )
+    }
+
+    if (existing && existing.length > 0) {
+      return NextResponse.json(
+        { error: 'Este CPF já está cadastrado em nossa base.' },
+        { status: 409 }
+      )
+    }
+
     // Inserir dados na tabela cadastro_site com data de cadastro
     const { data, error } = await supabase
       .from('cadastro_site')
@@ -34,7 +66,7 @@ export async function POST(request: NextRequest) {
         {
           nome_completo,
           email,
-          cpf,
+          cpf: cpfFormatted,
           whatsapp,
           data_nascimento: data_nascimento || null,
           sexo: sexo || null,
@@ -46,6 +78,13 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('[v0] Erro ao inserir em cadastro_site:', error)
+      // Tratamento de erro caso exista UNIQUE constraint no banco (código 23505)
+      if ((error as { code?: string }).code === '23505') {
+        return NextResponse.json(
+          { error: 'Este CPF já está cadastrado em nossa base.' },
+          { status: 409 }
+        )
+      }
       return NextResponse.json(
         { error: 'Erro ao salvar cadastro: ' + error.message },
         { status: 400 }
