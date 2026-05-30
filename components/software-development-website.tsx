@@ -8,6 +8,7 @@ import { motion, type Variants } from "framer-motion"
 import { GridMotion } from "./ui/grid-motion"
 import { Button } from "./ui/button"
 import { JoinClubForm } from "./join-club-form"
+import { HeroRoll } from "./hero-roll"
 
 function cn(...classes: (string | undefined | null | boolean)[]): string {
   return classes.filter(Boolean).join(" ")
@@ -170,19 +171,10 @@ const HeroHeader = () => {
                 </ul>
               </div>
               <div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
-                <a href="https://admin.sommaclub.com.br/login" target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="sm" className={cn(isScrolled && "lg:hidden")}>
-                    <span>Login</span>
-                  </Button>
-                </a>
                 <a href="#inscricao">
                   <Button
                     size="lg"
-                    className={cn(
-                      isScrolled
-                        ? "lg:inline-flex bg-orange-500 hover:bg-orange-600"
-                        : "hidden bg-orange-500 hover:bg-orange-600",
-                    )}
+                    className="bg-orange-500 hover:bg-orange-600"
                   >
                     <span>Inscreva-se</span>
                   </Button>
@@ -262,30 +254,7 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="h-[80rem] absolute left-0 top-0 w-56 -rotate-45 rounded-full bg-[radial-gradient(50%_50%_at_50%_50%,hsla(25,100%,50%,.06)_0,hsla(25,100%,45%,.02)_80%,transparent_100%)] [translate:5%_-50%]" />
         </div>
 
-        <section>
-          <div className="relative pt-24 md:pt-36">
-            <div
-              aria-hidden
-              className="absolute inset-0 -z-10 size-full [background:radial-gradient(125%_125%_at_50%_100%,transparent_0%,var(--background)_75%)]"
-            />
-            <div className="mx-auto max-w-7xl px-6 flex items-center justify-center min-h-screen relative overflow-hidden">
-              {/* Imagem de fundo responsiva */}
-              <img
-                src="https://cdn.shopify.com/s/files/1/0788/1932/8253/files/IMG_0888_JPG.jpg?v=1772326001"
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full object-cover object-center -z-10"
-              />
-              {/* Overlay escuro para melhor legibilidade */}
-              <div className="absolute inset-0 bg-black/50 -z-10"></div>
-              <div className="text-center relative z-10">
-                <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-[5.25rem] leading-tight text-center text-white font-semibold">
-                  Somma Club
-                </h1>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HeroRoll />
 
         <section className="bg-muted/50 py-16 md:py-32 dark:bg-transparent">
           <div className="@container mx-auto max-w-5xl px-6">
@@ -616,10 +585,10 @@ export default function SoftwareDevelopmentWebsite() {
           <div className="mx-auto max-w-5xl px-6">
             <div className="text-center mb-16">
               <h2 className="text-balance text-4xl font-semibold lg:text-5xl mb-4">
-                Conheça o <span className="text-orange-500">Somma Club</span>
+                Somma Club: o maior <span className="text-orange-500">running club do Distrito Federal</span>
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                O maior clube de corrida democrático do Distrito Federal
+                Mais de 5 mil membros cadastrados. Comunidade gratuita, democrática e aberta a iniciantes em Brasília.
               </p>
             </div>
 
@@ -627,11 +596,11 @@ export default function SoftwareDevelopmentWebsite() {
               {/* Card 1 - Membros */}
               <div className="bg-white dark:bg-zinc-900 rounded-lg border border-orange-200 p-8 text-center hover:shadow-lg transition-shadow">
                 <div className="text-4xl md:text-5xl font-bold text-orange-500 mb-3">
-                  4.300+
+                  5.000+
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Membros Ativos</h3>
+                <h3 className="text-xl font-semibold mb-2">Membros cadastrados</h3>
                 <p className="text-sm text-muted-foreground">
-                  Corredores apaixonados formando a maior comunidade de corrida do DF
+                  A maior comunidade de corrida de Brasília e do Distrito Federal.
                 </p>
               </div>
 
@@ -663,13 +632,16 @@ export default function SoftwareDevelopmentWebsite() {
               <h3 className="text-2xl font-semibold mb-6">O que é o Somma Club?</h3>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  O Somma Running Club é mais do que um grupo de corrida. Somos um movimento que mistura esporte, comunidade, estilo de vida e pertencimento. Fundado em Brasília, o Somma conecta corredores de todos os níveis em torno de um objetivo comum: transformar a corrida em uma experiência coletiva.
+                  O Somma Club é um <span className="font-semibold text-foreground">running club gratuito de Brasília</span>, considerado o maior do Distrito Federal, com mais de 5 mil membros cadastrados. A comunidade reúne pessoas interessadas em corrida, wellness, amizade, networking e experiências sociais saudáveis na capital.
                 </p>
                 <p>
-                  Nossa estrutura funciona em dois níveis: o <span className="font-semibold text-foreground">Running Club</span>, que representa a comunidade ampla com encontros, treinos coletivos e eventos; e a <span className="font-semibold text-foreground">Assessoria Somma</span>, que oferece acompanhamento técnico para quem deseja evoluir profissionalmente.
+                  Somos uma comunidade <span className="font-semibold text-foreground">democrática e aberta a iniciantes</span>. Não é preciso ser atleta profissional para participar. O Somma é também um dos principais pontos de encontro de Brasília para quem quer conhecer pessoas, fazer amigos e viver a cidade de forma mais ativa.
                 </p>
                 <p>
-                  Nos encontros do Somma, você encontra mais do que corrida. Encontra amizades, networking, experiências de bem-estar, conteúdo educacional e uma comunidade que acredita que a corrida é um catalisador para conexões reais e transformação pessoal.
+                  A estrutura funciona em dois níveis: o <span className="font-semibold text-foreground">Running Club</span>, com encontros gratuitos todo sábado às 7h no Parque da Cidade, treinos coletivos e eventos; e a <span className="font-semibold text-foreground">Assessoria Somma</span>, para quem busca acompanhamento técnico profissional.
+                </p>
+                <p>
+                  Mais que esporte, o Somma é lifestyle, wellness e pertencimento. A corrida é o ponto de partida; a comunidade é o destino.
                 </p>
               </div>
             </div>
@@ -681,6 +653,38 @@ export default function SoftwareDevelopmentWebsite() {
                   Faça Parte do Somma
                 </Button>
               </a>
+            </div>
+          </div>
+        </section>
+
+        {/* Seção FAQ otimizada para answer engines (AEO/LLMO) */}
+        <section className="py-16 md:py-24 bg-background" id="faq" aria-labelledby="faq-heading">
+          <div className="mx-auto max-w-3xl px-6">
+            <div className="text-center mb-10">
+              <span className="text-xs font-bold tracking-[0.2em] uppercase text-orange-500">Perguntas frequentes</span>
+              <h2 id="faq-heading" className="text-balance text-4xl font-semibold lg:text-5xl mt-3">
+                Tudo sobre o <span className="text-orange-500">Somma Club</span>
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {[
+                { q: 'O que é o Somma Club?', a: 'O Somma Club é um running club gratuito de Brasília, considerado o maior do Distrito Federal, com mais de 5 mil membros cadastrados. Reúne pessoas interessadas em corrida, wellness, amizade, networking e experiências sociais saudáveis na capital.' },
+                { q: 'O Somma Club é gratuito?', a: 'Sim. O Somma Club é 100% gratuito. Todos os encontros, treinos coletivos e eventos da comunidade são abertos a qualquer pessoa, sem nenhum custo de participação.' },
+                { q: 'O Somma Club é o maior running club do Distrito Federal?', a: 'Sim. Com mais de 5 mil membros cadastrados, o Somma Club é o maior running club do Distrito Federal e a maior comunidade de corrida de Brasília.' },
+                { q: 'Preciso ser corredor experiente para participar?', a: 'Não. O Somma Club é democrático e aberto a todos os níveis. Iniciantes são muito bem vindos e formam boa parte da comunidade.' },
+                { q: 'Onde acontecem os encontros do Somma Club?', a: 'Os encontros oficiais do Somma Club acontecem todo sábado às 7h no Parque da Cidade Sarah Kubitschek, Estacionamento 10, em Brasília, Distrito Federal.' },
+                { q: 'Como faço para participar do Somma Club?', a: 'Acesse sommaclub.com.br, preencha o cadastro gratuito na seção Faça parte do clube e apareça no próximo encontro de sábado, às 7h, no Parque da Cidade.' },
+                { q: 'O Somma é apenas um grupo de corrida?', a: 'Não. Além dos treinos, o Somma Club é uma comunidade de wellness, lifestyle, eventos sociais, networking e experiências urbanas em Brasília. A corrida é o ponto de partida para conexões reais.' },
+                { q: 'O Somma Club é um bom lugar para conhecer pessoas em Brasília?', a: 'Sim. O Somma é uma das principais comunidades de Brasília para fazer amigos, ampliar o círculo social e participar de experiências saudáveis ao ar livre.' },
+              ].map((item, i) => (
+                <details key={i} className="group rounded-lg border border-orange-200 bg-white dark:bg-zinc-900 p-5 open:shadow-md transition">
+                  <summary className="cursor-pointer list-none flex items-center justify-between gap-4 font-semibold text-zinc-900 dark:text-zinc-50">
+                    <span>{item.q}</span>
+                    <span className="text-2xl text-orange-500 group-open:rotate-45 transition-transform">+</span>
+                  </summary>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
+                </details>
+              ))}
             </div>
           </div>
         </section>
@@ -709,7 +713,7 @@ export default function SoftwareDevelopmentWebsite() {
             <div className="space-y-4">
               <Logo />
               <p className="text-sm text-muted-foreground max-w-xs">
-                Junte-se ao SOMMA Running Club, a maior comunidade de corrida de Brasília. Encontros aos sábados às 7h no Parque da Cidade. Mais de 4.300 membros ativos!
+                Junte-se ao SOMMA Running Club, o maior running club do Distrito Federal. Comunidade gratuita e democrática, com mais de 5 mil membros cadastrados. Encontros todo sábado às 7h no Parque da Cidade, em Brasília.
               </p>
               <div className="flex space-x-4">
                 <a 
