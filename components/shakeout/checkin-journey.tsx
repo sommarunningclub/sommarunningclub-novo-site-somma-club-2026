@@ -146,28 +146,28 @@ export function CheckinJourney() {
     return (
       <div className="mt-8">
         {/* logos das 3 marcas */}
-        <div className="mb-8 flex items-center justify-center gap-6">
-          <img src={LOGO_DOPA} alt="Casa Dopa" className="h-5 w-auto [filter:brightness(0)_invert(1)]" />
+        <div className="mb-7 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-x-6">
+          <img src={LOGO_DOPA} alt="Casa Dopa" className="h-4 w-auto [filter:brightness(0)_invert(1)] sm:h-5" />
           <span className="text-white/20">|</span>
-          <CentauroLogo className="h-4 w-auto text-white" />
+          <CentauroLogo className="h-3.5 w-auto text-white sm:h-4" />
           <span className="text-white/20">|</span>
-          <img src={LOGO_SOMMA} alt="Somma Club" className="h-7 w-auto" />
+          <img src={LOGO_SOMMA} alt="Somma Club" className="h-6 w-auto sm:h-7" />
         </div>
 
-        <div className="mb-4 text-center">
-          <CheckCircle2 className="mx-auto mb-3 h-11 w-11 text-[#FF2C03]" aria-hidden />
-          <h3 className="text-3xl uppercase">Você está dentro!</h3>
-          <p className="mt-2 flex items-center justify-center gap-2 text-sm text-[#A1A1A1]">
-            <Printer className="h-4 w-4 text-[#FF2C03]" aria-hidden />
-            Faça um <strong className="text-white">print</strong> ou salve este ticket e apresente na entrada.
+        <div className="mb-5 text-center">
+          <CheckCircle2 className="mx-auto mb-3 h-10 w-10 text-[#FF2C03] sm:h-11 sm:w-11" aria-hidden />
+          <h3 className="text-2xl uppercase sm:text-3xl">Presença confirmada!</h3>
+          <p className="mx-auto mt-3 flex max-w-xs items-start justify-center gap-2 text-sm leading-relaxed text-[#A1A1A1] sm:max-w-sm">
+            <Printer className="mt-0.5 h-4 w-4 shrink-0 text-[#FF2C03]" aria-hidden />
+            <span>Tire um print ou salve este ticket — você vai apresentá-lo na entrada do evento.</span>
           </p>
         </div>
 
         {/* TICKET */}
         <div id="shakeout-ticket" className="overflow-hidden rounded-2xl border border-[#FF2C03]/40 bg-[#0e0e0e]">
-          <div className="flex items-center justify-between bg-[#FF2C03] px-5 py-3 text-black">
-            <span className="flex items-center gap-2 font-[family-name:var(--font-display)] text-lg uppercase">
-              <Ticket className="h-5 w-5" aria-hidden /> Shake Out Rio
+          <div className="flex items-center justify-between gap-3 bg-[#FF2C03] px-4 py-3 text-black sm:px-5">
+            <span className="flex items-center gap-2 font-[family-name:var(--font-display)] text-base uppercase sm:text-lg">
+              <Ticket className="h-5 w-5 shrink-0" aria-hidden /> Shake Out Rio
             </span>
             <span className="font-mono text-xs font-bold">{ticket}</span>
           </div>
@@ -175,30 +175,31 @@ export function CheckinJourney() {
           <div className="grid grid-cols-1 gap-px bg-[#2A2A2A] sm:grid-cols-3">
             {[
               { k: 'DATA', v: '04/06 · QUI' },
-              { k: 'HORÁRIO', v: '08H00 · CONC. 07H30' },
-              { k: 'LOCAL', v: 'Casa Dopa — Copacabana' },
+              { k: 'HORÁRIO', v: '08H00 · conc. 07H30' },
+              { k: 'LOCAL', v: 'Casa Dopa · Copacabana' },
             ].map((i) => (
-              <div key={i.k} className="bg-[#0e0e0e] px-5 py-4">
+              <div key={i.k} className="bg-[#0e0e0e] px-4 py-3.5 sm:px-5 sm:py-4">
                 <p className="text-[10px] uppercase tracking-widest text-[#FF2C03]">{i.k}</p>
                 <p className="mt-1 text-sm text-white">{i.v}</p>
               </div>
             ))}
           </div>
 
-          <div className="border-t border-dashed border-[#2A2A2A] px-5 py-5">
-            <p className="mb-3 text-[10px] uppercase tracking-widest text-[#A1A1A1]">Confirmação do participante</p>
-            <dl className="grid grid-cols-1 gap-x-8 gap-y-2 sm:grid-cols-2">
+          <div className="border-t border-dashed border-[#2A2A2A] px-4 py-5 sm:px-5">
+            <p className="mb-3 text-[10px] uppercase tracking-widest text-[#A1A1A1]">Seus dados confirmados</p>
+            <dl className="space-y-1.5">
               {[
-                ['Nome', form.nome_completo],
-                ['CPF', formatCPF(form.cpf)],
-                ['E-mail', form.email],
-                ['WhatsApp', form.telefone],
-                ['UF', form.uf],
-                ['Status', 'CONFIRMADO ✓'],
-              ].map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-3 border-b border-[#1c1c1c] py-1.5 text-sm">
-                  <dt className="text-[#A1A1A1]">{k}</dt>
-                  <dd className="text-right font-medium text-white">{v}</dd>
+                ['Nome', form.nome_completo, false],
+                ['CPF', formatCPF(form.cpf), false],
+                ['E-mail', form.email, true],
+                ['WhatsApp', form.telefone, false],
+                ['UF', form.uf, false],
+                ['Sexo', SEXOS.find((s) => s.v === form.sexo)?.label ?? '—', false],
+                ['Status', 'Confirmado ✓', false],
+              ].map(([k, v, brk]) => (
+                <div key={k as string} className="flex items-baseline justify-between gap-4 border-b border-[#1c1c1c] py-1.5 text-sm">
+                  <dt className="shrink-0 text-[#A1A1A1]">{k}</dt>
+                  <dd className={`text-right font-medium text-white ${brk ? 'break-all' : ''}`}>{v}</dd>
                 </div>
               ))}
             </dl>
@@ -223,7 +224,7 @@ export function CheckinJourney() {
             ].map((m) => (
               <a key={m.handle} href={m.url} target="_blank" rel="noopener noreferrer"
                 onClick={() => track('shakeout_cta_click', { cta: 'seguir', perfil: m.handle })}
-                className="flex items-center gap-3 rounded-xl border border-[#2A2A2A] bg-[#0e0e0e] px-4 py-3 transition hover:border-[#FF2C03]/60 hover:bg-[#151515]">
+                className="flex items-center gap-3 rounded-xl border border-[#2A2A2A] bg-[#0e0e0e] px-4 py-3.5 transition hover:border-[#FF2C03]/60 hover:bg-[#151515] active:bg-[#151515]">
                 <Instagram className="h-5 w-5 shrink-0 text-[#FF2C03]" aria-hidden />
                 <span className="min-w-0">
                   <span className="block text-sm font-semibold text-white">{m.nome}</span>

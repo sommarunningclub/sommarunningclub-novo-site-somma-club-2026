@@ -53,20 +53,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'As inscrições estão encerradas no momento.' }, { status: 403 })
     }
 
-    // Dedup por CPF nesta ativação (idempotente)
+    // Bloqueia duplicidade de CPF OU e-mail nesta ativação
     const { data: existing, error: checkError } = await supabase
       .from('leads_shakeout_centauro')
-      .select('id')
+      .select('cpf, email')
       .eq('origem', ORIGEM)
-      .eq('cpf', cpfDigits)
-      .limit(1)
+      .or(`cpf.eq.${cpfDigits},email.eq.${email}`)
+      .limit(5)
 
     if (checkError) {
       console.error('[shakeout] Erro ao verificar check-in existente:', checkError)
       return NextResponse.json({ error: 'Erro ao validar check-in: ' + checkError.message }, { status: 500 })
     }
     if (existing && existing.length > 0) {
-      return NextResponse.json({ success: true, already: true })
+      const cpfDup = existing.some((r) => r.cpf === cpfDigits)
+      return NextResponse.json(
+        { error: cpfDup ? 'Este CPF já está inscrito neste evento.' : 'Este e-mail já está inscrito neste evento.' },
+        { status: 409 }
+      )
     }
 
     const { data, error } = await supabase

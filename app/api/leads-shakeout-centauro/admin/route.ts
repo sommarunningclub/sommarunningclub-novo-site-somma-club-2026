@@ -89,6 +89,23 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Sexo inválido.' }, { status: 400 })
       }
 
+      // Bloqueia CPF/e-mail duplicado (ignorando o próprio registro ao editar)
+      const orParts: string[] = []
+      if (cpfDigits) orParts.push(`cpf.eq.${cpfDigits}`)
+      if (email) orParts.push(`email.eq.${email}`)
+      if (orParts.length) {
+        let dupQ = supabase.from('leads_shakeout_centauro').select('id, cpf, email').eq('origem', ORIGEM).or(orParts.join(','))
+        if (r.id) dupQ = dupQ.neq('id', r.id)
+        const { data: dups } = await dupQ.limit(5)
+        if (dups && dups.length > 0) {
+          const cpfDup = dups.some((d) => d.cpf === cpfDigits)
+          return NextResponse.json(
+            { error: cpfDup ? 'Já existe um inscrito com este CPF.' : 'Já existe um inscrito com este e-mail.' },
+            { status: 409 }
+          )
+        }
+      }
+
       const record = {
         nome_completo,
         email,
@@ -111,6 +128,15 @@ export async function POST(request: NextRequest) {
       const { data, error } = await supabase.from('leads_shakeout_centauro').insert([record]).select('id')
       if (error) return NextResponse.json({ error: error.message }, { status: 400 })
       return NextResponse.json({ success: true, id: data?.[0]?.id })
+    }
+
+    // ---- Apagar inscrição ----
+    if (action === 'delete') {
+      const id = body.id
+      if (!id) return NextResponse.json({ error: 'ID não informado.' }, { status: 400 })
+      const { error } = await supabase.from('leads_shakeout_centauro').delete().eq('id', id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+      return NextResponse.json({ success: true })
     }
 
     return NextResponse.json({ error: 'Ação desconhecida.' }, { status: 400 })

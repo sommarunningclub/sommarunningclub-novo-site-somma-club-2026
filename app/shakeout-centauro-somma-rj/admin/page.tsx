@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import { Lock, Search, Plus, Pencil, Users, UserCheck, UserX, Power, X, RefreshCw } from 'lucide-react'
+import { Lock, Search, Plus, Pencil, Trash2, Users, UserCheck, UserX, Power, X, RefreshCw } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
 
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
@@ -97,6 +97,17 @@ export default function AdminPage() {
     try {
       await callAdmin('config_set', { inscricoes_abertas: !stats.inscricoes_abertas })
       setStats({ ...stats, inscricoes_abertas: !stats.inscricoes_abertas })
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro')
+    }
+  }
+
+  const del = async (row: Lead) => {
+    if (!row.id) return
+    if (!confirm(`Apagar a inscrição de ${row.nome_completo}? Esta ação não pode ser desfeita.`)) return
+    try {
+      await callAdmin('delete', { id: row.id })
+      loadList(search)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erro')
     }
@@ -209,7 +220,10 @@ export default function AdminPage() {
                   <td className="px-3 py-2.5">{r.conhecia_somma ? 'Sim' : 'Não'}</td>
                   <td className="px-3 py-2.5">{r.status}</td>
                   <td className="px-3 py-2.5 text-right">
-                    <button onClick={() => setEditing(r)} className="text-[#FF2C03] hover:text-[#ff4d35]" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                    <div className="flex items-center justify-end gap-3">
+                      <button onClick={() => setEditing(r)} className="text-[#FF2C03] hover:text-[#ff4d35]" aria-label="Editar"><Pencil className="h-4 w-4" /></button>
+                      <button onClick={() => del(r)} className="text-[#888] hover:text-red-500" aria-label="Apagar"><Trash2 className="h-4 w-4" /></button>
+                    </div>
                   </td>
                 </tr>
               ))}
