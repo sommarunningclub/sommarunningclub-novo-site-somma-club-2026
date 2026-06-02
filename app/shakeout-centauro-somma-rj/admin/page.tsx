@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import {
   Lock, Search, Plus, Pencil, Trash2, Users, UserCheck, UserX, Sparkles,
   Power, X, RefreshCw, LogOut, ChevronRight, Check, AlertCircle, Loader2, Trophy,
-  Handshake, Copy, Home,
+  Handshake, Copy, Home, MapPin, Filter,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
 import { InteractiveMenu } from '@/components/ui/modern-mobile-menu'
@@ -34,7 +34,8 @@ type Lead = {
   origem?: string
   data_de_cadastro?: string
 }
-type Stats = { total: number; conhece: number; nao_conhece: number; recentes: number; inscricoes_abertas: boolean }
+type Regiao = { uf: string; count: number }
+type Stats = { total: number; conhece: number; nao_conhece: number; recentes: number; inscricoes_abertas: boolean; por_regiao?: Regiao[] }
 
 const INPUT = 'w-full rounded-lg bg-[#0c0c0c] px-4 py-3 text-base sm:text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] transition'
 
@@ -54,6 +55,8 @@ export default function AdminPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [rows, setRows] = useState<Lead[]>([])
   const [search, setSearch] = useState('')
+  const [filterConhecia, setFilterConhecia] = useState<'' | 'sim' | 'nao'>('')
+  const [filterUf, setFilterUf] = useState('')
   const [loading, setLoading] = useState(false)
   const [lastUpdate, setLastUpdate] = useState('')
 
@@ -85,11 +88,11 @@ export default function AdminPage() {
     return data
   }, [code])
 
-  const loadList = useCallback(async (s = '', theCode?: string) => {
+  const loadList = useCallback(async (s = '', conhecia = '', uf = '', theCode?: string) => {
     setLoading(true)
     setError('')
     try {
-      const [st, ls] = await Promise.all([callAdmin('stats', {}, theCode), callAdmin('list', { search: s }, theCode)])
+      const [st, ls] = await Promise.all([callAdmin('stats', {}, theCode), callAdmin('list', { search: s, conhecia, uf }, theCode)])
       setStats(st)
       setRows(ls.rows ?? [])
       setLastUpdate(new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))
@@ -100,11 +103,28 @@ export default function AdminPage() {
     }
   }, [callAdmin])
 
+  // filtros
+  const toggleConhecia = (v: 'sim' | 'nao') => {
+    const nv = filterConhecia === v ? '' : v
+    setFilterConhecia(nv)
+    loadList(search, nv, filterUf)
+  }
+  const toggleUf = (u: string) => {
+    const nv = filterUf === u ? '' : u
+    setFilterUf(nv)
+    loadList(search, filterConhecia, nv)
+  }
+  const clearFilters = () => {
+    setFilterConhecia('')
+    setFilterUf('')
+    loadList(search, '', '')
+  }
+
   useEffect(() => {
     const saved = typeof window !== 'undefined' ? sessionStorage.getItem('shk_admin_code') : null
     if (saved) {
       setCode(saved)
-      callAdmin('stats', {}, saved).then(() => { setAuthed(true); loadList('', saved) }).catch(() => sessionStorage.removeItem('shk_admin_code'))
+      callAdmin('stats', {}, saved).then(() => { setAuthed(true); loadList('', '', '', saved) }).catch(() => sessionStorage.removeItem('shk_admin_code'))
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -154,7 +174,7 @@ export default function AdminPage() {
       setSelected(null)
       setMode('view')
       showToast(draft.id ? 'Inscrição atualizada' : 'Inscrição adicionada')
-      loadList(search)
+      loadList(search, filterConhecia, filterUf)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erro')
     } finally {
@@ -191,7 +211,7 @@ export default function AdminPage() {
       await callAdmin('delete', { id: selected.id })
       setSelected(null)
       showToast('Inscrição deletada')
-      loadList(search)
+      loadList(search, filterConhecia, filterUf)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erro')
     } finally {
@@ -240,7 +260,7 @@ export default function AdminPage() {
             <button onClick={openParceiros} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40">
               <Handshake className="h-4 w-4" /> <span className="hidden sm:inline">Parceiros</span>
             </button>
-            <button onClick={() => loadList(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
+            <button onClick={() => loadList(search, filterConhecia, filterUf)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
             </button>
             <button onClick={logout} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold text-[#A1A1A1] transition hover:border-red-500/50 hover:text-red-400">
@@ -253,11 +273,50 @@ export default function AdminPage() {
       <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6">
         {/* Dashboard */}
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <StatCard icon={Users} label="Inscritos" value={stats?.total} loading={loading} />
-          <StatCard icon={UserCheck} label="Conhecem o Somma" value={stats?.conhece} loading={loading} />
-          <StatCard icon={UserX} label="Não conheciam" value={stats?.nao_conhece} loading={loading} />
+          <StatCard icon={Users} label="Inscritos" value={stats?.total} loading={loading} active={!filterConhecia} onClick={clearFilters} />
+          <StatCard icon={UserCheck} label="Conhecem o Somma" value={stats?.conhece} loading={loading} active={filterConhecia === 'sim'} onClick={() => toggleConhecia('sim')} />
+          <StatCard icon={UserX} label="Não conheciam" value={stats?.nao_conhece} loading={loading} active={filterConhecia === 'nao'} onClick={() => toggleConhecia('nao')} />
           <StatCard icon={Sparkles} label="Últimas 24h" value={stats?.recentes} loading={loading} />
         </div>
+
+        {/* Por região (UF) */}
+        {stats?.por_regiao && stats.por_regiao.length > 0 && (
+          <div className="mt-3 rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-[#FF2C03]" />
+              <p className="text-sm font-semibold">Por região <span className="text-[#A1A1A1]">(UF)</span></p>
+              <span className="ml-auto text-[11px] text-[#666]">toque para filtrar</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {stats.por_regiao.map((r) => (
+                <button
+                  key={r.uf}
+                  onClick={() => toggleUf(r.uf === '—' ? '' : r.uf)}
+                  disabled={r.uf === '—'}
+                  className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                    filterUf === r.uf && r.uf !== '—'
+                      ? 'border-[#FF2C03] bg-[#FF2C03]/15 text-[#FF2C03]'
+                      : 'border-[#2A2A2A] text-white hover:border-white/40 disabled:cursor-default disabled:opacity-50 disabled:hover:border-[#2A2A2A]'
+                  }`}
+                >
+                  <span>{r.uf === '—' ? 'Sem UF' : r.uf}</span>
+                  <span className={`rounded-full px-1.5 py-0.5 text-[10px] ${filterUf === r.uf && r.uf !== '—' ? 'bg-[#FF2C03]/25' : 'bg-[#1c1c1c] text-[#A1A1A1]'}`}>{r.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Barra de filtro ativo */}
+        {(filterConhecia || filterUf) && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-[#FF2C03]/30 bg-[#FF2C03]/5 px-4 py-2.5 text-xs">
+            <Filter className="h-3.5 w-3.5 text-[#FF2C03]" />
+            <span className="text-[#A1A1A1]">Filtrando:</span>
+            {filterConhecia && <span className="rounded-full bg-[#FF2C03]/15 px-2.5 py-0.5 font-semibold text-[#FF2C03]">{filterConhecia === 'sim' ? 'Conhecem o Somma' : 'Não conheciam'}</span>}
+            {filterUf && <span className="rounded-full bg-[#FF2C03]/15 px-2.5 py-0.5 font-semibold text-[#FF2C03]">UF: {filterUf}</span>}
+            <button onClick={clearFilters} className="ml-auto flex items-center gap-1 font-semibold text-[#A1A1A1] hover:text-white"><X className="h-3.5 w-3.5" /> Limpar</button>
+          </div>
+        )}
 
         {/* Toggle inscrições */}
         <div className="mt-3 flex flex-col gap-3 rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
@@ -280,10 +339,10 @@ export default function AdminPage() {
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#666]" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && loadList(search)} placeholder="Buscar por nome ou CPF…" className={`${INPUT} pl-9`} />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && loadList(search, filterConhecia, filterUf)} placeholder="Buscar por nome ou CPF…" className={`${INPUT} pl-9`} />
           </div>
           <div className="flex gap-2">
-            <button onClick={() => loadList(search)} className="flex-1 rounded-lg border border-[#2A2A2A] px-4 py-3 text-sm font-semibold transition hover:border-white/40 sm:flex-none">Buscar</button>
+            <button onClick={() => loadList(search, filterConhecia, filterUf)} className="flex-1 rounded-lg border border-[#2A2A2A] px-4 py-3 text-sm font-semibold transition hover:border-white/40 sm:flex-none">Buscar</button>
             <button onClick={openNew} className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-[#FF2C03] px-4 py-3 text-sm font-bold tracking-wider transition hover:bg-[#ff4d35] sm:flex-none">
               <Plus className="h-4 w-4" /> ADICIONAR
             </button>
@@ -483,14 +542,19 @@ export default function AdminPage() {
   )
 }
 
-function StatCard({ icon: Icon, label, value, loading }: { icon: React.ElementType; label: string; value?: number; loading: boolean }) {
-  return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:p-5">
-      <Icon className="mb-2 h-5 w-5 text-[#FF2C03] sm:mb-3 sm:h-6 sm:w-6" />
+function StatCard({ icon: Icon, label, value, loading, onClick, active }: { icon: React.ElementType; label: string; value?: number; loading: boolean; onClick?: () => void; active?: boolean }) {
+  const base = `rounded-2xl border bg-[#0e0e0e] p-4 text-left sm:p-5 ${active ? 'border-[#FF2C03] ring-1 ring-[#FF2C03]/40' : 'border-[#2A2A2A]'}`
+  const inner = (
+    <>
+      <Icon className={`mb-2 h-5 w-5 sm:mb-3 sm:h-6 sm:w-6 ${active ? 'text-[#FF2C03]' : 'text-[#FF2C03]'}`} />
       <p className="text-2xl font-bold sm:text-3xl">{loading && value === undefined ? '…' : value ?? '—'}</p>
       <p className="mt-0.5 text-[11px] uppercase tracking-widest text-[#A1A1A1] sm:text-xs">{label}</p>
-    </div>
+    </>
   )
+  if (onClick) {
+    return <button onClick={onClick} className={`${base} transition hover:border-white/40 ${active ? 'hover:border-[#FF2C03]' : ''}`}>{inner}</button>
+  }
+  return <div className={base}>{inner}</div>
 }
 
 function StatusBadge({ status }: { status?: string }) {

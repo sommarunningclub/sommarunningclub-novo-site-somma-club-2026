@@ -32,22 +32,37 @@ export async function POST(request: NextRequest) {
     // ---- visão macro: stats + lista ----
     if (action === 'data') {
       const search = String(body.search ?? '').trim()
+      const conhecia = String(body.conhecia ?? '').trim() // 'sim' | 'nao' | ''
+      const ufFilter = String(body.uf ?? '').trim().toUpperCase()
       const base = () => supabase.from('leads_shakeout_centauro').select('*', { count: 'exact', head: true }).eq('origem', ORIGEM)
       const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
       const [{ count: total }, { count: conhece }, { count: naoConhece }, { count: recentes }] = await Promise.all([
         base(), base().eq('conhecia_somma', true), base().eq('conhecia_somma', false), base().gte('data_de_cadastro', last24h),
       ])
+
+      // contagem por região (UF)
+      const { data: ufRows } = await supabase.from('leads_shakeout_centauro').select('uf').eq('origem', ORIGEM).limit(10000)
+      const porRegiao: Record<string, number> = {}
+      for (const row of ufRows ?? []) {
+        const u = (row.uf || '—').toString().toUpperCase()
+        porRegiao[u] = (porRegiao[u] ?? 0) + 1
+      }
+      const por_regiao = Object.entries(porRegiao).map(([uf, count]) => ({ uf, count })).sort((a, b) => b.count - a.count)
+
       let q = supabase.from('leads_shakeout_centauro').select('*').eq('origem', ORIGEM).order('data_de_cadastro', { ascending: false }).limit(1000)
       if (search) {
         const digits = search.replace(/\D/g, '')
         if (digits.length >= 3) q = q.or(`nome_completo.ilike.%${search}%,cpf.ilike.%${digits}%`)
         else q = q.ilike('nome_completo', `%${search}%`)
       }
+      if (conhecia === 'sim') q = q.eq('conhecia_somma', true)
+      else if (conhecia === 'nao') q = q.eq('conhecia_somma', false)
+      if (ufFilter) q = q.eq('uf', ufFilter)
       const { data: rows, error } = await q
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({
         parceiro: parceiro.nome,
-        stats: { total: total ?? 0, conhece: conhece ?? 0, nao_conhece: naoConhece ?? 0, recentes: recentes ?? 0 },
+        stats: { total: total ?? 0, conhece: conhece ?? 0, nao_conhece: naoConhece ?? 0, recentes: recentes ?? 0, por_regiao },
         rows,
       })
     }

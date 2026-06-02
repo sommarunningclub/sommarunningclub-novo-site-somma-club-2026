@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   Search, Plus, Users, UserCheck, UserX, Sparkles, X, RefreshCw,
-  ChevronRight, Check, AlertCircle, Loader2, Eye, LogOut, Home,
+  ChevronRight, Check, AlertCircle, Loader2, Eye, LogOut, Home, MapPin, Filter,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
 import { CentauroLogo } from '@/components/shakeout/centauro-logo'
@@ -20,7 +20,8 @@ const SEXOS = [
 const INPUT = 'w-full rounded-lg bg-[#0c0c0c] px-4 py-3 text-base sm:text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] transition'
 
 type Lead = { id?: string; nome_completo?: string; email?: string; telefone?: string; cpf?: string; uf?: string; sexo?: string; conhecia_somma?: boolean; aceite_comunicacoes?: boolean; status?: string; origem?: string; data_de_cadastro?: string }
-type Stats = { total: number; conhece: number; nao_conhece: number; recentes: number }
+type Regiao = { uf: string; count: number }
+type Stats = { total: number; conhece: number; nao_conhece: number; recentes: number; por_regiao?: Regiao[] }
 
 const sexoLabel = (v?: string) => SEXOS.find((s) => s.v === v)?.label ?? '—'
 const fmtDate = (s?: string) => { if (!s) return '—'; try { return new Date(s).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) } catch { return s } }
@@ -33,6 +34,8 @@ export default function ParceiroPage() {
   const [stats, setStats] = useState<Stats | null>(null)
   const [rows, setRows] = useState<Lead[]>([])
   const [search, setSearch] = useState('')
+  const [filterConhecia, setFilterConhecia] = useState<'' | 'sim' | 'nao'>('')
+  const [filterUf, setFilterUf] = useState('')
   const [loading, setLoading] = useState(false)
   const [lastUpdate, setLastUpdate] = useState('')
   const [selected, setSelected] = useState<Lead | null>(null)
@@ -54,16 +57,33 @@ export default function ParceiroPage() {
     return data
   }, [codigo])
 
-  const loadData = useCallback(async (s = '', theCode?: string) => {
+  const loadData = useCallback(async (s = '', conhecia = '', uf = '', theCode?: string) => {
     setLoading(true)
     try {
-      const d = await call('data', { search: s }, theCode)
+      const d = await call('data', { search: s, conhecia, uf }, theCode)
       setNome(d.parceiro); setStats(d.stats); setRows(d.rows ?? [])
       setLastUpdate(new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erro')
     } finally { setLoading(false) }
   }, [call])
+
+  // filtros
+  const toggleConhecia = (v: 'sim' | 'nao') => {
+    const nv = filterConhecia === v ? '' : v
+    setFilterConhecia(nv)
+    loadData(search, nv, filterUf)
+  }
+  const toggleUf = (u: string) => {
+    const nv = filterUf === u ? '' : u
+    setFilterUf(nv)
+    loadData(search, filterConhecia, nv)
+  }
+  const clearFilters = () => {
+    setFilterConhecia('')
+    setFilterUf('')
+    loadData(search, '', '')
+  }
 
   // auto-login via ?codigo= ou sessão
   useEffect(() => {
@@ -78,14 +98,14 @@ export default function ParceiroPage() {
   // auto-refresh (realtime) a cada 15s
   useEffect(() => {
     if (!authed) return
-    const t = setInterval(() => loadData(search), 15000)
+    const t = setInterval(() => loadData(search, filterConhecia, filterUf), 15000)
     return () => clearInterval(t)
-  }, [authed, search, loadData])
+  }, [authed, search, filterConhecia, filterUf, loadData])
 
   const login = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoginErr('')
-    try { await call('data', {}, codigo); sessionStorage.setItem('shk_parceiro_codigo', codigo); setAuthed(true); loadData('', codigo) }
+    try { await call('data', {}, codigo); sessionStorage.setItem('shk_parceiro_codigo', codigo); setAuthed(true); loadData('', '', '', codigo) }
     catch (e2) { setLoginErr(e2 instanceof Error ? e2.message : 'Erro') }
   }
 
@@ -96,7 +116,7 @@ export default function ParceiroPage() {
 
   const saveAdd = async () => {
     setSaving(true); setError('')
-    try { await call('add', { row: draft }); setAdding(false); setDraft({}); showToast('Inscrito adicionado'); loadData(search) }
+    try { await call('add', { row: draft }); setAdding(false); setDraft({}); showToast('Inscrito adicionado'); loadData(search, filterConhecia, filterUf) }
     catch (e) { setError(e instanceof Error ? e.message : 'Erro') }
     finally { setSaving(false) }
   }
@@ -125,7 +145,7 @@ export default function ParceiroPage() {
 
   const partnerMenu = [
     { label: 'Início', icon: Home, action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
-    { label: 'Atualizar', icon: RefreshCw, action: () => loadData(search) },
+    { label: 'Atualizar', icon: RefreshCw, action: () => loadData(search, filterConhecia, filterUf) },
     { label: 'Adicionar', icon: Plus, action: () => { setDraft({ conhecia_somma: false }); setAdding(true); setError('') } },
     { label: 'Sair', icon: LogOut, action: logout },
   ]
@@ -139,7 +159,7 @@ export default function ParceiroPage() {
             <p className="text-[11px] text-[#888]">Tempo real · atualizado às {lastUpdate || '—'}</p>
           </div>
           <div className="hidden items-center gap-2 lg:flex">
-            <button onClick={() => loadData(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
+            <button onClick={() => loadData(search, filterConhecia, filterUf)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
             </button>
             <button onClick={logout} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold text-[#A1A1A1] transition hover:border-red-500/50 hover:text-red-400">
@@ -151,16 +171,55 @@ export default function ParceiroPage() {
 
       <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Stat icon={Users} label="Inscritos" value={stats?.total} />
-          <Stat icon={UserCheck} label="Conhecem o Somma" value={stats?.conhece} />
-          <Stat icon={UserX} label="Não conheciam" value={stats?.nao_conhece} />
+          <Stat icon={Users} label="Inscritos" value={stats?.total} active={!filterConhecia} onClick={clearFilters} />
+          <Stat icon={UserCheck} label="Conhecem o Somma" value={stats?.conhece} active={filterConhecia === 'sim'} onClick={() => toggleConhecia('sim')} />
+          <Stat icon={UserX} label="Não conheciam" value={stats?.nao_conhece} active={filterConhecia === 'nao'} onClick={() => toggleConhecia('nao')} />
           <Stat icon={Sparkles} label="Últimas 24h" value={stats?.recentes} />
         </div>
+
+        {/* Por região (UF) */}
+        {stats?.por_regiao && stats.por_regiao.length > 0 && (
+          <div className="mt-3 rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:p-5">
+            <div className="mb-3 flex items-center gap-2">
+              <MapPin className="h-4 w-4 text-[#FF2C03]" />
+              <p className="text-sm font-semibold">Por região <span className="text-[#A1A1A1]">(UF)</span></p>
+              <span className="ml-auto text-[11px] text-[#666]">toque para filtrar</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {stats.por_regiao.map((r) => (
+                <button
+                  key={r.uf}
+                  onClick={() => toggleUf(r.uf === '—' ? '' : r.uf)}
+                  disabled={r.uf === '—'}
+                  className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold transition ${
+                    filterUf === r.uf && r.uf !== '—'
+                      ? 'border-[#FF2C03] bg-[#FF2C03]/15 text-[#FF2C03]'
+                      : 'border-[#2A2A2A] text-white hover:border-white/40 disabled:cursor-default disabled:opacity-50 disabled:hover:border-[#2A2A2A]'
+                  }`}
+                >
+                  <span>{r.uf === '—' ? 'Sem UF' : r.uf}</span>
+                  <span className={`rounded-full px-1.5 py-0.5 text-[10px] ${filterUf === r.uf && r.uf !== '—' ? 'bg-[#FF2C03]/25' : 'bg-[#1c1c1c] text-[#A1A1A1]'}`}>{r.count}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Barra de filtro ativo */}
+        {(filterConhecia || filterUf) && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-xl border border-[#FF2C03]/30 bg-[#FF2C03]/5 px-4 py-2.5 text-xs">
+            <Filter className="h-3.5 w-3.5 text-[#FF2C03]" />
+            <span className="text-[#A1A1A1]">Filtrando:</span>
+            {filterConhecia && <span className="rounded-full bg-[#FF2C03]/15 px-2.5 py-0.5 font-semibold text-[#FF2C03]">{filterConhecia === 'sim' ? 'Conhecem o Somma' : 'Não conheciam'}</span>}
+            {filterUf && <span className="rounded-full bg-[#FF2C03]/15 px-2.5 py-0.5 font-semibold text-[#FF2C03]">UF: {filterUf}</span>}
+            <button onClick={clearFilters} className="ml-auto flex items-center gap-1 font-semibold text-[#A1A1A1] hover:text-white"><X className="h-3.5 w-3.5" /> Limpar</button>
+          </div>
+        )}
 
         <div className="mt-5 flex flex-col gap-2 sm:flex-row">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#666]" />
-            <input value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && loadData(search)} placeholder="Buscar por nome ou CPF…" className={`${INPUT} pl-9`} />
+            <input value={search} onChange={(e) => setSearch(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && loadData(search, filterConhecia, filterUf)} placeholder="Buscar por nome ou CPF…" className={`${INPUT} pl-9`} />
           </div>
           <button onClick={() => { setDraft({ conhecia_somma: false }); setAdding(true); setError('') }} className="flex items-center justify-center gap-2 rounded-lg bg-[#FF2C03] px-4 py-3 text-sm font-bold tracking-wider transition hover:bg-[#ff4d35]">
             <Plus className="h-4 w-4" /> ADICIONAR
@@ -268,12 +327,17 @@ export default function ParceiroPage() {
   )
 }
 
-function Stat({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value?: number }) {
-  return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:p-5">
+function Stat({ icon: Icon, label, value, onClick, active }: { icon: React.ElementType; label: string; value?: number; onClick?: () => void; active?: boolean }) {
+  const base = `rounded-2xl border bg-[#0e0e0e] p-4 text-left sm:p-5 ${active ? 'border-[#FF2C03] ring-1 ring-[#FF2C03]/40' : 'border-[#2A2A2A]'}`
+  const inner = (
+    <>
       <Icon className="mb-2 h-5 w-5 text-[#FF2C03] sm:mb-3 sm:h-6 sm:w-6" />
       <p className="text-2xl font-bold sm:text-3xl">{value ?? '—'}</p>
       <p className="mt-0.5 text-[11px] uppercase tracking-widest text-[#A1A1A1] sm:text-xs">{label}</p>
-    </div>
+    </>
   )
+  if (onClick) {
+    return <button onClick={onClick} className={`${base} transition hover:border-white/40 ${active ? 'hover:border-[#FF2C03]' : ''}`}>{inner}</button>
+  }
+  return <div className={base}>{inner}</div>
 }

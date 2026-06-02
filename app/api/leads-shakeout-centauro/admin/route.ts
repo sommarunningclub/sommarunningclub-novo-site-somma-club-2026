@@ -36,24 +36,42 @@ export async function POST(request: NextRequest) {
         base().gte('data_de_cadastro', last24h),
       ])
       const { data: cfg } = await supabase.from('config_shakeout').select('inscricoes_abertas').eq('id', 1).maybeSingle()
+
+      // contagem por região (UF)
+      const { data: ufRows } = await supabase.from('leads_shakeout_centauro').select('uf').eq('origem', ORIGEM).limit(10000)
+      const porRegiao: Record<string, number> = {}
+      for (const row of ufRows ?? []) {
+        const u = (row.uf || '—').toString().toUpperCase()
+        porRegiao[u] = (porRegiao[u] ?? 0) + 1
+      }
+      const por_regiao = Object.entries(porRegiao)
+        .map(([uf, count]) => ({ uf, count }))
+        .sort((a, b) => b.count - a.count)
+
       return NextResponse.json({
         total: total ?? 0,
         conhece: conhece ?? 0,
         nao_conhece: naoConhece ?? 0,
         recentes: recentes ?? 0,
         inscricoes_abertas: cfg?.inscricoes_abertas ?? true,
+        por_regiao,
       })
     }
 
     // ---- Listagem com busca por CPF ou nome ----
     if (action === 'list') {
       const search = String(body.search ?? '').trim()
+      const conhecia = String(body.conhecia ?? '').trim() // 'sim' | 'nao' | ''
+      const uf = String(body.uf ?? '').trim().toUpperCase()
       let q = supabase.from('leads_shakeout_centauro').select('*').eq('origem', ORIGEM).order('data_de_cadastro', { ascending: false }).limit(1000)
       if (search) {
         const digits = search.replace(/\D/g, '')
         if (digits.length >= 3) q = q.or(`nome_completo.ilike.%${search}%,cpf.ilike.%${digits}%`)
         else q = q.ilike('nome_completo', `%${search}%`)
       }
+      if (conhecia === 'sim') q = q.eq('conhecia_somma', true)
+      else if (conhecia === 'nao') q = q.eq('conhecia_somma', false)
+      if (uf) q = q.eq('uf', uf)
       const { data, error } = await q
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       return NextResponse.json({ rows: data })
