@@ -7,9 +7,10 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   Footprints, Snowflake, Coffee, Gift, Users, MapPin, Clock, CalendarDays,
-  ArrowRight, Check, TrainFront, Trees, Waves, Menu, X,
+  ArrowRight, Check, TrainFront, Trees, Waves, Home, HelpCircle, Ticket,
 } from 'lucide-react'
 import { CentauroLogo } from '@/components/shakeout/centauro-logo'
+import { InteractiveMenu, type InteractiveMenuItem } from '@/components/ui/modern-mobile-menu'
 import { CheckinJourney } from '@/components/shakeout/checkin-journey'
 import { SiteFooter } from '@/components/site-footer'
 
@@ -39,6 +40,15 @@ const NAV = [
   { label: 'PROGRAMAÇÃO', href: '#sobre' },
   { label: 'LOCALIZAÇÃO', href: '#localizacao' },
   { label: 'FAQ', href: '#faq' },
+]
+
+// menu inferior animado (mobile) — máx. 5 itens
+const MOBILE_NAV: (InteractiveMenuItem & { href: string })[] = [
+  { label: 'Início', icon: Home, href: '#topo' },
+  { label: 'Evento', icon: Footprints, href: '#experiencia' },
+  { label: 'Local', icon: MapPin, href: '#localizacao' },
+  { label: 'FAQ', icon: HelpCircle, href: '#faq' },
+  { label: 'Check-in', icon: Ticket, href: '#checkin' },
 ]
 
 const EXPERIENCIAS = [
@@ -75,7 +85,6 @@ const Eyebrow = ({ children }: { children: React.ReactNode }) => (
 export function ShakeoutClient() {
   const rootRef = useRef<HTMLElement>(null)
   const lenisRef = useRef<Lenis | null>(null)
-  const [menuOpen, setMenuOpen] = useState(false)
 
   /* ── Lenis (scroll suave) + GSAP (reveals + parallax) ── */
   useEffect(() => {
@@ -122,13 +131,17 @@ export function ShakeoutClient() {
       e.preventDefault()
       lenisRef.current.scrollTo(href, { offset: -72 })
     }
-    setMenuOpen(false)
+  }
+
+  const goTo = (href: string) => {
+    if (lenisRef.current) lenisRef.current.scrollTo(href, { offset: -72 })
+    else document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
     <main
       ref={rootRef}
-      className="min-h-screen overflow-x-hidden bg-black font-[family-name:var(--font-body)] text-white antialiased [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]"
+      className="min-h-screen overflow-x-hidden bg-black pb-24 font-[family-name:var(--font-body)] text-white antialiased lg:pb-0 [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]"
     >
       {/* ===== HEADER ===== */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md">
@@ -147,28 +160,22 @@ export function ShakeoutClient() {
             <a
               href="#checkin"
               onClick={(e) => { track('shakeout_cta_click', { cta: 'header_checkin' }); handleNav(e, '#checkin') }}
-              className="hidden rounded-md bg-[#FF2C03] px-5 py-2.5 text-xs font-bold tracking-wider text-white transition hover:bg-[#ff4d35] sm:inline-block"
+              className="rounded-md bg-[#FF2C03] px-4 py-2.5 text-xs font-bold tracking-wider text-white transition hover:bg-[#ff4d35]"
             >
               FAZER CHECK-IN
             </a>
-            <button onClick={() => setMenuOpen((v) => !v)} className="lg:hidden" aria-label="Abrir menu" aria-expanded={menuOpen}>
-              {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
           </div>
         </div>
-        {menuOpen && (
-          <nav className="flex flex-col gap-1 border-t border-white/5 bg-black px-5 py-4 lg:hidden">
-            {NAV.map((n) => (
-              <a key={n.href} href={n.href} onClick={(e) => handleNav(e, n.href)} className="py-2.5 text-sm font-semibold tracking-widest text-white/80">
-                {n.label}
-              </a>
-            ))}
-            <a href="#checkin" onClick={(e) => handleNav(e, '#checkin')} className="mt-2 rounded-md bg-[#FF2C03] px-5 py-3 text-center text-sm font-bold tracking-wider text-white">
-              FAZER CHECK-IN
-            </a>
-          </nav>
-        )}
       </header>
+
+      {/* ===== MENU INFERIOR ANIMADO (mobile) ===== */}
+      <div className="shk-menu-wrap fixed bottom-4 left-1/2 z-50 -translate-x-1/2 lg:hidden">
+        <InteractiveMenu
+          items={MOBILE_NAV.map(({ label, icon }) => ({ label, icon }))}
+          accentColor="#FF2C03"
+          onItemClick={(i) => goTo(MOBILE_NAV[i].href)}
+        />
+      </div>
 
       {/* ===== HERO ===== */}
       <section id="topo" data-hero className="relative isolate flex min-h-[100svh] items-center overflow-hidden">
