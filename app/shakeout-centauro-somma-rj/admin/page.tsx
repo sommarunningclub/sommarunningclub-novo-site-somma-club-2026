@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import Link from 'next/link'
 import {
   Lock, Search, Plus, Pencil, Trash2, Users, UserCheck, UserX, Sparkles,
-  Power, X, RefreshCw, LogOut, ChevronRight, Check, AlertCircle, Loader2,
+  Power, X, RefreshCw, LogOut, ChevronRight, Check, AlertCircle, Loader2, Trophy,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
 
@@ -191,6 +192,9 @@ export default function AdminPage() {
             <p className="text-[11px] text-[#888]">Atualizado às {lastUpdate || '—'}</p>
           </div>
           <div className="flex items-center gap-2">
+            <Link href="/shakeout-centauro-somma-rj/admin/sorteio" className="flex items-center gap-1.5 rounded-lg bg-[#FF2C03]/15 px-3 py-2 text-xs font-semibold text-[#FF2C03] transition hover:bg-[#FF2C03]/25">
+              <Trophy className="h-4 w-4" /> <span className="hidden sm:inline">Sorteio</span>
+            </Link>
             <button onClick={() => loadList(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
             </button>
