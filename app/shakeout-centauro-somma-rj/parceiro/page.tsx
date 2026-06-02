@@ -2,10 +2,14 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import {
-  Lock, Search, Plus, Users, UserCheck, UserX, Sparkles, X, RefreshCw,
-  ChevronRight, Check, AlertCircle, Loader2, Eye,
+  Search, Plus, Users, UserCheck, UserX, Sparkles, X, RefreshCw,
+  ChevronRight, Check, AlertCircle, Loader2, Eye, LogOut,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
+import { CentauroLogo } from '@/components/shakeout/centauro-logo'
+
+const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
+const LOGO_DOPA = 'https://seekdopa.com/cdn/shop/files/DOPA_Logo_Cinza_Original.png?v=1728398053&width=600'
 
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
 const SEXOS = [
@@ -84,6 +88,11 @@ export default function ParceiroPage() {
     catch (e2) { setLoginErr(e2 instanceof Error ? e2.message : 'Erro') }
   }
 
+  const logout = () => {
+    sessionStorage.removeItem('shk_parceiro_codigo')
+    setAuthed(false); setCodigo(''); setRows([]); setStats(null); setSelected(null); setAdding(false)
+  }
+
   const saveAdd = async () => {
     setSaving(true); setError('')
     try { await call('add', { row: draft }); setAdding(false); setDraft({}); showToast('Inscrito adicionado'); loadData(search) }
@@ -95,6 +104,13 @@ export default function ParceiroPage() {
     return (
       <main className="flex min-h-[100svh] items-center justify-center bg-black px-5 text-white">
         <form onSubmit={login} className="w-full max-w-sm rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-7 sm:p-8">
+          <div className="mb-7 flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+            <img src={LOGO_DOPA} alt="Casa Dopa" className="h-4 w-auto [filter:brightness(0)_invert(1)]" />
+            <span className="text-white/20">|</span>
+            <CentauroLogo className="h-3.5 w-auto text-white" />
+            <span className="text-white/20">|</span>
+            <img src={LOGO_SOMMA} alt="Somma Club" className="h-6 w-auto" />
+          </div>
           <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-[#FF2C03]/10"><Eye className="h-6 w-6 text-[#FF2C03]" /></span>
           <h1 className="mt-4 text-2xl font-bold">Painel do Parceiro</h1>
           <p className="mt-1 text-sm text-[#A1A1A1]">Acompanhe os check-ins em tempo real.</p>
@@ -114,9 +130,14 @@ export default function ParceiroPage() {
             <h1 className="flex items-center gap-2 text-base font-bold leading-tight sm:text-lg"><Eye className="h-4 w-4 text-[#FF2C03]" /> {nome || 'Parceiro'}</h1>
             <p className="text-[11px] text-[#888]">Tempo real · atualizado às {lastUpdate || '—'}</p>
           </div>
-          <button onClick={() => loadData(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => loadData(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
+              <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
+            </button>
+            <button onClick={logout} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold text-[#A1A1A1] transition hover:border-red-500/50 hover:text-red-400">
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Sair</span>
+            </button>
+          </div>
         </div>
       </header>
 
