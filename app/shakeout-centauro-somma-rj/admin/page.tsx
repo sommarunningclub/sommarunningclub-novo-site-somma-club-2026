@@ -5,6 +5,7 @@ import Link from 'next/link'
 import {
   Lock, Search, Plus, Pencil, Trash2, Users, UserCheck, UserX, Sparkles,
   Power, X, RefreshCw, LogOut, ChevronRight, Check, AlertCircle, Loader2, Trophy,
+  Handshake, Copy,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
 
@@ -58,6 +59,15 @@ export default function AdminPage() {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
   const [draft, setDraft] = useState<Lead>({})
   const [saving, setSaving] = useState(false)
+
+  // parceiros
+  type Parceiro = { id: string; nome: string; codigo: string; ativo: boolean }
+  const [parceirosOpen, setParceirosOpen] = useState(false)
+  const [parceiros, setParceiros] = useState<Parceiro[]>([])
+  const [pNome, setPNome] = useState('')
+  const [pCodigo, setPCodigo] = useState('')
+  const [pErr, setPErr] = useState('')
+  const [pSaving, setPSaving] = useState(false)
 
   const showToast = (m: string) => { setToast(m); setTimeout(() => setToast(''), 2600) }
 
@@ -149,6 +159,27 @@ export default function AdminPage() {
     }
   }
 
+  const openParceiros = async () => {
+    setParceirosOpen(true); setPErr('')
+    try { const d = await callAdmin('parceiro_list'); setParceiros(d.parceiros ?? []) } catch (e) { setPErr(e instanceof Error ? e.message : 'Erro') }
+  }
+  const createParceiro = async () => {
+    setPErr('')
+    if (!pNome.trim() || !pCodigo.trim()) return setPErr('Informe nome e código.')
+    setPSaving(true)
+    try { await callAdmin('parceiro_create', { nome: pNome, codigo: pCodigo }); setPNome(''); setPCodigo(''); const d = await callAdmin('parceiro_list'); setParceiros(d.parceiros ?? []); showToast('Parceiro criado') }
+    catch (e) { setPErr(e instanceof Error ? e.message : 'Erro') }
+    finally { setPSaving(false) }
+  }
+  const deleteParceiro = async (id: string) => {
+    if (!confirm('Remover este parceiro? O link dele deixará de funcionar.')) return
+    try { await callAdmin('parceiro_delete', { id }); setParceiros((ps) => ps.filter((p) => p.id !== id)); showToast('Parceiro removido') } catch (e) { setPErr(e instanceof Error ? e.message : 'Erro') }
+  }
+  const copyParceiroLink = (codigo: string) => {
+    const link = `${window.location.origin}/shakeout-centauro-somma-rj/parceiro?codigo=${encodeURIComponent(codigo)}`
+    navigator.clipboard?.writeText(link).then(() => showToast('Link copiado!')).catch(() => showToast(link))
+  }
+
   const doDelete = async () => {
     if (!selected?.id) return
     if (!confirm('Tem certeza que deseja deletar este usuário? Esta ação não pode ser desfeita.')) return
@@ -195,6 +226,9 @@ export default function AdminPage() {
             <Link href="/shakeout-centauro-somma-rj/admin/sorteio" className="flex items-center gap-1.5 rounded-lg bg-[#FF2C03]/15 px-3 py-2 text-xs font-semibold text-[#FF2C03] transition hover:bg-[#FF2C03]/25">
               <Trophy className="h-4 w-4" /> <span className="hidden sm:inline">Sorteio</span>
             </Link>
+            <button onClick={openParceiros} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40">
+              <Handshake className="h-4 w-4" /> <span className="hidden sm:inline">Parceiros</span>
+            </button>
             <button onClick={() => loadList(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
             </button>
@@ -308,6 +342,46 @@ export default function AdminPage() {
       {toast && (
         <div className="fixed left-1/2 top-4 z-[60] -translate-x-1/2 rounded-full border border-[#FF2C03]/40 bg-[#111] px-5 py-2.5 text-sm font-medium text-white shadow-lg">
           <span className="flex items-center gap-2"><Check className="h-4 w-4 text-[#FF2C03]" />{toast}</span>
+        </div>
+      )}
+
+      {/* Modal Parceiros */}
+      {parceirosOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 sm:items-center" onClick={() => setParceirosOpen(false)}>
+          <div onClick={(e) => e.stopPropagation()} className="max-h-[92svh] w-full overflow-y-auto rounded-t-2xl border border-[#2A2A2A] bg-[#0e0e0e] sm:max-w-lg sm:rounded-2xl">
+            <div className="sticky top-0 flex items-center justify-between border-b border-[#1c1c1c] bg-[#0e0e0e] px-5 py-4">
+              <h2 className="flex items-center gap-2 text-lg font-bold"><Handshake className="h-5 w-5 text-[#FF2C03]" /> Parceiros</h2>
+              <button onClick={() => setParceirosOpen(false)} aria-label="Fechar" className="rounded-md p-1 text-[#888] hover:text-white"><X className="h-5 w-5" /></button>
+            </div>
+            <div className="px-5 py-5">
+              <p className="mb-3 text-sm text-[#A1A1A1]">Crie um acesso de parceiro. Ele vê os check-ins em tempo real e pode adicionar inscritos, mas <strong className="text-white">não edita nem exclui</strong>.</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_1fr_auto]">
+                <input className={INPUT} placeholder="Nome do parceiro" value={pNome} onChange={(e) => setPNome(e.target.value)} />
+                <input className={INPUT} placeholder="Código de acesso" value={pCodigo} onChange={(e) => setPCodigo(e.target.value)} />
+                <button onClick={createParceiro} disabled={pSaving} className="flex items-center justify-center gap-2 rounded-lg bg-[#FF2C03] px-4 py-3 text-sm font-bold tracking-wider transition hover:bg-[#ff4d35] disabled:opacity-50">{pSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />} CRIAR</button>
+              </div>
+              {pErr && <p className="mt-3 flex items-center gap-1.5 text-sm text-red-400"><AlertCircle className="h-4 w-4" />{pErr}</p>}
+
+              <div className="mt-5 space-y-2">
+                {parceiros.length === 0 ? (
+                  <p className="py-6 text-center text-sm text-[#666]">Nenhum parceiro cadastrado.</p>
+                ) : parceiros.map((p) => (
+                  <div key={p.id} className="rounded-xl border border-[#2A2A2A] bg-[#0c0c0c] p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="truncate font-semibold">{p.nome}</p>
+                        <p className="truncate text-xs text-[#A1A1A1]">código: <span className="font-mono text-white">{p.codigo}</span></p>
+                      </div>
+                      <button onClick={() => deleteParceiro(p.id)} className="text-[#888] hover:text-red-500" aria-label="Remover"><Trash2 className="h-4 w-4" /></button>
+                    </div>
+                    <button onClick={() => copyParceiroLink(p.codigo)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#FF2C03]/40 bg-[#FF2C03]/10 py-2.5 text-xs font-bold tracking-wider text-[#FF2C03] transition hover:bg-[#FF2C03]/20">
+                      <Copy className="h-4 w-4" /> COPIAR LINK DO PARCEIRO
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       )}
 

@@ -133,6 +133,35 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, id: data?.[0]?.id })
     }
 
+    // ---- Parceiros: listar ----
+    if (action === 'parceiro_list') {
+      const { data, error } = await supabase.from('parceiros_shakeout').select('*').order('created_at', { ascending: false })
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      return NextResponse.json({ parceiros: data })
+    }
+
+    // ---- Parceiros: criar ----
+    if (action === 'parceiro_create') {
+      const nome = String(body.nome ?? '').trim()
+      const codigo = String(body.codigo ?? '').trim()
+      if (!nome || !codigo) return NextResponse.json({ error: 'Informe nome e código do parceiro.' }, { status: 400 })
+      const { data, error } = await supabase.from('parceiros_shakeout').insert({ nome, codigo, ativo: true }).select().single()
+      if (error) {
+        if ((error as { code?: string }).code === '23505') return NextResponse.json({ error: 'Este código já está em uso.' }, { status: 409 })
+        return NextResponse.json({ error: error.message }, { status: 400 })
+      }
+      return NextResponse.json({ success: true, parceiro: data })
+    }
+
+    // ---- Parceiros: apagar ----
+    if (action === 'parceiro_delete') {
+      const id = body.id
+      if (!id) return NextResponse.json({ error: 'ID não informado.' }, { status: 400 })
+      const { error } = await supabase.from('parceiros_shakeout').delete().eq('id', id)
+      if (error) return NextResponse.json({ error: error.message }, { status: 400 })
+      return NextResponse.json({ success: true })
+    }
+
     // ---- Apagar inscrição ----
     if (action === 'delete') {
       const id = body.id
