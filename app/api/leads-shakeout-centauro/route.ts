@@ -4,6 +4,7 @@ import { isValidCPF } from '@/lib/cpf'
 
 const ORIGEM = 'shakeout-centauro-somma-rj'
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
+const SEXOS = ['masculino', 'feminino', 'outro', 'prefiro-nao-dizer']
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,14 +13,18 @@ export async function POST(request: NextRequest) {
     const email = String(body.email ?? '').trim().toLowerCase()
     const telefone = String(body.telefone ?? '').trim()
     const uf = String(body.uf ?? '').trim().toUpperCase()
+    const sexo = String(body.sexo ?? '').trim().toLowerCase()
     const cpfDigits = String(body.cpf ?? '').replace(/\D/g, '')
     const conhecia_somma = Boolean(body.conhecia_somma)
     const aceite_lgpd = Boolean(body.aceite_lgpd)
     const aceite_comunicacoes = Boolean(body.aceite_comunicacoes)
 
     // Validação
-    if (!nome_completo || !email || !telefone || !uf || !cpfDigits) {
+    if (!nome_completo || !email || !telefone || !uf || !sexo || !cpfDigits) {
       return NextResponse.json({ error: 'Preencha todos os campos obrigatórios.' }, { status: 400 })
+    }
+    if (!SEXOS.includes(sexo)) {
+      return NextResponse.json({ error: 'Sexo inválido.' }, { status: 400 })
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'E-mail inválido.' }, { status: 400 })
@@ -41,6 +46,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Erro ao configurar banco de dados' }, { status: 500 })
     }
     const supabase = createClient(supabaseUrl, serviceKey)
+
+    // Inscrições encerradas? (admin pode bloquear)
+    const { data: cfg } = await supabase.from('config_shakeout').select('inscricoes_abertas').eq('id', 1).maybeSingle()
+    if (cfg && cfg.inscricoes_abertas === false) {
+      return NextResponse.json({ error: 'As inscrições estão encerradas no momento.' }, { status: 403 })
+    }
 
     // Dedup por CPF nesta ativação (idempotente)
     const { data: existing, error: checkError } = await supabase
@@ -66,6 +77,7 @@ export async function POST(request: NextRequest) {
           email,
           telefone,
           uf,
+          sexo,
           cpf: cpfDigits,
           conhecia_somma,
           aceite_lgpd,

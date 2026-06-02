@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { ArrowRight, ArrowLeft, CheckCircle2, Instagram, Printer, Ticket } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { ArrowRight, ArrowLeft, CheckCircle2, Instagram, Printer, Ticket, Lock } from 'lucide-react'
 import { CentauroLogo } from '@/components/shakeout/centauro-logo'
 import { isValidCPF, formatCPF } from '@/lib/cpf'
 
@@ -30,15 +30,23 @@ type Form = {
   email: string
   telefone: string
   uf: string
+  sexo: string
   conhecia_somma: string
   aceite_lgpd: boolean
   aceite_comunicacoes: boolean
 }
 
 const EMPTY: Form = {
-  nome_completo: '', cpf: '', email: '', telefone: '', uf: '',
+  nome_completo: '', cpf: '', email: '', telefone: '', uf: '', sexo: '',
   conhecia_somma: '', aceite_lgpd: false, aceite_comunicacoes: false,
 }
+
+const SEXOS = [
+  { v: 'masculino', label: 'Masculino' },
+  { v: 'feminino', label: 'Feminino' },
+  { v: 'outro', label: 'Outro' },
+  { v: 'prefiro-nao-dizer', label: 'Prefiro não dizer' },
+]
 
 const STEPS = ['Identificação', 'Contato', 'Confirmação']
 
@@ -49,6 +57,14 @@ export function CheckinJourney() {
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
   const [ticket, setTicket] = useState('')
+  const [closed, setClosed] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/leads-shakeout-centauro/config')
+      .then((r) => r.json())
+      .then((d) => setClosed(d?.inscricoes_abertas === false))
+      .catch(() => {})
+  }, [])
 
   const set = <K extends keyof Form>(k: K, v: Form[K]) => {
     setForm((f) => ({ ...f, [k]: v }))
@@ -64,6 +80,7 @@ export function CheckinJourney() {
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) return 'E-mail inválido.'
       if (form.telefone.replace(/\D/g, '').length < 10) return 'Telefone (WhatsApp) inválido.'
       if (!form.uf) return 'Selecione seu estado (UF).'
+      if (!form.sexo) return 'Selecione o sexo.'
     }
     if (step === 2) {
       if (!form.conhecia_somma) return 'Responda se já conhecia o Somma Club.'
@@ -95,6 +112,7 @@ export function CheckinJourney() {
           email: form.email,
           telefone: form.telefone,
           uf: form.uf,
+          sexo: form.sexo,
           conhecia_somma: form.conhecia_somma === 'sim',
           aceite_lgpd: form.aceite_lgpd,
           aceite_comunicacoes: form.aceite_comunicacoes,
@@ -218,6 +236,21 @@ export function CheckinJourney() {
     )
   }
 
+  /* ===================== INSCRIÇÕES ENCERRADAS ===================== */
+  if (closed) {
+    return (
+      <div className="mt-8 rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-8 text-center">
+        <Lock className="mx-auto mb-4 h-10 w-10 text-[#FF2C03]" aria-hidden />
+        <h3 className="text-3xl uppercase">Vagas encerradas</h3>
+        <p className="mt-2 text-sm text-[#A1A1A1]">
+          As inscrições para o Shake Out Rio estão encerradas no momento. Siga o
+          {' '}<a href={IG.somma} target="_blank" rel="noopener noreferrer" className="text-[#FF2C03] underline">@somma.club</a>{' '}
+          para novidades.
+        </p>
+      </div>
+    )
+  }
+
   /* ===================== JORNADA (form) ===================== */
   return (
     <div className="mt-8">
@@ -257,6 +290,10 @@ export function CheckinJourney() {
             <select value={form.uf} onChange={(e) => set('uf', e.target.value)} className={`${INPUT} appearance-none`} aria-label="Estado (UF)">
               <option value="" disabled>Estado (UF)</option>
               {UFS.map((uf) => <option key={uf} value={uf}>{uf}</option>)}
+            </select>
+            <select value={form.sexo} onChange={(e) => set('sexo', e.target.value)} className={`${INPUT} appearance-none`} aria-label="Sexo">
+              <option value="" disabled>Sexo</option>
+              {SEXOS.map((s) => <option key={s.v} value={s.v}>{s.label}</option>)}
             </select>
           </>
         )}
