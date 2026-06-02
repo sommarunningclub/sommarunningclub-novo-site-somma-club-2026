@@ -28,16 +28,19 @@ export async function POST(request: NextRequest) {
     // ---- Estatísticas + estado das inscrições ----
     if (action === 'stats') {
       const base = () => supabase.from('leads_shakeout_centauro').select('*', { count: 'exact', head: true }).eq('origem', ORIGEM)
-      const [{ count: total }, { count: conhece }, { count: naoConhece }] = await Promise.all([
+      const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+      const [{ count: total }, { count: conhece }, { count: naoConhece }, { count: recentes }] = await Promise.all([
         base(),
         base().eq('conhecia_somma', true),
         base().eq('conhecia_somma', false),
+        base().gte('data_de_cadastro', last24h),
       ])
       const { data: cfg } = await supabase.from('config_shakeout').select('inscricoes_abertas').eq('id', 1).maybeSingle()
       return NextResponse.json({
         total: total ?? 0,
         conhece: conhece ?? 0,
         nao_conhece: naoConhece ?? 0,
+        recentes: recentes ?? 0,
         inscricoes_abertas: cfg?.inscricoes_abertas ?? true,
       })
     }
