@@ -299,7 +299,6 @@ export function CheckinJourney() {
               placeholder="CPF (000.000.000-00)"
               aria-label="CPF"
             />
-            <p className="text-xs text-[#666]">Seu CPF é validado automaticamente — não usamos consulta externa.</p>
           </>
         )}
 
