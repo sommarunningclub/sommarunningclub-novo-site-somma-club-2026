@@ -3,10 +3,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import {
   Search, Plus, Users, UserCheck, UserX, Sparkles, X, RefreshCw,
-  ChevronRight, Check, AlertCircle, Loader2, Eye, LogOut,
+  ChevronRight, Check, AlertCircle, Loader2, Eye, LogOut, Home,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
 import { CentauroLogo } from '@/components/shakeout/centauro-logo'
+import { InteractiveMenu } from '@/components/ui/modern-mobile-menu'
 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const LOGO_DOPA = 'https://seekdopa.com/cdn/shop/files/DOPA_Logo_Cinza_Original.png?v=1728398053&width=600'
@@ -122,15 +123,22 @@ export default function ParceiroPage() {
     )
   }
 
+  const partnerMenu = [
+    { label: 'Início', icon: Home, action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+    { label: 'Atualizar', icon: RefreshCw, action: () => loadData(search) },
+    { label: 'Adicionar', icon: Plus, action: () => { setDraft({ conhecia_somma: false }); setAdding(true); setError('') } },
+    { label: 'Sair', icon: LogOut, action: logout },
+  ]
+
   return (
-    <main className="min-h-[100svh] bg-black pb-16 text-white">
+    <main className="min-h-[100svh] bg-black pb-28 text-white lg:pb-16">
       <header className="sticky top-0 z-30 border-b border-[#1c1c1c] bg-black/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
           <div>
             <h1 className="flex items-center gap-2 text-base font-bold leading-tight sm:text-lg"><Eye className="h-4 w-4 text-[#FF2C03]" /> {nome || 'Parceiro'}</h1>
             <p className="text-[11px] text-[#888]">Tempo real · atualizado às {lastUpdate || '—'}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-2 lg:flex">
             <button onClick={() => loadData(search)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
             </button>
@@ -203,6 +211,11 @@ export default function ParceiroPage() {
       </div>
 
       {toast && <div className="fixed left-1/2 top-4 z-[60] -translate-x-1/2 rounded-full border border-[#FF2C03]/40 bg-[#111] px-5 py-2.5 text-sm font-medium shadow-lg"><span className="flex items-center gap-2"><Check className="h-4 w-4 text-[#FF2C03]" />{toast}</span></div>}
+
+      {/* Menu inferior animado (mobile) */}
+      <div className="shk-menu-wrap fixed bottom-4 left-1/2 z-40 -translate-x-1/2 lg:hidden">
+        <InteractiveMenu items={partnerMenu.map(({ label, icon }) => ({ label, icon }))} accentColor="#FF2C03" onItemClick={(i) => partnerMenu[i].action()} />
+      </div>
 
       {/* Detalhe (somente leitura) */}
       {selected && (

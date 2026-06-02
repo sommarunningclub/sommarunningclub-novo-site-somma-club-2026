@@ -2,12 +2,14 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   Lock, Search, Plus, Pencil, Trash2, Users, UserCheck, UserX, Sparkles,
   Power, X, RefreshCw, LogOut, ChevronRight, Check, AlertCircle, Loader2, Trophy,
-  Handshake, Copy,
+  Handshake, Copy, Home,
 } from 'lucide-react'
 import { formatCPF } from '@/lib/cpf'
+import { InteractiveMenu } from '@/components/ui/modern-mobile-menu'
 
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
 const SEXOS = [
@@ -43,6 +45,7 @@ const fmtDate = (s?: string) => {
 }
 
 export default function AdminPage() {
+  const router = useRouter()
   const [code, setCode] = useState('')
   const [authed, setAuthed] = useState(false)
   const [loginErr, setLoginErr] = useState('')
@@ -213,8 +216,16 @@ export default function AdminPage() {
   }
 
   /* ---------------- DASHBOARD ---------------- */
+  const adminMenu = [
+    { label: 'Início', icon: Home, action: () => window.scrollTo({ top: 0, behavior: 'smooth' }) },
+    { label: 'Sorteio', icon: Trophy, action: () => router.push('/shakeout-centauro-somma-rj/admin/sorteio') },
+    { label: 'Parceiros', icon: Handshake, action: openParceiros },
+    { label: 'Adicionar', icon: Plus, action: openNew },
+    { label: 'Sair', icon: LogOut, action: logout },
+  ]
+
   return (
-    <main className="min-h-[100svh] bg-black pb-16 text-white">
+    <main className="min-h-[100svh] bg-black pb-28 text-white lg:pb-16">
       {/* topo fixo */}
       <header className="sticky top-0 z-30 border-b border-[#1c1c1c] bg-black/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
@@ -222,7 +233,7 @@ export default function AdminPage() {
             <h1 className="text-base font-bold leading-tight sm:text-lg">Shake Out · Admin</h1>
             <p className="text-[11px] text-[#888]">Atualizado às {lastUpdate || '—'}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="hidden items-center gap-2 lg:flex">
             <Link href="/shakeout-centauro-somma-rj/admin/sorteio" className="flex items-center gap-1.5 rounded-lg bg-[#FF2C03]/15 px-3 py-2 text-xs font-semibold text-[#FF2C03] transition hover:bg-[#FF2C03]/25">
               <Trophy className="h-4 w-4" /> <span className="hidden sm:inline">Sorteio</span>
             </Link>
@@ -344,6 +355,11 @@ export default function AdminPage() {
           <span className="flex items-center gap-2"><Check className="h-4 w-4 text-[#FF2C03]" />{toast}</span>
         </div>
       )}
+
+      {/* Menu inferior animado (mobile) */}
+      <div className="shk-menu-wrap fixed bottom-4 left-1/2 z-40 -translate-x-1/2 lg:hidden">
+        <InteractiveMenu items={adminMenu.map(({ label, icon }) => ({ label, icon }))} accentColor="#FF2C03" onItemClick={(i) => adminMenu[i].action()} />
+      </div>
 
       {/* Modal Parceiros */}
       {parceirosOpen && (
