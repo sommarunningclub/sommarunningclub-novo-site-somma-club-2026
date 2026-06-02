@@ -57,6 +57,7 @@ export function CheckinJourney() {
   const [err, setErr] = useState('')
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
+  const [printing, setPrinting] = useState(false)
   const [ticket, setTicket] = useState('')
   const [closed, setClosed] = useState(false)
 
@@ -125,11 +126,17 @@ export function CheckinJourney() {
       }
       track('shakeout_checkin', { status: 'sucesso' })
       setTicket('SHK-' + Date.now().toString(36).toUpperCase().slice(-6))
-      setDone(true)
+      setLoading(false)
+      setPrinting(true)
+      // delay de 4s com a animação de impressão -> depois mostra o ticket (obrigado)
+      setTimeout(() => {
+        setPrinting(false)
+        setDone(true)
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 4000)
     } catch (e2) {
       track('shakeout_checkin', { status: 'erro' })
       setErr(e2 instanceof Error ? e2.message : 'Erro ao enviar.')
-    } finally {
       setLoading(false)
     }
   }
@@ -232,6 +239,50 @@ export function CheckinJourney() {
           body * { visibility: hidden !important; }
           #shakeout-ticket, #shakeout-ticket * { visibility: visible !important; }
           #shakeout-ticket { position: absolute; left: 0; top: 0; width: 100%; }
+        }`}</style>
+      </div>
+    )
+  }
+
+  /* ===================== IMPRIMINDO (delay 4s) ===================== */
+  if (printing) {
+    return (
+      <div className="mt-8 flex flex-col items-center">
+        <p className="mb-8 text-center font-[family-name:var(--font-display)] text-2xl uppercase leading-tight text-white">
+          Aguarde, seu ticket<br />está sendo impresso
+        </p>
+
+        {/* impressora */}
+        <div className="relative z-10 h-5 w-72 rounded-lg border-4 border-white bg-[#111] shadow-[1px_3px_4px_rgba(0,0,0,0.5)]" />
+
+        {/* papel saindo */}
+        <div className="w-72 overflow-hidden">
+          <div className="[animation:shk-print_3s_cubic-bezier(.45,0,.15,1)_forwards]">
+            <div className="mx-auto -mt-1 w-[90%] rounded-b-xl bg-white p-5 text-left text-[#111] shadow-[1px_4px_10px_rgba(0,0,0,0.35)]">
+              <div className="mb-3 flex items-center justify-between">
+                <span className="font-[family-name:var(--font-display)] text-lg uppercase text-[#FF2C03]">Shake Out Rio</span>
+                <span className="font-mono text-[11px] font-bold">{ticket}</span>
+              </div>
+              <div className="border-t border-dashed border-zinc-300 pt-3">
+                <p className="text-[10px] uppercase tracking-widest text-zinc-500">Check-in confirmado</p>
+                <p className="mt-1 font-semibold leading-tight">{form.nome_completo}</p>
+                <p className="mt-0.5 text-sm text-zinc-600">{form.uf} · 04/06 08H00 · Casa Dopa Rio</p>
+              </div>
+              <div className="mt-4 h-6 w-full bg-[repeating-linear-gradient(90deg,#111_0_2px,transparent_2px_5px)]" />
+            </div>
+          </div>
+        </div>
+
+        <p className="mt-8 flex items-center gap-2 text-sm text-[#A1A1A1]">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-[#FF2C03]" />
+          Confirmando sua presença…
+        </p>
+
+        <style>{`@keyframes shk-print {
+          0% { transform: translateY(-112%) }
+          30% { transform: translateY(-78%) }
+          65% { transform: translateY(-26%) }
+          100% { transform: translateY(0) }
         }`}</style>
       </div>
     )

@@ -22,7 +22,6 @@ const DopaMap = dynamic(() => import('@/components/shakeout/dopa-map').then((m) 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const LOGO_DOPA = 'https://seekdopa.com/cdn/shop/files/DOPA_Logo_Cinza_Original.png?v=1728398053&width=600'
 const BG_HERO = '/marcos-vinicius-do-vale-yeEsrY5kzL8-unsplash.jpg'
-const IMG_CASA_DOPA = 'https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=1200&q=80'
 const IMG_GIFT = 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?auto=format&fit=crop&w=1000&q=80'
 
 const ENDERECO = 'Rua Piragibe Frota Aguiar, 7, Copacabana, Rio de Janeiro'
@@ -261,9 +260,8 @@ export function ShakeoutClient() {
       {/* ===== CASA DOPA ===== */}
       <section id="sobre" className="scroll-mt-20 border-y border-[#1c1c1c] bg-[#060606]">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-5 py-20 md:px-6 md:py-28 lg:grid-cols-2">
-          <div data-reveal className="relative overflow-hidden rounded-2xl border border-[#2A2A2A]">
-            <img src={IMG_CASA_DOPA} alt="Casa Dopa Rio" className="h-72 w-full object-cover grayscale md:h-[26rem]" />
-            <img src={LOGO_DOPA} alt="Casa Dopa" className="absolute bottom-4 left-4 h-6 w-auto opacity-90 [filter:brightness(0)_invert(1)]" />
+          <div data-reveal className="flex min-h-[18rem] items-center justify-center rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-10 md:min-h-[26rem] md:p-16">
+            <img src={LOGO_DOPA} alt="Casa Dopa Rio" className="w-full max-w-xs [filter:brightness(0)_invert(1)] md:max-w-md" />
           </div>
           <div>
             <div data-reveal><Eyebrow>Semana da Maratona do Rio</Eyebrow></div>
