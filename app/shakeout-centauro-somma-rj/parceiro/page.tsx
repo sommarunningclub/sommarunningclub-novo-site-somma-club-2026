@@ -166,6 +166,10 @@ export default function ParceiroPage() {
               <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Sair</span>
             </button>
           </div>
+          {/* Atualizar (mobile) */}
+          <button onClick={() => loadData(search, filterConhecia, filterUf)} disabled={loading} aria-label="Atualizar dados" className="flex items-center justify-center rounded-lg border border-[#2A2A2A] p-2.5 text-[#A1A1A1] transition hover:border-white/40 disabled:opacity-50 lg:hidden">
+            <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
+          </button>
         </div>
       </header>
 
