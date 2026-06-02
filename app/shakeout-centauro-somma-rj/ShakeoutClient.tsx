@@ -7,9 +7,10 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   Footprints, Snowflake, Coffee, Gift, Users, MapPin, Clock, CalendarDays,
-  ArrowRight, CheckCircle2, Check, TrainFront, Trees, Waves, Menu, X,
+  ArrowRight, Check, TrainFront, Trees, Waves, Menu, X,
 } from 'lucide-react'
 import { CentauroLogo } from '@/components/shakeout/centauro-logo'
+import { CheckinJourney } from '@/components/shakeout/checkin-journey'
 import { SiteFooter } from '@/components/site-footer'
 
 const DopaMap = dynamic(() => import('@/components/shakeout/dopa-map').then((m) => m.DopaMap), {
@@ -26,7 +27,6 @@ const IMG_GIFT = 'https://images.unsplash.com/photo-1607344645866-009c320b63e0?a
 
 const ENDERECO = 'Rua Piragibe Frota Aguiar, 7, Copacabana, Rio de Janeiro'
 const MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ENDERECO)}`
-const WHATSAPP_GROUP_URL = ''
 
 type DataLayerWindow = Window & { dataLayer?: Record<string, unknown>[] }
 function track(event: string, params: Record<string, unknown> = {}) {
@@ -73,16 +73,10 @@ const Eyebrow = ({ children }: { children: React.ReactNode }) => (
   <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-[#FF2C03]">{children}</p>
 )
 
-const INPUT =
-  'w-full rounded-md bg-[#0c0c0c] px-4 py-3 text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] focus:border-transparent transition'
-
 export function ShakeoutClient() {
   const rootRef = useRef<HTMLElement>(null)
   const lenisRef = useRef<Lenis | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
 
   /* ── Lenis (scroll suave) + GSAP (reveals + parallax) ── */
   useEffect(() => {
@@ -130,39 +124,6 @@ export function ShakeoutClient() {
       lenisRef.current.scrollTo(href, { offset: -72 })
     }
     setMenuOpen(false)
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
-    try {
-      const fd = new FormData(e.currentTarget)
-      const res = await fetch('/api/leads-shakeout-centauro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nome_completo: fd.get('nome_completo'),
-          email: fd.get('email'),
-          telefone: fd.get('telefone'),
-          cidade: fd.get('cidade'),
-          instagram: fd.get('instagram'),
-          conhecia_somma: fd.get('conhecia_somma') === 'sim',
-          aceite_comunicacoes: fd.get('aceite_comunicacoes') === 'on',
-        }),
-      })
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
-        throw new Error(data.error || 'Não foi possível confirmar sua presença.')
-      }
-      track('shakeout_checkin', { status: 'sucesso' })
-      setSuccess(true)
-    } catch (err) {
-      track('shakeout_checkin', { status: 'erro' })
-      setError(err instanceof Error ? err.message : 'Erro ao enviar formulário.')
-    } finally {
-      setLoading(false)
-    }
   }
 
   return (
@@ -372,54 +333,9 @@ export function ShakeoutClient() {
               Preencha seus dados para confirmar sua participação e garantir sua vaga no evento.
             </p>
 
-            {success ? (
-              <div className="mt-8 rounded-2xl border border-[#FF2C03]/40 bg-[#111111] p-8">
-                <CheckCircle2 className="mb-4 h-11 w-11 text-[#FF2C03]" aria-hidden />
-                <p className="text-2xl uppercase">Você está dentro.</p>
-                <p className="mt-2 text-[#A1A1A1]">Seu check-in foi realizado com sucesso.</p>
-                {WHATSAPP_GROUP_URL ? (
-                  <a href={WHATSAPP_GROUP_URL} target="_blank" rel="noopener noreferrer"
-                    onClick={() => track('shakeout_cta_click', { cta: 'grupo_whatsapp' })}
-                    className="mt-6 inline-flex items-center gap-2 rounded-md bg-[#FF2C03] px-7 py-3.5 text-sm font-bold tracking-wider text-white transition hover:bg-[#ff4d35]">
-                    ENTRAR NO GRUPO OFICIAL <ArrowRight className="h-4 w-4" aria-hidden />
-                  </a>
-                ) : (
-                  <button type="button" disabled title="Link do grupo em breve"
-                    className="mt-6 inline-flex cursor-not-allowed items-center gap-2 rounded-md border border-[#2A2A2A] px-7 py-3.5 text-sm font-bold tracking-wider text-[#666]">
-                    ENTRAR NO GRUPO OFICIAL (EM BREVE)
-                  </button>
-                )}
-              </div>
-            ) : (
-              <form data-reveal onSubmit={handleSubmit} className="mt-8 space-y-3">
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <input name="nome_completo" type="text" required className={INPUT} placeholder="Nome completo" aria-label="Nome completo" />
-                  <input name="email" type="email" required className={INPUT} placeholder="E-mail" aria-label="E-mail" />
-                  <input name="telefone" type="tel" required className={INPUT} placeholder="Telefone (WhatsApp)" aria-label="Telefone WhatsApp" />
-                  <input name="cidade" type="text" required className={INPUT} placeholder="Cidade" aria-label="Cidade" />
-                  <input name="instagram" type="text" className={INPUT} placeholder="Instagram" aria-label="Instagram" />
-                  <select name="conhecia_somma" required defaultValue="" className={`${INPUT} appearance-none`} aria-label="Você já conhecia o Somma Club?">
-                    <option value="" disabled>Você já conhecia o Somma Club?</option>
-                    <option value="sim">Sim, já conhecia</option>
-                    <option value="nao">Não, conheci agora</option>
-                  </select>
-                </div>
-                <label className="flex cursor-pointer items-start gap-2.5 pt-1">
-                  <input type="checkbox" name="aceite_comunicacoes" className="mt-0.5 h-4 w-4 accent-[#FF2C03]" />
-                  <span className="text-xs leading-relaxed text-[#A1A1A1]">Quero receber novidades e conteúdos do Somma Club.</span>
-                </label>
-                {error && (
-                  <div className="rounded-md border border-red-900 bg-red-950/30 px-4 py-3">
-                    <p className="text-sm text-red-400">{error}</p>
-                  </div>
-                )}
-                <button type="submit" disabled={loading}
-                  className="group mt-1 flex w-full items-center justify-center gap-2 rounded-md bg-[#FF2C03] py-4 text-sm font-bold tracking-wider text-white transition hover:bg-[#ff4d35] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] focus:ring-offset-2 focus:ring-offset-black disabled:cursor-not-allowed disabled:opacity-50">
-                  {loading ? 'CONFIRMANDO...' : 'CONFIRMAR PRESENÇA'}
-                  {!loading && <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden />}
-                </button>
-              </form>
-            )}
+            <div data-reveal>
+              <CheckinJourney />
+            </div>
           </div>
 
           {/* Sorteios */}

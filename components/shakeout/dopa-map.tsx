@@ -5,8 +5,31 @@ import { setOptions, importLibrary } from '@googlemaps/js-api-loader'
 
 // Casa Dopa Rio — Rua Piragibe Frota Aguiar, 7, Copacabana (ajuste fino se necessário)
 const CENTER = { lat: -22.98093, lng: -43.19061 }
-const ACCENT = '#FF2C03'
+const SOMMA = '#FF2C03'
+const CENTAURO = '#E30000'
 const COORDS = `22°58'51"S  43°11'26"W`
+
+// Estilo dark "palantir" — detalhes em laranja Somma e vermelho Centauro
+const DARK_MAP_STYLES: google.maps.MapTypeStyle[] = [
+  { elementType: 'geometry', stylers: [{ color: '#0a0a0a' }] },
+  { elementType: 'labels.text.stroke', stylers: [{ color: '#0a0a0a' }] },
+  { elementType: 'labels.text.fill', stylers: [{ color: '#8a8a8a' }] },
+  { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
+  { featureType: 'administrative', elementType: 'geometry.stroke', stylers: [{ color: '#2a2a2a' }] },
+  { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#141414' }] },
+  { featureType: 'poi', elementType: 'labels.text.fill', stylers: [{ color: '#6b6b6b' }] },
+  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#10130f' }] },
+  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#1c1c1c' }] },
+  { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#241a14' }] },
+  { featureType: 'road', elementType: 'labels.text.fill', stylers: [{ color: '#9a9a9a' }] },
+  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#2a2018' }] },
+  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#3a2018' }] },
+  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: SOMMA }] },
+  { featureType: 'transit', elementType: 'geometry', stylers: [{ color: '#191919' }] },
+  { featureType: 'transit.line', elementType: 'geometry', stylers: [{ color: CENTAURO }] },
+  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#050505' }] },
+  { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#5a3a30' }] },
+]
 
 export function DopaMap() {
   const ref = useRef<HTMLDivElement>(null)
@@ -31,13 +54,14 @@ export function DopaMap() {
         const map = new Map(ref.current, {
           center: CENTER,
           zoom: 16,
-          mapTypeId: 'hybrid', // satélite + rótulos
+          mapTypeId: 'roadmap',
+          styles: DARK_MAP_STYLES,
           disableDefaultUI: true,
           gestureHandling: 'none',
           keyboardShortcuts: false,
           draggable: false,
           clickableIcons: false,
-          backgroundColor: '#000',
+          backgroundColor: '#0a0a0a',
           tilt: 0,
           isFractionalZoomEnabled: true,
         })
