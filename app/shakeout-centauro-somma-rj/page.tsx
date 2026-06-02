@@ -1,6 +1,14 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Anton, Barlow } from 'next/font/google'
 import { ShakeoutClient } from './ShakeoutClient'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: '#000000',
+}
 
 const display = Anton({ weight: '400', subsets: ['latin'], variable: '--font-display', display: 'swap' })
 const body = Barlow({ weight: ['400', '500', '600', '700'], subsets: ['latin'], variable: '--font-body', display: 'swap' })

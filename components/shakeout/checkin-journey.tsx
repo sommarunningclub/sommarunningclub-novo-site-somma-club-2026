@@ -21,8 +21,9 @@ function track(event: string, params: Record<string, unknown> = {}) {
   if (w.dataLayer) w.dataLayer.push({ event, ...params })
 }
 
+// text-base (16px) no mobile evita o zoom automático do iOS ao focar o campo
 const INPUT =
-  'w-full rounded-md bg-[#0c0c0c] px-4 py-3 text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] focus:border-transparent transition'
+  'w-full rounded-md bg-[#0c0c0c] px-4 py-3 text-base sm:text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] focus:border-transparent transition'
 
 type Form = {
   nome_completo: string

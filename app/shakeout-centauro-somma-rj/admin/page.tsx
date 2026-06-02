@@ -28,7 +28,7 @@ type Lead = {
 }
 type Stats = { total: number; conhece: number; nao_conhece: number; inscricoes_abertas: boolean }
 
-const INPUT = 'w-full rounded-md bg-[#0c0c0c] px-4 py-2.5 text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] transition'
+const INPUT = 'w-full rounded-md bg-[#0c0c0c] px-4 py-2.5 text-base sm:text-sm text-white placeholder:text-[#666] border border-[#2A2A2A] focus:outline-none focus:ring-2 focus:ring-[#FF2C03] transition'
 
 export default function AdminPage() {
   const [code, setCode] = useState('')

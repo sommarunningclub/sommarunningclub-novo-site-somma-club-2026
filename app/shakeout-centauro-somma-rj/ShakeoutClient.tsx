@@ -129,7 +129,7 @@ export function ShakeoutClient() {
   return (
     <main
       ref={rootRef}
-      className="min-h-screen bg-black font-[family-name:var(--font-body)] text-white antialiased [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]"
+      className="min-h-screen overflow-x-hidden bg-black font-[family-name:var(--font-body)] text-white antialiased [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]"
     >
       {/* ===== HEADER ===== */}
       <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-md">
