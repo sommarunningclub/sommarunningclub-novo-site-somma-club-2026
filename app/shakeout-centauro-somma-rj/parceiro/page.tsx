@@ -154,11 +154,11 @@ export default function ParceiroPage() {
     <main className="min-h-[100svh] bg-black pb-28 text-white lg:pb-16">
       <header className="sticky top-0 z-30 border-b border-[#1c1c1c] bg-black/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3.5 sm:px-6">
-          <div>
-            <h1 className="flex items-center gap-2 text-base font-bold leading-tight sm:text-lg"><Eye className="h-4 w-4 text-[#FF2C03]" /> {nome || 'Parceiro'}</h1>
+          <div className="min-w-0 flex-1">
+            <h1 className="flex items-center gap-2 text-base font-bold leading-tight sm:text-lg"><Eye className="h-4 w-4 shrink-0 text-[#FF2C03]" /> <span className="truncate">{nome || 'Parceiro'}</span></h1>
             <p className="text-[11px] text-[#888]">Tempo real · atualizado às {lastUpdate || '—'}</p>
           </div>
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="ml-2 hidden shrink-0 items-center gap-2 lg:flex">
             <button onClick={() => loadData(search, filterConhecia, filterUf)} disabled={loading} className="flex items-center gap-1.5 rounded-lg border border-[#2A2A2A] px-3 py-2 text-xs font-semibold transition hover:border-white/40 disabled:opacity-50">
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> <span className="hidden sm:inline">Atualizar</span>
             </button>
@@ -167,7 +167,7 @@ export default function ParceiroPage() {
             </button>
           </div>
           {/* Atualizar (mobile) */}
-          <button onClick={() => loadData(search, filterConhecia, filterUf)} disabled={loading} aria-label="Atualizar dados" className="flex items-center justify-center rounded-lg border border-[#2A2A2A] p-2.5 text-[#A1A1A1] transition hover:border-white/40 disabled:opacity-50 lg:hidden">
+          <button onClick={() => loadData(search, filterConhecia, filterUf)} disabled={loading} aria-label="Atualizar dados" className="ml-2 flex shrink-0 items-center justify-center rounded-lg border border-[#2A2A2A] p-2.5 text-[#A1A1A1] transition hover:border-white/40 disabled:opacity-50 lg:hidden">
             <RefreshCw className={`h-5 w-5 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
