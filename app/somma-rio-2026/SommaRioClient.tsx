@@ -12,7 +12,15 @@ import {
 import { SiteFooter } from '@/components/site-footer'
 import { StravaRouteEmbed } from '@/components/somma-rio/strava-route-embed'
 import { RioCircuitMap } from '@/components/somma-rio/rio-circuit-map'
-import { ROUTE_42K, ROUTE_21K } from './route-data'
+import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
+import { ROUTE_42K, ROUTE_21K, ELEV_42K, GAIN_42K } from './route-data'
+
+const PEAKS_42K = [
+  { km: 15.9, label: 'Joá' },
+  { km: 21.4, label: 'S. Conrado' },
+  { km: 37, label: 'Marina' },
+  { km: 39, label: 'Viaduto' },
+]
 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const BG_HERO = '/marcos-vinicius-do-vale-yeEsrY5kzL8-unsplash.jpg'
@@ -133,44 +141,6 @@ const POSTOS_ELETRO = [10, 17, 24, 31, 38]
 const Eyebrow = ({ children }: { children: React.ReactNode }) => (
   <p className="mb-3 text-xs font-bold uppercase tracking-[0.25em] text-[#FF2C03]">{children}</p>
 )
-
-/* ───────────────── Perfil de altimetria (42K) ───────────────── */
-function ElevationProfile() {
-  // pontos aproximados do perfil — x: km0→42 (0..1000), y: invertido (maior = mais alto)
-  const pts =
-    '0,168 345,168 365,150 378,96 392,140 405,150 464,150 485,128 509,98 519,150 700,150 850,150 880,116 900,128 927,114 945,140 1000,150'
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-5 md:p-6">
-      <div className="mb-4 flex items-center gap-2">
-        <Mountain className="h-4 w-4 text-[#FF2C03]" aria-hidden />
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/70">Perfil de altimetria</p>
-      </div>
-      <svg viewBox="0 0 1000 200" className="h-40 w-full md:h-52" preserveAspectRatio="none" role="img" aria-label="Perfil de altimetria do percurso de 42K">
-        <defs>
-          <linearGradient id="elev" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#FF2C03" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#FF2C03" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        <polygon points={`0,200 ${pts} 1000,200`} fill="url(#elev)" />
-        <polyline points={pts} fill="none" stroke="#FF2C03" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-        {/* picos marcados */}
-        {[
-          { x: 378, label: 'Joá' },
-          { x: 509, label: 'S. Conrado' },
-          { x: 927, label: 'Viaduto' },
-        ].map((p) => (
-          <g key={p.label}>
-            <line x1={p.x} y1="0" x2={p.x} y2="200" stroke="#ffffff" strokeOpacity="0.08" strokeDasharray="4 4" />
-          </g>
-        ))}
-      </svg>
-      <div className="mt-3 flex justify-between text-[10px] font-semibold uppercase tracking-wider text-[#666]">
-        <span>KM 0</span><span>Joá</span><span>S. Conrado</span><span>Viaduto</span><span>KM 42</span>
-      </div>
-    </div>
-  )
-}
 
 /* ───────────────── Item da timeline (clicável) ───────────────── */
 function TimelineItem({ marco, open, onToggle }: { marco: Marco; open: boolean; onToggle: () => void }) {
@@ -378,7 +348,7 @@ export function SommaRioClient() {
           <div data-reveal className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {[
               { icon: Route, v: '42,195 km', k: 'Distância' },
-              { icon: Mountain, v: '≈ 150 m', k: 'Ganho de elevação' },
+              { icon: Mountain, v: `${GAIN_42K} m`, k: 'Ganho de elevação' },
               { icon: Droplets, v: '13', k: 'Postos de hidratação' },
               { icon: Zap, v: '5', k: 'Postos de eletrólitos' },
             ].map((s) => (
@@ -418,7 +388,7 @@ export function SommaRioClient() {
           </div>
 
           {/* altimetria (complementa o mapa) */}
-          <div data-reveal className="mt-4"><ElevationProfile /></div>
+          <div data-reveal className="mt-4"><ElevationProfile data={ELEV_42K} gain={GAIN_42K} peaks={PEAKS_42K} /></div>
 
           {/* timeline interativa */}
           <div className="mt-14">
