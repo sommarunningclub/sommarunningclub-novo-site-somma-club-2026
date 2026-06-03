@@ -7,15 +7,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
   Route, Mountain, Droplets, Zap, Flag, TriangleAlert, TrendingUp, TrendingDown,
   Activity, Flame, Thermometer, Heart, Users, ArrowRight, ArrowDown, ChevronDown,
-  MapPin, Gauge, Move, CornerUpRight, ExternalLink, Footprints,
+  MapPin, Gauge, Move, CornerUpRight, Footprints,
 } from 'lucide-react'
 import { SiteFooter } from '@/components/site-footer'
+import { StravaRouteEmbed } from '@/components/somma-rio/strava-route-embed'
 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const BG_HERO = '/marcos-vinicius-do-vale-yeEsrY5kzL8-unsplash.jpg'
 
-const MAP_42 = 'https://www.maratonadorio.com.br/pt/corrida/42k-2026'
-const MAP_21 = 'https://www.maratonadorio.com.br/pt/corrida/21k-2026'
+const STRAVA_42 =
+  'https://strava-embeds.com/route/3456667059960308766?units=metric&fullWidth=true&style=standard&clubId=666544&fromEmbed=true#ns=13efd3d9-8998-4292-8495-2d3f0c2059b9&hostOrigin=https%3A%2F%2Fwww.maratonadorio.com.br&hostPath=%2Fpt%2Fcorrida%2F42k-2026&hostTitle=42K+-+2025+%7C+Maratona+do+Rio&mapHash=10.24/-22.9613/-43.3016'
+const STRAVA_21 =
+  'https://strava-embeds.com/route/3347662519365211922?units=metric&style=standard&clubId=666544&fromEmbed=false#ns=04b192a3-acda-4e8e-80bb-45fcf91d2841&hostOrigin=https%3A%2F%2Fwww.maratonadorio.com.br&hostPath=%2Fpt%2Fcorrida%2F21k-2026&hostTitle=21K+-+2025+%7C+Maratona+do+Rio'
 const MARINA_EMBED =
   'https://www.google.com/maps?q=Marina+da+Gl%C3%B3ria,+Rio+de+Janeiro&z=15&output=embed'
 
@@ -385,23 +388,25 @@ export function SommaRioClient() {
             ))}
           </div>
 
-          {/* altimetria + link oficial */}
-          <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[2fr_1fr]">
-            <div data-reveal><ElevationProfile /></div>
-            <a
-              data-reveal href={MAP_42} target="_blank" rel="noopener noreferrer"
-              className="group flex flex-col justify-between rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-5 transition hover:border-[#FF2C03]/50 md:p-6"
-            >
-              <div>
-                <MapPin className="h-6 w-6 text-[#FF2C03]" aria-hidden />
-                <h3 className="mt-4 text-2xl uppercase leading-tight">Mapa oficial<br />do percurso</h3>
-                <p className="mt-2 text-sm text-[#A1A1A1]">Veja o traçado completo dos 42K no site da Maratona do Rio.</p>
-              </div>
-              <span className="mt-6 inline-flex items-center gap-2 text-sm font-bold tracking-wider text-[#FF2C03]">
-                ABRIR MAPA 42K <ExternalLink className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
-              </span>
-            </a>
+          {/* mapa interativo (Strava) */}
+          <div data-reveal className="mt-12">
+            <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 42K</h3>
+            <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
+              Explore o percurso completo da maratona, observe os trechos de subida, descida, altimetria e pontos
+              críticos da prova.
+            </p>
+            <div className="mt-5">
+              <StravaRouteEmbed
+                title="Mapa interativo 42K Maratona do Rio"
+                src={STRAVA_42}
+                height={720}
+                fallbackLabel="Abrir percurso 42K no Strava"
+              />
+            </div>
           </div>
+
+          {/* altimetria (complementa o mapa) */}
+          <div data-reveal className="mt-4"><ElevationProfile /></div>
 
           {/* timeline interativa */}
           <div className="mt-14">
@@ -438,19 +443,27 @@ export function SommaRioClient() {
               </div>
             ))}
           </div>
-          <div className="mt-6 grid grid-cols-1 gap-4 lg:grid-cols-[1fr_auto] lg:items-stretch">
-            <div data-reveal className="flex items-center rounded-2xl border border-[#FF2C03]/30 bg-[#FF2C03]/5 p-6 md:p-8">
-              <p className="text-2xl font-semibold leading-snug md:text-3xl">
-                <span className="text-[#FF2C03]">“</span>Segure até o km 16 e acelere no final.<span className="text-[#FF2C03]">”</span>
-              </p>
+          {/* mapa interativo (Strava) */}
+          <div data-reveal className="mt-12">
+            <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 21K</h3>
+            <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
+              Explore o percurso, a altimetria e os principais pontos da meia maratona.
+            </p>
+            <div className="mt-5">
+              <StravaRouteEmbed
+                title="Mapa interativo 21K Maratona do Rio"
+                src={STRAVA_21}
+                height={680}
+                fallbackLabel="Abrir percurso 21K no Strava"
+              />
             </div>
-            <a data-reveal href={MAP_21} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-6 rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-6 transition hover:border-[#FF2C03]/50 md:p-8">
-              <div>
-                <MapPin className="h-6 w-6 text-[#FF2C03]" aria-hidden />
-                <h3 className="mt-3 text-xl uppercase">Mapa oficial 21K</h3>
-              </div>
-              <ExternalLink className="h-5 w-5 text-[#FF2C03] transition group-hover:translate-x-1" aria-hidden />
-            </a>
+          </div>
+
+          {/* frase-destaque */}
+          <div data-reveal className="mt-4 flex items-center rounded-2xl border border-[#FF2C03]/30 bg-[#FF2C03]/5 p-6 md:p-8">
+            <p className="text-2xl font-semibold leading-snug md:text-3xl">
+              <span className="text-[#FF2C03]">“</span>Segure até o km 16 e acelere no final.<span className="text-[#FF2C03]">”</span>
+            </p>
           </div>
         </div>
       </section>
