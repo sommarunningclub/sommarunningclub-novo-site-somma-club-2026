@@ -6,7 +6,8 @@ import {
   Users, Thermometer, TrendingDown, TrendingUp, Flame, CornerUpRight, Move, Footprints,
   Sun, Moon, Sparkles, Maximize, Minimize,
 } from 'lucide-react'
-import { GAIN_42K, GAIN_21K } from '../somma-rio-2026/route-data'
+import { GAIN_42K, GAIN_21K, ROUTE_42K, ROUTE_21K } from '../somma-rio-2026/route-data'
+import { RioFlyover, type CircuitPoi } from '@/components/somma-rio/rio-flyover'
 
 const LOGO_WHITE = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const LOGO_DARK = 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png?v=1772322941'
@@ -39,6 +40,22 @@ const CRITICOS = [
   { tone: '#ef4444', icon: Flame, km: 'KM 24 – 30,5', title: 'A maratona começa aqui', tip: 'Leblon: piso irregular e muita torcida. Corra no centro da pista e não corra pela emoção.' },
 ]
 
+const POIS_42K: CircuitPoi[] = [
+  { km: 7, tone: 'green', title: 'Trecho favorável', note: 'Plano até o km 14,5 — segure o ritmo.' },
+  { km: 15.9, tone: 'yellow', title: 'Subida do Joá', note: '1,5 km · +33 m. Não compense na subida.' },
+  { km: 17, tone: 'red', title: 'Descida do Joá', note: 'Técnica — preserve o quadríceps.' },
+  { km: 21.4, tone: 'yellow', title: 'Subida de São Conrado', note: '1,9 km · +36 m. Descida íngreme nos últimos 400 m.' },
+  { km: 27, tone: 'red', title: 'A maratona começa aqui', note: 'Leblon — piso irregular e muita torcida.' },
+  { km: 37, tone: 'orange', title: 'Marina da Glória', note: 'Início da reta final.' },
+  { km: 39, tone: 'yellow', title: 'Viaduto', note: 'Subida curta com desgaste acumulado.' },
+]
+const POIS_21K: CircuitPoi[] = [
+  { km: 0.1, tone: 'green', title: 'Largada · Jardim de Alah' },
+  { km: 6.5, tone: 'orange', title: 'Entrada no túnel' },
+  { km: 16.5, tone: 'red', title: 'Muita torcida' },
+  { km: 19, tone: 'yellow', title: 'Subida final', note: 'Último esforço antes da chegada.' },
+]
+
 const DICAS = [
   { icon: CornerUpRight, t: 'Curvas', d: 'Faça pela tangente' },
   { icon: Move, t: 'Terreno irregular', d: 'Corra no centro da pista' },
@@ -51,6 +68,7 @@ export function PptClient() {
   const [index, setIndex] = useState(0)
   const [mode, setMode] = useState<Mode>('vivo')
   const [openCrit, setOpenCrit] = useState(0)
+  const [mapDist, setMapDist] = useState<'42' | '21'>('42')
   const [fs, setFs] = useState(false)
   const touchX = useRef<number | null>(null)
   const rootRef = useRef<HTMLElement>(null)
@@ -111,7 +129,38 @@ export function PptClient() {
         </div>
       </Reveal>
     ),
-    // 4 — Pontos críticos (interativo)
+    // 4 — Sobrevoo do circuito (mapa interativo, auto-play ao chegar)
+    (a, tk) => (
+      <Reveal active={a} className="w-full">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <Eyebrow color={tk.eyebrow}>Sobrevoo do circuito</Eyebrow>
+            <h2 className="text-3xl uppercase leading-none md:text-5xl">Veja a rota no mapa</h2>
+          </div>
+          <div className={`flex gap-0.5 rounded-full border p-0.5 ${tk.onLight ? 'border-black/15 bg-black/[0.03]' : 'border-white/20 bg-white/5'}`}>
+            {(['42', '21'] as const).map((d) => (
+              <button key={d} onClick={() => setMapDist(d)}
+                className={`rounded-full px-4 py-1.5 text-xs font-bold uppercase tracking-wider transition ${mapDist === d ? 'bg-[#FF2C03] text-white' : tk.onLight ? 'text-neutral-500 hover:text-black' : 'text-white/60 hover:text-white'}`}>
+                {d}K
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* isola toques do mapa/scrubber do swipe de navegação */}
+        <div onTouchStart={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()} onTouchEnd={(e) => e.stopPropagation()}>
+          <RioFlyover
+            key={mapDist}
+            points={mapDist === '42' ? ROUTE_42K : ROUTE_21K}
+            pois={mapDist === '42' ? POIS_42K : POIS_21K}
+            label={mapDist === '42' ? 'Circuito 42K' : 'Circuito 21K'}
+            distanceLabel={mapDist === '42' ? '42,195 KM' : '21,097 KM'}
+            autoActive={a}
+            className="h-[44vh] sm:h-[48vh] lg:h-[52vh]"
+          />
+        </div>
+      </Reveal>
+    ),
+    // 5 — Pontos críticos (interativo)
     (a, tk) => (
       <Reveal active={a}>
         <Eyebrow color={tk.eyebrow}>Pontos de atenção</Eyebrow>

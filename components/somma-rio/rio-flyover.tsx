@@ -23,12 +23,14 @@ interface RioFlyoverProps {
   label: string
   distanceLabel: string
   className?: string
+  /** quando definido, auto-sobrevoa ao virar true (ex.: slide ativo) e pausa ao virar false */
+  autoActive?: boolean
 }
 
 const FLY_DURATION = 46000 // ms para sobrevoar todo o circuito (lento)
 const FOLLOW_ZOOM = 16
 
-export function RioFlyover({ points, pois = [], label, distanceLabel, className = '' }: RioFlyoverProps) {
+export function RioFlyover({ points, pois = [], label, distanceLabel, className = '', autoActive }: RioFlyoverProps) {
   const mapEl = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
   const [ready, setReady] = useState(false)
@@ -224,6 +226,14 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
     return () => { cancelled = true; if (rafRef.current) cancelAnimationFrame(rafRef.current) }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [points])
+
+  // auto-sobrevoo controlado externamente (ex.: slide ativo na apresentação)
+  useEffect(() => {
+    if (autoActive === undefined || !ready) return
+    if (autoActive) { progressRef.current = 0; setProgress(0); play() }
+    else stopFly()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoActive, ready])
 
   if (error) {
     return (
