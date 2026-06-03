@@ -10,8 +10,7 @@ import {
   MapPin, Gauge, Move, CornerUpRight, Footprints,
 } from 'lucide-react'
 import { SiteFooter } from '@/components/site-footer'
-import { StravaRouteEmbed } from '@/components/somma-rio/strava-route-embed'
-import { RioCircuitMap } from '@/components/somma-rio/rio-circuit-map'
+import { RioFlyover, type CircuitPoi } from '@/components/somma-rio/rio-flyover'
 import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
 import { ROUTE_42K, ROUTE_21K, ELEV_42K, GAIN_42K, ELEV_21K, GAIN_21K } from './route-data'
 
@@ -23,13 +22,25 @@ const PEAKS_42K = [
 ]
 const PEAKS_21K = [{ km: 19, label: 'Subida' }]
 
+const POIS_42K: CircuitPoi[] = [
+  { km: 7, tone: 'green', title: 'Trecho favorável', note: 'Plano até o km 14,5 — segure o ritmo.' },
+  { km: 15.9, tone: 'yellow', title: 'Subida do Joá', note: '1,5 km · +33 m. Não compense na subida.' },
+  { km: 17, tone: 'red', title: 'Descida do Joá', note: 'Técnica — preserve o quadríceps.' },
+  { km: 21.4, tone: 'yellow', title: 'Subida de São Conrado', note: '1,9 km · +36 m. Descida íngreme nos últimos 400 m.' },
+  { km: 27, tone: 'red', title: 'A maratona começa aqui', note: 'Leblon — piso irregular e muita torcida.' },
+  { km: 37, tone: 'orange', title: 'Marina da Glória', note: 'Início da reta final.' },
+  { km: 39, tone: 'yellow', title: 'Viaduto', note: 'Subida curta com desgaste acumulado.' },
+]
+const POIS_21K: CircuitPoi[] = [
+  { km: 0.1, tone: 'green', title: 'Largada · Jardim de Alah' },
+  { km: 6.5, tone: 'orange', title: 'Entrada no túnel' },
+  { km: 16.5, tone: 'red', title: 'Muita torcida' },
+  { km: 19, tone: 'yellow', title: 'Subida final', note: 'Último esforço antes da chegada.' },
+]
+
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const BG_HERO = '/marcos-vinicius-do-vale-yeEsrY5kzL8-unsplash.jpg'
 
-const STRAVA_42 =
-  'https://strava-embeds.com/route/3456667059960308766?units=metric&fullWidth=true&style=standard&clubId=666544&fromEmbed=true#ns=13efd3d9-8998-4292-8495-2d3f0c2059b9&hostOrigin=https%3A%2F%2Fwww.maratonadorio.com.br&hostPath=%2Fpt%2Fcorrida%2F42k-2026&hostTitle=42K+-+2025+%7C+Maratona+do+Rio&mapHash=10.24/-22.9613/-43.3016'
-const STRAVA_21 =
-  'https://strava-embeds.com/route/3347662519365211922?units=metric&style=standard&clubId=666544&fromEmbed=false#ns=04b192a3-acda-4e8e-80bb-45fcf91d2841&hostOrigin=https%3A%2F%2Fwww.maratonadorio.com.br&hostPath=%2Fpt%2Fcorrida%2F21k-2026&hostTitle=21K+-+2025+%7C+Maratona+do+Rio'
 const MARINA_EMBED =
   'https://www.google.com/maps?q=Marina+da+Gl%C3%B3ria,+Rio+de+Janeiro&z=15&output=embed'
 
@@ -361,29 +372,20 @@ export function SommaRioClient() {
             ))}
           </div>
 
-          {/* circuito animado (palantir) + mapa interativo (Strava) */}
+          {/* sobrevoo do circuito (satélite) */}
           <div data-reveal className="mt-10 md:mt-12">
-            <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 42K</h3>
+            <h3 className="text-2xl uppercase leading-tight md:text-3xl">Sobrevoo do circuito 42K</h3>
             <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
-              Explore o percurso completo da maratona, observe os trechos de subida, descida, altimetria e pontos
-              críticos da prova.
+              Veja todo o traçado no satélite. Toque em ▶ para sobrevoar o circuito devagar, arraste para avançar
+              e toque nos pontos de atenção da prova.
             </p>
             <div className="mt-5">
-              <RioCircuitMap
+              <RioFlyover
                 points={ROUTE_42K}
-                label="Circuito 42K · Recreio → Sambódromo"
+                pois={POIS_42K}
+                label="Circuito 42K"
                 distanceLabel="42,195 KM"
-                scroll3d
-                className="h-[20rem] sm:h-[26rem] lg:h-[34rem]"
-              />
-              <p className="mt-2 text-[11px] uppercase tracking-widest text-[#666]">Simulação do circuito · traçado real do Strava</p>
-            </div>
-            <div className="mt-4">
-              <StravaRouteEmbed
-                title="Mapa interativo 42K Maratona do Rio"
-                src={STRAVA_42}
-                height={720}
-                fallbackLabel="Abrir percurso 42K no Strava"
+                className="h-[24rem] sm:h-[30rem] lg:h-[38rem]"
               />
             </div>
           </div>
@@ -426,28 +428,20 @@ export function SommaRioClient() {
               </div>
             ))}
           </div>
-          {/* circuito animado (palantir) + mapa interativo (Strava) */}
+          {/* sobrevoo do circuito (satélite) */}
           <div data-reveal className="mt-10 md:mt-12">
-            <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 21K</h3>
+            <h3 className="text-2xl uppercase leading-tight md:text-3xl">Sobrevoo do circuito 21K</h3>
             <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
-              Explore o percurso, a altimetria e os principais pontos da meia maratona.
+              Veja todo o traçado no satélite. Toque em ▶ para sobrevoar a meia maratona, arraste para avançar
+              e toque nos pontos de atenção.
             </p>
             <div className="mt-5">
-              <RioCircuitMap
+              <RioFlyover
                 points={ROUTE_21K}
-                label="Circuito 21K · Leblon → Centro"
+                pois={POIS_21K}
+                label="Circuito 21K"
                 distanceLabel="21,097 KM"
-                scroll3d
-                className="h-[20rem] sm:h-[26rem] lg:h-[34rem]"
-              />
-              <p className="mt-2 text-[11px] uppercase tracking-widest text-[#666]">Simulação do circuito · traçado real do Strava</p>
-            </div>
-            <div className="mt-4">
-              <StravaRouteEmbed
-                title="Mapa interativo 21K Maratona do Rio"
-                src={STRAVA_21}
-                height={680}
-                fallbackLabel="Abrir percurso 21K no Strava"
+                className="h-[24rem] sm:h-[30rem] lg:h-[38rem]"
               />
             </div>
           </div>
