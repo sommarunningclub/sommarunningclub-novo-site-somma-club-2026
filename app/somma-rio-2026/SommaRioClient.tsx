@@ -11,6 +11,8 @@ import {
 } from 'lucide-react'
 import { SiteFooter } from '@/components/site-footer'
 import { StravaRouteEmbed } from '@/components/somma-rio/strava-route-embed'
+import { RioCircuitMap } from '@/components/somma-rio/rio-circuit-map'
+import { ROUTE_42K, ROUTE_21K } from './route-data'
 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const BG_HERO = '/marcos-vinicius-do-vale-yeEsrY5kzL8-unsplash.jpg'
@@ -388,7 +390,7 @@ export function SommaRioClient() {
             ))}
           </div>
 
-          {/* mapa interativo (Strava) */}
+          {/* circuito animado (palantir) + mapa interativo (Strava) */}
           <div data-reveal className="mt-10 md:mt-12">
             <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 42K</h3>
             <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
@@ -396,6 +398,15 @@ export function SommaRioClient() {
               críticos da prova.
             </p>
             <div className="mt-5">
+              <RioCircuitMap
+                points={ROUTE_42K}
+                label="Circuito 42K · Recreio → Sambódromo"
+                distanceLabel="42,195 KM"
+                className="h-[20rem] sm:h-[26rem] lg:h-[34rem]"
+              />
+              <p className="mt-2 text-[11px] uppercase tracking-widest text-[#666]">Simulação do circuito · traçado real do Strava</p>
+            </div>
+            <div className="mt-4">
               <StravaRouteEmbed
                 title="Mapa interativo 42K Maratona do Rio"
                 src={STRAVA_42}
@@ -443,13 +454,22 @@ export function SommaRioClient() {
               </div>
             ))}
           </div>
-          {/* mapa interativo (Strava) */}
+          {/* circuito animado (palantir) + mapa interativo (Strava) */}
           <div data-reveal className="mt-10 md:mt-12">
             <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 21K</h3>
             <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
               Explore o percurso, a altimetria e os principais pontos da meia maratona.
             </p>
             <div className="mt-5">
+              <RioCircuitMap
+                points={ROUTE_21K}
+                label="Circuito 21K · Leblon → Centro"
+                distanceLabel="21,097 KM"
+                className="h-[20rem] sm:h-[26rem] lg:h-[34rem]"
+              />
+              <p className="mt-2 text-[11px] uppercase tracking-widest text-[#666]">Simulação do circuito · traçado real do Strava</p>
+            </div>
+            <div className="mt-4">
               <StravaRouteEmbed
                 title="Mapa interativo 21K Maratona do Rio"
                 src={STRAVA_21}
