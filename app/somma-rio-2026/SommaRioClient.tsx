@@ -310,12 +310,12 @@ export function SommaRioClient() {
           </nav>
         </div>
         {/* nav rolável no mobile */}
-        <nav className="flex gap-2 overflow-x-auto border-t border-white/5 px-5 py-2.5 [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
+        <nav className="flex gap-2 overflow-x-auto border-t border-white/5 px-5 py-2 [scrollbar-width:none] lg:hidden [&::-webkit-scrollbar]:hidden">
           {NAV.map((n) => (
             <button
               key={n.id}
               onClick={() => goTo(n.id)}
-              className={`shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider transition ${active === n.id ? 'border-[#FF2C03] bg-[#FF2C03] text-white' : 'border-[#2A2A2A] text-white/60'}`}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider transition ${active === n.id ? 'border-[#FF2C03] bg-[#FF2C03] text-white' : 'border-[#2A2A2A] text-white/60'}`}
             >
               {n.label}
             </button>
@@ -327,13 +327,13 @@ export function SommaRioClient() {
       <section id="topo" data-hero className="relative isolate flex min-h-[100svh] items-center overflow-hidden">
         <img data-hero-bg src={BG_HERO} alt="Rio de Janeiro" aria-hidden className="absolute inset-0 -z-20 h-[120%] w-full object-cover" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgba(0,0,0,0.85)_0%,rgba(0,0,0,0.6)_45%,rgba(0,0,0,0.92)_100%)]" />
-        <div className="mx-auto w-full max-w-7xl px-5 pt-32 pb-24 md:px-6">
+        <div className="mx-auto w-full max-w-7xl px-5 pt-28 pb-20 md:px-6 md:pt-32 md:pb-24">
           <div className="max-w-3xl">
             <div data-reveal><Eyebrow>Briefing técnico · Somma Club</Eyebrow></div>
-            <h1 data-reveal className="text-[3rem] uppercase leading-[0.85] tracking-tight sm:text-7xl md:text-8xl">
+            <h1 data-reveal className="text-[2.65rem] uppercase leading-[0.85] tracking-tight sm:text-7xl md:text-8xl">
               Maratona<br />do Rio <span className="text-[#FF2C03]">2026</span>
             </h1>
-            <p data-reveal className="mt-6 max-w-xl text-lg font-semibold text-white md:text-xl">
+            <p data-reveal className="mt-5 max-w-xl text-base font-semibold text-white sm:text-lg md:text-xl">
               Tudo o que você precisa saber antes da largada.
             </p>
             <p data-reveal className="mt-3 max-w-xl text-sm leading-relaxed text-[#A1A1A1] md:text-base">
@@ -343,7 +343,7 @@ export function SommaRioClient() {
             <button
               data-reveal
               onClick={() => goTo('p42k')}
-              className="group mt-9 inline-flex items-center gap-3 rounded-md bg-[#FF2C03] px-8 py-4 text-sm font-bold tracking-wider text-white transition hover:bg-[#ff4d35]"
+              className="group mt-8 inline-flex w-full items-center justify-center gap-3 rounded-md bg-[#FF2C03] px-8 py-4 text-sm font-bold tracking-wider text-white transition hover:bg-[#ff4d35] sm:w-auto sm:justify-start"
             >
               EXPLORAR PERCURSOS
               <ArrowDown className="h-4 w-4 transition group-hover:translate-y-0.5" aria-hidden />
@@ -367,9 +367,9 @@ export function SommaRioClient() {
 
       {/* ===== 42K ===== */}
       <section id="p42k" className="scroll-mt-28 border-t border-[#1c1c1c]">
-        <div className="mx-auto max-w-7xl px-5 py-20 md:px-6 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-28">
           <div data-reveal><Eyebrow>Percurso principal</Eyebrow></div>
-          <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">42K · Maratona</h2>
+          <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">42K · Maratona</h2>
           <p data-reveal className="mt-4 max-w-xl text-[#A1A1A1]">A prova completa, dividida em trechos. Toque em cada marco da timeline para ver o briefing.</p>
 
           {/* card de indicadores */}
@@ -380,16 +380,16 @@ export function SommaRioClient() {
               { icon: Droplets, v: '13', k: 'Postos de hidratação' },
               { icon: Zap, v: '5', k: 'Postos de eletrólitos' },
             ].map((s) => (
-              <div key={s.k} className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-5">
-                <s.icon className="mb-3 h-6 w-6 text-[#FF2C03]" aria-hidden />
-                <p className="text-2xl font-bold md:text-3xl">{s.v}</p>
+              <div key={s.k} className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:p-5">
+                <s.icon className="mb-2.5 h-5 w-5 text-[#FF2C03] sm:mb-3 sm:h-6 sm:w-6" aria-hidden />
+                <p className="text-xl font-bold sm:text-2xl md:text-3xl">{s.v}</p>
                 <p className="mt-0.5 text-[11px] uppercase tracking-widest text-[#A1A1A1]">{s.k}</p>
               </div>
             ))}
           </div>
 
           {/* mapa interativo (Strava) */}
-          <div data-reveal className="mt-12">
+          <div data-reveal className="mt-10 md:mt-12">
             <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 42K</h3>
             <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
               Explore o percurso completo da maratona, observe os trechos de subida, descida, altimetria e pontos
@@ -430,9 +430,9 @@ export function SommaRioClient() {
 
       {/* ===== 21K ===== */}
       <section id="p21k" className="scroll-mt-28 border-t border-[#1c1c1c] bg-[#060606]">
-        <div className="mx-auto max-w-7xl px-5 py-20 md:px-6 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-28">
           <div data-reveal><Eyebrow>Meia maratona</Eyebrow></div>
-          <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">21K · Meia</h2>
+          <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">21K · Meia</h2>
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {CARDS_21K.map((c) => (
               <div key={c.title} data-reveal className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-5 transition hover:-translate-y-1 hover:border-[#FF2C03]/50">
@@ -444,7 +444,7 @@ export function SommaRioClient() {
             ))}
           </div>
           {/* mapa interativo (Strava) */}
-          <div data-reveal className="mt-12">
+          <div data-reveal className="mt-10 md:mt-12">
             <h3 className="text-2xl uppercase leading-tight md:text-3xl">Mapa interativo do percurso 21K</h3>
             <p className="mt-2 max-w-2xl text-sm text-[#A1A1A1] md:text-base">
               Explore o percurso, a altimetria e os principais pontos da meia maratona.
@@ -470,9 +470,9 @@ export function SommaRioClient() {
 
       {/* ===== 10K ===== */}
       <section id="p10k" className="scroll-mt-28 border-t border-[#1c1c1c]">
-        <div className="mx-auto max-w-7xl px-5 py-20 md:px-6 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-28">
           <div data-reveal><Eyebrow>Performance</Eyebrow></div>
-          <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">10K</h2>
+          <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">10K</h2>
           <p data-reveal className="mt-4 max-w-xl text-lg text-[#A1A1A1]">Percurso rápido e favorável para performance.</p>
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {CARDS_10K.map((c) => (
@@ -488,9 +488,9 @@ export function SommaRioClient() {
 
       {/* ===== 5K ===== */}
       <section id="p5k" className="scroll-mt-28 border-t border-[#1c1c1c] bg-[#060606]">
-        <div className="mx-auto max-w-7xl px-5 py-20 md:px-6 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-28">
           <div data-reveal><Eyebrow>Experiência</Eyebrow></div>
-          <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">5K</h2>
+          <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">5K</h2>
           <p data-reveal className="mt-4 max-w-xl text-lg text-[#A1A1A1]">Corra para se divertir.</p>
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {CARDS_5K.map((c) => (
@@ -506,9 +506,9 @@ export function SommaRioClient() {
 
       {/* ===== HIDRATAÇÃO ===== */}
       <section id="hidratacao" className="scroll-mt-28 border-t border-[#1c1c1c]">
-        <div className="mx-auto max-w-7xl px-5 py-20 md:px-6 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-28">
           <div data-reveal><Eyebrow>Estratégia de prova</Eyebrow></div>
-          <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">Hidratação</h2>
+          <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">Hidratação</h2>
 
           <div data-reveal className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
             {[
@@ -517,9 +517,9 @@ export function SommaRioClient() {
               { icon: Zap, v: '5', k: 'Postos de eletrólitos' },
               { icon: Flag, v: 'KM 10', k: '1º posto eletrolítico' },
             ].map((s) => (
-              <div key={s.k} className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-5">
-                <s.icon className="mb-3 h-6 w-6 text-[#FF2C03]" aria-hidden />
-                <p className="text-2xl font-bold md:text-3xl">{s.v}</p>
+              <div key={s.k} className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-4 sm:p-5">
+                <s.icon className="mb-2.5 h-5 w-5 text-[#FF2C03] sm:mb-3 sm:h-6 sm:w-6" aria-hidden />
+                <p className="text-xl font-bold sm:text-2xl md:text-3xl">{s.v}</p>
                 <p className="mt-0.5 text-[11px] uppercase tracking-widest text-[#A1A1A1]">{s.k}</p>
               </div>
             ))}
@@ -566,10 +566,10 @@ export function SommaRioClient() {
       {/* ===== TORCIDA SOMMA ===== */}
       <section id="torcida" className="scroll-mt-28 border-t border-[#FF2C03]/20">
         <div className="relative overflow-hidden bg-[radial-gradient(120%_120%_at_0%_0%,rgba(255,44,3,0.18)_0%,rgba(0,0,0,0)_55%)]">
-          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 py-20 md:px-6 md:py-28 lg:grid-cols-2 lg:items-center">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 py-14 md:px-6 md:py-28 lg:grid-cols-2 lg:items-center">
             <div>
               <div data-reveal><Eyebrow>O laranja te espera</Eyebrow></div>
-              <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">Encontre a<br />torcida <span className="text-[#FF2C03]">Somma</span></h2>
+              <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">Encontre a<br />torcida <span className="text-[#FF2C03]">Somma</span></h2>
               <div data-reveal className="mt-8 space-y-3">
                 {[
                   { icon: MapPin, t: 'Entre o km 37 e o km 38' },
@@ -602,9 +602,9 @@ export function SommaRioClient() {
 
       {/* ===== DICAS FINAIS ===== */}
       <section className="border-t border-[#1c1c1c] bg-[#060606]">
-        <div className="mx-auto max-w-7xl px-5 py-20 md:px-6 md:py-28">
+        <div className="mx-auto max-w-7xl px-5 py-14 md:px-6 md:py-28">
           <div data-reveal><Eyebrow>Checklist do atleta</Eyebrow></div>
-          <h2 data-reveal className="text-5xl uppercase leading-[0.9] md:text-6xl">Dicas finais</h2>
+          <h2 data-reveal className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-6xl">Dicas finais</h2>
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {DICAS.map((d) => (
               <div key={d.title} data-reveal className="rounded-2xl border border-[#2A2A2A] bg-[#0e0e0e] p-6 transition hover:-translate-y-1 hover:border-[#FF2C03]/50">
