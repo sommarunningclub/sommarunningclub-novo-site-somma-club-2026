@@ -402,6 +402,7 @@ export function SommaRioClient() {
                 points={ROUTE_42K}
                 label="Circuito 42K · Recreio → Sambódromo"
                 distanceLabel="42,195 KM"
+                scroll3d
                 className="h-[20rem] sm:h-[26rem] lg:h-[34rem]"
               />
               <p className="mt-2 text-[11px] uppercase tracking-widest text-[#666]">Simulação do circuito · traçado real do Strava</p>
@@ -465,6 +466,7 @@ export function SommaRioClient() {
                 points={ROUTE_21K}
                 label="Circuito 21K · Leblon → Centro"
                 distanceLabel="21,097 KM"
+                scroll3d
                 className="h-[20rem] sm:h-[26rem] lg:h-[34rem]"
               />
               <p className="mt-2 text-[11px] uppercase tracking-widest text-[#666]">Simulação do circuito · traçado real do Strava</p>

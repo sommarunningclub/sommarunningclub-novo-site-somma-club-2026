@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { setOptions, importLibrary } from '@googlemaps/js-api-loader'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import type { LatLng } from '@/app/somma-rio-2026/route-data'
 
 const SOMMA = '#FF2C03'
@@ -30,15 +32,21 @@ interface RioCircuitMapProps {
   label: string
   distanceLabel: string
   className?: string
+  /** liga o efeito GSAP: ao rolar, inclina (3D) e dá zoom no circuito */
+  scroll3d?: boolean
 }
 
-export function RioCircuitMap({ points, label, distanceLabel, className = '' }: RioCircuitMapProps) {
+export function RioCircuitMap({ points, label, distanceLabel, className = '', scroll3d = false }: RioCircuitMapProps) {
   const ref = useRef<HTMLDivElement>(null)
   const wrapRef = useRef<HTMLDivElement>(null)
+  const tiltRef = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
   const [ready, setReady] = useState(false)
   const inViewRef = useRef(true)
+  const mapRef = useRef<google.maps.Map | null>(null)
+  const camRef = useRef<{ center: google.maps.LatLngLiteral; baseZoom: number } | null>(null)
 
+  // ── inicializa mapa + animação do traçado ──
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
     if (!apiKey || !ref.current || points.length < 2) {
@@ -50,7 +58,6 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
     let cancelled = false
     setOptions({ key: apiKey, v: 'weekly' })
 
-    // pausa a animação quando fora da viewport (performance)
     const io = new IntersectionObserver(
       (entries) => { inViewRef.current = entries[0]?.isIntersecting ?? true },
       { threshold: 0.05 }
@@ -75,13 +82,18 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
           tilt: 0,
           isFractionalZoomEnabled: true,
         })
+        mapRef.current = map
 
-        // enquadra todo o circuito
         const bounds = new google.maps.LatLngBounds()
         path.forEach((p) => bounds.extend(p))
         map.fitBounds(bounds, { top: 56, right: 48, bottom: 56, left: 48 })
 
-        // perfil de distância acumulada (para traçar proporcional ao comprimento)
+        // guarda centro + zoom base para o scroll-zoom 3D
+        google.maps.event.addListenerOnce(map, 'idle', () => {
+          const c = bounds.getCenter()
+          camRef.current = { center: { lat: c.lat(), lng: c.lng() }, baseZoom: map.getZoom() ?? 13 }
+        })
+
         const sph = google.maps.geometry.spherical
         const cumulative: number[] = [0]
         let total = 0
@@ -90,15 +102,10 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
           cumulative.push(total)
         }
 
-        // underlay: circuito completo, fraco
         new Polyline({ map, path, strokeColor: SOMMA, strokeOpacity: 0.16, strokeWeight: 2 })
-
-        // linha ativa (traçando)
         const active = new Polyline({ map, path: [], strokeColor: SOMMA, strokeOpacity: 0.95, strokeWeight: 4 })
-        // brilho da linha ativa
         const glow = new Polyline({ map, path: [], strokeColor: SOMMA, strokeOpacity: 0.25, strokeWeight: 10 })
 
-        // marcadores largada / chegada
         const dot = (p: google.maps.LatLngLiteral, color: string) =>
           new google.maps.Marker({
             map, position: p,
@@ -108,7 +115,6 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
         dot(path[0], '#ffffff')
         dot(path[path.length - 1], SOMMA)
 
-        // cabeça (corredor) que percorre o traçado
         const head = new google.maps.Marker({
           map, position: path[0], zIndex: 10,
           icon: { path: google.maps.SymbolPath.CIRCLE, scale: 6, fillColor: '#fff', fillOpacity: 1, strokeColor: SOMMA, strokeWeight: 3 },
@@ -116,14 +122,13 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
 
         setReady(true)
 
-        const DRAW = 9000 // ms para traçar o circuito
-        const HOLD = 1400 // ms com o circuito completo
+        const DRAW = 9000
+        const HOLD = 1400
         const CYCLE = DRAW + HOLD
         const ease = (t: number) => 1 - Math.pow(1 - t, 2)
         let startTs: number | null = null
 
         const interpAt = (target: number) => {
-          // encontra ponto interpolado na distância "target"
           for (let i = 1; i < path.length; i++) {
             if (cumulative[i] >= target) {
               const segStart = cumulative[i - 1]
@@ -161,6 +166,39 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
     }
   }, [points])
 
+  // ── efeito 3D dirigido por scroll (GSAP ScrollTrigger) ──
+  useEffect(() => {
+    if (!scroll3d || !wrapRef.current || !tiltRef.current) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    gsap.registerPlugin(ScrollTrigger)
+    const tilt = tiltRef.current
+
+    // estado inicial (deitado + levemente afastado)
+    const applyTilt = (p: number) => {
+      const rot = (1 - p) * 20 // 20° → 0°
+      const sc = 1 + (1 - p) * 0.14 // cobre a folga da inclinação
+      tilt.style.transform = `rotateX(${rot}deg) scale(${sc})`
+      tilt.style.opacity = String(0.55 + p * 0.45)
+      const cam = camRef.current
+      if (cam && mapRef.current) {
+        const z = cam.baseZoom - 1.1 + p * 2.2 // aberto → fechado (zoom no circuito)
+        mapRef.current.moveCamera({ center: cam.center, zoom: z })
+      }
+    }
+    applyTilt(0)
+
+    const st = ScrollTrigger.create({
+      trigger: wrapRef.current,
+      start: 'top 82%',
+      end: 'top 26%',
+      scrub: true,
+      onUpdate: (self) => applyTilt(self.progress),
+    })
+
+    return () => st.kill()
+  }, [scroll3d])
+
   if (error) {
     return (
       <div className={`flex min-h-[18rem] w-full items-center justify-center rounded-2xl border border-white/10 bg-[#0a0a0a] text-center ${className}`}>
@@ -173,24 +211,27 @@ export function RioCircuitMap({ points, label, distanceLabel, className = '' }: 
   }
 
   return (
-    <div ref={wrapRef} className={`relative w-full overflow-hidden rounded-2xl border border-white/10 bg-black ${className}`}>
-      <div ref={ref} className="absolute inset-0 h-full w-full" aria-label={`Circuito animado ${label}`} />
+    <div
+      ref={wrapRef}
+      style={scroll3d ? { perspective: '1200px' } : undefined}
+      className={`relative w-full overflow-hidden rounded-2xl border border-white/10 bg-black ${className}`}
+    >
+      {/* plano do mapa (recebe a inclinação 3D) */}
+      <div ref={tiltRef} className="absolute inset-0 origin-center [transform-style:preserve-3d] will-change-transform">
+        <div ref={ref} className="absolute inset-0 h-full w-full" aria-label={`Circuito animado ${label}`} />
+      </div>
 
-      {/* HUD palantir */}
+      {/* HUD palantir (sempre plano, emoldura o card) */}
       <div className={`pointer-events-none absolute inset-0 transition-opacity duration-700 ${ready ? 'opacity-100' : 'opacity-0'}`} aria-hidden>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_55%,rgba(0,0,0,0.5)_100%)]" />
-        {/* cantos */}
         {['left-4 top-4 border-l-2 border-t-2', 'right-4 top-4 border-r-2 border-t-2', 'left-4 bottom-4 border-l-2 border-b-2', 'right-4 bottom-4 border-r-2 border-b-2'].map((pos) => (
           <span key={pos} className={`absolute h-6 w-6 border-[#FF2C03]/70 ${pos}`} />
         ))}
-        {/* varredura */}
         <span className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#FF2C03] to-transparent [animation:rio-scan_4.2s_linear_infinite]" />
-        {/* status */}
         <div className="absolute left-4 top-4 font-mono text-[10px] uppercase tracking-[0.2em] text-[#FF2C03] sm:text-xs">
           <span className="mr-2 inline-block h-2 w-2 animate-pulse rounded-full bg-[#FF2C03] align-middle" />
           Traçando circuito…
         </div>
-        {/* readout */}
         <div className="absolute bottom-4 left-4 right-4 font-mono text-[10px] uppercase tracking-widest text-white/80 sm:text-xs">
           <p className="text-[#FF2C03]">● {label}</p>
           <p className="mt-1 text-white/60">{distanceLabel} · MARATONA DO RIO 2026</p>
