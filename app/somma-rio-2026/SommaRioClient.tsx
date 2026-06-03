@@ -13,7 +13,7 @@ import { SiteFooter } from '@/components/site-footer'
 import { StravaRouteEmbed } from '@/components/somma-rio/strava-route-embed'
 import { RioCircuitMap } from '@/components/somma-rio/rio-circuit-map'
 import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
-import { ROUTE_42K, ROUTE_21K, ELEV_42K, GAIN_42K } from './route-data'
+import { ROUTE_42K, ROUTE_21K, ELEV_42K, GAIN_42K, ELEV_21K, GAIN_21K } from './route-data'
 
 const PEAKS_42K = [
   { km: 15.9, label: 'Joá' },
@@ -21,6 +21,7 @@ const PEAKS_42K = [
   { km: 37, label: 'Marina' },
   { km: 39, label: 'Viaduto' },
 ]
+const PEAKS_21K = [{ km: 19, label: 'Subida' }]
 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const BG_HERO = '/marcos-vinicius-do-vale-yeEsrY5kzL8-unsplash.jpg'
@@ -450,6 +451,9 @@ export function SommaRioClient() {
               />
             </div>
           </div>
+
+          {/* altimetria real 21K */}
+          <div data-reveal className="mt-4"><ElevationProfile data={ELEV_21K} gain={GAIN_21K} peaks={PEAKS_21K} /></div>
 
           {/* frase-destaque */}
           <div data-reveal className="mt-4 flex items-center rounded-2xl border border-[#FF2C03]/30 bg-[#FF2C03]/5 p-6 md:p-8">
