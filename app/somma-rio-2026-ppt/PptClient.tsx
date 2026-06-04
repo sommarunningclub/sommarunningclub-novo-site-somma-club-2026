@@ -92,7 +92,7 @@ function Section({ i, mode, center = false, className = '', children }: { i: num
   return (
     <section
       id={`sec-${i}`} data-sec data-index={i}
-      className={`relative flex min-h-[100svh] w-full flex-col justify-center px-6 py-20 transition-colors duration-500 ${tk.text} ${center ? 'items-center text-center' : ''} ${className}`}
+      className={`relative flex min-h-[100svh] w-full flex-col justify-center px-5 py-16 transition-colors duration-500 sm:px-6 sm:py-20 ${tk.text} ${center ? 'items-center text-center' : ''} ${className}`}
       style={{ backgroundColor: tk.bg }}
     >
       <div className="mx-auto w-full max-w-5xl">{children}</div>
@@ -181,14 +181,14 @@ export function PptClient() {
   const T = (i: number) => resolve(mode, i)
 
   return (
-    <div ref={rootRef} className={`font-[family-name:var(--font-body)] antialiased [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]`}>
+    <div ref={rootRef} className={`overflow-x-hidden font-[family-name:var(--font-body)] antialiased [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]`}>
       {/* progresso */}
       <div className="fixed inset-x-0 top-0 z-50 h-1 bg-black/10">
         <div ref={progressBarRef} className="h-full bg-[#FF2C03] transition-[width] duration-150" style={{ width: '0%' }} />
       </div>
 
       {/* controles fixos */}
-      <div className="fixed right-5 top-4 z-50 flex items-center gap-2">
+      <div className="fixed right-[max(1.25rem,env(safe-area-inset-right))] top-[max(1rem,env(safe-area-inset-top))] z-50 flex items-center gap-2">
         <div className={`flex items-center gap-0.5 rounded-full border p-0.5 backdrop-blur-md ${onLight ? 'border-black/15 bg-white/70' : 'border-white/20 bg-black/40'}`}>
           {MODES.map(({ m, icon: Icon, label }) => (
             <button key={m} onClick={() => setMode(m)} aria-label={label} title={label}
@@ -212,7 +212,7 @@ export function PptClient() {
       </div>
 
       {/* contador */}
-      <div className={`fixed left-6 top-5 z-50 font-mono text-xs font-bold tracking-widest ${onLight ? 'text-neutral-400' : 'text-white/55'}`}>
+      <div className={`fixed left-[max(1.25rem,env(safe-area-inset-left))] top-[max(1.1rem,env(safe-area-inset-top))] z-50 font-mono text-xs font-bold tracking-widest ${onLight ? 'text-neutral-400' : 'text-white/55'}`}>
         {String(active + 1).padStart(2, '0')} / {String(SECTIONS.length).padStart(2, '0')}
       </div>
 
@@ -220,7 +220,7 @@ export function PptClient() {
       <Section mode={mode} i={0} center>
         <img data-anim src={T(0).onLight ? LOGO_DARK : LOGO_WHITE} alt="Somma Club" className="mx-auto mb-10 h-9 w-auto" />
         <Eyebrow color={T(0).eyebrow}>Briefing · Guia de prova</Eyebrow>
-        <h1 data-anim className="text-[3.4rem] uppercase leading-[0.85] tracking-tight sm:text-8xl md:text-9xl">
+        <h1 data-anim className="text-[2.9rem] uppercase leading-[0.85] tracking-tight sm:text-7xl md:text-9xl">
           Maratona<br />do Rio <span style={{ color: T(0).accent }}>2026</span>
         </h1>
         <p data-anim className={`mx-auto mt-7 max-w-md text-base md:text-lg ${T(0).sub}`}>Tudo o que você precisa saber antes da largada — role para começar.</p>
@@ -230,7 +230,7 @@ export function PptClient() {
       {/* ===== 1 · PROVAS ===== */}
       <Section mode={mode} i={1}>
         <Eyebrow color={T(1).eyebrow}>As provas</Eyebrow>
-        <h2 data-anim className="text-5xl uppercase leading-[0.9] md:text-7xl">Quatro distâncias,<br />uma cidade</h2>
+        <h2 data-anim className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-7xl">Quatro distâncias,<br />uma cidade</h2>
         <div data-stagger className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
           {[
             { d: '42K', s: `42,195 km · +${GAIN_42K} m` }, { d: '21K', s: `21,097 km · +${GAIN_21K} m` },
@@ -366,7 +366,7 @@ export function PptClient() {
       {/* ===== 8 · HIDRATAÇÃO ===== */}
       <Section mode={mode} i={8}>
         <Eyebrow color={T(8).eyebrow}>Estratégia de prova</Eyebrow>
-        <h2 data-anim className="text-5xl uppercase leading-[0.9] md:text-7xl">Hidratação</h2>
+        <h2 data-anim className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-7xl">Hidratação</h2>
         <div data-stagger className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
           {[
             { i: Droplets, v: '13', k: 'postos de água' }, { i: Flag, v: '≈ 3 km', k: 'entre postos' },
@@ -415,7 +415,7 @@ export function PptClient() {
       {/* ===== 10 · DICAS ===== */}
       <Section mode={mode} i={10}>
         <Eyebrow color={T(10).eyebrow}>Checklist do atleta</Eyebrow>
-        <h2 data-anim className="text-5xl uppercase leading-[0.9] md:text-7xl">Dicas finais</h2>
+        <h2 data-anim className="text-4xl uppercase leading-[0.9] sm:text-5xl md:text-7xl">Dicas finais</h2>
         <div data-stagger className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
           {DICAS.map((d) => (
             <div key={d.t} className={`rounded-2xl border p-5 ${T(10).cardB} ${T(10).cardBg}`}>
@@ -429,7 +429,7 @@ export function PptClient() {
 
       {/* ===== 11 · FIM ===== */}
       <Section mode={mode} i={11} center>
-        <h2 data-anim className="text-5xl uppercase leading-[0.85] md:text-8xl">Boa prova,<br /><span style={{ color: T(11).accent }}>atleta</span></h2>
+        <h2 data-anim className="text-4xl uppercase leading-[0.85] sm:text-5xl md:text-8xl">Boa prova,<br /><span style={{ color: T(11).accent }}>atleta</span></h2>
         <p data-anim className={`mt-6 text-lg ${T(11).sub}`}>Confie no plano. O Somma corre com você.</p>
         <img data-anim src={T(11).onLight ? LOGO_DARK : LOGO_WHITE} alt="Somma Club" className="mx-auto mt-10 h-9 w-auto" />
       </Section>

@@ -317,7 +317,7 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
               <button
                 key={p.title}
                 onClick={() => jumpToPoi(i)}
-                className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-[11px] font-semibold transition ${activePoi === i ? `${TONE_RING[p.tone]} bg-white/5 ${TONE_TXT[p.tone]}` : 'border-[#2a2a2a] text-white/70 hover:border-white/30'}`}
+                className={`flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] font-semibold transition ${activePoi === i ? `${TONE_RING[p.tone]} bg-white/5 ${TONE_TXT[p.tone]}` : 'border-[#2a2a2a] text-white/70 hover:border-white/30'}`}
               >
                 <span className="h-2 w-2 rounded-full" style={{ background: TONE_HEX[p.tone] }} />
                 <MapPin className="h-3 w-3 opacity-60" /> {p.title}

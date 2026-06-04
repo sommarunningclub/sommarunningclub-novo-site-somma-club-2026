@@ -276,7 +276,7 @@ export function SommaRioClient() {
       className="min-h-screen overflow-x-hidden bg-black font-[family-name:var(--font-body)] text-white antialiased [&_h1]:font-[family-name:var(--font-display)] [&_h2]:font-[family-name:var(--font-display)] [&_h3]:font-[family-name:var(--font-display)]"
     >
       {/* ===== HEADER + NAV STICKY ===== */}
-      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/85 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50 border-b border-white/5 bg-black/85 pt-[env(safe-area-inset-top)] backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3 md:px-6">
           <button onClick={() => goTo('topo')} aria-label="Somma Club">
             <img src={LOGO_SOMMA} alt="Somma Club" className="h-6 w-auto md:h-7" />
