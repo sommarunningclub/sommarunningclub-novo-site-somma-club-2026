@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { GAIN_42K, GAIN_21K, ROUTE_42K, ROUTE_21K, ELEV_42K, ELEV_21K } from '../somma-rio-2026/route-data'
 import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
-import { RioFlyover, type CircuitPoi } from '@/components/somma-rio/rio-flyover'
+import { RioFlyover, type CircuitPoi, type HydrationPoint } from '@/components/somma-rio/rio-flyover'
 import { HeroQR } from '@/components/somma-rio/hero-qr'
 
 const PAGE_URL = 'https://www.sommaclub.com.br/somma-rio-2026-ppt'
@@ -74,13 +74,22 @@ const POIS_42K: CircuitPoi[] = [
   { km: 21.4, tone: 'yellow', title: 'Subida de São Conrado', note: '1,9 km · +36 m. Descida íngreme no fim.' },
   { km: 27, tone: 'red', title: 'A maratona começa aqui', note: 'Leblon — piso irregular e muita torcida.' },
   { km: 37, tone: 'orange', title: 'Marina da Glória', note: 'Início da reta final.' },
+  { km: 37.8, tone: 'orange', title: 'Torcida Somma', note: 'Entre o km 37 e 38 — procure o laranja.' },
   { km: 39, tone: 'yellow', title: 'Viaduto', note: 'Subida curta com desgaste acumulado.' },
 ]
 const POIS_21K: CircuitPoi[] = [
   { km: 0.1, tone: 'green', title: 'Largada · Jardim de Alah' },
   { km: 6.5, tone: 'orange', title: 'Entrada no túnel' },
-  { km: 16.5, tone: 'red', title: 'Muita torcida' },
+  { km: 16.75, tone: 'orange', title: 'Torcida Somma', note: 'Entre o km 16,5 e 17 — procure o laranja.' },
   { km: 19, tone: 'yellow', title: 'Subida final' },
+]
+const HYDRO_42K: HydrationPoint[] = [
+  ...[3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39].map((km) => ({ km, type: 'agua' as const })),
+  ...[10, 17, 24, 31, 38].map((km) => ({ km, type: 'eletro' as const })),
+]
+const HYDRO_21K: HydrationPoint[] = [
+  ...[0.2, 3, 6, 9, 12, 15, 18, 21].map((km) => ({ km, type: 'agua' as const })),
+  ...[7, 14].map((km) => ({ km, type: 'eletro' as const })),
 ]
 const KM_TOTAL = 42.195
 const POSTOS_AGUA = [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39]
@@ -284,6 +293,7 @@ export function PptClient() {
         </div>
         <div data-anim onTouchStart={(e) => e.stopPropagation()} onTouchMove={(e) => e.stopPropagation()}>
           <RioFlyover key={mapDist} points={mapDist === '42' ? ROUTE_42K : ROUTE_21K} pois={mapDist === '42' ? POIS_42K : POIS_21K}
+            hydration={mapDist === '42' ? HYDRO_42K : HYDRO_21K}
             label={mapDist === '42' ? 'Circuito 42K' : 'Circuito 21K'} distanceLabel={mapDist === '42' ? '42,195 KM' : '21,097 KM'}
             autoActive={active === MAP_INDEX} className="h-[46vh] sm:h-[50vh]" />
         </div>

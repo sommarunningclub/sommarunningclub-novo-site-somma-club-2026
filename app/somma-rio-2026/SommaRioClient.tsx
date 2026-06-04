@@ -10,7 +10,7 @@ import {
   MapPin, Gauge, Move, CornerUpRight, Footprints,
 } from 'lucide-react'
 import { SiteFooter } from '@/components/site-footer'
-import { RioFlyover, type CircuitPoi } from '@/components/somma-rio/rio-flyover'
+import { RioFlyover, type CircuitPoi, type HydrationPoint } from '@/components/somma-rio/rio-flyover'
 import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
 import { HeroQR } from '@/components/somma-rio/hero-qr'
 import { ROUTE_42K, ROUTE_21K, ELEV_42K, GAIN_42K, ELEV_21K, GAIN_21K } from './route-data'
@@ -32,13 +32,25 @@ const POIS_42K: CircuitPoi[] = [
   { km: 21.4, tone: 'yellow', title: 'Subida de São Conrado', note: '1,9 km · +36 m. Descida íngreme nos últimos 400 m.' },
   { km: 27, tone: 'red', title: 'A maratona começa aqui', note: 'Leblon — piso irregular e muita torcida.' },
   { km: 37, tone: 'orange', title: 'Marina da Glória', note: 'Início da reta final.' },
+  { km: 37.8, tone: 'orange', title: 'Torcida Somma', note: 'Entre o km 37 e 38 — quando estiver difícil, procure o laranja.' },
   { km: 39, tone: 'yellow', title: 'Viaduto', note: 'Subida curta com desgaste acumulado.' },
 ]
 const POIS_21K: CircuitPoi[] = [
   { km: 0.1, tone: 'green', title: 'Largada · Jardim de Alah' },
   { km: 6.5, tone: 'orange', title: 'Entrada no túnel' },
-  { km: 16.5, tone: 'red', title: 'Muita torcida' },
+  { km: 16.75, tone: 'orange', title: 'Torcida Somma', note: 'Entre o km 16,5 e 17 — procure o laranja.' },
   { km: 19, tone: 'yellow', title: 'Subida final', note: 'Último esforço antes da chegada.' },
+]
+
+// Hidratação ao longo do percurso (água / eletrólitos)
+const HYDRO_42K: HydrationPoint[] = [
+  ...[3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39].map((km) => ({ km, type: 'agua' as const })),
+  ...[10, 17, 24, 31, 38].map((km) => ({ km, type: 'eletro' as const })),
+]
+// 21K: largada + chegada + 6 postos (~3km cada) = 8 de água · 2 de eletrólitos
+const HYDRO_21K: HydrationPoint[] = [
+  ...[0.2, 3, 6, 9, 12, 15, 18, 21].map((km) => ({ km, type: 'agua' as const })),
+  ...[7, 14].map((km) => ({ km, type: 'eletro' as const })),
 ]
 
 const LOGO_SOMMA = '/Logo_Nova_Somma_Branca_Laranja.svg'
@@ -93,7 +105,7 @@ const TIMELINE: Marco[] = [
   },
   {
     km: 'Descida do Joá', tone: 'red', icon: TrendingDown, badge: 'Atenção', title: 'DESCIDA TÉCNICA',
-    stats: [{ k: 'Tipo', v: 'Descida técnica' }, { k: 'Foco', v: 'Quadríceps' }],
+    stats: [{ k: 'Tipo', v: 'Descida técnica' }],
     bullets: ['Descida técnica', 'Controle o ritmo', 'Preserve o quadríceps'],
     highlight: 'Quem ganha tempo aqui costuma perder depois.',
   },
@@ -387,6 +399,7 @@ export function SommaRioClient() {
               <RioFlyover
                 points={ROUTE_42K}
                 pois={POIS_42K}
+                hydration={HYDRO_42K}
                 label="Circuito 42K"
                 distanceLabel="42,195 KM"
                 className="h-[24rem] sm:h-[30rem] lg:h-[38rem]"
@@ -443,6 +456,7 @@ export function SommaRioClient() {
               <RioFlyover
                 points={ROUTE_21K}
                 pois={POIS_21K}
+                hydration={HYDRO_21K}
                 label="Circuito 21K"
                 distanceLabel="21,097 KM"
                 className="h-[24rem] sm:h-[30rem] lg:h-[38rem]"

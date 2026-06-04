@@ -16,10 +16,14 @@ const TONE_TXT: Record<PoiTone, string> = {
 }
 
 export interface CircuitPoi { km: number; tone: PoiTone; title: string; note?: string }
+export interface HydrationPoint { km: number; type: 'agua' | 'eletro' }
+const AGUA = '#38bdf8'
+const ELETRO = '#a78bfa'
 
 interface RioFlyoverProps {
   points: LatLng[]
   pois?: CircuitPoi[]
+  hydration?: HydrationPoint[]
   label: string
   distanceLabel: string
   className?: string
@@ -35,7 +39,7 @@ const SPEEDS = [
 ]
 const FOLLOW_ZOOM = 16
 
-export function RioFlyover({ points, pois = [], label, distanceLabel, className = '', autoActive }: RioFlyoverProps) {
+export function RioFlyover({ points, pois = [], hydration = [], label, distanceLabel, className = '', autoActive }: RioFlyoverProps) {
   const mapEl = useRef<HTMLDivElement>(null)
   const [error, setError] = useState(false)
   const [ready, setReady] = useState(false)
@@ -207,6 +211,17 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
         dot(path[0], '#ffffff')
         dot(path[path.length - 1], SOMMA)
 
+        // hidratação (água / eletrólitos)
+        hydration.forEach((h) => {
+          const frac = Math.min(Math.max((h.km * 1000) / total, 0), 1)
+          const { point } = interpAt(frac * total)
+          new google.maps.Marker({
+            map, position: point, zIndex: 4,
+            icon: { path: google.maps.SymbolPath.CIRCLE, scale: 4, fillColor: h.type === 'agua' ? AGUA : ELETRO, fillOpacity: 1, strokeColor: '#0a0a0a', strokeWeight: 1.5 },
+            title: `${h.type === 'agua' ? 'Água' : 'Eletrólitos'} · km ${h.km}`,
+          })
+        })
+
         // pontos de atenção
         poiFracRef.current = pois.map((poi) => Math.min(Math.max((poi.km * 1000) / total, 0), 1))
         pois.forEach((poi, i) => {
@@ -317,20 +332,28 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
           />
         </div>
 
-        {/* controle de velocidade */}
-        <div className="mt-3 flex items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Velocidade</span>
-          <div className="flex gap-0.5 rounded-full border border-[#2a2a2a] p-0.5">
-            {SPEEDS.map((s, i) => (
-              <button
-                key={s.label}
-                onClick={() => { speedRef.current = i; setSpeedIdx(i) }}
-                className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${speedIdx === i ? 'bg-[#FF2C03] text-white' : 'text-white/55 hover:text-white'}`}
-              >
-                {s.label}
-              </button>
-            ))}
+        {/* controle de velocidade + legenda de hidratação */}
+        <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Velocidade</span>
+            <div className="flex gap-0.5 rounded-full border border-[#2a2a2a] p-0.5">
+              {SPEEDS.map((s, i) => (
+                <button
+                  key={s.label}
+                  onClick={() => { speedRef.current = i; setSpeedIdx(i) }}
+                  className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${speedIdx === i ? 'bg-[#FF2C03] text-white' : 'text-white/55 hover:text-white'}`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
           </div>
+          {hydration.length > 0 && (
+            <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-wider text-white/55 sm:ml-auto">
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ background: AGUA }} /> Água</span>
+              <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-full" style={{ background: ELETRO }} /> Eletrólitos</span>
+            </div>
+          )}
         </div>
 
         {/* chips dos pontos de atenção */}
