@@ -27,7 +27,12 @@ interface RioFlyoverProps {
   autoActive?: boolean
 }
 
-const FLY_DURATION = 46000 // ms para sobrevoar todo o circuito (lento)
+// presets de velocidade do sobrevoo (duração total da volta, em ms)
+const SPEEDS = [
+  { label: 'Lento', dur: 78000 },
+  { label: 'Normal', dur: 46000 },
+  { label: 'Rápido', dur: 26000 },
+]
 const FOLLOW_ZOOM = 16
 
 export function RioFlyover({ points, pois = [], label, distanceLabel, className = '', autoActive }: RioFlyoverProps) {
@@ -38,6 +43,8 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
   const [progress, setProgress] = useState(0)
   const [activePoi, setActivePoi] = useState<number | null>(null)
   const [totalKm, setTotalKm] = useState(0)
+  const [speedIdx, setSpeedIdx] = useState(0) // padrão: Lento
+  const speedRef = useRef(0)
 
   // refs imperativos
   const mapRef = useRef<google.maps.Map | null>(null)
@@ -113,7 +120,7 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
       if (!playingRef.current) return
       if (last === null) last = ts
       const dt = ts - last; last = ts
-      let p = progressRef.current + dt / FLY_DURATION
+      let p = progressRef.current + dt / SPEEDS[speedRef.current].dur
       if (p >= 1) { p = 1 }
       progressRef.current = p
       apply(p, true)
@@ -308,6 +315,22 @@ export function RioFlyover({ points, pois = [], label, distanceLabel, className 
             className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-[#2a2a2a] accent-[#FF2C03] [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#FF2C03]"
             aria-label="Avançar pelo circuito"
           />
+        </div>
+
+        {/* controle de velocidade */}
+        <div className="mt-3 flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-white/40">Velocidade</span>
+          <div className="flex gap-0.5 rounded-full border border-[#2a2a2a] p-0.5">
+            {SPEEDS.map((s, i) => (
+              <button
+                key={s.label}
+                onClick={() => { speedRef.current = i; setSpeedIdx(i) }}
+                className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${speedIdx === i ? 'bg-[#FF2C03] text-white' : 'text-white/55 hover:text-white'}`}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* chips dos pontos de atenção */}
