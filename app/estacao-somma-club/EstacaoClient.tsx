@@ -13,9 +13,9 @@ const SOMMA = '#FF2C03'
  * Componentes de apresentação (tema claro institucional)
  * -------------------------------------------------------------------------- */
 
-const O = ({ children }: { children: ReactNode }) => <span className="text-[#FF2C03]">{children}</span>
+export const O = ({ children }: { children: ReactNode }) => <span className="text-[#FF2C03]">{children}</span>
 
-function Eyebrow({ children }: { children: ReactNode }) {
+export function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <p data-anim className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#FF2C03] sm:text-xs">
       {children}
@@ -23,7 +23,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
   )
 }
 
-function Title({ children, className = '' }: { children: ReactNode; className?: string }) {
+export function Title({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <h2
       data-anim
@@ -34,7 +34,7 @@ function Title({ children, className = '' }: { children: ReactNode; className?: 
   )
 }
 
-function Head({ k, title, sub }: { k: string; title: ReactNode; sub?: ReactNode }) {
+export function Head({ k, title, sub }: { k: string; title: ReactNode; sub?: ReactNode }) {
   return (
     <header className="space-y-3">
       <Eyebrow>{k}</Eyebrow>
@@ -49,7 +49,7 @@ function Head({ k, title, sub }: { k: string; title: ReactNode; sub?: ReactNode 
 }
 
 /** Citação curta de impacto (Anton) */
-function Pull({ children, cite }: { children: ReactNode; cite?: ReactNode }) {
+export function Pull({ children, cite }: { children: ReactNode; cite?: ReactNode }) {
   return (
     <blockquote data-anim className="border-l-4 border-[#FF2C03] pl-5 sm:pl-7">
       <p className="font-[family-name:var(--font-display)] uppercase leading-[1.02] tracking-tight text-neutral-900 text-2xl sm:text-4xl lg:text-[2.85rem]">
@@ -61,7 +61,7 @@ function Pull({ children, cite }: { children: ReactNode; cite?: ReactNode }) {
 }
 
 /** Narrativa longa (Barlow) — para os parágrafos institucionais */
-function Narrative({ children, cite }: { children: ReactNode; cite?: ReactNode }) {
+export function Narrative({ children, cite }: { children: ReactNode; cite?: ReactNode }) {
   return (
     <blockquote data-anim className="border-l-4 border-[#FF2C03] pl-5 sm:pl-7">
       <p className="text-lg font-medium leading-snug text-neutral-800 sm:text-2xl lg:text-[1.7rem]">{children}</p>
@@ -71,7 +71,7 @@ function Narrative({ children, cite }: { children: ReactNode; cite?: ReactNode }
 }
 
 /** Tabela de duas colunas com cabeçalho */
-function Rows({ head, items }: { head: [string, string]; items: [string, string][] }) {
+export function Rows({ head, items }: { head: [string, string]; items: [string, string][] }) {
   return (
     <div data-anim className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-sm">
       <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.45fr)] gap-3 bg-neutral-900 px-4 py-2.5 sm:px-6">
@@ -90,8 +90,8 @@ function Rows({ head, items }: { head: [string, string]; items: [string, string]
   )
 }
 
-type CardItem = { icon: typeof Store; t: string; d: string }
-function CardsGrid({ items, cols = 'sm:grid-cols-2 lg:grid-cols-3' }: { items: CardItem[]; cols?: string }) {
+export type CardItem = { icon: typeof Store; t: string; d: string }
+export function CardsGrid({ items, cols = 'sm:grid-cols-2 lg:grid-cols-3' }: { items: CardItem[]; cols?: string }) {
   return (
     <div className={`grid grid-cols-1 gap-3 sm:gap-4 ${cols}`}>
       {items.map(({ icon: Icon, t, d }, i) => (
@@ -111,8 +111,8 @@ function CardsGrid({ items, cols = 'sm:grid-cols-2 lg:grid-cols-3' }: { items: C
   )
 }
 
-type Step = { a: string; o?: string }
-function Steps({ items, cols = 'sm:grid-cols-2' }: { items: Step[]; cols?: string }) {
+export type Step = { a: string; o?: string }
+export function Steps({ items, cols = 'sm:grid-cols-2' }: { items: Step[]; cols?: string }) {
   return (
     <ol className={`grid grid-cols-1 gap-x-7 gap-y-2.5 ${cols}`}>
       {items.map((s, i) => (
@@ -130,7 +130,7 @@ function Steps({ items, cols = 'sm:grid-cols-2' }: { items: Step[]; cols?: strin
   )
 }
 
-function Callout({ children }: { children: ReactNode }) {
+export function Callout({ children }: { children: ReactNode }) {
   return (
     <div data-anim className="rounded-2xl border border-[#FF2C03]/25 bg-[#FF2C03]/[0.06] p-4 sm:p-5">
       <p className="text-sm font-medium leading-snug text-neutral-800 sm:text-base">{children}</p>
@@ -138,7 +138,7 @@ function Callout({ children }: { children: ReactNode }) {
   )
 }
 
-function Note({ children }: { children: ReactNode }) {
+export function Note({ children }: { children: ReactNode }) {
   return (
     <p data-anim className="text-sm leading-snug text-neutral-500 sm:text-base">
       {children}
@@ -311,9 +311,9 @@ const CONCL: [string, string][] = [
  * Slides
  * -------------------------------------------------------------------------- */
 
-type Slide = { section: string; node: ReactNode; center?: boolean }
+export type Slide = { section: string; node: ReactNode; center?: boolean }
 
-const SLIDES: Slide[] = [
+export const BASE_SLIDES: Slide[] = [
   // 0 — Capa
   {
     section: 'Capa',
@@ -741,13 +741,13 @@ const SLIDES: Slide[] = [
  * Deck
  * -------------------------------------------------------------------------- */
 
-export function EstacaoClient() {
+export function Deck({ slides, brand }: { slides: Slide[]; brand?: ReactNode }) {
   const [active, setActive] = useState(0)
   const [fs, setFs] = useState(false)
   const [menu, setMenu] = useState(false)
   const slideRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
-  const total = SLIDES.length
+  const total = slides.length
 
   const go = useCallback((n: number) => setActive((a) => Math.min(Math.max(n, 0), total - 1)), [total])
   const next = useCallback(() => setActive((a) => Math.min(a + 1, total - 1)), [total])
@@ -835,7 +835,7 @@ export function EstacaoClient() {
     touch.current = null
   }
 
-  const slide = SLIDES[active]
+  const slide = slides[active]
   const pct = ((active + 1) / total) * 100
 
   return (
@@ -848,7 +848,7 @@ export function EstacaoClient() {
       {/* Top bar */}
       <header className="absolute inset-x-0 top-0 z-30 flex items-center justify-between px-4 pt-[max(0.9rem,env(safe-area-inset-top))] sm:px-8">
         <span className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-neutral-900">
-          Estação <span className="text-[#FF2C03]">SOMMA</span>
+          {brand ?? (<>Estação <span className="text-[#FF2C03]">SOMMA</span></>)}
         </span>
         <span className="hidden text-[11px] font-semibold uppercase tracking-[0.2em] text-neutral-400 sm:block">
           {slide.section}
@@ -929,7 +929,7 @@ export function EstacaoClient() {
             </button>
           </div>
           <div className="grid flex-1 grid-cols-2 content-start gap-2 overflow-y-auto p-5 sm:grid-cols-3 sm:p-8 lg:grid-cols-4">
-            {SLIDES.map((s, i) => (
+            {slides.map((s, i) => (
               <button
                 key={i}
                 onClick={() => {
@@ -953,4 +953,8 @@ export function EstacaoClient() {
       )}
     </main>
   )
+}
+
+export function EstacaoClient() {
+  return <Deck slides={BASE_SLIDES} />
 }
