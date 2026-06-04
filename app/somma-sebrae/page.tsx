@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Anton, Barlow } from 'next/font/google'
-import { EstacaoClient } from '../estacao-somma-club/EstacaoClient'
+import { SebraeClient } from './SebraeClient'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <div className={`${display.variable} ${body.variable}`}>
-      <EstacaoClient />
+      <SebraeClient />
     </div>
   )
 }
