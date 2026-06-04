@@ -12,6 +12,9 @@ import {
 import { GAIN_42K, GAIN_21K, ROUTE_42K, ROUTE_21K, ELEV_42K, ELEV_21K } from '../somma-rio-2026/route-data'
 import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
 import { RioFlyover, type CircuitPoi } from '@/components/somma-rio/rio-flyover'
+import { HeroQR } from '@/components/somma-rio/hero-qr'
+
+const PAGE_URL = 'https://www.sommaclub.com.br/somma-rio-2026-ppt'
 
 const LOGO_WHITE = '/Logo_Nova_Somma_Branca_Laranja.svg'
 const LOGO_DARK = 'https://cdn.shopify.com/s/files/1/0788/1932/8253/files/HORIZONTAL_PRETA_LARANJA.png?v=1772322941'
@@ -225,6 +228,7 @@ export function PptClient() {
         </h1>
         <p data-anim className={`mx-auto mt-7 max-w-md text-base md:text-lg ${T(0).sub}`}>Tudo o que você precisa saber antes da largada — role para começar.</p>
         <button data-anim onClick={() => goTo(1)} className="mx-auto mt-9 flex h-12 w-12 animate-bounce items-center justify-center rounded-full bg-[#FF2C03] text-white"><ChevronDown className="h-5 w-5" /></button>
+        <HeroQR url={PAGE_URL} className="absolute bottom-10 right-8 z-20" />
       </Section>
 
       {/* ===== 1 · PROVAS ===== */}

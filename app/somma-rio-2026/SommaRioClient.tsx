@@ -12,7 +12,10 @@ import {
 import { SiteFooter } from '@/components/site-footer'
 import { RioFlyover, type CircuitPoi } from '@/components/somma-rio/rio-flyover'
 import { ElevationProfile } from '@/components/somma-rio/elevation-profile'
+import { HeroQR } from '@/components/somma-rio/hero-qr'
 import { ROUTE_42K, ROUTE_21K, ELEV_42K, GAIN_42K, ELEV_21K, GAIN_21K } from './route-data'
+
+const PAGE_URL = 'https://www.sommaclub.com.br/somma-rio-2026'
 
 const PEAKS_42K = [
   { km: 15.9, label: 'Joá' },
@@ -347,6 +350,7 @@ export function SommaRioClient() {
         <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40">
           <ChevronDown className="h-6 w-6 animate-bounce" aria-hidden />
         </div>
+        <HeroQR url={PAGE_URL} className="absolute bottom-10 right-6 z-20 xl:right-10" />
       </section>
 
       {/* ===== 42K ===== */}
