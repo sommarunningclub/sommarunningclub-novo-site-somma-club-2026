@@ -332,6 +332,20 @@ function ClosingCard({ kicker, title, sub }: { kicker: string; title: ReactNode;
   )
 }
 
+function Gallery({ images }: { images: { src: string; cap: string }[] }) {
+  return (
+    <div data-anim className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+      {images.map((im) => (
+        <figure key={im.src} className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.04]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={im.src} alt={im.cap} loading="lazy" className="aspect-video w-full bg-white/[0.03] object-cover" />
+          <figcaption className="px-3 py-2 text-[12px] leading-snug text-white/60">{im.cap}</figcaption>
+        </figure>
+      ))}
+    </div>
+  )
+}
+
 /* ---- ESTAÇÃO SOMMA · apresentação completa (GDF + Decathlon + Investidores) ---- */
 const ESTACAO_SLIDES: Slide[] = [
   {
@@ -393,7 +407,18 @@ const ESTACAO_SLIDES: Slide[] = [
         <p className="mt-1 text-lg font-semibold text-white">Parque da Cidade · Brasília–DF</p>
         <p className="mt-1 font-mono text-sm text-white/60">-15.8015306, -47.9036227</p>
       </div>
-      <Note>Espaço reservado para renderizações, implantação e fotos reais do terreno (antes e depois).</Note>
+    </>),
+  },
+  {
+    section: '05 · Como será',
+    node: (<>
+      <Head k="Capítulo 5" title="Como será a Estação" sub="Conceito visual — Estação Somma no Parque da Cidade." />
+      <Gallery images={[
+        { src: '/estacao-somma/render-fachada.jpg', cap: 'Fachada · Café, Loja, Decathlon Experience, Guarda-volumes e Recovery' },
+        { src: '/estacao-somma/render-aerea.jpg', cap: 'Vista aérea · Estação Somma + Praça Evolve (academia outdoor)' },
+        { src: '/estacao-somma/render-rooftop.jpg', cap: 'Rooftop · convivência, eventos e experiência premium' },
+        { src: '/estacao-somma/render-treinao.jpg', cap: 'Treinão · a comunidade reunida ao entardecer' },
+      ]} />
     </>),
   },
   {
@@ -747,7 +772,7 @@ function SubDeck({ title, slides, onClose }: { title: string; slides: Slide[]; o
         </div>
         <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:text-[#FF2C03]" aria-label="Fechar projeto"><X className="h-4 w-4" /></button>
       </div>
-      <div key={i} ref={ref} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:px-12">
+      <div key={i} ref={ref} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 py-6 sm:px-12 sm:py-8">
         <span className="pointer-events-none absolute right-4 top-1 z-0 select-none font-[family-name:var(--font-display)] text-[6rem] leading-none text-white/[0.03] sm:right-8 sm:text-[9rem]">{String(i + 1).padStart(2, '0')}</span>
         <div className="relative z-10 mx-auto flex min-h-full max-w-3xl flex-col justify-center gap-4 pb-6 sm:gap-5">{slide.node}</div>
       </div>
@@ -775,7 +800,7 @@ const SLIDES: Slide[] = [
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img data-anim src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" className="mb-7 h-12 w-auto sm:h-14" />
         <Eyebrow>Estrutura · Responsabilidades · Indicadores</Eyebrow>
-        <h1 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-5xl sm:text-7xl lg:text-[7rem]">
+        <h1 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-[2.6rem] sm:text-7xl lg:text-[7rem]">
           Governança<br />Corporativa<br /><span className="text-[#FF2C03]">Somma Club</span>
         </h1>
         <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-white/60 sm:text-xl">
@@ -1469,7 +1494,7 @@ export function PptCorporativoClient() {
 
   return (
     <ProjectCtx.Provider value={setProject}>
-    <main className="fixed inset-0 flex overflow-hidden bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white">
+    <main className="fixed inset-0 flex overflow-hidden overscroll-none bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white [-webkit-tap-highlight-color:transparent] select-none">
       <style>{`
         @keyframes orgGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 3px rgba(255,44,3,.45) } }
         @keyframes orgFlow { 0% { opacity:.25; transform: translateY(-3px) } 50% { opacity:1; transform: translateY(3px) } 100% { opacity:.25; transform: translateY(-3px) } }
@@ -1507,9 +1532,16 @@ export function PptCorporativoClient() {
         {/* Top bar mobile */}
         <div className="flex items-center justify-between border-b border-white/10 px-4 pt-[max(0.7rem,env(safe-area-inset-top))] pb-2 lg:hidden">
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight">SOMMA <span className="text-[#FF2C03]">Gov.</span></span>
-          <button onClick={() => setMenu(true)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15" aria-label="Índice">
-            <Menu className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] font-bold tabular-nums text-white/45">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+            <button onClick={() => setMenu(true)} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 active:bg-white/10" aria-label="Índice">
+              <Menu className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+        {/* Barra de progresso mobile */}
+        <div className="h-0.5 bg-white/10 lg:hidden">
+          <div className="h-full bg-[#FF2C03] transition-[width] duration-500" style={{ width: `${((active + 1) / total) * 100}%` }} />
         </div>
 
         {/* Número gigante de fundo */}
@@ -1525,7 +1557,7 @@ export function PptCorporativoClient() {
           ref={stageRef}
           onTouchStart={onTouchStart}
           onTouchEnd={onTouchEnd}
-          className="relative z-10 h-full overflow-y-auto px-5 pb-20 pt-6 sm:px-12 sm:pb-20 sm:pt-10"
+          className="relative z-10 h-full overflow-y-auto overscroll-contain px-5 pb-24 pt-6 sm:px-12 sm:pb-20 sm:pt-10"
         >
           <div className={`mx-auto flex min-h-full max-w-4xl flex-col gap-4 sm:gap-5 ${slide.center ? 'justify-center' : 'justify-center'}`}>
             {slide.node}

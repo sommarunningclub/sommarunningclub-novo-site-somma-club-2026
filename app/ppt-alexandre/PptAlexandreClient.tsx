@@ -154,7 +154,7 @@ const SLIDES: Slide[] = [
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img data-anim src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" className="mb-7 h-12 w-auto sm:h-14" />
         <Eyebrow>Apresentação executiva · para Alexandre Alves</Eyebrow>
-        <h1 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-5xl sm:text-7xl lg:text-[7rem]">
+        <h1 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-[2.7rem] sm:text-7xl lg:text-[7rem]">
           O Futuro do<br /><span className="text-[#FF2C03]">Somma Club</span>
         </h1>
         <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-white/60 sm:text-xl">
@@ -663,7 +663,7 @@ export function PptAlexandreClient() {
   )
 
   return (
-    <main className="fixed inset-0 flex overflow-hidden bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white">
+    <main className="fixed inset-0 flex overflow-hidden overscroll-none bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white [-webkit-tap-highlight-color:transparent] select-none">
       <aside className={`hidden w-60 shrink-0 flex-col border-r border-white/10 ${collapsed ? 'lg:hidden' : 'lg:flex'}`}>
         <div className="flex items-center justify-between gap-2 px-5 py-5">
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">SOMMA <span className="text-[#FF2C03]">Futuro</span></span>
@@ -686,7 +686,13 @@ export function PptAlexandreClient() {
       <section className="relative flex min-w-0 flex-1 flex-col">
         <div className="flex items-center justify-between border-b border-white/10 px-4 pt-[max(0.7rem,env(safe-area-inset-top))] pb-2 lg:hidden">
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight">SOMMA <span className="text-[#FF2C03]">Futuro</span></span>
-          <button onClick={() => setMenu(true)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15" aria-label="Índice"><Menu className="h-4 w-4" /></button>
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] font-bold tabular-nums text-white/45">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+            <button onClick={() => setMenu(true)} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 active:bg-white/10" aria-label="Índice"><Menu className="h-4 w-4" /></button>
+          </div>
+        </div>
+        <div className="h-0.5 bg-white/10 lg:hidden">
+          <div className="h-full bg-[#FF2C03] transition-[width] duration-500" style={{ width: `${((active + 1) / total) * 100}%` }} />
         </div>
 
         {!slide.center && (
@@ -695,7 +701,7 @@ export function PptAlexandreClient() {
           </span>
         )}
 
-        <div key={active} ref={stageRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative z-10 h-full overflow-y-auto px-5 pb-20 pt-6 sm:px-12 sm:pb-20 sm:pt-10">
+        <div key={active} ref={stageRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative z-10 h-full overflow-y-auto overscroll-contain px-5 pb-24 pt-6 sm:px-12 sm:pb-20 sm:pt-10">
           <div className="mx-auto flex min-h-full max-w-4xl flex-col justify-center gap-4 sm:gap-5">{slide.node}</div>
         </div>
 
