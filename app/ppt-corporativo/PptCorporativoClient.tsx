@@ -84,6 +84,15 @@ function Arrow() {
   return <div className="flex justify-center text-base text-white/25">↓</div>
 }
 
+/** Seta animada (fluxo descendo) — para o organograma em loop */
+function FlowArrow() {
+  return (
+    <div className="flex justify-center">
+      <span style={{ animation: 'orgFlow 1.8s ease-in-out infinite' }} className="text-lg text-[#FF2C03]">↓</span>
+    </div>
+  )
+}
+
 function RoleCard({ area, cargo, person, missao, resp, kpis, team }: {
   area?: string; cargo: string; person: string; missao?: string; resp: string[]; kpis: string[]; team?: string
 }) {
@@ -135,7 +144,7 @@ function UnitCard({ nome, responsavel, kpis }: { nome: string; responsavel: stri
   )
 }
 
-function Bars({ title, note, items }: { title?: string; note?: string; items: { label: string; pct: number; value?: string }[] }) {
+function Bars({ title, note, items, animated }: { title?: string; note?: string; items: { label: string; pct: number; value?: string }[]; animated?: boolean }) {
   return (
     <div data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
       {title && <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">{title}</p>}
@@ -146,7 +155,7 @@ function Bars({ title, note, items }: { title?: string; note?: string; items: { 
               <span>{it.label}</span>{it.value && <span className="text-white/40">{it.value}</span>}
             </div>
             <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-white/[0.08]">
-              <div className="h-full rounded-full bg-[#FF2C03]" style={{ width: `${it.pct}%` }} />
+              <div className="h-full rounded-full bg-[#FF2C03]" style={{ width: `${it.pct}%`, transformOrigin: 'left', animation: animated ? `barGrow 2.8s ease-in-out ${i * 0.2}s infinite` : undefined }} />
             </div>
           </div>
         ))}
@@ -156,11 +165,11 @@ function Bars({ title, note, items }: { title?: string; note?: string; items: { 
   )
 }
 
-function Funnel({ items }: { items: { label: string; value: string; pct: number; tone?: 'plain' | 'accent' }[] }) {
+function Funnel({ items, animated }: { items: { label: string; value: string; pct: number; tone?: 'plain' | 'accent' }[]; animated?: boolean }) {
   return (
     <div data-anim className="mx-auto flex max-w-md flex-col items-center gap-2">
       {items.map((it, i) => (
-        <div key={i} style={{ width: `${it.pct}%` }} className={`rounded-xl px-3 py-3 text-center ${it.tone === 'accent' ? 'bg-[#FF2C03] text-black' : 'border border-white/15 bg-white/[0.06] text-white'}`}>
+        <div key={i} style={{ width: `${it.pct}%`, animation: animated ? `funnelPulse 2.6s ease-in-out ${i * 0.4}s infinite` : undefined }} className={`rounded-xl px-3 py-3 text-center ${it.tone === 'accent' ? 'bg-[#FF2C03] text-black' : 'border border-white/15 bg-white/[0.06] text-white'}`}>
           <p className="font-[family-name:var(--font-display)] text-2xl uppercase leading-none tracking-tight sm:text-3xl">{it.value}</p>
           <p className={`mt-1 text-[11px] ${it.tone === 'accent' ? 'text-black/60' : 'text-white/50'}`}>{it.label}</p>
         </div>
@@ -234,6 +243,8 @@ const SLIDES: Slide[] = [
     center: true,
     node: (
       <div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img data-anim src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" className="mb-7 h-12 w-auto sm:h-14" />
         <Eyebrow>Estrutura · Responsabilidades · Indicadores</Eyebrow>
         <h1 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-5xl sm:text-7xl lg:text-[7rem]">
           Governança<br />Corporativa<br /><span className="text-[#FF2C03]">Somma Club</span>
@@ -351,16 +362,16 @@ const SLIDES: Slide[] = [
       <>
         <Head k="05 · A estrutura" title="O organograma do Somma" />
         <div className="space-y-2">
-          <div data-anim className="rounded-2xl border border-white/15 bg-white/[0.05] p-3 text-center">
+          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0s infinite' }} className="rounded-2xl border border-white/15 bg-white/[0.05] p-3 text-center">
             <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Conselho de Sócios</p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-white">Alexandre · João Victor · Diogo</p>
           </div>
-          <Arrow />
-          <div data-anim className="mx-auto max-w-[16rem]"><Person name="Alexandre Alves" role="CEO" tone="ceo" /></div>
-          <Arrow />
-          <div data-anim className="mx-auto max-w-[16rem]"><Person name="Alex Rodrigues" role="COO" tone="coo" /></div>
-          <Arrow />
-          <div data-anim className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <FlowArrow />
+          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0.5s infinite' }} className="mx-auto max-w-[16rem] rounded-xl"><Person name="Alexandre Alves" role="CEO" tone="ceo" /></div>
+          <FlowArrow />
+          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 1s infinite' }} className="mx-auto max-w-[16rem] rounded-xl"><Person name="Alex Rodrigues" role="COO" tone="coo" /></div>
+          <FlowArrow />
+          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 1.5s infinite' }} className="grid grid-cols-2 gap-2 rounded-2xl sm:grid-cols-3">
             <Person name="Camilla" role="Head Comercial e Parcerias" tone="head" />
             <Person name="Diogo" role="Head de Produto e Retail" tone="head" />
             <Person name="João Victor" role="Head de Conteúdo Visual" tone="head" />
@@ -636,9 +647,9 @@ const SLIDES: Slide[] = [
         <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
           <div className="space-y-2">
             <p data-anim className="text-[11px] font-bold uppercase tracking-widest text-white/40">Comunidade · do cadastro ao recorrente</p>
-            <Funnel items={[{ label: 'membros cadastrados', value: '5.000', pct: 100 }, { label: 'recorrentes nos eventos', value: '~400', pct: 55, tone: 'accent' }]} />
+            <Funnel animated items={[{ label: 'membros cadastrados', value: '5.000', pct: 100 }, { label: 'recorrentes nos eventos', value: '~400', pct: 55, tone: 'accent' }]} />
           </div>
-          <Bars title="Composição de receita do corporativo" note="Distribuição ilustrativa — a calibrar com dados reais."
+          <Bars animated title="Composição de receita do corporativo" note="Distribuição ilustrativa — a calibrar com dados reais."
             items={[{ label: 'Assessoria', pct: 40, value: '40%' }, { label: 'Loja', pct: 25, value: '25%' }, { label: 'Eventos', pct: 20, value: '20%' }, { label: 'Mídia e patrocínios', pct: 15, value: '15%' }]} />
         </div>
       </>
@@ -915,6 +926,13 @@ export function PptCorporativoClient() {
 
   return (
     <main className="fixed inset-0 flex overflow-hidden bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white">
+      <style>{`
+        @keyframes orgGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 3px rgba(255,44,3,.45) } }
+        @keyframes orgFlow { 0% { opacity:.25; transform: translateY(-3px) } 50% { opacity:1; transform: translateY(3px) } 100% { opacity:.25; transform: translateY(-3px) } }
+        @keyframes barGrow { 0% { transform: scaleX(0) } 50% { transform: scaleX(1) } 100% { transform: scaleX(0) } }
+        @keyframes funnelPulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.03) } }
+        @media (prefers-reduced-motion: reduce) { [style*="animation"] { animation: none !important } }
+      `}</style>
       {/* Barra lateral (desktop) */}
       <aside className="hidden w-60 shrink-0 flex-col border-r border-white/10 lg:flex">
         <div className="flex items-center gap-2 px-5 py-5">

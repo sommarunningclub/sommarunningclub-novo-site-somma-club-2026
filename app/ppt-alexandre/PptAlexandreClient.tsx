@@ -151,6 +151,8 @@ const SLIDES: Slide[] = [
     center: true,
     node: (
       <div>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img data-anim src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" className="mb-7 h-12 w-auto sm:h-14" />
         <Eyebrow>Apresentação executiva · para Alexandre Alves</Eyebrow>
         <h1 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-5xl sm:text-7xl lg:text-[7rem]">
           O Futuro do<br /><span className="text-[#FF2C03]">Somma Club</span>
