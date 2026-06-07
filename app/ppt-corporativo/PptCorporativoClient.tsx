@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import {
   ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen,
@@ -227,6 +227,190 @@ function Divider({ part, num, title, sub }: { part: string; num: string; title: 
       <h2 data-anim className="mt-3 max-w-4xl font-[family-name:var(--font-display)] uppercase leading-[0.92] tracking-tight text-white text-4xl sm:text-6xl lg:text-7xl">{title}</h2>
       {sub && <p data-anim className="mt-5 max-w-2xl text-base font-medium leading-snug text-white/55 sm:text-lg">{sub}</p>}
     </div>
+  )
+}
+
+/* ============================================================================
+ * Projetos estratégicos — botões + modais
+ * ========================================================================== */
+
+type ProjectKey = 'estacao' | 'sebrae'
+const ProjectCtx = createContext<(p: ProjectKey) => void>(() => {})
+
+function ProjectButtons() {
+  const open = useContext(ProjectCtx)
+  const btn = 'group rounded-2xl border p-6 text-left transition'
+  return (
+    <div data-anim className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <button onClick={() => open('estacao')} className={`${btn} border-[#FF2C03]/40 bg-[#FF2C03]/[0.08] hover:bg-[#FF2C03]/[0.16]`}>
+        <span className="text-3xl">🏠</span>
+        <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-white">Estação Somma</h3>
+        <p className="mt-1 text-sm leading-snug text-white/60">O hub físico permanente da comunidade no Parque da Cidade.</p>
+        <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#FF2C03]">Abrir projeto →</span>
+      </button>
+      <button onClick={() => open('sebrae')} className={`${btn} border-white/15 bg-white/[0.05] hover:bg-white/[0.09]`}>
+        <span className="text-3xl">🚀</span>
+        <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-white">Somma Sebrae</h3>
+        <p className="mt-1 text-sm leading-snug text-white/60">O laboratório vivo de empreendedorismo wellness do DF.</p>
+        <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#FF2C03]">Abrir projeto →</span>
+      </button>
+    </div>
+  )
+}
+
+function MSec({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="space-y-3">
+      <h3 className="border-l-2 border-[#FF2C03] pl-3 font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-white sm:text-2xl">{title}</h3>
+      {children}
+    </section>
+  )
+}
+function MQuote({ children }: { children: ReactNode }) {
+  return <blockquote className="rounded-2xl border border-[#FF2C03]/30 bg-[#FF2C03]/[0.08] p-4 text-base font-medium italic leading-snug text-white/90">“{children}”</blockquote>
+}
+function Bul({ items }: { items: string[] }) {
+  return (
+    <ul className="space-y-1.5">
+      {items.map((it, i) => <li key={i} className="flex gap-2 text-sm leading-snug text-white/75"><span className="text-[#FF2C03]">▸</span>{it}</li>)}
+    </ul>
+  )
+}
+function Pills({ items, accent }: { items: string[]; accent?: boolean }) {
+  return (
+    <div className="flex flex-wrap gap-2">
+      {items.map((t) => <span key={t} className={`rounded-full px-3 py-1.5 text-xs font-semibold ${accent ? 'bg-[#FF2C03] text-black' : 'border border-white/15 bg-white/[0.05] text-white/80'}`}>{t}</span>)}
+    </div>
+  )
+}
+function Flow({ items }: { items: string[] }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-1.5 gap-y-2">
+      {items.map((s, i) => (
+        <span key={s} className="flex items-center gap-1.5">
+          <span className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${i === items.length - 1 ? 'bg-[#FF2C03] text-black' : 'border border-white/15 bg-white/[0.05] text-white/80'}`}>{s}</span>
+          {i < items.length - 1 && <span className="text-white/30">→</span>}
+        </span>
+      ))}
+    </div>
+  )
+}
+
+function EstacaoContent() {
+  return (
+    <>
+      <div>
+        <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">Projeto · Hub físico</p>
+        <h2 className="mt-1 font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-white sm:text-4xl">Estação Somma</h2>
+        <p className="mt-2 text-white/60">O terceiro lugar do corredor — um hub físico permanente de esporte, saúde, bem-estar, comunidade e experiências dentro do Parque da Cidade.</p>
+      </div>
+      <MSec title="O que é">
+        <p className="text-sm text-white/75">Não é um café. Não é uma loja. Não é uma assessoria. A corrida é só a porta de entrada — o verdadeiro ativo é a comunidade.</p>
+        <Flow items={['Corrida', 'Comunidade', 'Pertencimento', 'Lifestyle', 'Monetização']} />
+      </MSec>
+      <MSec title="A tese central">
+        <p className="text-sm text-white/75">O Somma já tem quase tudo — só falta um ponto físico. A Estação vira a “casa oficial” da comunidade.</p>
+        <Bul items={['+5.000 membros cadastrados', 'Treinões recorrentes aos sábados', 'Assessoria esportiva', 'Loja própria', 'Patrocinadores e ativações', 'Capacidade de organizar eventos']} />
+        <p className="text-sm text-white/60">Assim como a Starbucks virou o terceiro lugar entre casa e trabalho, e o WeWork entre casa e escritório, a Estação Somma vira o terceiro lugar do corredor.</p>
+      </MSec>
+      <MSec title="Estrutura física">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Panel title="Container principal" items={['Café', 'Alimentação saudável', 'Operação e estoque', 'Loja Somma', 'Guarda-volumes', 'Lounge']} />
+          <Panel variant="accent" title="Área externa" items={['Convivência', 'Alongamento e recovery', 'Encontros e eventos', 'Ativações de marcas']} />
+        </div>
+      </MSec>
+      <MSec title="Como ganha dinheiro">
+        <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
+          { emoji: '👕', t: 'Somma Retail', d: 'Camisetas, bonés, meias, acessórios e exclusivos.' },
+          { emoji: '☕', t: 'Somma Café', d: 'Café, açaí, sanduíches e snacks saudáveis.' },
+          { emoji: '🏃', t: 'Assessoria', d: 'A Estação vira o principal canal de aquisição de alunos.' },
+          { emoji: '🤝', t: 'Patrocínios', d: 'Áreas de marca: recovery, mobilidade, aquecimento, hidratação.' },
+          { emoji: '🎉', t: 'Eventos', d: 'Treinos especiais, corridas, palestras e workshops.' },
+          { emoji: '🏷️', t: 'Naming Rights', d: 'Ex.: “Evolve Outdoor Performance Center”.' },
+        ]} />
+      </MSec>
+      <MSec title="Papel da Evolve">
+        <p className="text-sm text-white/75">Transformar a área externa num centro outdoor de performance: mobilidade, alongamento, funcional, recovery, fortalecimento e prevenção de lesão. A Evolve ganha presença física dentro da maior comunidade de corrida do DF.</p>
+      </MSec>
+      <MSec title="Papel da Decathlon">
+        <p className="text-sm text-white/75">A Decathlon entra como laboratório — o <span className="text-[#FF2C03]">Running Lab Decathlon</span>: teste de tênis e equipamentos, lançamentos, pesquisa com corredores e validação de produtos. Ganha acesso contínuo a milhares de corredores reais.</p>
+      </MSec>
+      <MSec title="Como convencer o GDF">
+        <MQuote>O Somma já ocupa o parque gratuitamente todos os sábados. A Estação Somma apenas organiza, qualifica e financia essa ocupação.</MQuote>
+        <Bul items={['Treinos e eventos gratuitos', 'Ações de saúde e atividades esportivas', 'Ocupação qualificada do parque', 'Mais segurança pelo uso contínuo']} />
+        <p className="text-sm text-white/60">A operação comercial existe para financiar a operação comunitária. É um projeto de interesse público — não um negócio privado.</p>
+      </MSec>
+      <MSec title="Caminho jurídico">
+        <Pills items={['Permissão de Uso', 'Termo de Cooperação']} />
+        <p className="text-sm text-white/60">Enquadrar como equipamento esportivo e comunitário permanente — não como simples comércio dentro do parque.</p>
+      </MSec>
+      <MSec title="Organograma futuro">
+        <Pills items={['CEO · Alexandre', 'COO · Alex', 'Head Comercial', 'Head Retail', 'Head Performance', 'Head Eventos', 'Head Comunidade', 'Head Tecnologia']} />
+        <p className="text-sm text-white/60">A Estação deixa de ser um projeto e vira uma empresa física operando diariamente.</p>
+      </MSec>
+      <MSec title="O que mais chama atenção">
+        <MQuote>A Estação transforma um ativo digital em um ativo físico. Hoje o Somma tem uma comunidade. Com a Estação, passa a ter um território.</MQuote>
+        <p className="text-sm text-white/60">Comunidades com território próprio criam barreiras competitivas muito maiores do que as que existem só no Instagram ou no WhatsApp.</p>
+      </MSec>
+    </>
+  )
+}
+
+function SebraeContent() {
+  return (
+    <>
+      <div>
+        <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">Projeto · Parceria institucional</p>
+        <h2 className="mt-1 font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-white sm:text-4xl">Somma Sebrae</h2>
+        <p className="mt-2 text-white/60">O Sebrae muda completamente a narrativa da Estação — de “container comercial no parque” para “polo de empreendedorismo, esporte, saúde e desenvolvimento econômico”.</p>
+      </div>
+      <MSec title="A virada de narrativa">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Panel variant="muted" title="Sem Sebrae" items={['“Um grupo quer colocar um container comercial dentro do parque.”']} />
+          <Panel variant="accent" title="Com Sebrae" items={['“Estamos criando um polo de empreendedorismo, esporte, saúde e desenvolvimento econômico ligado à economia wellness do DF.”']} />
+        </div>
+      </MSec>
+      <MSec title="A tese do Sebrae">
+        <p className="text-sm text-white/75">O Sebrae não é patrocinador — é <span className="text-[#FF2C03]">parceiro institucional</span>. O discurso não é “patrocinem a Estação”.</p>
+        <MQuote>Vamos construir juntos o primeiro laboratório vivo de empreendedorismo wellness do Distrito Federal.</MQuote>
+      </MSec>
+      <MSec title="O que é o Somma Lab">
+        <p className="text-sm text-white/75">Um braço dentro da Estação (Somma Lab / Sebrae Wellness Lab) que a transforma num ambiente de teste para pequenos negócios validarem produtos na comunidade:</p>
+        <Pills items={['Nutricionistas', 'Suplementação', 'Marcas de corrida', 'Fisioterapeutas', 'Massoterapeutas', 'Personal trainers', 'Startups de saúde', 'Tecnologia esportiva', 'Produtores locais', 'Marcas fitness']} />
+      </MSec>
+      <MSec title="O que o Sebrae ganha">
+        <Tiles cols="sm:grid-cols-2" items={[
+          { emoji: '👥', t: 'Ambiente real', d: '+5.000 membros e centenas de corredores ativos e engajados.' },
+          { emoji: '🧪', t: 'Laboratório vivo', d: 'O empreendedor testa produto, preço, comunicação e demanda — não só teoria.' },
+          { emoji: '📈', t: 'Desenvolvimento econômico', d: 'Geração de renda, negócios, empreendedorismo e inovação.' },
+          { emoji: '🏆', t: 'Case nacional', d: 'Pouquíssimos Sebraes têm um projeto assim.' },
+        ]} />
+      </MSec>
+      <MSec title="Decathlon + Sebrae + Somma">
+        <div className="grid gap-3 sm:grid-cols-3">
+          <Panel title="Decathlon" items={['Acesso ao corredor', 'Testar produtos', 'Experiência e marca']} />
+          <Panel title="Sebrae" items={['Desenvolver pequenos negócios', 'Gerar renda', 'Fomentar empreendedorismo']} />
+          <Panel variant="accent" title="Somma" items={['Conecta os dois', 'Cria o ecossistema']} />
+        </div>
+        <p className="text-sm text-white/60">A Decathlon traz a grande marca. O Sebrae traz o pequeno empreendedor. O Somma conecta os dois.</p>
+      </MSec>
+      <MSec title="Os 4 pilares para vender ao Sebrae">
+        <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
+          { emoji: '🏃', t: 'Esporte', d: 'Mais pessoas em atividade física.' },
+          { emoji: '❤️', t: 'Saúde', d: 'Melhora da qualidade de vida.' },
+          { emoji: '💡', t: 'Empreendedorismo', d: 'Pequenos negócios criados e validados.' },
+          { emoji: '🔬', t: 'Inovação', d: 'Testes reais com consumidores reais.' },
+        ]} />
+      </MSec>
+      <MSec title="Programa Sebrae Wellness">
+        <p className="text-sm text-white/75">Turmas trimestrais, 10 a 20 empreendedores. Segmentos: corrida, wellness, nutrição, saúde, performance e longevidade.</p>
+        <Flow items={['Capacitação', 'Mentorias', 'Validação na comunidade', 'Demo Day', 'Patrocinadores', 'Investidores']} />
+      </MSec>
+      <MSec title="O argumento mais forte">
+        <MQuote>O Parque da Cidade já recebe milhares de pessoas todo fim de semana. O Somma já tem comunidade consolidada. Não estamos propondo criar demanda — estamos propondo organizar, acelerar e transformar essa demanda em desenvolvimento econômico para pequenos empreendedores do DF.</MQuote>
+        <p className="text-sm text-white/60">A chancela institucional do Sebrae pode transformar a Estação de um pedido de ocupação em um projeto estratégico de desenvolvimento do ecossistema wellness de Brasília — mais importante para destravar o GDF do que o aporte financeiro.</p>
+      </MSec>
+    </>
   )
 }
 
@@ -802,7 +986,18 @@ const SLIDES: Slide[] = [
     ),
   },
 
-  // 34 — Finalização (laranja pleno)
+  // 34 — Projetos estratégicos
+  {
+    section: 'Projetos',
+    node: (
+      <>
+        <Head k="21 · Projetos" title="Dois projetos estratégicos" sub="Eles ampliam o Somma para além da comunidade. Toque para abrir e explorar cada um." />
+        <ProjectButtons />
+      </>
+    ),
+  },
+
+  // 35 — Finalização (laranja pleno)
   {
     section: 'Finalização',
     center: true,
@@ -834,6 +1029,7 @@ export function PptCorporativoClient() {
   const [menu, setMenu] = useState(false)
   const [fs, setFs] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
+  const [project, setProject] = useState<ProjectKey | null>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const navRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -867,6 +1063,7 @@ export function PptCorporativoClient() {
   // teclado
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (project && e.key === 'Escape') return setProject(null)
       if (menu && e.key === 'Escape') return setMenu(false)
       if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next() }
       else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev() }
@@ -877,7 +1074,7 @@ export function PptCorporativoClient() {
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [next, prev, go, toggleFs, total, menu])
+  }, [next, prev, go, toggleFs, total, menu, project])
 
   useEffect(() => {
     const onFs = () => setFs(!!document.fullscreenElement)
@@ -926,6 +1123,7 @@ export function PptCorporativoClient() {
   )
 
   return (
+    <ProjectCtx.Provider value={setProject}>
     <main className="fixed inset-0 flex overflow-hidden bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white">
       <style>{`
         @keyframes orgGlow { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 3px rgba(255,44,3,.45) } }
@@ -1022,6 +1220,26 @@ export function PptCorporativoClient() {
           </div>
         </div>
       )}
+
+      {/* Modal de projeto */}
+      {project && (
+        <div className="absolute inset-0 z-[60] flex flex-col bg-[#0A0A0A]">
+          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-8">
+            <span className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-white">
+              {project === 'estacao' ? 'Estação Somma' : 'Somma Sebrae'}
+            </span>
+            <button onClick={() => setProject(null)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:text-[#FF2C03]" aria-label="Fechar projeto">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:px-12">
+            <div className="mx-auto max-w-3xl space-y-8 pb-10">
+              {project === 'estacao' ? <EstacaoContent /> : <SebraeContent />}
+            </div>
+          </div>
+        </div>
+      )}
     </main>
+    </ProjectCtx.Provider>
   )
 }
