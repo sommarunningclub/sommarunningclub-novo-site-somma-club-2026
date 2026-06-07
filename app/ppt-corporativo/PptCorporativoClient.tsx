@@ -296,121 +296,466 @@ function Flow({ items }: { items: string[] }) {
   )
 }
 
-function EstacaoContent() {
+function Stats({ items }: { items: { n: string; l: string }[] }) {
   return (
-    <>
-      <div>
-        <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">Projeto · Hub físico</p>
-        <h2 className="mt-1 font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-white sm:text-4xl">Estação Somma</h2>
-        <p className="mt-2 text-white/60">O terceiro lugar do corredor — um hub físico permanente de esporte, saúde, bem-estar, comunidade e experiências dentro do Parque da Cidade.</p>
-      </div>
-      <MSec title="O que é">
-        <p className="text-sm text-white/75">Não é um café. Não é uma loja. Não é uma assessoria. A corrida é só a porta de entrada — o verdadeiro ativo é a comunidade.</p>
-        <Flow items={['Corrida', 'Comunidade', 'Pertencimento', 'Lifestyle', 'Monetização']} />
-      </MSec>
-      <MSec title="A tese central">
-        <p className="text-sm text-white/75">O Somma já tem quase tudo — só falta um ponto físico. A Estação vira a “casa oficial” da comunidade.</p>
-        <Bul items={['+5.000 membros cadastrados', 'Treinões recorrentes aos sábados', 'Assessoria esportiva', 'Loja própria', 'Patrocinadores e ativações', 'Capacidade de organizar eventos']} />
-        <p className="text-sm text-white/60">Assim como a Starbucks virou o terceiro lugar entre casa e trabalho, e o WeWork entre casa e escritório, a Estação Somma vira o terceiro lugar do corredor.</p>
-      </MSec>
-      <MSec title="Estrutura física">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Panel title="Container principal" items={['Café', 'Alimentação saudável', 'Operação e estoque', 'Loja Somma', 'Guarda-volumes', 'Lounge']} />
-          <Panel variant="accent" title="Área externa" items={['Convivência', 'Alongamento e recovery', 'Encontros e eventos', 'Ativações de marcas']} />
+    <div data-anim className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      {items.map((s) => (
+        <div key={s.l} className="rounded-xl border border-white/10 bg-white/[0.04] p-3 text-center">
+          <p className="font-[family-name:var(--font-display)] text-2xl uppercase leading-none tracking-tight text-[#FF2C03] sm:text-3xl">{s.n}</p>
+          <p className="mt-1 text-[11px] font-medium leading-tight text-white/55">{s.l}</p>
         </div>
-      </MSec>
-      <MSec title="Como ganha dinheiro">
-        <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
-          { emoji: '👕', t: 'Somma Retail', d: 'Camisetas, bonés, meias, acessórios e exclusivos.' },
-          { emoji: '☕', t: 'Somma Café', d: 'Café, açaí, sanduíches e snacks saudáveis.' },
-          { emoji: '🏃', t: 'Assessoria', d: 'A Estação vira o principal canal de aquisição de alunos.' },
-          { emoji: '🤝', t: 'Patrocínios', d: 'Áreas de marca: recovery, mobilidade, aquecimento, hidratação.' },
-          { emoji: '🎉', t: 'Eventos', d: 'Treinos especiais, corridas, palestras e workshops.' },
-          { emoji: '🏷️', t: 'Naming Rights', d: 'Ex.: “Evolve Outdoor Performance Center”.' },
-        ]} />
-      </MSec>
-      <MSec title="Papel da Evolve">
-        <p className="text-sm text-white/75">Transformar a área externa num centro outdoor de performance: mobilidade, alongamento, funcional, recovery, fortalecimento e prevenção de lesão. A Evolve ganha presença física dentro da maior comunidade de corrida do DF.</p>
-      </MSec>
-      <MSec title="Papel da Decathlon">
-        <p className="text-sm text-white/75">A Decathlon entra como laboratório — o <span className="text-[#FF2C03]">Running Lab Decathlon</span>: teste de tênis e equipamentos, lançamentos, pesquisa com corredores e validação de produtos. Ganha acesso contínuo a milhares de corredores reais.</p>
-      </MSec>
-      <MSec title="Como convencer o GDF">
-        <MQuote>O Somma já ocupa o parque gratuitamente todos os sábados. A Estação Somma apenas organiza, qualifica e financia essa ocupação.</MQuote>
-        <Bul items={['Treinos e eventos gratuitos', 'Ações de saúde e atividades esportivas', 'Ocupação qualificada do parque', 'Mais segurança pelo uso contínuo']} />
-        <p className="text-sm text-white/60">A operação comercial existe para financiar a operação comunitária. É um projeto de interesse público — não um negócio privado.</p>
-      </MSec>
-      <MSec title="Caminho jurídico">
-        <Pills items={['Permissão de Uso', 'Termo de Cooperação']} />
-        <p className="text-sm text-white/60">Enquadrar como equipamento esportivo e comunitário permanente — não como simples comércio dentro do parque.</p>
-      </MSec>
-      <MSec title="Organograma futuro">
-        <Pills items={['CEO · Alexandre', 'COO · Alex', 'Head Comercial', 'Head Retail', 'Head Performance', 'Head Eventos', 'Head Comunidade', 'Head Tecnologia']} />
-        <p className="text-sm text-white/60">A Estação deixa de ser um projeto e vira uma empresa física operando diariamente.</p>
-      </MSec>
-      <MSec title="O que mais chama atenção">
-        <MQuote>A Estação transforma um ativo digital em um ativo físico. Hoje o Somma tem uma comunidade. Com a Estação, passa a ter um território.</MQuote>
-        <p className="text-sm text-white/60">Comunidades com território próprio criam barreiras competitivas muito maiores do que as que existem só no Instagram ou no WhatsApp.</p>
-      </MSec>
-    </>
+      ))}
+    </div>
   )
 }
 
-function SebraeContent() {
+function VFlow({ items }: { items: string[] }) {
   return (
-    <>
+    <div data-anim className="mx-auto flex max-w-xs flex-col gap-1.5">
+      {items.map((t, i) => (
+        <div key={t}>
+          <div className={`rounded-xl px-4 py-2.5 text-center text-sm font-semibold ${i === 0 ? 'bg-[#FF2C03] text-black' : 'border border-white/15 bg-white/[0.05] text-white/85'}`}>{t}</div>
+          {i < items.length - 1 && <div className="flex justify-center text-white/25">↓</div>}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ClosingCard({ kicker, title, sub }: { kicker: string; title: ReactNode; sub: ReactNode }) {
+  return (
+    <div data-anim className="rounded-3xl bg-[#FF2C03] p-8 text-center sm:p-12">
+      <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/60 sm:text-xs">{kicker}</p>
+      <h2 className="mt-4 font-[family-name:var(--font-display)] text-3xl uppercase leading-[0.98] tracking-tight text-black sm:text-5xl">{title}</h2>
+      <p className="mx-auto mt-5 max-w-2xl text-base font-semibold leading-snug text-black/80 sm:text-lg">{sub}</p>
+    </div>
+  )
+}
+
+/* ---- ESTAÇÃO SOMMA · apresentação completa (GDF + Decathlon + Investidores) ---- */
+const ESTACAO_SLIDES: Slide[] = [
+  {
+    section: 'Capa', center: true,
+    node: (
       <div>
-        <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">Projeto · Parceria institucional</p>
-        <h2 className="mt-1 font-[family-name:var(--font-display)] text-3xl uppercase tracking-tight text-white sm:text-4xl">Somma Sebrae</h2>
-        <p className="mt-2 text-white/60">O Sebrae muda completamente a narrativa da Estação — de “container comercial no parque” para “polo de empreendedorismo, esporte, saúde e desenvolvimento econômico”.</p>
+        <p data-anim className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#FF2C03]">Projeto de parceria público-privada</p>
+        <h2 data-anim className="mt-3 font-[family-name:var(--font-display)] text-5xl uppercase leading-[0.9] tracking-tight text-white sm:text-7xl">Estação <span className="text-[#FF2C03]">Somma</span></h2>
+        <p data-anim className="mt-4 max-w-xl text-base text-white/65 sm:text-lg">Um hub permanente de esporte, saúde, bem-estar e comunidade no Parque da Cidade.</p>
+        <div className="mt-5"><Pills items={['Para o GDF', 'Para a Decathlon', 'Para investidores']} /></div>
       </div>
-      <MSec title="A virada de narrativa">
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Panel variant="muted" title="Sem Sebrae" items={['“Um grupo quer colocar um container comercial dentro do parque.”']} />
-          <Panel variant="accent" title="Com Sebrae" items={['“Estamos criando um polo de empreendedorismo, esporte, saúde e desenvolvimento econômico ligado à economia wellness do DF.”']} />
+    ),
+  },
+  {
+    section: '01 · O que é o Somma',
+    node: (<>
+      <Head k="Capítulo 1" title="O que é o Somma" />
+      <Stats items={[{ n: '+5.000', l: 'membros cadastrados' }, { n: '#1', l: 'corrida do DF' }, { n: '100%', l: 'gratuito' }, { n: 'Semanal', l: 'encontros' }]} />
+      <Bul items={['Comunidade gratuita e movimento democrático', 'Maior comunidade de corrida do Distrito Federal', 'Eventos recorrentes e ativações esportivas', 'Impacto real em saúde e qualidade de vida']} />
+    </>),
+  },
+  {
+    section: '02 · O problema',
+    node: (<>
+      <Head k="Capítulo 2" title="O problema" sub="Brasília tem demanda — falta estrutura." />
+      <Bul items={['Milhares de corredores e usuários do Parque da Cidade', 'Poucos pontos estruturados de apoio ao corredor', 'Falta de espaços permanentes de convivência esportiva', 'Falta de integração entre esporte, saúde e comunidade', 'Falta de infraestrutura moderna voltada ao corredor']} />
+    </>),
+  },
+  {
+    section: '03 · A oportunidade',
+    node: (<>
+      <Head k="Capítulo 3" title="A oportunidade" sub="Por que Brasília e por que agora." />
+      <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
+        { emoji: '🏞️', t: 'Parque da Cidade', d: 'Fluxo constante de corredores, ciclistas e caminhantes.' },
+        { emoji: '🏃', t: 'Mercado de corrida', d: 'Em forte crescimento no país.' },
+        { emoji: '🧘', t: 'Wellness', d: 'Economia da saúde em alta.' },
+        { emoji: '📅', t: 'Eventos esportivos', d: 'Calendário aquecido o ano todo.' },
+        { emoji: '💼', t: 'Economia do esporte', d: 'Cada vez mais relevante.' },
+        { emoji: '👥', t: 'Comunidade pronta', d: 'O Somma já reúne o público.' },
+      ]} />
+    </>),
+  },
+  {
+    section: '04 · A visão', center: true,
+    node: (
+      <div>
+        <Head k="Capítulo 4" title="A visão" />
+        <MQuote>Transformar o Parque da Cidade no principal ponto de encontro da comunidade de corrida do Centro-Oeste.</MQuote>
+        <Note>Visão de longo prazo, legado e transformação urbana.</Note>
+      </div>
+    ),
+  },
+  {
+    section: '05 · Estação Somma',
+    node: (<>
+      <Head k="Capítulo 5" title="O projeto e a localização" />
+      <div data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
+        <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">Localização</p>
+        <p className="mt-1 text-lg font-semibold text-white">Parque da Cidade · Brasília–DF</p>
+        <p className="mt-1 font-mono text-sm text-white/60">-15.8015306, -47.9036227</p>
+      </div>
+      <Note>Espaço reservado para renderizações, implantação e fotos reais do terreno (antes e depois).</Note>
+    </>),
+  },
+  {
+    section: '06 · Estrutura física',
+    node: (<>
+      <Head k="Capítulo 6" title="Estrutura física" />
+      <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
+        { emoji: '☕', t: 'Café Somma', d: 'Café especial, açaí, lanches e conveniência esportiva.' },
+        { emoji: '👕', t: 'Loja Somma', d: 'Roupas, bonés, acessórios e coleções exclusivas.' },
+        { emoji: '🛒', t: 'Decathlon Experience', d: 'Teste de produtos, lançamentos e ativações.' },
+        { emoji: '🔐', t: 'Guarda-volumes', d: 'Lockers, segurança e conveniência.' },
+        { emoji: '💆', t: 'Área Recovery', d: 'Alongamento, massagem e recuperação.' },
+        { emoji: '🌇', t: 'Rooftop', d: 'Convivência, eventos, networking e experiência premium.' },
+      ]} />
+    </>),
+  },
+  {
+    section: '07 · Academia Evolve',
+    node: (<>
+      <Head k="Capítulo 7" title="Praça Evolve" sub="Academia ao ar livre — ativação permanente da marca." />
+      <Bul items={['Academia outdoor com equipamentos premium', 'Treinos gratuitos e aulas abertas à população', 'Mobilidade, funcional, fortalecimento e prevenção', 'Benefício direto de saúde para quem usa o parque']} />
+    </>),
+  },
+  {
+    section: '08 · Ecossistema',
+    node: (<>
+      <Head k="Capítulo 8" title="Ecossistema Somma" sub="Cada unidade fortalece as demais." />
+      <VFlow items={['Grupo Somma', 'Somma Club', 'Somma Retail', 'Somma Eventos', 'Assessoria Somma', 'Estação Somma']} />
+    </>),
+  },
+  {
+    section: '09 · Como o GDF ganha',
+    node: (<>
+      <Head k="Capítulo 9" title="Como o GDF ganha" sub="Infraestrutura permanente, sem custo direto para o governo." />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Bul items={['Ocupação qualificada do parque', 'Promoção da saúde e da atividade física', 'Redução do sedentarismo', 'Valorização do espaço público']} />
+        <Bul items={['Turismo esportivo', 'Geração de emprego e renda', 'Atração de investimento privado', 'Nenhum custo direto ao governo']} />
+      </div>
+    </>),
+  },
+  {
+    section: '10 · Como a Decathlon ganha',
+    node: (<>
+      <Head k="Capítulo 10" title="Como a Decathlon ganha" />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Bul items={['Presença permanente e hub regional', 'Teste de produto em ambiente real', 'Relacionamento direto com corredores', 'Brand awareness e experiência de marca']} />
+        <Bul items={['Vendas e lançamentos', 'Produção de conteúdo', 'Programa de embaixadores', 'Aderência total ao público']} />
+      </div>
+      <Note>Perfil predominante do Somma — classes C, D e média — altamente alinhado ao posicionamento democrático da Decathlon.</Note>
+    </>),
+  },
+  {
+    section: '11 · Como o investidor ganha',
+    node: (<>
+      <Head k="Capítulo 11" title="Como o investidor ganha" sub="Múltiplas fontes de receita — não depende de uma só." />
+      <Pills items={['Café', 'Açaí', 'Loja', 'Assessoria', 'Eventos', 'Patrocínios', 'Naming Rights', 'Mídia', 'Ativações', 'Locação de espaços']} />
+      <DataTable heads={['Cenário', 'Potencial de receita/mês', 'Perfil']} rows={[
+        ['Conservador', 'R$ 60–90 mil', 'Operação base'],
+        ['Moderado', 'R$ 120–160 mil', '+ patrocínios e eventos'],
+        ['Agressivo', 'R$ 200 mil +', '+ naming rights e mídia'],
+      ]} />
+      <Note>Valores ilustrativos — a validar no projeto executivo e no plano financeiro.</Note>
+    </>),
+  },
+  {
+    section: '12 · Modelo de parceria',
+    node: (<>
+      <Head k="Capítulo 12" title="Modelo de parceria" />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Panel title="GDF" items={['Cessão de área', 'Apoio institucional', 'Licenciamento']} />
+        <Panel variant="accent" title="Somma" items={['Operação e gestão', 'Comunidade', 'Eventos']} />
+        <Panel title="Decathlon" items={['Patrocínio', 'Experiência', 'Equipamentos e conteúdo']} />
+        <Panel title="Evolve" items={['Academia outdoor', 'Treinos', 'Ativações']} />
+      </div>
+      <Panel variant="muted" title="Investidores" items={['Capex inicial', 'Expansão', 'Escala']} />
+    </>),
+  },
+  {
+    section: '13 · Roadmap',
+    node: (<>
+      <Head k="Capítulo 13" title="Roadmap" />
+      <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
+        { emoji: '①', t: 'Fase 1', d: 'Aprovação institucional, renders, projeto executivo e captação.' },
+        { emoji: '②', t: 'Fase 2', d: 'Implantação, estrutura e operação piloto.' },
+        { emoji: '③', t: 'Fase 3', d: 'Lançamento, eventos, ativações e patrocínios.' },
+        { emoji: '④', t: 'Fase 4', d: 'Consolidação, expansão e novas receitas.' },
+      ]} />
+    </>),
+  },
+  {
+    section: '14 · Chamada final', center: true,
+    node: (
+      <ClosingCard
+        kicker="Chamada final"
+        title={<>Não estamos propondo um café dentro de um parque.</>}
+        sub="Estamos propondo o principal hub permanente de corrida, saúde, bem-estar e comunidade do Centro-Oeste — para transformar o Parque da Cidade em referência nacional de esporte, convivência e qualidade de vida."
+      />
+    ),
+  },
+]
+
+/* ---- SOMMA SEBRAE · apresentação para os sócios (conselho estratégico) ---- */
+const SEBRAE_SLIDES: Slide[] = [
+  {
+    section: 'Capa', center: true,
+    node: (
+      <div>
+        <p data-anim className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#FF2C03]">Reunião de conselho estratégico</p>
+        <h2 data-anim className="mt-3 font-[family-name:var(--font-display)] text-5xl uppercase leading-[0.9] tracking-tight text-white sm:text-7xl">Somma <span className="text-[#FF2C03]">Sebrae</span></h2>
+        <p data-anim className="mt-4 max-w-xl text-base text-white/65 sm:text-lg">Transformar a comunidade Somma numa plataforma de desenvolvimento econômico, inovação e empreendedorismo wellness.</p>
+      </div>
+    ),
+  },
+  {
+    section: '01 · Onde estamos',
+    node: (<>
+      <Head k="Bloco 1" title="Onde o Somma está hoje" />
+      <Stats items={[{ n: '+5.000', l: 'membros' }, { n: 'Semanal', l: 'encontros grátis' }, { n: 'Validada', l: 'operação' }, { n: '4+', l: 'frentes ativas' }]} />
+      <DataTable heads={['Indicador', 'Status']} rows={[
+        ['Comunidade recorrente', 'Encontros gratuitos todo sábado'],
+        ['Assessoria', 'Ativa e crescendo'],
+        ['Loja', 'Própria'],
+        ['Eventos', 'Recorrentes'],
+        ['Patrocinadores', 'Presentes'],
+      ]} />
+    </>),
+  },
+  {
+    section: '02 · O que o Somma vende',
+    node: (<>
+      <Head k="Bloco 2" title="O que o Somma realmente vende" sub="O Somma não vende corrida." />
+      <VFlow items={['Comunidade', 'Pertencimento', 'Estilo de vida', 'Experiência']} />
+    </>),
+  },
+  {
+    section: '03 · O maior ativo',
+    node: (<>
+      <Head k="Bloco 3" title="O maior ativo do Somma" sub="Audiência física recorrente é extremamente rara — e valiosa." />
+      <DataTable heads={['Canal', 'Audiência', 'Recorrência presencial']} rows={[
+        ['Influenciadores', 'Digital', 'Baixa'],
+        ['Academias', 'Físico', 'Média'],
+        ['Eventos', 'Físico', 'Pontual'],
+        ['Comunidades digitais', 'Digital', 'Baixa'],
+        ['Somma', 'Físico', 'Alta · toda semana'],
+      ]} />
+    </>),
+  },
+  {
+    section: '04 · O problema do modelo',
+    node: (<>
+      <Head k="Bloco 4" title="O problema do modelo atual" sub="O Somma gera muito valor — mas captura pouco." />
+      <DataTable heads={['Hoje o Somma gera', 'Mas captura']} rows={[
+        ['Milhares de pessoas por semana', 'Pouca receita direta'],
+        ['Atenção e engajamento', 'Pouca monetização de mídia'],
+        ['Comunidade fiel', 'Baixo ticket por membro'],
+      ]} />
+    </>),
+  },
+  {
+    section: '05 · Oportunidade',
+    node: (<>
+      <Head k="Bloco 5" title="Oportunidade estratégica" />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Panel variant="muted" title="Hoje" items={['Comunidade']} />
+        <Panel variant="accent" title="Amanhã" items={['Comunidade + Desenvolvimento Econômico']} />
+      </div>
+    </>),
+  },
+  {
+    section: '06 · Onde o Sebrae entra',
+    node: (<>
+      <Head k="Bloco 6" title="Como o Sebrae entra nessa história" sub="A missão do Sebrae conversa diretamente com o projeto." />
+      <Bul items={['Desenvolver pequenos negócios', 'Estimular inovação', 'Apoiar empreendedores', 'Criar ambientes de desenvolvimento econômico']} />
+    </>),
+  },
+  {
+    section: '07 · Somma Lab', center: true,
+    node: (
+      <div>
+        <Head k="Bloco 7" title="Nasce o Somma Lab" />
+        <MQuote>O primeiro laboratório vivo de empreendedorismo wellness do Distrito Federal.</MQuote>
+        <Note>Um braço dentro da Estação que transforma a comunidade num ambiente real de teste e validação de negócios.</Note>
+      </div>
+    ),
+  },
+  {
+    section: '08 · Na prática',
+    node: (<>
+      <Head k="Bloco 8" title="Como funcionaria na prática" />
+      <Pills items={['Marca de roupa fitness', 'Marca de suplemento', 'Healthtech', 'Cafeteria', 'Fisioterapia']} />
+      <Flow items={['Inscrição', 'Capacitação', 'Validação na comunidade', 'Feedback e dados', 'Primeiras vendas']} />
+    </>),
+  },
+  {
+    section: '09 · O que o Sebrae ganha',
+    node: (<>
+      <Head k="Bloco 9" title="O que o Sebrae ganha" />
+      <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
+        { emoji: '📈', t: 'Desenvolvimento econômico', d: 'Geração de renda e negócios.' },
+        { emoji: '🏆', t: 'Casos de sucesso', d: 'Histórias reais para mostrar.' },
+        { emoji: '🔬', t: 'Inovação', d: 'Validação com consumidores reais.' },
+        { emoji: '🏪', t: 'Pequenos negócios', d: 'Acelerados de verdade.' },
+        { emoji: '📍', t: 'Impacto local', d: 'No coração de Brasília.' },
+        { emoji: '🇧🇷', t: 'Case nacional', d: 'Projeto pioneiro.' },
+      ]} />
+    </>),
+  },
+  {
+    section: '10 · O que o Somma ganha',
+    node: (<>
+      <Head k="Bloco 10" title="O que o Somma ganha" />
+      <div className="grid gap-2 sm:grid-cols-2">
+        <Bul items={['Recursos e novas receitas', 'Credibilidade e legitimidade', 'Relações institucionais']} />
+        <Bul items={['Crescimento e novos parceiros', 'Acesso a programas', 'Estrutura para a Estação']} />
+      </div>
+    </>),
+  },
+  {
+    section: '11 · O que o GDF ganha',
+    node: (<>
+      <Head k="Bloco 11" title="O que o GDF ganha" sub="O Sebrae fortalece a narrativa junto ao governo." />
+      <Bul items={['Saúde pública e esporte', 'Bem-estar da população', 'Turismo', 'Uso qualificado do parque', 'Desenvolvimento econômico local']} />
+    </>),
+  },
+  {
+    section: '12 · Papel da Estação',
+    node: (<>
+      <Head k="Bloco 12" title="O papel da Estação Somma" sub="A Estação não é um café — é infraestrutura." />
+      <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
+        { emoji: '👥', t: 'Comunidade', d: 'A casa do movimento.' },
+        { emoji: '❤️', t: 'Saúde', d: 'Promoção de bem-estar.' },
+        { emoji: '🔬', t: 'Inovação', d: 'Teste e validação.' },
+        { emoji: '💡', t: 'Empreendedorismo', d: 'Pequenos negócios.' },
+      ]} />
+    </>),
+  },
+  {
+    section: '13 · Decathlon + Sebrae + Somma',
+    node: (<>
+      <Head k="Bloco 13" title="A sinergia dos três" sub="Juntos criam algo que nenhum faria sozinho." />
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Panel title="Decathlon" items={['Democratização do esporte']} />
+        <Panel title="Sebrae" items={['Desenvolvimento econômico']} />
+        <Panel variant="accent" title="Somma" items={['Comunidade que conecta tudo']} />
+      </div>
+    </>),
+  },
+  {
+    section: '14 · Evolve + Somma',
+    node: (<>
+      <Head k="Bloco 14" title="Evolve + Somma" />
+      <MQuote>Evolve Outdoor Performance Center.</MQuote>
+      <Bul items={['Academia ao ar livre na Estação', 'Mobilidade, funcional e recovery', 'Treinos abertos e ativação de marca permanente']} />
+    </>),
+  },
+  {
+    section: '15 · Modelo econômico',
+    node: (<>
+      <Head k="Bloco 15" title="Modelo econômico futuro" />
+      <Pills items={['Patrocínios', 'Ativações', 'Retail', 'Eventos', 'Estação', 'Somma Lab']} />
+      <Note>Cada camada monetiza a mesma comunidade. Projeções a detalhar no plano financeiro — o objetivo é elevar o valuation do ecossistema Somma.</Note>
+    </>),
+  },
+  {
+    section: '16 · Riscos',
+    node: (<>
+      <Head k="Bloco 16" title="Riscos e mitigadores" sub="Análise honesta." />
+      <DataTable heads={['Risco', 'Mitigação']} rows={[
+        ['Dependência institucional', 'Diversificar parceiros e receitas'],
+        ['Timing do GDF', 'Entrar via Sebrae para destravar'],
+        ['Execução / equipe', 'Governança e papéis claros'],
+        ['Capital inicial', 'Capex faseado e patrocínio âncora'],
+      ]} />
+    </>),
+  },
+  {
+    section: '17 · Roadmap',
+    node: (<>
+      <Head k="Bloco 17" title="Roadmap" />
+      <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
+        { emoji: '📅', t: '30 dias', d: 'Validar tese e alinhar sócios.' },
+        { emoji: '🗓️', t: '90 dias', d: 'Desenhar o Somma Lab e aproximar o Sebrae.' },
+        { emoji: '📆', t: '180 dias', d: 'Piloto e projeto institucional.' },
+        { emoji: '🚀', t: '12 meses', d: 'Estação + programa em operação.' },
+      ]} />
+    </>),
+  },
+  {
+    section: '18 · Decisões dos sócios',
+    node: (<>
+      <Head k="Bloco 18" title="Decisões que os sócios precisam tomar" />
+      <Bul items={['Validar a tese', 'Aprovar a construção do Somma Lab', 'Aprovar a aproximação com o Sebrae', 'Aprovar o piloto', 'Aprovar o projeto institucional']} />
+    </>),
+  },
+  {
+    section: 'Reflexão final', center: true,
+    node: (
+      <ClosingCard
+        kicker="Reflexão final"
+        title={<>E se isso é sem infraestrutura…</>}
+        sub="Se hoje o Somma já reúne mais de 5 mil pessoas sem uma infraestrutura física permanente, o que poderemos construir quando transformarmos essa comunidade numa plataforma de desenvolvimento econômico, saúde e inovação?"
+      />
+    ),
+  },
+]
+
+/* ---- Sub-deck navegável (usado nos modais de projeto) ---- */
+function SubDeck({ title, slides, onClose }: { title: string; slides: Slide[]; onClose: () => void }) {
+  const [i, setI] = useState(0)
+  const ref = useRef<HTMLDivElement>(null)
+  const touch = useRef<{ x: number; y: number } | null>(null)
+  const total = slides.length
+  const next = useCallback(() => setI((v) => Math.min(v + 1, total - 1)), [total])
+  const prev = useCallback(() => setI((v) => Math.max(v - 1, 0)), [])
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const t = el.querySelectorAll('[data-anim]')
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { gsap.set(t, { opacity: 1, x: 0 }); return }
+    const ctx = gsap.context(() => { gsap.fromTo(t, { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.45, ease: 'power3.out', stagger: 0.05 }) }, el)
+    return () => ctx.revert()
+  }, [i])
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') return onClose()
+      if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next() }
+      else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev() }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [next, prev, onClose])
+
+  const onTouchStart = (e: React.TouchEvent) => { touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY } }
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touch.current) return
+    const dx = e.changedTouches[0].clientX - touch.current.x
+    const dy = e.changedTouches[0].clientY - touch.current.y
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.4) { dx < 0 ? next() : prev() }
+    touch.current = null
+  }
+
+  const slide = slides[i]
+  return (
+    <div className="absolute inset-0 z-[60] flex flex-col bg-[#0A0A0A]">
+      <div className="flex items-center justify-between border-b border-white/10 px-5 py-3.5 sm:px-8">
+        <div className="flex items-center gap-3">
+          <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">{title}</span>
+          <span className="text-[11px] font-bold tabular-nums text-white/40">{String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
         </div>
-      </MSec>
-      <MSec title="A tese do Sebrae">
-        <p className="text-sm text-white/75">O Sebrae não é patrocinador — é <span className="text-[#FF2C03]">parceiro institucional</span>. O discurso não é “patrocinem a Estação”.</p>
-        <MQuote>Vamos construir juntos o primeiro laboratório vivo de empreendedorismo wellness do Distrito Federal.</MQuote>
-      </MSec>
-      <MSec title="O que é o Somma Lab">
-        <p className="text-sm text-white/75">Um braço dentro da Estação (Somma Lab / Sebrae Wellness Lab) que a transforma num ambiente de teste para pequenos negócios validarem produtos na comunidade:</p>
-        <Pills items={['Nutricionistas', 'Suplementação', 'Marcas de corrida', 'Fisioterapeutas', 'Massoterapeutas', 'Personal trainers', 'Startups de saúde', 'Tecnologia esportiva', 'Produtores locais', 'Marcas fitness']} />
-      </MSec>
-      <MSec title="O que o Sebrae ganha">
-        <Tiles cols="sm:grid-cols-2" items={[
-          { emoji: '👥', t: 'Ambiente real', d: '+5.000 membros e centenas de corredores ativos e engajados.' },
-          { emoji: '🧪', t: 'Laboratório vivo', d: 'O empreendedor testa produto, preço, comunicação e demanda — não só teoria.' },
-          { emoji: '📈', t: 'Desenvolvimento econômico', d: 'Geração de renda, negócios, empreendedorismo e inovação.' },
-          { emoji: '🏆', t: 'Case nacional', d: 'Pouquíssimos Sebraes têm um projeto assim.' },
-        ]} />
-      </MSec>
-      <MSec title="Decathlon + Sebrae + Somma">
-        <div className="grid gap-3 sm:grid-cols-3">
-          <Panel title="Decathlon" items={['Acesso ao corredor', 'Testar produtos', 'Experiência e marca']} />
-          <Panel title="Sebrae" items={['Desenvolver pequenos negócios', 'Gerar renda', 'Fomentar empreendedorismo']} />
-          <Panel variant="accent" title="Somma" items={['Conecta os dois', 'Cria o ecossistema']} />
-        </div>
-        <p className="text-sm text-white/60">A Decathlon traz a grande marca. O Sebrae traz o pequeno empreendedor. O Somma conecta os dois.</p>
-      </MSec>
-      <MSec title="Os 4 pilares para vender ao Sebrae">
-        <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
-          { emoji: '🏃', t: 'Esporte', d: 'Mais pessoas em atividade física.' },
-          { emoji: '❤️', t: 'Saúde', d: 'Melhora da qualidade de vida.' },
-          { emoji: '💡', t: 'Empreendedorismo', d: 'Pequenos negócios criados e validados.' },
-          { emoji: '🔬', t: 'Inovação', d: 'Testes reais com consumidores reais.' },
-        ]} />
-      </MSec>
-      <MSec title="Programa Sebrae Wellness">
-        <p className="text-sm text-white/75">Turmas trimestrais, 10 a 20 empreendedores. Segmentos: corrida, wellness, nutrição, saúde, performance e longevidade.</p>
-        <Flow items={['Capacitação', 'Mentorias', 'Validação na comunidade', 'Demo Day', 'Patrocinadores', 'Investidores']} />
-      </MSec>
-      <MSec title="O argumento mais forte">
-        <MQuote>O Parque da Cidade já recebe milhares de pessoas todo fim de semana. O Somma já tem comunidade consolidada. Não estamos propondo criar demanda — estamos propondo organizar, acelerar e transformar essa demanda em desenvolvimento econômico para pequenos empreendedores do DF.</MQuote>
-        <p className="text-sm text-white/60">A chancela institucional do Sebrae pode transformar a Estação de um pedido de ocupação em um projeto estratégico de desenvolvimento do ecossistema wellness de Brasília — mais importante para destravar o GDF do que o aporte financeiro.</p>
-      </MSec>
-    </>
+        <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:text-[#FF2C03]" aria-label="Fechar projeto"><X className="h-4 w-4" /></button>
+      </div>
+      <div key={i} ref={ref} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:px-12">
+        <span className="pointer-events-none absolute right-4 top-1 z-0 select-none font-[family-name:var(--font-display)] text-[6rem] leading-none text-white/[0.03] sm:right-8 sm:text-[9rem]">{String(i + 1).padStart(2, '0')}</span>
+        <div className="relative z-10 mx-auto flex min-h-full max-w-3xl flex-col justify-center gap-4 pb-6 sm:gap-5">{slide.node}</div>
+      </div>
+      <div className="flex items-center justify-end gap-1 border-t border-white/10 px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8">
+        <button onClick={prev} disabled={i === 0} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/80 transition hover:bg-white/10 disabled:opacity-25" aria-label="Anterior"><ArrowLeft className="h-4 w-4" /></button>
+        <button onClick={next} disabled={i === total - 1} className="ml-1 flex h-9 w-9 items-center justify-center rounded-full bg-[#FF2C03] text-black transition hover:bg-[#ff4a28] disabled:opacity-25" aria-label="Próximo"><ArrowRight className="h-4 w-4" /></button>
+      </div>
+    </div>
   )
 }
 
@@ -1063,7 +1408,7 @@ export function PptCorporativoClient() {
   // teclado
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (project && e.key === 'Escape') return setProject(null)
+      if (project) return
       if (menu && e.key === 'Escape') return setMenu(false)
       if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); next() }
       else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); prev() }
@@ -1221,23 +1566,13 @@ export function PptCorporativoClient() {
         </div>
       )}
 
-      {/* Modal de projeto */}
+      {/* Sub-deck de projeto */}
       {project && (
-        <div className="absolute inset-0 z-[60] flex flex-col bg-[#0A0A0A]">
-          <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-8">
-            <span className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-white">
-              {project === 'estacao' ? 'Estação Somma' : 'Somma Sebrae'}
-            </span>
-            <button onClick={() => setProject(null)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:text-[#FF2C03]" aria-label="Fechar projeto">
-              <X className="h-4 w-4" />
-            </button>
-          </div>
-          <div className="min-h-0 flex-1 overflow-y-auto px-5 py-8 sm:px-12">
-            <div className="mx-auto max-w-3xl space-y-8 pb-10">
-              {project === 'estacao' ? <EstacaoContent /> : <SebraeContent />}
-            </div>
-          </div>
-        </div>
+        <SubDeck
+          title={project === 'estacao' ? 'Estação Somma' : 'Somma Sebrae'}
+          slides={project === 'estacao' ? ESTACAO_SLIDES : SEBRAE_SLIDES}
+          onClose={() => setProject(null)}
+        />
       )}
     </main>
     </ProjectCtx.Provider>
