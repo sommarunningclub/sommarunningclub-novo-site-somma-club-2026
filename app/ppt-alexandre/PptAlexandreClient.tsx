@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
-import { ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 
 /* ============================================================================
  * Componentes — tema ESCURO editorial
@@ -579,6 +579,7 @@ export function PptAlexandreClient() {
   const [active, setActive] = useState(0)
   const [menu, setMenu] = useState(false)
   const [fs, setFs] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
   const stageRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const navRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -663,15 +664,24 @@ export function PptAlexandreClient() {
 
   return (
     <main className="fixed inset-0 flex overflow-hidden bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white">
-      <aside className="hidden w-60 shrink-0 flex-col border-r border-white/10 lg:flex">
-        <div className="flex items-center gap-2 px-5 py-5">
+      <aside className={`hidden w-60 shrink-0 flex-col border-r border-white/10 ${collapsed ? 'lg:hidden' : 'lg:flex'}`}>
+        <div className="flex items-center justify-between gap-2 px-5 py-5">
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">SOMMA <span className="text-[#FF2C03]">Futuro</span></span>
+          <button onClick={() => setCollapsed(true)} className="flex h-7 w-7 items-center justify-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-[#FF2C03]" aria-label="Recolher menu">
+            <PanelLeftClose className="h-4 w-4" />
+          </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4"><NavList /></div>
         <div className="h-1 bg-white/5">
           <div className="h-full bg-[#FF2C03] transition-[width] duration-500" style={{ width: `${((active + 1) / total) * 100}%` }} />
         </div>
       </aside>
+
+      {collapsed && (
+        <button onClick={() => setCollapsed(false)} className="absolute left-3 top-3 z-30 hidden h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] text-white/70 transition hover:text-[#FF2C03] lg:flex" aria-label="Expandir menu">
+          <PanelLeftOpen className="h-4 w-4" />
+        </button>
+      )}
 
       <section className="relative flex min-w-0 flex-1 flex-col">
         <div className="flex items-center justify-between border-b border-white/10 px-4 pt-[max(0.7rem,env(safe-area-inset-top))] pb-2 lg:hidden">
