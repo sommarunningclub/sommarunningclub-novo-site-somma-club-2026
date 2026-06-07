@@ -5,7 +5,7 @@ import gsap from 'gsap'
 import { SatelliteMap } from '@/components/estacao/satellite-map'
 import {
   ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen,
-  DollarSign, Building2, Users, TrendingUp, Award, Heart, Store,
+  DollarSign, Building2, Users, TrendingUp, Award, Heart, Store, ImageOff, ZoomIn, ZoomOut, Expand,
 } from 'lucide-react'
 
 const ORANGE = '#FF2C03'
@@ -342,28 +342,85 @@ function LogoChip({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: strin
     </span>
   )
 }
-function DecathlonMark({ className = '' }: { className?: string }) {
-  return (
-    <span className={`inline-flex items-center rounded-lg bg-[#0082C3] px-3 py-2 text-sm font-bold uppercase tracking-wide text-white ${className}`}>
-      Decathlon
-    </span>
-  )
+function LogoImg({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: string }) {
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt={alt} loading="lazy" className={`${h} w-auto`} />
+}
+function DecathlonMark({ h = 'h-7' }: { h?: string }) {
+  return <LogoImg src="/Decathlon_-_logo__France__2024_.png" alt="Decathlon" h={h} />
 }
 function Logos({ children }: { children: ReactNode }) {
   return <div data-anim className="flex flex-wrap items-center gap-2.5">{children}</div>
 }
 
 function Gallery({ images }: { images: { src: string; cap: string }[] }) {
+  const [open, setOpen] = useState<number | null>(null)
+  const [broken, setBroken] = useState<Record<string, boolean>>({})
+  const [zoom, setZoom] = useState(1)
+
+  useEffect(() => {
+    if (open === null) return
+    setZoom(1)
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { e.stopPropagation(); setOpen(null) }
+      else if (e.key === 'ArrowRight') { e.stopPropagation(); setOpen((i) => (i === null ? i : Math.min(i + 1, images.length - 1))) }
+      else if (e.key === 'ArrowLeft') { e.stopPropagation(); setOpen((i) => (i === null ? i : Math.max(i - 1, 0))) }
+    }
+    window.addEventListener('keydown', onKey, true)
+    return () => window.removeEventListener('keydown', onKey, true)
+  }, [open, images.length])
+
+  const zBtn = 'flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition hover:bg-white/10 disabled:opacity-30'
+
   return (
-    <div data-anim className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-      {images.map((im) => (
-        <figure key={im.src} className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.04]">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={im.src} alt={im.cap} loading="lazy" className="aspect-video w-full bg-white/[0.03] object-cover" />
-          <figcaption className="px-3 py-2 text-[12px] leading-snug text-white/60">{im.cap}</figcaption>
-        </figure>
-      ))}
-    </div>
+    <>
+      <div data-anim className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+        {images.map((im, i) => (
+          <figure key={im.src} className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.04]">
+            {broken[im.src] ? (
+              <div className="flex aspect-video w-full flex-col items-center justify-center gap-2 bg-white/[0.03] text-white/35">
+                <ImageOff className="h-6 w-6" />
+                <span className="text-[11px] font-medium">render em breve</span>
+              </div>
+            ) : (
+              <button type="button" onClick={() => setOpen(i)} className="group relative block w-full">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={im.src} alt={im.cap} loading="lazy" onError={() => setBroken((b) => ({ ...b, [im.src]: true }))} className="aspect-video w-full cursor-zoom-in bg-white/[0.03] object-cover" />
+                <span className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-full bg-black/55 text-white opacity-0 transition group-hover:opacity-100"><Expand className="h-3.5 w-3.5" /></span>
+              </button>
+            )}
+            <figcaption className="px-3 py-2 text-[12px] leading-snug text-white/60">{im.cap}</figcaption>
+          </figure>
+        ))}
+      </div>
+
+      {open !== null && !broken[images[open].src] && (
+        <div className="fixed inset-0 z-[80] flex flex-col bg-black/95" onClick={() => setOpen(null)}>
+          <div className="flex items-center justify-between gap-3 px-4 pt-[max(0.8rem,env(safe-area-inset-top))] pb-3" onClick={(e) => e.stopPropagation()}>
+            <span className="min-w-0 truncate text-xs text-white/60">{images[open].cap}</span>
+            <div className="flex items-center gap-2">
+              <button onClick={() => setZoom((z) => Math.max(1, +(z - 0.5).toFixed(1)))} disabled={zoom <= 1} className={zBtn} aria-label="Diminuir zoom"><ZoomOut className="h-4 w-4" /></button>
+              <span className="w-12 text-center text-xs font-bold tabular-nums text-white/70">{Math.round(zoom * 100)}%</span>
+              <button onClick={() => setZoom((z) => Math.min(4, +(z + 0.5).toFixed(1)))} disabled={zoom >= 4} className={zBtn} aria-label="Aumentar zoom"><ZoomIn className="h-4 w-4" /></button>
+              <button onClick={() => setOpen(null)} className={zBtn} aria-label="Fechar"><X className="h-4 w-4" /></button>
+            </div>
+          </div>
+          <div className="min-h-0 flex-1 overflow-auto p-3 sm:p-6" onClick={(e) => e.stopPropagation()}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={images[open].src}
+              alt={images[open].cap}
+              onDoubleClick={() => setZoom((z) => (z > 1 ? 1 : 2))}
+              style={zoom === 1 ? { maxWidth: '100%', maxHeight: '100%' } : { width: `${zoom * 100}%`, maxWidth: 'none' }}
+              className={`mx-auto block ${zoom > 1 ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
+            />
+          </div>
+          <div className="px-4 pb-[max(0.8rem,env(safe-area-inset-bottom))] pt-1 text-center text-[11px] text-white/35" onClick={(e) => e.stopPropagation()}>
+            Duplo-clique na imagem para ampliar · toque fora para fechar
+          </div>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -465,7 +522,7 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '07 · Academia Evolve',
     node: (<>
       <Head k="Capítulo 7" title="Praça Evolve" sub="Academia ao ar livre — ativação permanente da marca." />
-      <Logos><LogoChip src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
+      <Logos><LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
       <Bul items={['Academia outdoor com equipamentos premium', 'Treinos gratuitos e aulas abertas à população', 'Mobilidade, funcional, fortalecimento e prevenção', 'Benefício direto de saúde para quem usa o parque']} />
     </>),
   },
@@ -515,7 +572,7 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '12 · Modelo de parceria',
     node: (<>
       <Head k="Capítulo 12" title="Modelo de parceria" />
-      <Logos><DecathlonMark /><LogoChip src="/logo-evolve.png" alt="Evolve" h="h-6" /></Logos>
+      <Logos><DecathlonMark /><LogoImg src="/logo-evolve.png" alt="Evolve" h="h-6" /></Logos>
       <div className="grid gap-3 sm:grid-cols-2">
         <Panel title="GDF" items={['Cessão de área', 'Apoio institucional', 'Licenciamento']} />
         <Panel variant="accent" title="Somma" items={['Operação e gestão', 'Comunidade', 'Eventos']} />
@@ -701,7 +758,7 @@ const SEBRAE_SLIDES: Slide[] = [
     section: '14 · Evolve + Somma',
     node: (<>
       <Head k="Bloco 14" title="Evolve + Somma" />
-      <Logos><LogoChip src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
+      <Logos><LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
       <MQuote>Evolve Outdoor Performance Center.</MQuote>
       <Bul items={['Academia ao ar livre na Estação', 'Mobilidade, funcional e recovery', 'Treinos abertos e ativação de marca permanente']} />
     </>),
