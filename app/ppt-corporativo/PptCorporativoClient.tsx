@@ -506,9 +506,9 @@ const SLIDES: Slide[] = [
     node: (
       <>
         <Head k="08 · Coordenações" title="Atendimento e Operações" />
-        <RoleCard area="Relacionamento" cargo="Atendimento e Operações" person="Priscila" missao="Garantir organização e excelente atendimento aos membros."
-          resp={['WhatsApp e atendimento', 'Agenda', 'Organização de reuniões', 'Comunicação operacional', 'Suporte aos participantes']}
-          kpis={['Tempo médio de resposta', 'Taxa de resolução', 'Satisfação dos membros', 'Demandas resolvidas', 'Reuniões organizadas']} />
+        <RoleCard area="Relacionamento · Experiência da Assessoria" cargo="Atendimento e Operações" person="Priscila" missao="Garantir organização, excelente atendimento e a experiência completa do aluno da assessoria."
+          resp={['WhatsApp e atendimento', 'Experiência da assessoria de ponta a ponta', 'Controle de kits: quem recebeu e quem ainda não recebeu', 'Mapear necessidades do aluno (quem precisa de algo, quem não precisa)', 'Agenda e organização de reuniões', 'Comunicação operacional e suporte aos participantes']}
+          kpis={['Tempo médio de resposta', 'Taxa de resolução', 'Satisfação dos membros', 'Kits entregues x pendentes', 'Demandas resolvidas', 'Reuniões organizadas']} />
       </>
     ),
   },
