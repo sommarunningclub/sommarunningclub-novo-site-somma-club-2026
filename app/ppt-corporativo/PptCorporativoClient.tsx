@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
+import { SatelliteMap } from '@/components/estacao/satellite-map'
 import {
   ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen,
   DollarSign, Building2, Users, TrendingUp, Award, Heart, Store,
@@ -249,7 +250,7 @@ function ProjectButtons() {
         <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#FF2C03]">Abrir projeto →</span>
       </button>
       <button onClick={() => open('sebrae')} className={`${btn} border-white/15 bg-white/[0.05] hover:bg-white/[0.09]`}>
-        <span className="text-3xl">🚀</span>
+        <LogoChip src="/Sebrae_logo.svg" alt="Sebrae" h="h-7" />
         <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-white">Somma Sebrae</h3>
         <p className="mt-1 text-sm leading-snug text-white/60">O laboratório vivo de empreendedorismo wellness do DF.</p>
         <span className="mt-3 inline-flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-[#FF2C03]">Abrir projeto →</span>
@@ -332,6 +333,26 @@ function ClosingCard({ kicker, title, sub }: { kicker: string; title: ReactNode;
   )
 }
 
+/* ---- Logos de parceiros ---- */
+function LogoChip({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: string }) {
+  return (
+    <span className="inline-flex items-center rounded-lg bg-white px-3 py-2 shadow-sm">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} loading="lazy" className={`${h} w-auto`} />
+    </span>
+  )
+}
+function DecathlonMark({ className = '' }: { className?: string }) {
+  return (
+    <span className={`inline-flex items-center rounded-lg bg-[#0082C3] px-3 py-2 text-sm font-bold uppercase tracking-wide text-white ${className}`}>
+      Decathlon
+    </span>
+  )
+}
+function Logos({ children }: { children: ReactNode }) {
+  return <div data-anim className="flex flex-wrap items-center gap-2.5">{children}</div>
+}
+
 function Gallery({ images }: { images: { src: string; cap: string }[] }) {
   return (
     <div data-anim className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -407,6 +428,10 @@ const ESTACAO_SLIDES: Slide[] = [
         <p className="mt-1 text-lg font-semibold text-white">Parque da Cidade · Brasília–DF</p>
         <p className="mt-1 font-mono text-sm text-white/60">-15.8015306, -47.9036227</p>
       </div>
+      <div data-anim>
+        <SatelliteMap lat={-15.8015306} lng={-47.9036227} zoom={18} label="Estação Somma · Parque da Cidade" />
+        <p className="mt-2 text-[11px] text-white/40">Visão de satélite · exatamente onde a Estação Somma seria implantada.</p>
+      </div>
     </>),
   },
   {
@@ -425,6 +450,7 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '06 · Estrutura física',
     node: (<>
       <Head k="Capítulo 6" title="Estrutura física" />
+      <Logos><DecathlonMark /></Logos>
       <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
         { emoji: '☕', t: 'Café Somma', d: 'Café especial, açaí, lanches e conveniência esportiva.' },
         { emoji: '👕', t: 'Loja Somma', d: 'Roupas, bonés, acessórios e coleções exclusivas.' },
@@ -439,6 +465,7 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '07 · Academia Evolve',
     node: (<>
       <Head k="Capítulo 7" title="Praça Evolve" sub="Academia ao ar livre — ativação permanente da marca." />
+      <Logos><LogoChip src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
       <Bul items={['Academia outdoor com equipamentos premium', 'Treinos gratuitos e aulas abertas à população', 'Mobilidade, funcional, fortalecimento e prevenção', 'Benefício direto de saúde para quem usa o parque']} />
     </>),
   },
@@ -463,6 +490,7 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '10 · Como a Decathlon ganha',
     node: (<>
       <Head k="Capítulo 10" title="Como a Decathlon ganha" />
+      <Logos><DecathlonMark /></Logos>
       <div className="grid gap-2 sm:grid-cols-2">
         <Bul items={['Presença permanente e hub regional', 'Teste de produto em ambiente real', 'Relacionamento direto com corredores', 'Brand awareness e experiência de marca']} />
         <Bul items={['Vendas e lançamentos', 'Produção de conteúdo', 'Programa de embaixadores', 'Aderência total ao público']} />
@@ -487,6 +515,7 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '12 · Modelo de parceria',
     node: (<>
       <Head k="Capítulo 12" title="Modelo de parceria" />
+      <Logos><DecathlonMark /><LogoChip src="/logo-evolve.png" alt="Evolve" h="h-6" /></Logos>
       <div className="grid gap-3 sm:grid-cols-2">
         <Panel title="GDF" items={['Cessão de área', 'Apoio institucional', 'Licenciamento']} />
         <Panel variant="accent" title="Somma" items={['Operação e gestão', 'Comunidade', 'Eventos']} />
@@ -526,6 +555,7 @@ const SEBRAE_SLIDES: Slide[] = [
     section: 'Capa', center: true,
     node: (
       <div>
+        <div data-anim className="mb-6"><LogoChip src="/Sebrae_logo.svg" alt="Sebrae" h="h-10" /></div>
         <p data-anim className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#FF2C03]">Reunião de conselho estratégico</p>
         <h2 data-anim className="mt-3 font-[family-name:var(--font-display)] text-5xl uppercase leading-[0.9] tracking-tight text-white sm:text-7xl">Somma <span className="text-[#FF2C03]">Sebrae</span></h2>
         <p data-anim className="mt-4 max-w-xl text-base text-white/65 sm:text-lg">Transformar a comunidade Somma numa plataforma de desenvolvimento econômico, inovação e empreendedorismo wellness.</p>
@@ -659,6 +689,7 @@ const SEBRAE_SLIDES: Slide[] = [
     section: '13 · Decathlon + Sebrae + Somma',
     node: (<>
       <Head k="Bloco 13" title="A sinergia dos três" sub="Juntos criam algo que nenhum faria sozinho." />
+      <Logos><DecathlonMark /><LogoChip src="/Sebrae_logo.svg" alt="Sebrae" h="h-6" /></Logos>
       <div className="grid gap-3 sm:grid-cols-3">
         <Panel title="Decathlon" items={['Democratização do esporte']} />
         <Panel title="Sebrae" items={['Desenvolvimento econômico']} />
@@ -670,6 +701,7 @@ const SEBRAE_SLIDES: Slide[] = [
     section: '14 · Evolve + Somma',
     node: (<>
       <Head k="Bloco 14" title="Evolve + Somma" />
+      <Logos><LogoChip src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
       <MQuote>Evolve Outdoor Performance Center.</MQuote>
       <Bul items={['Academia ao ar livre na Estação', 'Mobilidade, funcional e recovery', 'Treinos abertos e ativação de marca permanente']} />
     </>),
@@ -726,7 +758,7 @@ const SEBRAE_SLIDES: Slide[] = [
 ]
 
 /* ---- Sub-deck navegável (usado nos modais de projeto) ---- */
-function SubDeck({ title, slides, onClose }: { title: string; slides: Slide[]; onClose: () => void }) {
+function SubDeck({ title, slides, onClose, headerLogo }: { title: string; slides: Slide[]; onClose: () => void; headerLogo?: string }) {
   const [i, setI] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
@@ -767,8 +799,9 @@ function SubDeck({ title, slides, onClose }: { title: string; slides: Slide[]; o
     <div className="absolute inset-0 z-[60] flex flex-col bg-[#0A0A0A]">
       <div className="flex items-center justify-between border-b border-white/10 px-5 py-3.5 sm:px-8">
         <div className="flex items-center gap-3">
+          {headerLogo && <LogoChip src={headerLogo} alt={title} h="h-5" />}
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">{title}</span>
-          <span className="text-[11px] font-bold tabular-nums text-white/40">{String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+          <span className="hidden text-[11px] font-bold tabular-nums text-white/40 sm:inline">{String(i + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
         </div>
         <button onClick={onClose} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:text-[#FF2C03]" aria-label="Fechar projeto"><X className="h-4 w-4" /></button>
       </div>
@@ -1603,6 +1636,7 @@ export function PptCorporativoClient() {
         <SubDeck
           title={project === 'estacao' ? 'Estação Somma' : 'Somma Sebrae'}
           slides={project === 'estacao' ? ESTACAO_SLIDES : SEBRAE_SLIDES}
+          headerLogo={project === 'sebrae' ? '/Sebrae_logo.svg' : undefined}
           onClose={() => setProject(null)}
         />
       )}
