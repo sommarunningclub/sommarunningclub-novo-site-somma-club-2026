@@ -448,7 +448,7 @@ const ESTACAO_SLIDES: Slide[] = [
   {
     section: '02 · O problema',
     node: (<>
-      <Head k="Capítulo 2" title="O problema" sub="Brasília tem demanda — falta estrutura." />
+      <Head k="Capítulo 2" title="O problema" sub="Brasília tem a demanda. Falta a estrutura." />
       <Bul items={['Milhares de corredores e usuários do Parque da Cidade', 'Poucos pontos estruturados de apoio ao corredor', 'Falta de espaços permanentes de convivência esportiva', 'Falta de integração entre esporte, saúde e comunidade', 'Falta de infraestrutura moderna voltada ao corredor']} />
     </>),
   },
@@ -494,7 +494,7 @@ const ESTACAO_SLIDES: Slide[] = [
   {
     section: '05 · Como será',
     node: (<>
-      <Head k="Capítulo 5" title="Como será a Estação" sub="Conceito visual — Estação Somma no Parque da Cidade." />
+      <Head k="Capítulo 5" title="Como será a Estação" sub="O conceito visual da Estação Somma no Parque da Cidade." />
       <Gallery images={[
         { src: '/estacao-somma/render-fachada.jpg', cap: 'Fachada · Café, Loja, Decathlon Experience, Guarda-volumes e Recovery' },
         { src: '/estacao-somma/render-aerea.jpg', cap: 'Vista aérea · Estação Somma + Praça Evolve (academia outdoor)' },
@@ -521,7 +521,7 @@ const ESTACAO_SLIDES: Slide[] = [
   {
     section: '07 · Academia Evolve',
     node: (<>
-      <Head k="Capítulo 7" title="Praça Evolve" sub="Academia ao ar livre — ativação permanente da marca." />
+      <Head k="Capítulo 7" title="Praça Evolve" sub="Academia ao ar livre, com a marca presente todo dia." />
       <Logos><LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7" /></Logos>
       <Bul items={['Academia outdoor com equipamentos premium', 'Treinos gratuitos e aulas abertas à população', 'Mobilidade, funcional, fortalecimento e prevenção', 'Benefício direto de saúde para quem usa o parque']} />
     </>),
@@ -552,20 +552,20 @@ const ESTACAO_SLIDES: Slide[] = [
         <Bul items={['Presença permanente e hub regional', 'Teste de produto em ambiente real', 'Relacionamento direto com corredores', 'Brand awareness e experiência de marca']} />
         <Bul items={['Vendas e lançamentos', 'Produção de conteúdo', 'Programa de embaixadores', 'Aderência total ao público']} />
       </div>
-      <Note>Perfil predominante do Somma — classes C, D e média — altamente alinhado ao posicionamento democrático da Decathlon.</Note>
+      <Note>O público do Somma é classe C, D e média. Combina direitinho com o posicionamento democrático da Decathlon.</Note>
     </>),
   },
   {
     section: '11 · Como o investidor ganha',
     node: (<>
-      <Head k="Capítulo 11" title="Como o investidor ganha" sub="Múltiplas fontes de receita — não depende de uma só." />
+      <Head k="Capítulo 11" title="Como o investidor ganha" sub="Várias fontes de receita. Não dependemos de uma só." />
       <Pills items={['Café', 'Açaí', 'Loja', 'Assessoria', 'Eventos', 'Patrocínios', 'Naming Rights', 'Mídia', 'Ativações', 'Locação de espaços']} />
       <DataTable heads={['Cenário', 'Potencial de receita/mês', 'Perfil']} rows={[
         ['Conservador', 'R$ 60–90 mil', 'Operação base'],
         ['Moderado', 'R$ 120–160 mil', '+ patrocínios e eventos'],
         ['Agressivo', 'R$ 200 mil +', '+ naming rights e mídia'],
       ]} />
-      <Note>Valores ilustrativos — a validar no projeto executivo e no plano financeiro.</Note>
+      <Note>Os valores são ilustrativos. A gente valida no projeto executivo e no plano financeiro.</Note>
     </>),
   },
   {
@@ -600,7 +600,7 @@ const ESTACAO_SLIDES: Slide[] = [
       <ClosingCard
         kicker="Chamada final"
         title={<>Não estamos propondo um café dentro de um parque.</>}
-        sub="Estamos propondo o principal hub permanente de corrida, saúde, bem-estar e comunidade do Centro-Oeste — para transformar o Parque da Cidade em referência nacional de esporte, convivência e qualidade de vida."
+        sub="Estamos propondo o principal hub de corrida, saúde, bem-estar e comunidade do Centro-Oeste. A ideia é transformar o Parque da Cidade em referência nacional de esporte, convivência e qualidade de vida."
       />
     ),
   },
@@ -643,7 +643,7 @@ const SEBRAE_SLIDES: Slide[] = [
   {
     section: '03 · O maior ativo',
     node: (<>
-      <Head k="Bloco 3" title="O maior ativo do Somma" sub="Audiência física recorrente é extremamente rara — e valiosa." />
+      <Head k="Bloco 3" title="O maior ativo do Somma" sub="Audiência física que volta toda semana é rara. E vale muito." />
       <DataTable heads={['Canal', 'Audiência', 'Recorrência presencial']} rows={[
         ['Influenciadores', 'Digital', 'Baixa'],
         ['Academias', 'Físico', 'Média'],
@@ -656,7 +656,7 @@ const SEBRAE_SLIDES: Slide[] = [
   {
     section: '04 · O problema do modelo',
     node: (<>
-      <Head k="Bloco 4" title="O problema do modelo atual" sub="O Somma gera muito valor — mas captura pouco." />
+      <Head k="Bloco 4" title="O problema do modelo atual" sub="O Somma gera muito valor, mas captura pouco." />
       <DataTable heads={['Hoje o Somma gera', 'Mas captura']} rows={[
         ['Milhares de pessoas por semana', 'Pouca receita direta'],
         ['Atenção e engajamento', 'Pouca monetização de mídia'],
@@ -733,7 +733,7 @@ const SEBRAE_SLIDES: Slide[] = [
   {
     section: '12 · Papel da Estação',
     node: (<>
-      <Head k="Bloco 12" title="O papel da Estação Somma" sub="A Estação não é um café — é infraestrutura." />
+      <Head k="Bloco 12" title="O papel da Estação Somma" sub="A Estação não é um café. É infraestrutura." />
       <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
         { emoji: '👥', t: 'Comunidade', d: 'A casa do movimento.' },
         { emoji: '❤️', t: 'Saúde', d: 'Promoção de bem-estar.' },
@@ -745,7 +745,7 @@ const SEBRAE_SLIDES: Slide[] = [
   {
     section: '13 · Decathlon + Sebrae + Somma',
     node: (<>
-      <Head k="Bloco 13" title="A sinergia dos três" sub="Juntos criam algo que nenhum faria sozinho." />
+      <Head k="Bloco 13" title="Os três juntos" sub="Juntos criam algo que nenhum faria sozinho." />
       <Logos><DecathlonMark /><LogoChip src="/Sebrae_logo.svg" alt="Sebrae" h="h-6" /></Logos>
       <div className="grid gap-3 sm:grid-cols-3">
         <Panel title="Decathlon" items={['Democratização do esporte']} />
@@ -768,7 +768,7 @@ const SEBRAE_SLIDES: Slide[] = [
     node: (<>
       <Head k="Bloco 15" title="Modelo econômico futuro" />
       <Pills items={['Patrocínios', 'Ativações', 'Retail', 'Eventos', 'Estação', 'Somma Lab']} />
-      <Note>Cada camada monetiza a mesma comunidade. Projeções a detalhar no plano financeiro — o objetivo é elevar o valuation do ecossistema Somma.</Note>
+      <Note>Cada camada monetiza a mesma comunidade. As projeções a gente detalha no plano financeiro. A meta é fazer o ecossistema Somma valer mais.</Note>
     </>),
   },
   {
@@ -961,7 +961,7 @@ const SLIDES: Slide[] = [
         </div>
         <div data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-center">
           <p className="text-sm font-semibold text-white/80 sm:text-base">
-            O <O>Corporativo</O> gera receita que <span className="font-bold text-white">financia</span> a <O>Comunidade</O> — que continua gratuita e forte.
+            O <O>Corporativo</O> gera a receita que <span className="font-bold text-white">financia</span> a <O>Comunidade</O>. E ela continua gratuita e forte.
           </p>
         </div>
       </>
@@ -973,7 +973,7 @@ const SLIDES: Slide[] = [
     section: 'Organizações maduras',
     node: (
       <>
-        <Head k="04 · A referência" title="Como organizações maduras funcionam" sub="Quatro camadas — cada uma com um papel claro. No Somma, fica assim:" />
+        <Head k="04 · A referência" title="Como organizações maduras funcionam" sub="São quatro camadas, cada uma com um papel claro. No Somma, fica assim:" />
         <div className="space-y-2">
           {[
             { n: '01', t: 'Conselho', d: 'Direção e visão de longo prazo', who: 'Alexandre · João Victor · Diogo', w: 'sm:w-[64%]', accent: true },
@@ -991,7 +991,7 @@ const SLIDES: Slide[] = [
             </div>
           ))}
         </div>
-        <Note>Ninguém faz tudo — e nada depende de uma pessoa só.</Note>
+        <Note>Ninguém faz tudo sozinho. E nada depende de uma pessoa só.</Note>
       </>
     ),
   },
@@ -1211,7 +1211,7 @@ const SLIDES: Slide[] = [
     node: (
       <>
         <Head k="11 · Cultura" title="Princípio de responsabilidade" />
-        <Lead>Quem é responsável não executa tudo — mas responde pelo resultado.</Lead>
+        <Lead>Quem é responsável não faz tudo, mas responde pelo resultado.</Lead>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div data-anim className="rounded-2xl border border-emerald-400/40 bg-emerald-500/10 p-5">
             <p className="text-xs font-bold uppercase tracking-widest text-emerald-300">Se der certo</p>
@@ -1245,7 +1245,7 @@ const SLIDES: Slide[] = [
             ['Produzir um evento', 'COO', 'Eventos', 'Comercial', 'CEO'],
             ['Gestão da loja', 'Head Retail', 'Retail', 'Comercial', 'COO'],
             ['Conteúdo & redes', 'Comunicação', 'Design / Conteúdo Visual', 'Marketing', 'COO'],
-            ['Treino & metodologia', 'Dir. Técnico', 'Professores', '—', 'COO'],
+            ['Treino & metodologia', 'Dir. Técnico', 'Professores', 'N/A', 'COO'],
           ]} />
       </>
     ),
@@ -1256,7 +1256,7 @@ const SLIDES: Slide[] = [
     section: 'Quem tem meta de receita',
     node: (
       <>
-        <Head k="13 · Metas" title="Quem responde por receita — e quem não" sub="Não se cobra alguém por um número sobre o qual não tem controle direto." />
+        <Head k="13 · Metas" title="Quem responde por receita (e quem não)" sub="Ninguém é cobrado por um número que não controla." />
         <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2">
           <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5">
             <p className="text-xs font-bold uppercase tracking-widest text-[#FF2C03]">Metas de RECEITA</p>
@@ -1269,7 +1269,7 @@ const SLIDES: Slide[] = [
           </div>
           <div data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
             <p className="text-xs font-bold uppercase tracking-widest text-white/50">Metas de EXECUÇÃO, QUALIDADE e PRAZO</p>
-            <p className="mt-1 text-[13px] text-white/50">Medimos entrega — não faturamento.</p>
+            <p className="mt-1 text-[13px] text-white/50">A gente mede entrega, não faturamento.</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {['Cristina', 'João Victor', 'Gustavo Firmino', 'Yas', 'Priscila'].map((p) => (
                 <span key={p} className="rounded-full bg-white/[0.08] px-3 py-1.5 text-xs font-bold text-white/80">{p}</span>
@@ -1293,7 +1293,7 @@ const SLIDES: Slide[] = [
             <p data-anim className="text-[11px] font-bold uppercase tracking-widest text-white/40">Comunidade · do cadastro ao recorrente</p>
             <Funnel animated items={[{ label: 'membros cadastrados', value: '5.000', pct: 100 }, { label: 'recorrentes nos eventos', value: '~400', pct: 55, tone: 'accent' }]} />
           </div>
-          <Bars animated title="Composição de receita do corporativo" note="Distribuição ilustrativa — a calibrar com dados reais."
+          <Bars animated title="Composição de receita do corporativo" note="Distribuição ilustrativa. A gente calibra com dados reais."
             items={[{ label: 'Assessoria', pct: 40, value: '40%' }, { label: 'Loja', pct: 25, value: '25%' }, { label: 'Eventos', pct: 20, value: '20%' }, { label: 'Mídia e patrocínios', pct: 15, value: '15%' }]} />
         </div>
       </>
@@ -1328,10 +1328,10 @@ const SLIDES: Slide[] = [
       <>
         <Head k="15 · Rotina" title="Ritual de reuniões" />
         <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
-          { emoji: '📅', t: 'Segunda', d: 'Reunião Corporativa — alinhar a semana das áreas.' },
-          { emoji: '✅', t: 'Sexta', d: 'Reunião Operacional — resultados e ajustes.' },
-          { emoji: '📈', t: 'Mensal', d: 'Reunião Estratégica — metas e prioridades.' },
-          { emoji: '🏛️', t: 'Trimestral', d: 'Conselho — visão, expansão e decisões grandes.' },
+          { emoji: '📅', t: 'Segunda', d: 'Reunião Corporativa para alinhar a semana das áreas.' },
+          { emoji: '✅', t: 'Sexta', d: 'Reunião Operacional com resultados e ajustes.' },
+          { emoji: '📈', t: 'Mensal', d: 'Reunião Estratégica com metas e prioridades.' },
+          { emoji: '🏛️', t: 'Trimestral', d: 'Conselho para visão, expansão e decisões grandes.' },
         ]} />
       </>
     ),
@@ -1360,7 +1360,7 @@ const SLIDES: Slide[] = [
             </div>
           ))}
         </div>
-        <Note>Critério é entrega e responsabilidade — não tempo de casa.</Note>
+        <Note>O que conta é entrega e responsabilidade, não tempo de casa.</Note>
       </>
     ),
   },
@@ -1419,7 +1419,7 @@ const SLIDES: Slide[] = [
             </div>
           ))}
         </div>
-        <Note>Cada fase é leve e prática — feita junto com o time, não imposta de cima.</Note>
+        <Note>Cada fase é leve e prática. A gente faz junto com o time, não impõe de cima.</Note>
       </>
     ),
   },
@@ -1430,7 +1430,7 @@ const SLIDES: Slide[] = [
     node: (
       <>
         <Head k="20 · O futuro" title="Visão Somma 2030" />
-        <Lead>Ser a <O>maior comunidade de corrida e bem-estar do Centro-Oeste</O> — um ecossistema completo.</Lead>
+        <Lead>Ser a <O>maior comunidade de corrida e bem-estar do Centro-Oeste</O>, com um ecossistema completo.</Lead>
         <div data-anim className="grid grid-cols-2 gap-2 sm:grid-cols-4">
           {[
             { e: '🧡', t: 'Comunidade' }, { e: '🏃', t: 'Assessoria' }, { e: '🎉', t: 'Eventos' }, { e: '👕', t: 'Loja' },
@@ -1468,7 +1468,7 @@ const SLIDES: Slide[] = [
           De comunidade<br />a instituição.
         </h2>
         <p data-anim className="mx-auto mt-7 max-w-2xl text-base font-medium leading-snug text-black/75 sm:text-xl">
-          O Somma já tem o mais difícil: <span className="font-bold text-black">pessoas e propósito</span>. Agora ganha a estrutura para crescer sem depender de uma pessoa só — e durar.
+          O Somma já tem o mais difícil: <span className="font-bold text-black">pessoas e propósito</span>. Agora ganha a estrutura para crescer sem depender de uma pessoa só. E para durar.
         </p>
         <div data-anim className="mx-auto mt-8 flex flex-wrap justify-center gap-2">
           {['Clareza', 'Responsabilidade', 'Indicadores', 'Crescimento'].map((c) => (

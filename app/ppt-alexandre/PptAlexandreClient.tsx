@@ -158,7 +158,7 @@ const SLIDES: Slide[] = [
           O Futuro do<br /><span className="text-[#FF2C03]">Somma Club</span>
         </h1>
         <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-white/60 sm:text-xl">
-          Governança, proteção jurídica e crescimento sustentável.
+Como organizar a casa, proteger a gente e crescer sem perder a essência.
         </p>
       </div>
     ),
@@ -222,7 +222,7 @@ const SLIDES: Slide[] = [
             ))}
           </div>
         </div>
-        <Note>Quanto maior o Somma ficar, maior o risco de operar sem estrutura. O melhor momento de organizar é antes de precisar.</Note>
+        <Note>Quanto maior o Somma fica, mais pesa rodar sem estrutura. A hora de organizar é agora, antes de a conta chegar.</Note>
       </>
     ),
   },
@@ -237,7 +237,7 @@ const SLIDES: Slide[] = [
           <Panel variant="muted" title="Antes" items={['Amizade', 'Boa vontade', 'Ajuda', 'Informalidade']} />
           <Panel variant="accent" title="Depois" items={['Responsabilidade', 'Processo', 'Prestação de contas', 'Governança']} />
         </div>
-        <Note>Não é perder o jeito Somma. É ganhar a base para que ele dure.</Note>
+        <Note>A gente não perde o jeito Somma. A gente ganha a base pra ele durar.</Note>
       </>
     ),
   },
@@ -254,7 +254,7 @@ const SLIDES: Slide[] = [
         </div>
         <div data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-center">
           <p className="text-sm font-semibold text-white/80 sm:text-base">
-            O <O>Corporativo</O> gera receita que <span className="font-bold text-white">financia</span> a <O>Comunidade</O> — que segue gratuita.
+            O <O>Corporativo</O> gera a receita que <span className="font-bold text-white">banca</span> a <O>Comunidade</O>. E ela continua de graça pra todo mundo.
           </p>
         </div>
       </>
@@ -275,7 +275,7 @@ const SLIDES: Slide[] = [
             { t: 'Quem presta contas?', d: 'quem mostra os números' },
           ]}
         />
-        <Note>Só isso. Governança é deixar essas respostas claras — para ninguém depender de adivinhação.</Note>
+        <Note>Só isso. Quando essas respostas ficam claras, ninguém precisa adivinhar nada.</Note>
       </>
     ),
   },
@@ -359,7 +359,7 @@ const SLIDES: Slide[] = [
         </div>
         <div data-anim className="flex items-center gap-3 rounded-2xl border border-amber-400/40 bg-amber-500/10 p-4">
           <span className="text-2xl">⚠️</span>
-          <p className="text-sm font-medium text-amber-100 sm:text-base">Quando “ajuda” vira “função fixa”, sem formalização, surge um risco silencioso — que cresce com o tempo.</p>
+          <p className="text-sm font-medium text-amber-100 sm:text-base">Quando “ajuda” vira “função fixa” sem nada no papel, nasce um risco silencioso. E ele só cresce com o tempo.</p>
         </div>
       </>
     ),
@@ -379,7 +379,7 @@ const SLIDES: Slide[] = [
             { emoji: '🎯', t: 'Subordinação', d: 'Recebe ordens e precisa cumprir.' },
           ]}
         />
-        <Note>Sem alarme: entender esses sinais é o que permite organizar tudo do jeito certo, com tranquilidade.</Note>
+        <Note>Sem susto. Entender esses sinais é justamente o que deixa a gente arrumar tudo com calma e do jeito certo.</Note>
       </>
     ),
   },
@@ -393,7 +393,7 @@ const SLIDES: Slide[] = [
         <FlowChips items={['Voluntário', 'Colaborador', 'Executivo']} />
         <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5">
           <p className="text-sm font-medium text-white/85 sm:text-base">
-            Algumas pessoas <O>já estão migrando</O> do estágio “voluntário” para o de “colaborador” — com responsabilidades recorrentes. É exatamente esse ponto que pede formalização.
+            Algumas pessoas <O>já estão saindo</O> do estágio “voluntário” e indo pro de “colaborador”, com responsabilidades que se repetem toda semana. É bem aí que entra a formalização.
           </p>
         </div>
       </>
@@ -430,7 +430,7 @@ const SLIDES: Slide[] = [
           title="Características do termo"
           items={['Sem cobrança', 'Sem metas', 'Sem obrigação', 'Sem remuneração', 'Participação 100% espontânea']}
         />
-        <Note>O termo apenas registra o que já é verdade: o insider participa porque ama o Somma.</Note>
+        <Note>O termo só coloca no papel o que já é verdade: o insider está aqui porque ama o Somma.</Note>
       </>
     ),
   },
@@ -440,7 +440,7 @@ const SLIDES: Slide[] = [
     section: 'Proposta · Corporativo',
     node: (
       <>
-        <Head k="15 · Time" title="Proposta para o Corporativo" sub="Aqui a lógica é o oposto do voluntariado — e tudo bem." />
+        <Head k="15 · Time" title="Proposta para o Corporativo" sub="Aqui é o contrário do voluntariado. E está tudo certo em ser assim." />
         <FlowChips items={['Corporativo', 'Responsabilidades', 'Metas', 'KPIs', 'Governança']} />
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Panel variant="muted" title="Insiders (voluntário)" items={['Sem metas', 'Sem cobrança', 'Espontâneo']} />
@@ -455,7 +455,7 @@ const SLIDES: Slide[] = [
     section: 'Estrutura jurídica',
     node: (
       <>
-        <Head k="16 · A separação" title="Estrutura jurídica recomendada" sub="Separar o que é comunidade do que é negócio — cada um na sua caixa." />
+        <Head k="16 · A separação" title="Estrutura jurídica recomendada" sub="Comunidade de um lado, negócio do outro. Cada um na sua caixa." />
         <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2">
           <div data-anim className="rounded-2xl border border-white/15 bg-white/[0.05] p-5">
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/50">Associação Somma Club</p>
@@ -476,7 +476,7 @@ const SLIDES: Slide[] = [
             </div>
           </div>
         </div>
-        <Note>Duas caixas separadas: a comunidade protegida de um lado, o negócio organizado do outro.</Note>
+        <Note>Duas caixas separadas: a comunidade protegida de um lado, o negócio organizado do outro. Simples assim.</Note>
       </>
     ),
   },
@@ -507,7 +507,7 @@ const SLIDES: Slide[] = [
     section: 'Se nada for feito',
     node: (
       <>
-        <Head k="18 · Cenário" title="E se nada for feito?" sub="Sem dramatizar — apenas o que a experiência mostra que costuma acontecer." />
+        <Head k="18 · Cenário" title="E se nada for feito?" sub="Sem drama. É só o que a gente vê acontecer na prática quando ninguém organiza." />
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {[
             ['⚖️', 'Passivos trabalhistas'],
@@ -543,7 +543,7 @@ const SLIDES: Slide[] = [
             { t: 'Estrutura societária', d: 'associação + empresa' },
           ]}
         />
-        <Note>Passo a passo, leve, sem travar a operação. Cada fase deixa o Somma mais seguro.</Note>
+        <Note>Passo a passo, leve, sem travar a operação. Cada etapa deixa o Somma mais seguro.</Note>
       </>
     ),
   },
@@ -564,7 +564,7 @@ const SLIDES: Slide[] = [
           ))}
         </div>
         <p data-anim className="mx-auto mt-7 max-w-2xl text-base font-semibold leading-snug text-black/80 sm:text-lg">
-          “Profissionalizar não significa perder a essência. Significa criar uma estrutura capaz de proteger e ampliar tudo aquilo que fez o Somma chegar até aqui.”
+          “Profissionalizar não é perder a essência. É construir a estrutura que protege e amplia tudo o que trouxe o Somma até aqui.”
         </p>
       </div>
     ),
