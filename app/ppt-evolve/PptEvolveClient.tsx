@@ -580,6 +580,32 @@ const SLIDES: Slide[] = [
     <Chips items={['Estrutura', 'Experiência', 'Investimento', 'Crescimento', 'Comunidade mais forte']} />
   </>) },
 
+  // 25b — proposta de investimento
+  { section: 'Proposta de investimento', node: (<>
+    <Head k="Cap 6 · Proposta" title="Proposta de investimento" sub="Três níveis de parceria. O Growth é o ponto de equilíbrio entre alcance e ativação." />
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      {[
+        { name: 'Start', price: 'R$ 10k', d: 'Presença de marca e ativações base.', feats: ['Logo nos ativos', 'Presença nos encontros', 'Inserções digitais'], hot: false },
+        { name: 'Growth', price: 'R$ 15k', d: 'Mais alcance, conteúdo e eventos.', feats: ['Tudo do Start', 'Somma Creators', 'Experiências Evolve+'], hot: true },
+        { name: 'Performance', price: 'R$ 20k', d: 'Parceria completa e exclusiva.', feats: ['Tudo do Growth', 'Programa de bolsas', 'Exclusividade total'], hot: false },
+      ].map((p) => (
+        <div key={p.name} data-anim className={`flex flex-col rounded-2xl p-5 ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
+          {p.hot && <span className="mb-2 inline-block self-start rounded-full bg-[#FF2C03] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">Recomendado</span>}
+          <p className="text-[11px] font-bold uppercase tracking-widest text-[rgb(var(--fg)_/_0.4)]">Plano</p>
+          <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))]">{p.name}</p>
+          <p className="mt-2 font-[family-name:var(--font-display)] text-4xl leading-none tracking-tight text-[#FF2C03]">{p.price}<span className="text-base text-[rgb(var(--fg)_/_0.4)]">/mês</span></p>
+          <p className="mt-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{p.d}</p>
+          <ul className="mt-3 space-y-1.5 border-t border-[rgb(var(--fg)_/_0.08)] pt-3">
+            {p.feats.map((f) => (
+              <li key={f} className="flex items-center gap-2 text-[13px] text-[rgb(var(--fg)_/_0.8)]"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#FF2C03]" />{f}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+    <Note>Contrato mínimo de 12 meses. Valores e escopos podem ser ajustados conforme a parceria.</Note>
+  </>) },
+
   // 26 — visão 2030
   { section: 'Visão 2030', center: true, node: (
     <Statement kicker="Cap 6 · 2030" sub="Não apenas uma academia. Não apenas um running club. Um movimento.">
