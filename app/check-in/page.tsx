@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowRight, ArrowLeft, Check, MapPin, Clock, Calendar, Lock, ChevronRight, Loader2 } from 'lucide-react'
+import { BoneBanner } from '@/components/loja/bone-banner'
 
 type FormData = {
   peloton: '' | '4km' | '6km' | '8km'
@@ -455,6 +456,9 @@ export default function CheckInPage() {
               Confirme sua presença em {totalSteps} passos simples
             </p>
           </div>
+
+          {/* Banner do novo boné */}
+          <BoneBanner className="mb-8 sm:mb-10" />
 
           {/* Progress */}
           <div className="flex items-center gap-1 sm:gap-2 mb-8 sm:mb-10">

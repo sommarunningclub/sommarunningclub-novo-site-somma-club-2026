@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
 import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin } from 'lucide-react'
 import CatcherRunTicket from '@/components/events/catcher-run/CatcherRunTicket'
+import { BoneBuyButton } from '@/components/loja/bone-buy-button'
 
 function CheckInSucessoContent() {
   const searchParams = useSearchParams()
@@ -112,6 +113,16 @@ function CheckInSucessoContent() {
             <p className="text-zinc-400 text-sm leading-relaxed">
               Salve o seu CPF cadastrado ou tire um print desta tela. Ele será usado para identificar sua presença no evento.
             </p>
+          </div>
+
+          {/* Compra do boné */}
+          <div className="rounded-2xl border border-orange-500/30 bg-zinc-900 p-5 mb-8 text-left">
+            <p className="text-orange-500 text-xs font-semibold uppercase tracking-wide mb-1">Garanta o seu</p>
+            <p className="text-white font-semibold mb-1">Novo boné Somma</p>
+            <p className="text-zinc-400 text-sm mb-4">Compre agora e retire o seu no dia do corre.</p>
+            <div className="rounded-xl bg-white p-3">
+              <BoneBuyButton />
+            </div>
           </div>
 
           {/* Link de localização */}
