@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import { Suspense } from 'react'
-import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin } from 'lucide-react'
+import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin, ShoppingBag } from 'lucide-react'
 import CatcherRunTicket from '@/components/events/catcher-run/CatcherRunTicket'
 import { BoneBuyButton } from '@/components/loja/bone-buy-button'
 
@@ -115,16 +115,6 @@ function CheckInSucessoContent() {
             </p>
           </div>
 
-          {/* Compra do boné */}
-          <div className="rounded-2xl border border-orange-500/30 bg-zinc-900 p-5 mb-8 text-left">
-            <p className="text-orange-500 text-xs font-semibold uppercase tracking-wide mb-1">Garanta o seu</p>
-            <p className="text-white font-semibold mb-1">Novo boné Somma</p>
-            <p className="text-zinc-400 text-sm mb-4">Compre agora e retire o seu no dia do corre.</p>
-            <div className="rounded-xl bg-white p-3">
-              <BoneBuyButton />
-            </div>
-          </div>
-
           {/* Link de localização */}
           {localUrl && (
             <a
@@ -136,6 +126,26 @@ function CheckInSucessoContent() {
               Ver localização no mapa
             </a>
           )}
+
+          {/* Compra do boné — destaque */}
+          <div className="relative mb-6 overflow-hidden rounded-3xl border-2 border-orange-500/50 bg-gradient-to-b from-orange-500/15 to-zinc-900 p-5 sm:p-6 text-left shadow-2xl shadow-orange-500/10">
+            <div className="absolute inset-x-0 top-0 h-1 bg-orange-500" />
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-orange-500 shadow-lg shadow-orange-500/40">
+                <ShoppingBag className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <p className="text-orange-400 text-[11px] font-bold uppercase tracking-widest">Novidade · Boné Somma</p>
+                <p className="text-white text-lg sm:text-xl font-bold leading-tight">Garanta o seu boné</p>
+              </div>
+            </div>
+            <p className="text-zinc-300 text-sm leading-relaxed mb-5">
+              O novo boné já está disponível. <span className="text-white font-medium">Compre agora e retire no próximo Somma Club</span>, no dia do corre.
+            </p>
+            <div className="rounded-2xl bg-white p-3 sm:p-4">
+              <BoneBuyButton />
+            </div>
+          </div>
 
           <a
             href="/"
