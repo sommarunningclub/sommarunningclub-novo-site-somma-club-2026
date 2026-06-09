@@ -334,7 +334,7 @@ const SLIDES: Slide[] = [
         <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7 sm:h-9" />
       </div>
       <h1 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-[rgb(var(--fg))] text-[2.6rem] sm:text-7xl lg:text-[6.5rem]">
-        Somma Club<br /><span className="text-[#FF2C03]">+ Evolve+</span>
+        Somma Club<br /><span className="text-[#FF2C03]">+ Evolve</span>
       </h1>
       <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-xl">
         Construindo o futuro da comunidade fitness no Distrito Federal.
