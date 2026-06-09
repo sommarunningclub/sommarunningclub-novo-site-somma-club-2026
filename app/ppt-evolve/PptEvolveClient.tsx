@@ -585,9 +585,9 @@ const SLIDES: Slide[] = [
     <Head k="Cap 6 · Proposta" title="Proposta de investimento" sub="Três níveis de parceria. O Growth é o ponto de equilíbrio entre alcance e ativação." />
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       {[
-        { name: 'Start', price: 'R$ 10k', d: 'Presença de marca e ativações base.', feats: ['Logo nos ativos', 'Presença nos encontros', 'Inserções digitais'], hot: false },
-        { name: 'Growth', price: 'R$ 15k', d: 'Mais alcance, conteúdo e eventos.', feats: ['Tudo do Start', 'Somma Creators', 'Experiências Evolve+'], hot: true },
-        { name: 'Performance', price: 'R$ 20k', d: 'Parceria completa e exclusiva.', feats: ['Tudo do Growth', 'Programa de bolsas', 'Exclusividade total'], hot: false },
+        { name: 'Start', price: 'R$ 10k', d: 'Presença de marca e ativações base.', feats: ['Logo nos ativos oficiais (camisetas, faixas e banners)', 'Presença nos 52 encontros do ano', '2 inserções digitais por mês (stories e feed)', 'Menção como parceiro nas comunicações', '1 ativação de produto nos eventos por mês'], hot: false },
+        { name: 'Growth', price: 'R$ 15k', d: 'Mais alcance, conteúdo e eventos.', feats: ['Tudo do plano Start', 'Somma Creators (rede de criadores ativando a marca)', '4 inserções digitais por mês + 1 reels colaborativo', 'Experiências Evolve exclusivas para a comunidade', 'Somma Intercity: 1 night run por trimestre saindo da unidade', 'Co-branding em 1 evento proprietário por trimestre'], hot: true },
+        { name: 'Performance', price: 'R$ 20k', d: 'Parceria completa e exclusiva.', feats: ['Tudo do plano Growth', 'Programa de Bolsas (atletas patrocinados pela Evolve)', 'Exclusividade total na categoria academia', 'Naming em 1 evento proprietário por ano', 'Série de conteúdo dedicada (1 por mês) + relatório de resultados', 'Presença de marca em todas as unidades Evolve mapeadas'], hot: false },
       ].map((p) => (
         <div key={p.name} data-anim className={`flex flex-col rounded-2xl p-5 ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
           {p.hot && <span className="mb-2 inline-block self-start rounded-full bg-[#FF2C03] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">Recomendado</span>}
@@ -597,7 +597,7 @@ const SLIDES: Slide[] = [
           <p className="mt-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{p.d}</p>
           <ul className="mt-3 space-y-1.5 border-t border-[rgb(var(--fg)_/_0.08)] pt-3">
             {p.feats.map((f) => (
-              <li key={f} className="flex items-center gap-2 text-[13px] text-[rgb(var(--fg)_/_0.8)]"><CheckCircle2 className="h-3.5 w-3.5 shrink-0 text-[#FF2C03]" />{f}</li>
+              <li key={f} className="flex items-start gap-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.8)]"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF2C03]" />{f}</li>
             ))}
           </ul>
         </div>
