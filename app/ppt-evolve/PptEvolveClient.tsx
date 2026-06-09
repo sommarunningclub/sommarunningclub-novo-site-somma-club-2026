@@ -381,9 +381,9 @@ const SLIDES: Slide[] = [
     </Statement>
   ) },
 
-  // 6 — uma das maiores do DF
-  { section: 'Uma das maiores do DF', node: (<>
-    <Head k="Cap 2 · Hoje" title="Uma das maiores comunidades de corrida do DF" />
+  // 6 — a maior do DF
+  { section: 'A maior do DF', node: (<>
+    <Head k="Cap 2 · Hoje" title="A maior comunidade de corrida do DF" sub="O maior running club do Distrito Federal." />
     <Stats items={[{ n: '+5.000', l: 'membros cadastrados' }, { n: '52', l: 'encontros por ano' }, { n: '100%', l: 'comunidade gratuita' }, { n: 'Orgânico', l: 'crescimento' }]} />
     <Chips items={['Eventos proprietários', 'Ecossistema próprio']} />
   </>) },
