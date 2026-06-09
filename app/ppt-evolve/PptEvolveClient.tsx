@@ -151,6 +151,72 @@ function ClosingCard({ kicker, title, sub }: { kicker: string; title: ReactNode;
   )
 }
 
+/** Ecossistema em órbita — logo Somma no centro, elementos orbitando */
+function OrbitEcosystem() {
+  const items = [
+    { e: '🏃', t: 'Comunidade' },
+    { e: '📈', t: 'Assessoria' },
+    { e: '🎉', t: 'Eventos' },
+    { e: '👕', t: 'Loja' },
+    { e: '🎬', t: 'Conteúdo' },
+    { e: '📣', t: 'Influência' },
+    { e: '🤝', t: 'Parceiros' },
+    { e: '✨', t: 'Lifestyle' },
+  ]
+  const rings = [
+    { d: 50, dur: 20, count: 2 },
+    { d: 76, dur: 28, count: 3 },
+    { d: 100, dur: 36, count: 3 },
+  ]
+  const nodes: { it: { e: string; t: string }; d: number; dur: number; delay: number }[] = []
+  let idx = 0
+  for (const r of rings) {
+    for (let k = 0; k < r.count; k++) {
+      const it = items[idx++]
+      if (!it) break
+      nodes.push({ it, d: r.d, dur: r.dur, delay: -(r.dur * k) / r.count })
+    }
+  }
+  return (
+    <div data-anim className="eco">
+      <style>{`
+        .eco { position: relative; margin: 0 auto; width: min(80vw, 300px); aspect-ratio: 1; }
+        @media (min-width: 640px){ .eco{ width: 380px; } }
+        @media (min-width: 1024px){ .eco{ width: 420px; } }
+        .eco-ring { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgba(255,255,255,.08); }
+        .eco-ring.lit { border-color: rgba(255,44,3,.18); }
+        .eco-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:20; display:flex; align-items:center; justify-content:center; border-radius:50%; background:#FF2C03; box-shadow:0 0 44px rgba(255,44,3,.45); width:27%; height:27%; }
+        .eco-lane { position:absolute; top:50%; left:50%; border-radius:50%; animation-name: ecoSpin; animation-timing-function: linear; animation-iteration-count: infinite; }
+        .eco-node { position:absolute; top:0; left:50%; width:0; height:0; }
+        .eco-badge { position:absolute; animation-name: ecoSpinRev; animation-timing-function: linear; animation-iteration-count: infinite; }
+        @keyframes ecoSpin { from { transform: translate(-50%,-50%) rotate(0deg) } to { transform: translate(-50%,-50%) rotate(360deg) } }
+        @keyframes ecoSpinRev { from { transform: translate(-50%,-50%) rotate(0deg) } to { transform: translate(-50%,-50%) rotate(-360deg) } }
+        @media (prefers-reduced-motion: reduce){ .eco-lane, .eco-badge { animation: none !important } }
+      `}</style>
+      {rings.map((r, i) => (
+        <span key={r.d} className={`eco-ring ${i === rings.length - 1 ? 'lit' : ''}`} style={{ width: `${r.d}%`, height: `${r.d}%` }} />
+      ))}
+      <div className="eco-center">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma" className="w-[60%]" style={{ filter: 'brightness(0)' }} />
+      </div>
+      {nodes.map((n, i) => (
+        <span key={i} className="eco-lane" style={{ width: `${n.d}%`, height: `${n.d}%`, animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}>
+          <span className="eco-node">
+            <span
+              className="eco-badge inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#161616] px-2 py-1 text-[11px] font-semibold text-white shadow-lg"
+              style={{ animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}
+            >
+              <span className="text-sm leading-none">{n.it.e}</span>
+              <span className="hidden whitespace-nowrap sm:inline">{n.it.t}</span>
+            </span>
+          </span>
+        </span>
+      ))}
+    </div>
+  )
+}
+
 /* ============================================================================
  * Slides
  * ========================================================================== */
@@ -225,19 +291,12 @@ const SLIDES: Slide[] = [
     </>),
   },
 
-  // 6 — Ecossistema
+  // 6 — Ecossistema (órbita)
   {
     section: 'O ecossistema',
     node: (<>
-      <Head k="04 · A plataforma" title="O Somma é um ecossistema" />
-      <div data-anim className="mx-auto w-fit rounded-2xl bg-[#FF2C03] px-10 py-4 text-center" style={{ animation: 'glowPulse 3s ease-in-out infinite' }}>
-        <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-black">Somma</p>
-      </div>
-      <div data-anim className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {['Comunidade', 'Assessoria', 'Eventos', 'Loja', 'Conteúdo', 'Influenciadores', 'Parceiros', 'Experiências', 'Lifestyle'].map((t) => (
-          <div key={t} className="rounded-xl border border-white/10 bg-white/[0.05] p-3 text-center text-sm font-semibold text-white/80">{t}</div>
-        ))}
-      </div>
+      <Head k="04 · A plataforma" title="O Somma é um ecossistema" sub="No centro, a comunidade. Em volta, tudo o que ela movimenta." />
+      <OrbitEcosystem />
     </>),
   },
 
