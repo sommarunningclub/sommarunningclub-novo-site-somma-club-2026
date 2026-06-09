@@ -2,7 +2,12 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode, type CSSProperties } from 'react'
 import gsap from 'gsap'
-import { ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen, Sun, Moon } from 'lucide-react'
+import {
+  ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen, Sun, Moon,
+  Activity, Medal, Users, Flame, Heart, Globe, Snowflake, Gauge, FlaskConical, Move, Coffee, Ticket, Repeat,
+  Building2, TrendingUp, PartyPopper, ShoppingBag, Megaphone, Sparkles, Handshake, Clapperboard, Network,
+  ClipboardCheck, CheckCircle2, type LucideIcon,
+} from 'lucide-react'
 import { EvolveMap } from '@/components/evolve/evolve-map'
 
 /* ============================================================================
@@ -60,14 +65,14 @@ function Arrow() {
   return <div className="flex justify-center text-base text-[rgb(var(--fg)_/_0.25)]">↓</div>
 }
 
-type Tile = { emoji: string; t: string; d: string }
+type Tile = { icon: LucideIcon; t: string; d: string }
 function Tiles({ items, cols = 'sm:grid-cols-2 lg:grid-cols-4' }: { items: Tile[]; cols?: string }) {
   return (
     <div className={`grid grid-cols-1 gap-3 ${cols}`}>
-      {items.map(({ emoji, t, d }, i) => (
+      {items.map(({ icon: Icon, t, d }, i) => (
         <div key={i} data-anim className="rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] p-4">
-          <span className="text-2xl">{emoji}</span>
-          <h3 className="mt-2 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">{t}</h3>
+          <Icon className="h-6 w-6 text-[#FF2C03]" strokeWidth={2} />
+          <h3 className="mt-3 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">{t}</h3>
           <p className="mt-1 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{d}</p>
         </div>
       ))}
@@ -140,14 +145,14 @@ function VFlow({ items, highlightFrom }: { items: string[]; highlightFrom?: numb
 /** Funil como fluxo de nós conectados, estilo n8n */
 function FunnelFlow() {
   const W = 940, H = 250, nw = 132, nh = 60
-  const nodes = [
-    { x: 6, y: 90, e: '👥', t: 'Comunidade' },
-    { x: 162, y: 14, e: '✨', t: 'Experiência' },
-    { x: 318, y: 162, e: '🤝', t: 'Relacionamento' },
-    { x: 474, y: 40, e: '🎟️', t: 'Teste' },
-    { x: 630, y: 168, e: '✅', t: 'Matrícula', hot: true },
-    { x: 706, y: 36, e: '🔁', t: 'Retenção', hot: true },
-    { x: 802, y: 120, e: '📣', t: 'Advocacia', hot: true },
+  const nodes: { x: number; y: number; icon: LucideIcon; t: string; hot?: boolean }[] = [
+    { x: 6, y: 90, icon: Users, t: 'Comunidade' },
+    { x: 162, y: 14, icon: Sparkles, t: 'Experiência' },
+    { x: 318, y: 162, icon: Handshake, t: 'Relacionamento' },
+    { x: 474, y: 40, icon: ClipboardCheck, t: 'Teste' },
+    { x: 630, y: 168, icon: CheckCircle2, t: 'Matrícula', hot: true },
+    { x: 706, y: 36, icon: Repeat, t: 'Retenção', hot: true },
+    { x: 802, y: 120, icon: Megaphone, t: 'Advocacia', hot: true },
   ]
   const paths = nodes.slice(0, -1).map((a, i) => {
     const b = nodes[i + 1]
@@ -165,23 +170,26 @@ function FunnelFlow() {
             </g>
           ))}
         </svg>
-        {nodes.map((n, i) => (
-          <div
-            key={n.t}
-            className={`absolute rounded-xl border shadow-lg ${n.hot ? 'border-[#FF2C03] bg-[#FF2C03]/[0.12]' : 'border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)]'}`}
-            style={{ left: n.x, top: n.y, width: nw, height: nh }}
-          >
-            <span className="absolute -left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-[#FF2C03] bg-[var(--bg)]" />
-            <span className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-[#FF2C03] bg-[var(--bg)]" />
-            <div className="flex h-full items-center gap-2 px-2.5">
-              <span className="shrink-0 text-lg leading-none">{n.e}</span>
-              <div className="min-w-0">
-                <p className="text-[12px] font-bold leading-tight text-[rgb(var(--fg))]">{n.t}</p>
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-[rgb(var(--fg)_/_0.4)]">etapa {i + 1}</p>
+        {nodes.map((n, i) => {
+          const Ic = n.icon
+          return (
+            <div
+              key={n.t}
+              className={`absolute rounded-xl border shadow-lg ${n.hot ? 'border-[#FF2C03] bg-[#FF2C03]/[0.12]' : 'border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)]'}`}
+              style={{ left: n.x, top: n.y, width: nw, height: nh }}
+            >
+              <span className="absolute -left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-[#FF2C03] bg-[var(--bg)]" />
+              <span className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-[#FF2C03] bg-[var(--bg)]" />
+              <div className="flex h-full items-center gap-2 px-2.5">
+                <Ic className="h-4 w-4 shrink-0 text-[#FF2C03]" />
+                <div className="min-w-0">
+                  <p className="text-[12px] font-bold leading-tight text-[rgb(var(--fg))]">{n.t}</p>
+                  <p className="text-[9px] font-semibold uppercase tracking-wider text-[rgb(var(--fg)_/_0.4)]">etapa {i + 1}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   )
@@ -205,23 +213,23 @@ function ClosingCard({ kicker, title, sub }: { kicker: string; title: ReactNode;
 /** Ecossistema em órbita — logo Somma no centro, elementos orbitando */
 function OrbitEcosystem() {
   const items = [
-    { e: '🏃', t: 'Comunidade' },
-    { e: '📈', t: 'Assessoria' },
-    { e: '🎉', t: 'Eventos' },
-    { e: '👕', t: 'Loja' },
-    { e: '📣', t: 'Influenciadores' },
-    { e: '✨', t: 'Experiências' },
-    { e: '🤝', t: 'Parceiros' },
-    { e: '🎬', t: 'Conteúdo' },
-    { e: '🔗', t: 'Networking' },
-    { e: '🌅', t: 'Lifestyle' },
+    { icon: Users, t: 'Comunidade' },
+    { icon: TrendingUp, t: 'Assessoria' },
+    { icon: PartyPopper, t: 'Eventos' },
+    { icon: ShoppingBag, t: 'Loja' },
+    { icon: Megaphone, t: 'Influenciadores' },
+    { icon: Sparkles, t: 'Experiências' },
+    { icon: Handshake, t: 'Parceiros' },
+    { icon: Clapperboard, t: 'Conteúdo' },
+    { icon: Network, t: 'Networking' },
+    { icon: Sun, t: 'Lifestyle' },
   ]
   const rings = [
     { d: 46, dur: 20, count: 2 },
     { d: 73, dur: 28, count: 4 },
     { d: 100, dur: 36, count: 4 },
   ]
-  const nodes: { it: { e: string; t: string }; d: number; dur: number; delay: number }[] = []
+  const nodes: { it: { icon: LucideIcon; t: string }; d: number; dur: number; delay: number }[] = []
   let idx = 0
   for (const r of rings) {
     for (let k = 0; k < r.count; k++) {
@@ -253,19 +261,22 @@ function OrbitEcosystem() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma" className="w-[60%]" style={{ filter: 'brightness(0)' }} />
       </div>
-      {nodes.map((n, i) => (
-        <span key={i} className="eco-lane" style={{ width: `${n.d}%`, height: `${n.d}%`, animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}>
-          <span className="eco-node">
-            <span
-              className="eco-badge inline-flex items-center gap-1.5 rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--badge)] px-2 py-1 text-[11px] font-semibold text-[rgb(var(--fg))] shadow-lg"
-              style={{ animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}
-            >
-              <span className="text-sm leading-none">{n.it.e}</span>
-              <span className="hidden whitespace-nowrap sm:inline">{n.it.t}</span>
+      {nodes.map((n, i) => {
+        const Ic = n.it.icon
+        return (
+          <span key={i} className="eco-lane" style={{ width: `${n.d}%`, height: `${n.d}%`, animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}>
+            <span className="eco-node">
+              <span
+                className="eco-badge inline-flex items-center gap-1.5 rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--badge)] px-2 py-1 text-[11px] font-semibold text-[rgb(var(--fg))] shadow-lg"
+                style={{ animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}
+              >
+                <Ic className="h-3.5 w-3.5 shrink-0 text-[#FF2C03]" />
+                <span className="hidden whitespace-nowrap sm:inline">{n.it.t}</span>
+              </span>
             </span>
           </span>
-        </span>
-      ))}
+        )
+      })}
     </div>
   )
 }
@@ -351,12 +362,12 @@ const SLIDES: Slide[] = [
   { section: 'O mercado explodindo', node: (<>
     <Head k="Cap 1 · O mercado" title="O mercado está explodindo" sub="Não é tendência passageira. É um movimento global." />
     <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
-      { emoji: '🏃', t: 'Corridas ↑', d: 'mais gente correndo a cada ano.' },
-      { emoji: '🏅', t: 'Maratonas ↑', d: 'inscrições esgotando em minutos.' },
-      { emoji: '👟', t: 'Run clubs ↑', d: 'explodindo em todo lugar.' },
-      { emoji: '🔥', t: 'Hyrox ↑', d: 'o novo fenômeno fitness.' },
-      { emoji: '🧘', t: 'Wellness ↑', d: 'economia bilionária e crescendo.' },
-      { emoji: '🌎', t: 'Global', d: 'o movimento é mundial.' },
+      { icon: Activity, t: 'Corridas em alta', d: 'mais gente correndo a cada ano.' },
+      { icon: Medal, t: 'Maratonas', d: 'inscrições esgotando em minutos.' },
+      { icon: Users, t: 'Run clubs', d: 'explodindo em todo lugar.' },
+      { icon: Flame, t: 'Hyrox', d: 'o novo fenômeno fitness.' },
+      { icon: Heart, t: 'Wellness', d: 'economia bilionária e crescendo.' },
+      { icon: Globe, t: 'Global', d: 'o movimento é mundial.' },
     ]} />
   </>) },
 
@@ -493,12 +504,12 @@ const SLIDES: Slide[] = [
   { section: 'Experiências Evolve+', node: (<>
     <Head k="Cap 5 · Experiências" title="Experiências exclusivas Evolve+" sub="Eventos exclusivos dentro da Evolve+." />
     <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
-      { emoji: '🧊', t: 'Recovery Day', d: 'recuperação e bem-estar.' },
-      { emoji: '⏱️', t: 'Performance Day', d: 'foco em evolução.' },
-      { emoji: '🔬', t: 'Running Lab', d: 'teste e ciência.' },
-      { emoji: '🧘', t: 'Mobility Day', d: 'mobilidade e prevenção.' },
-      { emoji: '☕', t: 'Coffee Run', d: 'corrida e café.' },
-      { emoji: '🌙', t: 'Community Night', d: 'comunidade e networking.' },
+      { icon: Snowflake, t: 'Recovery Day', d: 'recuperação e bem-estar.' },
+      { icon: Gauge, t: 'Performance Day', d: 'foco em evolução.' },
+      { icon: FlaskConical, t: 'Running Lab', d: 'teste e ciência.' },
+      { icon: Move, t: 'Mobility Day', d: 'mobilidade e prevenção.' },
+      { icon: Coffee, t: 'Coffee Run', d: 'corrida e café.' },
+      { icon: Moon, t: 'Community Night', d: 'comunidade e networking.' },
     ]} />
   </>) },
 
@@ -514,10 +525,10 @@ const SLIDES: Slide[] = [
       ))}
     </div>
     <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
-      { emoji: '🌙', t: 'Night run', d: 'corrida noturna, clima de evento.' },
-      { emoji: '🎟️', t: 'Vagas limitadas', d: 'gera desejo e exclusividade.' },
-      { emoji: '🔁', t: 'Sai e volta na unidade', d: 'movimento real pro ginásio.' },
-      { emoji: '🏙️', t: 'Presença nas cidades', d: 'leva Somma + Evolve+ pra cada região.' },
+      { icon: Moon, t: 'Night run', d: 'corrida noturna, clima de evento.' },
+      { icon: Ticket, t: 'Vagas limitadas', d: 'gera desejo e exclusividade.' },
+      { icon: Repeat, t: 'Sai e volta na unidade', d: 'movimento real pro ginásio.' },
+      { icon: Building2, t: 'Presença nas cidades', d: 'leva Somma + Evolve+ pra cada região.' },
     ]} />
     <Note>Uma vez por mês, 12 por ano, com vagas limitadas. Inspirado no cenário europeu e em capitais como SP, RJ e PE.</Note>
   </>) },
