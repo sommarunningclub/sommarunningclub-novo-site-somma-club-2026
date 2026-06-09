@@ -452,6 +452,26 @@ const SLIDES: Slide[] = [
     ]} />
   </>) },
 
+  // 18b — Somma Intercity
+  { section: 'Somma Intercity', node: (<>
+    <Head k="Cap 5 · Novo projeto" title="Somma Intercity" sub="Uma night run por mês, levando o movimento pra dentro das unidades Evolve+." />
+    <div data-anim className="flex flex-wrap items-center gap-x-1.5 gap-y-2">
+      {['Largada na unidade', 'Corrida noturna', 'Retorno à unidade'].map((s, i, a) => (
+        <span key={s} className="flex items-center gap-1.5">
+          <span className={`rounded-full px-3 py-1.5 text-[13px] font-semibold ${i === a.length - 1 ? 'bg-[#FF2C03] text-black' : 'border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.05)] text-[rgb(var(--fg)_/_0.85)]'}`}>{s}</span>
+          {i < a.length - 1 && <span className="text-[rgb(var(--fg)_/_0.3)]">→</span>}
+        </span>
+      ))}
+    </div>
+    <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
+      { emoji: '🌙', t: 'Night run', d: 'corrida noturna, clima de evento.' },
+      { emoji: '🎟️', t: 'Vagas limitadas', d: 'gera desejo e exclusividade.' },
+      { emoji: '🔁', t: 'Sai e volta na unidade', d: 'movimento real pro ginásio.' },
+      { emoji: '🏙️', t: 'Presença nas cidades', d: 'leva Somma + Evolve+ pra cada região.' },
+    ]} />
+    <Note>Uma vez por mês, 12 por ano, com vagas limitadas. Inspirado no cenário europeu e em capitais como SP, RJ e PE.</Note>
+  </>) },
+
   // 19 — bolsas
   { section: 'Programa de Bolsas', node: (<>
     <Head k="Cap 5 · Bolsas" title="Programa de Bolsas" sub="Patrocínio Evolve+." />
