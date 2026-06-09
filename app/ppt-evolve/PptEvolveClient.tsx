@@ -1,8 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useRef, useState, type ReactNode, type CSSProperties } from 'react'
 import gsap from 'gsap'
-import { ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen, Sun, Moon } from 'lucide-react'
 import { EvolveMap } from '@/components/evolve/evolve-map'
 
 /* ============================================================================
@@ -17,7 +17,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
 
 function Title({ children }: { children: ReactNode }) {
   return (
-    <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.9] tracking-tight text-white text-4xl sm:text-5xl lg:text-6xl">
+    <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.9] tracking-tight text-[rgb(var(--fg))] text-4xl sm:text-5xl lg:text-6xl">
       {children}
     </h2>
   )
@@ -28,28 +28,28 @@ function Head({ k, title, sub }: { k: string; title: ReactNode; sub?: ReactNode 
     <header className="space-y-3 border-l-2 border-[#FF2C03] pl-4 sm:pl-5">
       <Eyebrow>{k}</Eyebrow>
       <Title>{title}</Title>
-      {sub && <p data-anim className="max-w-2xl text-sm leading-snug text-white/55 sm:text-base lg:text-lg">{sub}</p>}
+      {sub && <p data-anim className="max-w-2xl text-sm leading-snug text-[rgb(var(--fg)_/_0.55)] sm:text-base lg:text-lg">{sub}</p>}
     </header>
   )
 }
 
 function Note({ children }: { children: ReactNode }) {
-  return <p data-anim className="text-sm leading-snug text-white/45 sm:text-base">{children}</p>
+  return <p data-anim className="text-sm leading-snug text-[rgb(var(--fg)_/_0.45)] sm:text-base">{children}</p>
 }
 
 function Lead({ children }: { children: ReactNode }) {
-  return <p data-anim className="text-lg font-medium leading-snug text-white/90 sm:text-2xl lg:text-[1.7rem]">{children}</p>
+  return <p data-anim className="text-lg font-medium leading-snug text-[rgb(var(--fg)_/_0.9)] sm:text-2xl lg:text-[1.7rem]">{children}</p>
 }
 
 function Panel({ title, items, variant = 'plain' }: { title: string; items: ReactNode[]; variant?: 'muted' | 'accent' | 'plain' }) {
   const accent = variant === 'accent'
   const muted = variant === 'muted'
   return (
-    <div data-anim className={`rounded-2xl p-5 sm:p-6 ${accent ? 'border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10]' : muted ? 'border border-white/10 bg-white/[0.03]' : 'border border-white/10 bg-white/[0.05]'}`}>
-      <p className={`text-[11px] font-bold uppercase tracking-[0.2em] ${accent ? 'text-[#FF2C03]' : 'text-white/40'}`}>{title}</p>
+    <div data-anim className={`rounded-2xl p-5 sm:p-6 ${accent ? 'border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10]' : muted ? 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.03)]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.05)]'}`}>
+      <p className={`text-[11px] font-bold uppercase tracking-[0.2em] ${accent ? 'text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.4)]'}`}>{title}</p>
       <ul className="mt-3 space-y-2">
         {items.map((it, i) => (
-          <li key={i} className="flex gap-2 text-sm leading-snug text-white/85 sm:text-base"><span className="text-[#FF2C03]">▸</span><span>{it}</span></li>
+          <li key={i} className="flex gap-2 text-sm leading-snug text-[rgb(var(--fg)_/_0.85)] sm:text-base"><span className="text-[#FF2C03]">▸</span><span>{it}</span></li>
         ))}
       </ul>
     </div>
@@ -57,7 +57,7 @@ function Panel({ title, items, variant = 'plain' }: { title: string; items: Reac
 }
 
 function Arrow() {
-  return <div className="flex justify-center text-base text-white/25">↓</div>
+  return <div className="flex justify-center text-base text-[rgb(var(--fg)_/_0.25)]">↓</div>
 }
 
 type Tile = { emoji: string; t: string; d: string }
@@ -65,10 +65,10 @@ function Tiles({ items, cols = 'sm:grid-cols-2 lg:grid-cols-4' }: { items: Tile[
   return (
     <div className={`grid grid-cols-1 gap-3 ${cols}`}>
       {items.map(({ emoji, t, d }, i) => (
-        <div key={i} data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+        <div key={i} data-anim className="rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] p-4">
           <span className="text-2xl">{emoji}</span>
-          <h3 className="mt-2 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">{t}</h3>
-          <p className="mt-1 text-[13px] leading-snug text-white/55">{d}</p>
+          <h3 className="mt-2 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">{t}</h3>
+          <p className="mt-1 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{d}</p>
         </div>
       ))}
     </div>
@@ -77,17 +77,17 @@ function Tiles({ items, cols = 'sm:grid-cols-2 lg:grid-cols-4' }: { items: Tile[
 
 function DataTable({ heads, rows }: { heads: string[]; rows: ReactNode[][] }) {
   return (
-    <div data-anim className="overflow-x-auto rounded-2xl border border-white/10">
+    <div data-anim className="overflow-x-auto rounded-2xl border border-[rgb(var(--fg)_/_0.1)]">
       <table className="w-full min-w-[560px] border-collapse text-left">
         <thead>
-          <tr className="bg-white/[0.07]">
-            {heads.map((h, i) => <th key={i} className={`px-4 py-3 text-[10px] font-bold uppercase tracking-[0.14em] ${i === 0 ? 'text-[#FF2C03]' : 'text-white/60'}`}>{h}</th>)}
+          <tr className="bg-[rgb(var(--panel)_/_0.07)]">
+            {heads.map((h, i) => <th key={i} className={`px-4 py-3 text-[10px] font-bold uppercase tracking-[0.14em] ${i === 0 ? 'text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.6)]'}`}>{h}</th>)}
           </tr>
         </thead>
         <tbody>
           {rows.map((r, ri) => (
-            <tr key={ri} className="border-t border-white/[0.08]">
-              {r.map((c, ci) => <td key={ci} className={`px-4 py-3 align-top text-[13px] sm:text-sm ${ci === 0 ? 'font-semibold text-white' : 'text-white/60'}`}>{c}</td>)}
+            <tr key={ri} className="border-t border-[rgb(var(--fg)_/_0.08)]">
+              {r.map((c, ci) => <td key={ci} className={`px-4 py-3 align-top text-[13px] sm:text-sm ${ci === 0 ? 'font-semibold text-[rgb(var(--fg))]' : 'text-[rgb(var(--fg)_/_0.6)]'}`}>{c}</td>)}
             </tr>
           ))}
         </tbody>
@@ -100,7 +100,7 @@ function Chips({ items }: { items: string[] }) {
   return (
     <div data-anim className="flex flex-wrap gap-2">
       {items.map((c) => (
-        <span key={c} className="rounded-full border border-white/15 bg-white/[0.05] px-3.5 py-2 text-sm font-semibold text-white/80">{c}</span>
+        <span key={c} className="rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.05)] px-3.5 py-2 text-sm font-semibold text-[rgb(var(--fg)_/_0.8)]">{c}</span>
       ))}
     </div>
   )
@@ -111,9 +111,9 @@ function Stats({ items, cols = 'sm:grid-cols-2 lg:grid-cols-4' }: { items: { n: 
   return (
     <div className={`grid grid-cols-2 gap-3 ${cols}`}>
       {items.map((s) => (
-        <div key={s.l} data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 text-center">
+        <div key={s.l} data-anim className="rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] p-4 text-center">
           <p className="font-[family-name:var(--font-display)] text-4xl uppercase leading-none tracking-tight text-[#FF2C03] sm:text-5xl">{s.n}</p>
-          <p className="mt-2 text-[11px] font-medium leading-tight text-white/55 sm:text-xs">{s.l}</p>
+          <p className="mt-2 text-[11px] font-medium leading-tight text-[rgb(var(--fg)_/_0.55)] sm:text-xs">{s.l}</p>
         </div>
       ))}
     </div>
@@ -128,8 +128,8 @@ function VFlow({ items, highlightFrom }: { items: string[]; highlightFrom?: numb
         const hot = highlightFrom !== undefined && i >= highlightFrom
         return (
           <div key={t}>
-            <div className={`rounded-xl px-4 py-2.5 text-center text-sm font-semibold ${i === 0 || hot ? 'bg-[#FF2C03] text-black' : 'border border-white/15 bg-white/[0.05] text-white/85'}`}>{t}</div>
-            {i < items.length - 1 && <div className="flex justify-center text-white/25">↓</div>}
+            <div className={`rounded-xl px-4 py-2.5 text-center text-sm font-semibold ${i === 0 || hot ? 'bg-[#FF2C03] text-black' : 'border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.05)] text-[rgb(var(--fg)_/_0.85)]'}`}>{t}</div>
+            {i < items.length - 1 && <div className="flex justify-center text-[rgb(var(--fg)_/_0.25)]">↓</div>}
           </div>
         )
       })}
@@ -184,7 +184,7 @@ function OrbitEcosystem() {
         .eco { position: relative; margin: 0 auto; width: min(80vw, 300px); aspect-ratio: 1; }
         @media (min-width: 640px){ .eco{ width: 380px; } }
         @media (min-width: 1024px){ .eco{ width: 420px; } }
-        .eco-ring { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgba(255,255,255,.08); }
+        .eco-ring { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgb(var(--fg) / 0.12); }
         .eco-ring.lit { border-color: rgba(255,44,3,.18); }
         .eco-center { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); z-index:20; display:flex; align-items:center; justify-content:center; border-radius:50%; background:#FF2C03; box-shadow:0 0 44px rgba(255,44,3,.45); width:27%; height:27%; }
         .eco-lane { position:absolute; top:50%; left:50%; border-radius:50%; animation-name: ecoSpin; animation-timing-function: linear; animation-iteration-count: infinite; }
@@ -205,7 +205,7 @@ function OrbitEcosystem() {
         <span key={i} className="eco-lane" style={{ width: `${n.d}%`, height: `${n.d}%`, animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}>
           <span className="eco-node">
             <span
-              className="eco-badge inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#161616] px-2 py-1 text-[11px] font-semibold text-white shadow-lg"
+              className="eco-badge inline-flex items-center gap-1.5 rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--badge)] px-2 py-1 text-[11px] font-semibold text-[rgb(var(--fg))] shadow-lg"
               style={{ animationDuration: `${n.dur}s`, animationDelay: `${n.delay}s` }}
             >
               <span className="text-sm leading-none">{n.it.e}</span>
@@ -232,13 +232,13 @@ const SLIDES: Slide[] = [
       <div>
         <div data-anim className="mb-8 flex items-center gap-4 sm:gap-6">
           <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-10 sm:h-14" />
-          <span className="text-2xl font-light text-white/25">×</span>
+          <span className="text-2xl font-light text-[rgb(var(--fg)_/_0.25)]">×</span>
           <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7 sm:h-9" />
         </div>
-        <h1 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-white text-[2.6rem] sm:text-7xl lg:text-[6.5rem]">
+        <h1 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-[rgb(var(--fg))] text-[2.6rem] sm:text-7xl lg:text-[6.5rem]">
           Somma Club<br /><span className="text-[#FF2C03]">+ Evolve</span>
         </h1>
-        <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-white/60 sm:text-xl">
+        <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-xl">
           Construindo a próxima geração de comunidade fitness do Distrito Federal.
         </p>
       </div>
@@ -250,10 +250,10 @@ const SLIDES: Slide[] = [
     section: 'Pertencimento', center: true,
     node: (
       <div>
-        <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-tight text-white text-3xl sm:text-5xl lg:text-[3.6rem]">
+        <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.6rem]">
           As pessoas não buscam mais academia.<br /><O>Elas buscam pertencimento.</O>
         </h2>
-        <p data-anim className="mt-7 max-w-2xl text-base font-medium leading-snug text-white/60 sm:text-xl">
+        <p data-anim className="mt-7 max-w-2xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-xl">
           As maiores marcas do mundo pararam de vender produto. Passaram a construir comunidade.
         </p>
       </div>
@@ -375,7 +375,7 @@ const SLIDES: Slide[] = [
         ['Conteúdo', 'Operação'],
       ]} />
       <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5 text-center">
-        <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-white sm:text-2xl">
+        <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-2xl">
           Juntos, vocês criam algo que <O>nenhum concorrente</O> tem.
         </p>
       </div>
@@ -402,7 +402,7 @@ const SLIDES: Slide[] = [
         <Panel variant="muted" title="E ainda" items={['Ecossistema próprio', 'Check-in próprio', 'Conteúdo próprio', 'Base de relacionamento própria']} />
       </div>
       <div data-anim className="rounded-2xl border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10] p-5 text-center">
-        <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-white sm:text-3xl">A Evolve pode ser a <O>única</O>.</p>
+        <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-3xl">A Evolve pode ser a <O>única</O>.</p>
       </div>
     </>),
   },
@@ -413,12 +413,12 @@ const SLIDES: Slide[] = [
     node: (
       <div>
         <Eyebrow>11 · O conceito</Eyebrow>
-        <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-none tracking-tight text-white text-6xl sm:text-8xl lg:text-[8rem]" style={{ animation: 'glowText 3s ease-in-out infinite' }}>
+        <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-none tracking-tight text-[rgb(var(--fg))] text-6xl sm:text-8xl lg:text-[8rem]" style={{ animation: 'glowText 3s ease-in-out infinite' }}>
           Evolve<span className="text-[#FF2C03]">+</span>
         </p>
-        <p data-anim className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-white/70 sm:text-base">Official Performance Partner of Somma Club</p>
-        <p data-anim className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-white/35">Powered by Evolve</p>
-        <p data-anim className="mx-auto mt-8 max-w-xl text-base font-medium leading-snug text-white/60 sm:text-lg">
+        <p data-anim className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[rgb(var(--fg)_/_0.7)] sm:text-base">Official Performance Partner of Somma Club</p>
+        <p data-anim className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-[rgb(var(--fg)_/_0.35)]">Powered by Evolve</p>
+        <p data-anim className="mx-auto mt-8 max-w-xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-lg">
           Não é naming rights tradicional. É uma associação estratégica.
         </p>
       </div>
@@ -545,10 +545,10 @@ const SLIDES: Slide[] = [
     node: (
       <div>
         <Eyebrow>20 · O coração da proposta</Eyebrow>
-        <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.98] tracking-tight text-white text-3xl sm:text-5xl lg:text-[3.4rem]">
+        <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.98] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.4rem]">
           A Evolve será a <O>única</O> academia oficialmente associada ao Somma.
         </p>
-        <p data-anim className="mx-auto mt-7 max-w-2xl text-base font-medium leading-snug text-white/60 sm:text-lg">
+        <p data-anim className="mx-auto mt-7 max-w-2xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-lg">
           Sem concorrentes diretos dentro do ecossistema. A exclusividade é parte central da proposta.
         </p>
       </div>
@@ -598,7 +598,7 @@ const SLIDES: Slide[] = [
       <Head k="25 · O futuro" title="Visão 2030" />
       <Lead>O Somma vira referência nacional. A Evolve vira a academia oficialmente ligada a esse movimento.</Lead>
       <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5 text-center">
-        <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-white sm:text-2xl">
+        <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-2xl">
           A gente não está criando uma campanha. Está construindo um <O>ativo</O>.
         </p>
       </div>
@@ -616,12 +616,12 @@ const SLIDES: Slide[] = [
           { name: 'Growth', price: 'R$ 15k', d: 'creators e eventos premium', hot: true },
           { name: 'Performance', price: 'R$ 20k', d: 'bolsas e exclusividade total', hot: false },
         ].map((p) => (
-          <div key={p.name} data-anim className={`rounded-2xl p-5 text-center ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-white/10 bg-white/[0.04]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
+          <div key={p.name} data-anim className={`rounded-2xl p-5 text-center ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
             {p.hot && <span className="mb-2 inline-block rounded-full bg-[#FF2C03] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">Recomendado</span>}
-            <p className="text-[11px] font-bold uppercase tracking-widest text-white/40">Plano</p>
-            <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-white">{p.name}</p>
-            <p className="mt-2 font-[family-name:var(--font-display)] text-4xl tracking-tight text-[#FF2C03]">{p.price}<span className="text-base text-white/40">/mês</span></p>
-            <p className="mt-2 text-[13px] leading-snug text-white/55">{p.d}</p>
+            <p className="text-[11px] font-bold uppercase tracking-widest text-[rgb(var(--fg)_/_0.4)]">Plano</p>
+            <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))]">{p.name}</p>
+            <p className="mt-2 font-[family-name:var(--font-display)] text-4xl tracking-tight text-[#FF2C03]">{p.price}<span className="text-base text-[rgb(var(--fg)_/_0.4)]">/mês</span></p>
+            <p className="mt-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{p.d}</p>
           </div>
         ))}
       </div>
@@ -651,6 +651,7 @@ export function PptEvolveClient() {
   const [menu, setMenu] = useState(false)
   const [fs, setFs] = useState(false)
   const [collapsed, setCollapsed] = useState(false)
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
   const stageRef = useRef<HTMLDivElement>(null)
   const touch = useRef<{ x: number; y: number } | null>(null)
   const navRefs = useRef<(HTMLButtonElement | null)[]>([])
@@ -664,6 +665,21 @@ export function PptEvolveClient() {
     if (typeof document === 'undefined') return
     if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {})
     else document.exitFullscreen?.().catch(() => {})
+  }, [])
+
+  const toggleTheme = useCallback(() => {
+    setTheme((t) => {
+      const nt = t === 'dark' ? 'light' : 'dark'
+      try { localStorage.setItem('evolve-theme', nt) } catch {}
+      return nt
+    })
+  }, [])
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('evolve-theme')
+      if (saved === 'light' || saved === 'dark') setTheme(saved)
+    } catch {}
   }, [])
 
   useEffect(() => {
@@ -689,10 +705,11 @@ export function PptEvolveClient() {
       else if (e.key === 'End') go(total - 1)
       else if (e.key === 'f' || e.key === 'F') toggleFs()
       else if (e.key === 'm' || e.key === 'M') setMenu((v) => !v)
+      else if (e.key === 't' || e.key === 'T') toggleTheme()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [next, prev, go, toggleFs, total, menu])
+  }, [next, prev, go, toggleFs, toggleTheme, total, menu])
 
   useEffect(() => {
     const onFs = () => setFs(!!document.fullscreenElement)
@@ -723,57 +740,61 @@ export function PptEvolveClient() {
           ref={(el) => { navRefs.current[i] = el }}
           onClick={() => { go(i); onPick?.() }}
           className={`flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-left text-[12px] transition ${
-            i === active ? 'bg-[#FF2C03]/15 font-semibold text-[#FF2C03]' : 'text-white/55 hover:bg-white/[0.05] hover:text-white'
+            i === active ? 'bg-[#FF2C03]/15 font-semibold text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.55)] hover:bg-[rgb(var(--panel)_/_0.05)] hover:text-[rgb(var(--fg))]'
           }`}
         >
-          <span className="w-5 shrink-0 text-right text-[10px] tabular-nums text-white/30">{String(i + 1).padStart(2, '0')}</span>
+          <span className="w-5 shrink-0 text-right text-[10px] tabular-nums text-[rgb(var(--fg)_/_0.3)]">{String(i + 1).padStart(2, '0')}</span>
           <span className="truncate">{s.section}</span>
         </button>
       ))}
     </nav>
   )
 
+  const themeVars = (theme === 'dark'
+    ? { '--bg': '#0A0A0A', '--fg': '255 255 255', '--panel': '255 255 255', '--badge': '#161616' }
+    : { '--bg': '#ffffff', '--fg': '23 23 23', '--panel': '15 15 15', '--badge': '#f1f1f1' }) as CSSProperties
+
   return (
-    <main className="fixed inset-0 flex overflow-hidden overscroll-none bg-[#0A0A0A] font-[family-name:var(--font-body)] text-white [-webkit-tap-highlight-color:transparent] select-none">
+    <main style={themeVars} className="fixed inset-0 flex overflow-hidden overscroll-none bg-[var(--bg)] font-[family-name:var(--font-body)] text-[rgb(var(--fg))] [-webkit-tap-highlight-color:transparent] select-none">
       <style>{`
         @keyframes glowPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 5px rgba(255,44,3,.35) } }
         @keyframes glowText { 0%,100% { text-shadow: 0 0 0 rgba(255,44,3,0) } 50% { text-shadow: 0 0 28px rgba(255,44,3,.45) } }
         @media (prefers-reduced-motion: reduce) { [style*="animation"] { animation: none !important } }
       `}</style>
 
-      <aside className={`hidden w-60 shrink-0 flex-col border-r border-white/10 ${collapsed ? 'lg:hidden' : 'lg:flex'}`}>
+      <aside className={`hidden w-60 shrink-0 flex-col border-r border-[rgb(var(--fg)_/_0.1)] ${collapsed ? 'lg:hidden' : 'lg:flex'}`}>
         <div className="flex items-center justify-between gap-2 px-5 py-5">
-          <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">SOMMA <span className="text-[#FF2C03]">× Evolve</span></span>
-          <button onClick={() => setCollapsed(true)} className="flex h-7 w-7 items-center justify-center rounded-full text-white/50 transition hover:bg-white/10 hover:text-[#FF2C03]" aria-label="Recolher menu">
+          <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">SOMMA <span className="text-[#FF2C03]">× Evolve</span></span>
+          <button onClick={() => setCollapsed(true)} className="flex h-7 w-7 items-center justify-center rounded-full text-[rgb(var(--fg)_/_0.5)] transition hover:bg-[rgb(var(--panel)_/_0.1)] hover:text-[#FF2C03]" aria-label="Recolher menu">
             <PanelLeftClose className="h-4 w-4" />
           </button>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-4"><NavList /></div>
-        <div className="h-1 bg-white/5">
+        <div className="h-1 bg-[rgb(var(--panel)_/_0.05)]">
           <div className="h-full bg-[#FF2C03] transition-[width] duration-500" style={{ width: `${((active + 1) / total) * 100}%` }} />
         </div>
       </aside>
 
       {collapsed && (
-        <button onClick={() => setCollapsed(false)} className="absolute left-3 top-3 z-30 hidden h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] text-white/70 transition hover:text-[#FF2C03] lg:flex" aria-label="Expandir menu">
+        <button onClick={() => setCollapsed(false)} className="absolute left-3 top-3 z-30 hidden h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)] text-[rgb(var(--fg)_/_0.7)] transition hover:text-[#FF2C03] lg:flex" aria-label="Expandir menu">
           <PanelLeftOpen className="h-4 w-4" />
         </button>
       )}
 
       <section className="relative flex min-w-0 flex-1 flex-col">
-        <div className="flex items-center justify-between border-b border-white/10 px-4 pt-[max(0.7rem,env(safe-area-inset-top))] pb-2 lg:hidden">
+        <div className="flex items-center justify-between border-b border-[rgb(var(--fg)_/_0.1)] px-4 pt-[max(0.7rem,env(safe-area-inset-top))] pb-2 lg:hidden">
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight">SOMMA <span className="text-[#FF2C03]">× Evolve</span></span>
           <div className="flex items-center gap-3">
-            <span className="text-[11px] font-bold tabular-nums text-white/45">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
-            <button onClick={() => setMenu(true)} className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 active:bg-white/10" aria-label="Índice"><Menu className="h-4 w-4" /></button>
+            <span className="text-[11px] font-bold tabular-nums text-[rgb(var(--fg)_/_0.45)]">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+            <button onClick={() => setMenu(true)} className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] active:bg-[rgb(var(--panel)_/_0.1)]" aria-label="Índice"><Menu className="h-4 w-4" /></button>
           </div>
         </div>
-        <div className="h-0.5 bg-white/10 lg:hidden">
+        <div className="h-0.5 bg-[rgb(var(--panel)_/_0.1)] lg:hidden">
           <div className="h-full bg-[#FF2C03] transition-[width] duration-500" style={{ width: `${((active + 1) / total) * 100}%` }} />
         </div>
 
         {!slide.center && (
-          <span className="pointer-events-none absolute right-4 top-2 z-0 select-none font-[family-name:var(--font-display)] text-[7rem] leading-none text-white/[0.03] sm:right-10 sm:text-[12rem]">
+          <span className="pointer-events-none absolute right-4 top-2 z-0 select-none font-[family-name:var(--font-display)] text-[7rem] leading-none text-[rgb(var(--fg)_/_0.03)] sm:right-10 sm:text-[12rem]">
             {String(active + 1).padStart(2, '0')}
           </span>
         )}
@@ -783,22 +804,25 @@ export function PptEvolveClient() {
         </div>
 
         <div className="absolute bottom-0 right-0 z-20 flex items-center gap-2 px-4 pb-[max(0.8rem,env(safe-area-inset-bottom))] sm:px-8">
-          <button onClick={toggleFs} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/70 transition hover:text-[#FF2C03]" aria-label="Tela cheia">
+          <button onClick={toggleTheme} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] text-[rgb(var(--fg)_/_0.7)] transition hover:text-[#FF2C03]" aria-label="Alternar tema claro/escuro" title="Tema (T)">
+            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <button onClick={toggleFs} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] text-[rgb(var(--fg)_/_0.7)] transition hover:text-[#FF2C03]" aria-label="Tela cheia">
             {fs ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
           </button>
-          <div className="flex items-center gap-1 rounded-full border border-white/15 bg-white/[0.04] px-1.5 py-1">
-            <button onClick={prev} disabled={active === 0} className="flex h-8 w-8 items-center justify-center rounded-full text-white/80 transition hover:bg-white/10 disabled:opacity-25" aria-label="Anterior"><ArrowLeft className="h-4 w-4" /></button>
-            <span className="min-w-[3.2rem] text-center text-xs font-bold tabular-nums text-white/60">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+          <div className="flex items-center gap-1 rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.04)] px-1.5 py-1">
+            <button onClick={prev} disabled={active === 0} className="flex h-8 w-8 items-center justify-center rounded-full text-[rgb(var(--fg)_/_0.8)] transition hover:bg-[rgb(var(--panel)_/_0.1)] disabled:opacity-25" aria-label="Anterior"><ArrowLeft className="h-4 w-4" /></button>
+            <span className="min-w-[3.2rem] text-center text-xs font-bold tabular-nums text-[rgb(var(--fg)_/_0.6)]">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
             <button onClick={next} disabled={active === total - 1} className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF2C03] text-black transition hover:bg-[#ff4a28] disabled:opacity-25" aria-label="Próximo"><ArrowRight className="h-4 w-4" /></button>
           </div>
         </div>
       </section>
 
       {menu && (
-        <div className="absolute inset-0 z-50 flex flex-col bg-[#0A0A0A]/97 backdrop-blur lg:hidden">
+        <div className="absolute inset-0 z-50 flex flex-col bg-[var(--bg)] backdrop-blur lg:hidden">
           <div className="flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
             <span className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight">Índice</span>
-            <button onClick={() => setMenu(false)} className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15" aria-label="Fechar"><X className="h-4 w-4" /></button>
+            <button onClick={() => setMenu(false)} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)]" aria-label="Fechar"><X className="h-4 w-4" /></button>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-6"><NavList onPick={() => setMenu(false)} /></div>
         </div>
