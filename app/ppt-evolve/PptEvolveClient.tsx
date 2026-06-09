@@ -137,6 +137,56 @@ function VFlow({ items, highlightFrom }: { items: string[]; highlightFrom?: numb
   )
 }
 
+/** Funil como fluxo de nós conectados, estilo n8n */
+function FunnelFlow() {
+  const W = 940, H = 250, nw = 132, nh = 60
+  const nodes = [
+    { x: 6, y: 90, e: '👥', t: 'Comunidade' },
+    { x: 162, y: 14, e: '✨', t: 'Experiência' },
+    { x: 318, y: 162, e: '🤝', t: 'Relacionamento' },
+    { x: 474, y: 40, e: '🎟️', t: 'Teste' },
+    { x: 630, y: 168, e: '✅', t: 'Matrícula', hot: true },
+    { x: 706, y: 36, e: '🔁', t: 'Retenção', hot: true },
+    { x: 802, y: 120, e: '📣', t: 'Advocacia', hot: true },
+  ]
+  const paths = nodes.slice(0, -1).map((a, i) => {
+    const b = nodes[i + 1]
+    const sx = a.x + nw, sy = a.y + nh / 2, ex = b.x, ey = b.y + nh / 2, mx = (sx + ex) / 2
+    return `M ${sx} ${sy} C ${mx} ${sy}, ${mx} ${ey}, ${ex} ${ey}`
+  })
+  return (
+    <div data-anim className="funnel-grid overflow-x-auto rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.03)]">
+      <div className="relative mx-auto" style={{ width: W, height: H }}>
+        <svg width={W} height={H} className="absolute inset-0">
+          {paths.map((d, i) => (
+            <g key={i}>
+              <path d={d} fill="none" stroke="rgb(var(--fg) / 0.12)" strokeWidth={3} />
+              <path d={d} fill="none" stroke="#FF2C03" strokeWidth={2.5} strokeDasharray="6 10" className="funnel-flow" style={{ animationDelay: `${i * 0.18}s` }} />
+            </g>
+          ))}
+        </svg>
+        {nodes.map((n, i) => (
+          <div
+            key={n.t}
+            className={`absolute rounded-xl border shadow-lg ${n.hot ? 'border-[#FF2C03] bg-[#FF2C03]/[0.12]' : 'border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)]'}`}
+            style={{ left: n.x, top: n.y, width: nw, height: nh }}
+          >
+            <span className="absolute -left-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-[#FF2C03] bg-[var(--bg)]" />
+            <span className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 rounded-full border-2 border-[#FF2C03] bg-[var(--bg)]" />
+            <div className="flex h-full items-center gap-2 px-2.5">
+              <span className="shrink-0 text-lg leading-none">{n.e}</span>
+              <div className="min-w-0">
+                <p className="text-[12px] font-bold leading-tight text-[rgb(var(--fg))]">{n.t}</p>
+                <p className="text-[9px] font-semibold uppercase tracking-wider text-[rgb(var(--fg)_/_0.4)]">etapa {i + 1}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function LogoImg({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: string }) {
   // eslint-disable-next-line @next/next/no-img-element
   return <img src={src} alt={alt} loading="lazy" className={`logo-adapt ${h} w-auto`} />
@@ -494,7 +544,7 @@ const SLIDES: Slide[] = [
   // 22 — funil
   { section: 'Funil de negócios', node: (<>
     <Head k="Cap 5 · Conversão" title="Funil de negócios" sub="A parceria gera matrícula, não só marca." />
-    <VFlow items={['Comunidade', 'Experiência', 'Relacionamento', 'Teste', 'Matrícula', 'Retenção', 'Advocacia da marca']} highlightFrom={4} />
+    <FunnelFlow />
   </>) },
 
   // — Capítulo 6
@@ -662,7 +712,10 @@ export function PptEvolveClient() {
         [data-theme="light"] .logo-adapt { filter: brightness(0); }
         @keyframes glowPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 5px rgba(255,44,3,.35) } }
         @keyframes glowText { 0%,100% { text-shadow: 0 0 0 rgba(255,44,3,0) } 50% { text-shadow: 0 0 28px rgba(255,44,3,.45) } }
-        @media (prefers-reduced-motion: reduce) { [style*="animation"] { animation: none !important } }
+        @keyframes funnelFlow { to { stroke-dashoffset: -16; } }
+        .funnel-flow { animation: funnelFlow 0.9s linear infinite; }
+        .funnel-grid { background-image: radial-gradient(rgb(var(--fg) / 0.07) 1px, transparent 1px); background-size: 18px 18px; }
+        @media (prefers-reduced-motion: reduce) { [style*="animation"] { animation: none !important } .funnel-flow { animation: none !important } }
       `}</style>
 
       <aside className={`hidden w-60 shrink-0 flex-col border-r border-[rgb(var(--fg)_/_0.1)] ${collapsed ? 'lg:hidden' : 'lg:flex'}`}>
