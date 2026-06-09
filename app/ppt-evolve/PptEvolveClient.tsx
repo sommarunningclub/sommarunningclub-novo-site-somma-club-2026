@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import gsap from 'gsap'
 import { ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
+import { EvolveMap } from '@/components/evolve/evolve-map'
 
 /* ============================================================================
  * Componentes — tema ESCURO editorial
@@ -338,6 +339,26 @@ const SLIDES: Slide[] = [
         { emoji: '📍', t: 'Capilaridade', d: 'presença em todo lugar.' },
         { emoji: '💪', t: 'Comunidade fitness', d: 'a potência do dia a dia.' },
       ]} />
+    </>),
+  },
+
+  // 9b — Marca + movimento
+  {
+    section: 'Marca + movimento',
+    node: (<>
+      <Head k="A grande sacada" title="Marca + movimento" sub="As maiores marcas não patrocinam só atletas. Elas se atrelam ao movimento." />
+      <Chips items={['New Balance', 'Adidas', 'Nike', 'Smart Fit', 'The Simple Gym', 'Ironberg']} />
+      <Note>Todas usam o esporte e a corrida pra construir desejo e reconhecimento. O Somma leva esse movimento pra dentro de cada unidade da Evolve.</Note>
+    </>),
+  },
+
+  // 9c — Evolve em todo o DF (mapa)
+  {
+    section: 'Evolve no DF',
+    node: (<>
+      <Head k="Capilaridade" title="Evolve em todo o Distrito Federal" sub="O Somma conversa com todas as regiões onde a Evolve está." />
+      <EvolveMap />
+      <Note>Cada ponto é uma unidade Evolve. O movimento de corrida do Somma alcança todas elas, fortalecendo a marca e impulsionando matrículas em cada região.</Note>
     </>),
   },
 
