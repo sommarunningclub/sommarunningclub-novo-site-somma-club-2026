@@ -139,7 +139,7 @@ function VFlow({ items, highlightFrom }: { items: string[]; highlightFrom?: numb
 
 function LogoImg({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: string }) {
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt={alt} loading="lazy" className={`${h} w-auto`} />
+  return <img src={src} alt={alt} loading="lazy" className={`logo-adapt ${h} w-auto`} />
 }
 
 function ClosingCard({ kicker, title, sub }: { kicker: string; title: ReactNode; sub: ReactNode }) {
@@ -159,15 +159,17 @@ function OrbitEcosystem() {
     { e: '📈', t: 'Assessoria' },
     { e: '🎉', t: 'Eventos' },
     { e: '👕', t: 'Loja' },
-    { e: '🎬', t: 'Conteúdo' },
-    { e: '📣', t: 'Influência' },
+    { e: '📣', t: 'Influenciadores' },
+    { e: '✨', t: 'Experiências' },
     { e: '🤝', t: 'Parceiros' },
-    { e: '✨', t: 'Lifestyle' },
+    { e: '🎬', t: 'Conteúdo' },
+    { e: '🔗', t: 'Networking' },
+    { e: '🌅', t: 'Lifestyle' },
   ]
   const rings = [
-    { d: 50, dur: 20, count: 2 },
-    { d: 76, dur: 28, count: 3 },
-    { d: 100, dur: 36, count: 3 },
+    { d: 46, dur: 20, count: 2 },
+    { d: 73, dur: 28, count: 4 },
+    { d: 100, dur: 36, count: 4 },
   ]
   const nodes: { it: { e: string; t: string }; d: number; dur: number; delay: number }[] = []
   let idx = 0
@@ -218,6 +220,43 @@ function OrbitEcosystem() {
   )
 }
 
+/** Divisor de capítulo */
+function Divider({ num, chapter, title }: { num: string; chapter: string; title: ReactNode }) {
+  return (
+    <div className="flex min-h-full flex-col justify-center">
+      <p data-anim className="font-[family-name:var(--font-display)] text-7xl leading-none tracking-tight text-[#FF2C03] sm:text-9xl">{num}</p>
+      <p data-anim className="mt-4 text-[11px] font-bold uppercase tracking-[0.32em] text-[rgb(var(--fg)_/_0.4)] sm:text-xs">{chapter}</p>
+      <h2 data-anim className="mt-3 max-w-4xl font-[family-name:var(--font-display)] uppercase leading-[0.92] tracking-tight text-[rgb(var(--fg))] text-4xl sm:text-6xl lg:text-7xl">{title}</h2>
+    </div>
+  )
+}
+
+/** Frase de impacto, centralizada */
+function Statement({ kicker, children, sub }: { kicker?: string; children: ReactNode; sub?: ReactNode }) {
+  return (
+    <div>
+      {kicker && <Eyebrow>{kicker}</Eyebrow>}
+      <h2 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.96] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.4rem]">{children}</h2>
+      {sub && <p data-anim className="mx-auto mt-6 max-w-2xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-lg">{sub}</p>}
+    </div>
+  )
+}
+
+/** Barra de divisão por gênero */
+function GenderBar({ f, m }: { f: number; m: number }) {
+  return (
+    <div data-anim className="space-y-2">
+      <div className="flex h-10 w-full overflow-hidden rounded-xl">
+        <div className="flex items-center justify-start bg-[#FF2C03] pl-3 text-sm font-bold text-black" style={{ width: `${f}%` }}>{f}%</div>
+        <div className="flex items-center justify-end bg-[rgb(var(--panel)_/_0.12)] pr-3 text-sm font-bold text-[rgb(var(--fg))]" style={{ width: `${m}%` }}>{m}%</div>
+      </div>
+      <div className="flex justify-between text-[11px] font-semibold uppercase tracking-widest text-[rgb(var(--fg)_/_0.5)]">
+        <span>Mulheres</span><span>Homens</span>
+      </div>
+    </div>
+  )
+}
+
 /* ============================================================================
  * Slides
  * ========================================================================== */
@@ -226,420 +265,263 @@ type Slide = { section: string; node: ReactNode; center?: boolean }
 
 const SLIDES: Slide[] = [
   // 1 — Capa
-  {
-    section: 'Capa', center: true,
-    node: (
-      <div>
-        <div data-anim className="mb-8 flex items-center gap-4 sm:gap-6">
-          <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-10 sm:h-14" />
-          <span className="text-2xl font-light text-[rgb(var(--fg)_/_0.25)]">×</span>
-          <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7 sm:h-9" />
-        </div>
-        <h1 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-[rgb(var(--fg))] text-[2.6rem] sm:text-7xl lg:text-[6.5rem]">
-          Somma Club<br /><span className="text-[#FF2C03]">+ Evolve</span>
-        </h1>
-        <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-xl">
-          Construindo a próxima geração de comunidade fitness do Distrito Federal.
-        </p>
+  { section: 'Capa', center: true, node: (
+    <div>
+      <div data-anim className="mb-8 flex items-center gap-4 sm:gap-6">
+        <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-10 sm:h-14" />
+        <span className="text-2xl font-light text-[rgb(var(--fg)_/_0.25)]">×</span>
+        <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7 sm:h-9" />
       </div>
-    ),
-  },
+      <h1 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-[rgb(var(--fg))] text-[2.6rem] sm:text-7xl lg:text-[6.5rem]">
+        Somma Club<br /><span className="text-[#FF2C03]">+ Evolve+</span>
+      </h1>
+      <p data-anim className="mt-6 max-w-xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-xl">
+        Construindo o futuro da comunidade fitness no Distrito Federal.
+      </p>
+    </div>
+  ) },
 
-  // 2 — Pertencimento
-  {
-    section: 'Pertencimento', center: true,
-    node: (
-      <div>
-        <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.6rem]">
-          As pessoas não buscam mais academia.<br /><O>Elas buscam pertencimento.</O>
-        </h2>
-        <p data-anim className="mt-7 max-w-2xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-xl">
-          As maiores marcas do mundo pararam de vender produto. Passaram a construir comunidade.
-        </p>
+  // — Capítulo 1
+  { section: '— Capítulo 1', center: true, node: <Divider num="01" chapter="Capítulo 1" title="O movimento que está redefinindo uma geração" /> },
+
+  // 2 — corrida virou comportamento
+  { section: 'Corrida = comportamento', center: true, node: (
+    <Statement kicker="O comportamento mudou" sub="O mundo vive uma transformação silenciosa. As pessoas não estão só correndo. Estão buscando pertencimento.">
+      A corrida deixou de ser esporte.<br /><O>Ela virou comportamento.</O>
+    </Statement>
+  ) },
+
+  // 3 — run clubs
+  { section: 'Novos pontos de encontro', node: (<>
+    <Head k="Cap 1 · O fenômeno" title="Os run clubs são os novos pontos de encontro" />
+    <Chips items={['Substituíram parte da vida social', 'A corrida virou saúde mental', 'O esporte virou conexão', 'As ruas viraram comunidade', 'Pertencer vale mais que performar']} />
+  </>) },
+
+  // 4 — mercado explodindo
+  { section: 'O mercado explodindo', node: (<>
+    <Head k="Cap 1 · O mercado" title="O mercado está explodindo" sub="Não é tendência passageira. É um movimento global." />
+    <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
+      { emoji: '🏃', t: 'Corridas ↑', d: 'mais gente correndo a cada ano.' },
+      { emoji: '🏅', t: 'Maratonas ↑', d: 'inscrições esgotando em minutos.' },
+      { emoji: '👟', t: 'Run clubs ↑', d: 'explodindo em todo lugar.' },
+      { emoji: '🔥', t: 'Hyrox ↑', d: 'o novo fenômeno fitness.' },
+      { emoji: '🧘', t: 'Wellness ↑', d: 'economia bilionária e crescendo.' },
+      { emoji: '🌎', t: 'Global', d: 'o movimento é mundial.' },
+    ]} />
+  </>) },
+
+  // — Capítulo 2
+  { section: '— Capítulo 2', center: true, node: <Divider num="02" chapter="Capítulo 2" title="O Somma" /> },
+
+  // 5 — o Somma nasceu
+  { section: 'O Somma nasceu', center: true, node: (
+    <Statement kicker="A origem">
+      Enquanto o movimento crescia,<br /><O>o Somma nascia.</O>
+    </Statement>
+  ) },
+
+  // 6 — uma das maiores do DF
+  { section: 'Uma das maiores do DF', node: (<>
+    <Head k="Cap 2 · Hoje" title="Uma das maiores comunidades de corrida do DF" />
+    <Stats items={[{ n: '+5.000', l: 'membros cadastrados' }, { n: '52', l: 'encontros por ano' }, { n: '100%', l: 'comunidade gratuita' }, { n: 'Orgânico', l: 'crescimento' }]} />
+    <Chips items={['Eventos proprietários', 'Ecossistema próprio']} />
+  </>) },
+
+  // 7 — números do Instagram
+  { section: 'O Somma em números', node: (<>
+    <Head k="Cap 2 · Alcance" title="O Somma em números" sub="Últimos 30 dias." />
+    <Stats cols="sm:grid-cols-3 lg:grid-cols-4" items={[
+      { n: '13.460', l: 'seguidores' },
+      { n: '737.620', l: 'visualizações em 30 dias' },
+      { n: '120.251', l: 'contas alcançadas' },
+      { n: '12.861', l: 'interações' },
+      { n: '14.044', l: 'visitas ao perfil' },
+      { n: '1.355', l: 'cliques na bio' },
+      { n: '+1.565', l: 'seguidores líquidos em 30 dias' },
+    ]} />
+  </>) },
+
+  // 8 — relacionamento + gênero
+  { section: 'Relacionamento, não audiência', node: (<>
+    <Head k="Cap 2 · O público" title="Não construímos audiência. Construímos relacionamento." />
+    <GenderBar f={66.9} m={33.1} />
+    <Chips items={['Saúde', 'Performance', 'Bem-estar', 'Lifestyle', 'Experiências', 'Comunidade']} />
+  </>) },
+
+  // 9 — órbita
+  { section: 'Não é grupo de corrida', node: (<>
+    <Head k="Cap 2 · A plataforma" title="O Somma não é um grupo de corrida" sub="No centro, a comunidade. Em volta, todo o ecossistema." />
+    <OrbitEcosystem />
+  </>) },
+
+  // 10 — pessoas
+  { section: 'Nosso maior ativo', center: true, node: (
+    <Statement kicker="A essência" sub="Diversidade, energia e pertencimento. Antes de qualquer número, são pessoas.">
+      Nosso maior ativo<br /><O>são as pessoas.</O>
+    </Statement>
+  ) },
+
+  // — Capítulo 3
+  { section: '— Capítulo 3', center: true, node: <Divider num="03" chapter="Capítulo 3" title="Por que a Evolve" /> },
+
+  // 11 — mesma geração (tabela)
+  { section: 'A mesma geração', node: (<>
+    <Head k="Cap 3 · O encaixe" title="Evolve e Somma falam com a mesma geração" />
+    <DataTable heads={['O Somma traz', 'A Evolve traz']} rows={[
+      ['Comunidade', 'Estrutura'],
+      ['Relacionamento', 'Escala'],
+      ['Influência', 'Academias'],
+      ['Lifestyle', 'Operação'],
+      ['Experiência', 'Capilaridade'],
+    ]} />
+    <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5 text-center">
+      <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-2xl">Juntos criam algo <O>único</O>.</p>
+    </div>
+  </>) },
+
+  // 11b — mapa Evolve no DF
+  { section: 'Evolve no DF', node: (<>
+    <Head k="Cap 3 · Capilaridade" title="Evolve em todo o Distrito Federal" sub="O movimento Somma alcança todas as regiões onde a Evolve está." />
+    <EvolveMap />
+  </>) },
+
+  // 12 — oportunidade Evolve+
+  { section: 'A oportunidade Evolve+', node: (<>
+    <Head k="Cap 3 · O salto" title="A oportunidade Evolve+" />
+    <div className="grid gap-3 sm:grid-cols-2">
+      <Panel variant="muted" title="Evolve hoje" items={['Domina o mercado de volume']} />
+      <Panel variant="accent" title="Evolve+ amanhã" items={['Pode dominar o mercado de valor']} />
+    </div>
+    <Note>E o Somma conecta exatamente esse público.</Note>
+  </>) },
+
+  // 13 — o que a Evolve está comprando
+  { section: 'O que a Evolve compra', node: (<>
+    <Head k="Cap 3 · A real" title="O que a Evolve está comprando" sub="Não é mídia. Não é post. Não é exposição." />
+    <Chips items={['Presença', 'Relacionamento', 'Comunidade', 'Influência', 'Recorrência', 'Pertencimento']} />
+  </>) },
+
+  // — Capítulo 4
+  { section: '— Capítulo 4', center: true, node: <Divider num="04" chapter="Capítulo 4" title="Naming rights" /> },
+
+  // 14 — conceito
+  { section: 'O conceito', center: true, node: (
+    <div>
+      <Eyebrow>Cap 4 · O conceito</Eyebrow>
+      <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.9] tracking-tight text-[rgb(var(--fg))] text-4xl sm:text-6xl lg:text-[5rem]">
+        Somma Club<br /><span className="text-[#FF2C03]">powered by Evolve+</span>
+      </p>
+      <p data-anim className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[rgb(var(--fg)_/_0.6)]">Evolve+ · Official Performance Partner of Somma Club</p>
+      <p data-anim className="mt-4 text-base font-medium text-[rgb(var(--fg)_/_0.55)]">Uma parceria que não existe no Distrito Federal.</p>
+    </div>
+  ) },
+
+  // 15 — exclusividade
+  { section: 'Exclusividade', center: true, node: (
+    <Statement kicker="Cap 4 · O território" sub="Nenhuma concorrente terá acesso ao território construído pela comunidade.">
+      A Evolve será a <O>única</O> academia integrada oficialmente ao ecossistema Somma.
+    </Statement>
+  ) },
+
+  // — Capítulo 5
+  { section: '— Capítulo 5', center: true, node: <Divider num="05" chapter="Capítulo 5" title="Entregáveis" /> },
+
+  // 16 — presença de marca
+  { section: 'Presença de marca', node: (<>
+    <Head k="Cap 5 · Marca" title="Presença de marca" sub="Logo Evolve+ em cada ponto de contato." />
+    <Chips items={['Uniformes dos insiders', 'Equipe Somma', 'Staff de eventos', 'Backdrops', 'Totens', 'Landing pages', 'Site', 'Materiais institucionais']} />
+  </>) },
+
+  // 17 — eventos
+  { section: 'Eventos', node: (<>
+    <Head k="Cap 5 · Eventos" title="Presença prioritária nos eventos" />
+    <Chips items={['Somma Day', 'Special Day', 'Shake Outs', 'Eventos proprietários', 'Experiências especiais']} />
+    <Stats cols="sm:grid-cols-1" items={[{ n: '52', l: 'encontros anuais' }]} />
+  </>) },
+
+  // 18 — experiências exclusivas
+  { section: 'Experiências Evolve+', node: (<>
+    <Head k="Cap 5 · Experiências" title="Experiências exclusivas Evolve+" sub="Eventos exclusivos dentro da Evolve+." />
+    <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
+      { emoji: '🧊', t: 'Recovery Day', d: 'recuperação e bem-estar.' },
+      { emoji: '⏱️', t: 'Performance Day', d: 'foco em evolução.' },
+      { emoji: '🔬', t: 'Running Lab', d: 'teste e ciência.' },
+      { emoji: '🧘', t: 'Mobility Day', d: 'mobilidade e prevenção.' },
+      { emoji: '☕', t: 'Coffee Run', d: 'corrida e café.' },
+      { emoji: '🌙', t: 'Community Night', d: 'comunidade e networking.' },
+    ]} />
+  </>) },
+
+  // 19 — bolsas
+  { section: 'Programa de Bolsas', node: (<>
+    <Head k="Cap 5 · Bolsas" title="Programa de Bolsas" sub="Patrocínio Evolve+." />
+    <Stats cols="sm:grid-cols-2" items={[{ n: '5', l: 'assessorias gratuitas por semestre' }, { n: '10', l: 'assessorias por ano' }]} />
+    <Note>Transformar histórias reais em conteúdo real.</Note>
+  </>) },
+
+  // 20 — creators
+  { section: 'Somma Creators', node: (<>
+    <Head k="Cap 5 · Creators" title="Somma Creators" sub="A rede oficial de criadores, gerando conteúdo recorrente para a Evolve+." />
+    <Chips items={['Influenciadores', 'Embaixadores', 'Atletas', 'Comunidade']} />
+  </>) },
+
+  // 21 — presença digital
+  { section: 'Presença digital', node: (<>
+    <Head k="Cap 5 · Digital" title="Presença digital" sub="Inserções recorrentes em todos os canais." />
+    <Chips items={['Instagram', 'Stories', 'Reels', 'CRM', 'WhatsApp', 'Landing pages', 'Site', 'E-mails', 'Check-ins']} />
+  </>) },
+
+  // 22 — funil
+  { section: 'Funil de negócios', node: (<>
+    <Head k="Cap 5 · Conversão" title="Funil de negócios" sub="A parceria gera matrícula, não só marca." />
+    <VFlow items={['Comunidade', 'Experiência', 'Relacionamento', 'Teste', 'Matrícula', 'Retenção', 'Advocacia da marca']} highlightFrom={4} />
+  </>) },
+
+  // — Capítulo 6
+  { section: '— Capítulo 6', center: true, node: <Divider num="06" chapter="Capítulo 6" title="Visão de futuro" /> },
+
+  // 23 — campanha x ativo
+  { section: 'Campanha ou ativo', center: true, node: (
+    <Statement kicker="Cap 6 · A virada" sub="Visão de longo prazo, crescimento e liderança de comunidade.">
+      Não estamos criando uma campanha.<br /><O>Estamos criando um ativo.</O>
+    </Statement>
+  ) },
+
+  // 24 — Evolve ganha
+  { section: 'O que a Evolve ganha', node: (<>
+    <Head k="Cap 6 · Para a Evolve" title="O que a Evolve ganha" />
+    <Chips items={['Exclusividade', 'Comunidade', 'Posicionamento', 'Autoridade', 'Conteúdo', 'Influência', 'Leads', 'Matrículas', 'Retenção']} />
+  </>) },
+
+  // 25 — Somma ganha
+  { section: 'O que o Somma ganha', node: (<>
+    <Head k="Cap 6 · Para o Somma" title="O que o Somma ganha" />
+    <Chips items={['Estrutura', 'Experiência', 'Investimento', 'Crescimento', 'Comunidade mais forte']} />
+  </>) },
+
+  // 26 — visão 2030
+  { section: 'Visão 2030', center: true, node: (
+    <Statement kicker="Cap 6 · 2030" sub="Não apenas uma academia. Não apenas um running club. Um movimento.">
+      Somma Club + Evolve+:<br /><O>a principal comunidade fitness do DF.</O>
+    </Statement>
+  ) },
+
+  // 27 — fecho
+  { section: 'Fecho', center: true, node: (
+    <div className="text-center">
+      <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.8rem]">
+        As melhores marcas não patrocinam movimentos.<br /><O>Elas se tornam parte deles.</O>
+      </h2>
+      <div data-anim className="mx-auto mt-9 flex items-center justify-center gap-4 sm:gap-6">
+        <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-8 sm:h-11" />
+        <span className="text-xl font-light text-[rgb(var(--fg)_/_0.3)]">×</span>
+        <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-6 sm:h-8" />
       </div>
-    ),
-  },
-
-  // 3 — O novo consumidor
-  {
-    section: 'O novo consumidor',
-    node: (<>
-      <Head k="01 · Comportamento" title="O novo consumidor" sub="O que a galera procura mudou de vez." />
-      <div className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-2">
-        <Panel variant="muted" title="Antes" items={['Academia', 'Treino', 'Equipamento']} />
-        <Panel variant="accent" title="Hoje" items={['Experiência', 'Comunidade', 'Relacionamento', 'Networking', 'Lifestyle', 'Performance']} />
-      </div>
-    </>),
-  },
-
-  // 4 — Quem é o Somma
-  {
-    section: 'Quem é o Somma',
-    node: (<>
-      <Head k="02 · O movimento" title="Antes de falar de corrida, vamos falar de gente" />
-      <Chips items={['Comunidade', 'Conexão', 'Experiência', 'Cultura', 'Pertencimento']} />
-      <Note>O Somma não é assessoria. Não é grupo de corrida. É uma comunidade que junta gente pela corrida.</Note>
-    </>),
-  },
-
-  // 5 — Os números
-  {
-    section: 'Os números',
-    node: (<>
-      <Head k="03 · O impacto" title="Os números falam por si" />
-      <Stats items={[{ n: '+5.000', l: 'membros cadastrados' }, { n: '52', l: 'encontros por ano' }, { n: '100k+', l: 'interações por ano' }, { n: '100%', l: 'comunidade ativa' }]} />
-      <Note>Eventos próprios, presença digital crescente e tudo isso de forma orgânica.</Note>
-    </>),
-  },
-
-  // 6 — Ecossistema (órbita)
-  {
-    section: 'O ecossistema',
-    node: (<>
-      <Head k="04 · A plataforma" title="O Somma é um ecossistema" sub="No centro, a comunidade. Em volta, tudo o que ela movimenta." />
-      <OrbitEcosystem />
-    </>),
-  },
-
-  // 7 — O que construímos
-  {
-    section: 'O que construímos',
-    node: (<>
-      <Head k="05 · A essência" title="O que a gente construiu" sub="No fim, não é sobre corrida. É sobre gente." />
-      <Chips items={['Pessoas', 'Conexões', 'Relacionamentos', 'Networking', 'Experiências', 'Emoção']} />
-      <Note>Esse é o ativo mais difícil de construir. E a gente já tem.</Note>
-    </>),
-  },
-
-  // 8 — Por que as marcas se aproximam
-  {
-    section: 'Por que as marcas chegam',
-    node: (<>
-      <Head k="06 · O valor" title="Por que as marcas chegam no Somma" sub="Porque o Somma tem uma coisa rara." />
-      <Tiles cols="sm:grid-cols-2 lg:grid-cols-5" items={[
-        { emoji: '👀', t: 'Atenção', d: 'gente olhando de verdade.' },
-        { emoji: '🤝', t: 'Confiança', d: 'a galera acredita.' },
-        { emoji: '📣', t: 'Influência', d: 'a recomendação rola.' },
-        { emoji: '❤️', t: 'Relacionamento', d: 'vínculo real.' },
-        { emoji: '🔁', t: 'Recorrência', d: 'toda semana, sem falta.' },
-      ]} />
-    </>),
-  },
-
-  // 9 — Quem é a Evolve
-  {
-    section: 'Quem é a Evolve',
-    node: (<>
-      <Head k="07 · A parceira" title="Quem é a Evolve" />
-      <div data-anim><LogoImg src="/logo-evolve.png" alt="Evolve" h="h-9 sm:h-11" /></div>
-      <Tiles cols="sm:grid-cols-2 lg:grid-cols-5" items={[
-        { emoji: '📈', t: 'Escala', d: 'tamanho de mercado.' },
-        { emoji: '⚡', t: 'Crescimento', d: 'em forte expansão.' },
-        { emoji: '🏗️', t: 'Estrutura', d: 'operação sólida.' },
-        { emoji: '📍', t: 'Capilaridade', d: 'presença em todo lugar.' },
-        { emoji: '💪', t: 'Comunidade fitness', d: 'a potência do dia a dia.' },
-      ]} />
-    </>),
-  },
-
-  // 9b — Marca + movimento
-  {
-    section: 'Marca + movimento',
-    node: (<>
-      <Head k="A grande sacada" title="Marca + movimento" sub="As maiores marcas não patrocinam só atletas. Elas se atrelam ao movimento." />
-      <Chips items={['New Balance', 'Adidas', 'Nike', 'Smart Fit', 'The Simple Gym', 'Ironberg']} />
-      <Note>Todas usam o esporte e a corrida pra construir desejo e reconhecimento. O Somma leva esse movimento pra dentro de cada unidade da Evolve.</Note>
-    </>),
-  },
-
-  // 9c — Evolve em todo o DF (mapa)
-  {
-    section: 'Evolve no DF',
-    node: (<>
-      <Head k="Capilaridade" title="Evolve em todo o Distrito Federal" sub="O Somma conversa com todas as regiões onde a Evolve está." />
-      <EvolveMap />
-      <Note>Cada ponto é uma unidade Evolve. O movimento de corrida do Somma alcança todas elas, fortalecendo a marca e impulsionando matrículas em cada região.</Note>
-    </>),
-  },
-
-  // 10 — Por que faz sentido (tabela)
-  {
-    section: 'Por que faz sentido',
-    node: (<>
-      <Head k="08 · O encaixe" title="Por que Evolve e Somma combinam" />
-      <DataTable heads={['O Somma traz', 'A Evolve traz']} rows={[
-        ['Comunidade', 'Estrutura'],
-        ['Influência', 'Academias'],
-        ['Relacionamento', 'Escala'],
-        ['Lifestyle', 'Capacidade comercial'],
-        ['Conteúdo', 'Operação'],
-      ]} />
-      <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5 text-center">
-        <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-2xl">
-          Juntos, vocês criam algo que <O>nenhum concorrente</O> tem.
-        </p>
-      </div>
-    </>),
-  },
-
-  // 11 — A oportunidade Evolve+
-  {
-    section: 'A oportunidade',
-    node: (<>
-      <Head k="09 · O salto" title="A oportunidade Evolve+" sub="A Evolve já domina a porta de entrada. Agora dá pra ir além." />
-      <Chips items={['Construir desejo', 'Construir autoridade', 'Posicionamento premium']} />
-      <Note>E o melhor: esse público já está dentro do Somma.</Note>
-    </>),
-  },
-
-  // 12 — Oportunidade exclusiva
-  {
-    section: 'Oportunidade exclusiva',
-    node: (<>
-      <Head k="10 · O território" title="Uma oportunidade exclusiva" sub="Nenhuma academia do DF tem isso hoje:" />
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        <Panel variant="muted" title="O que falta pra todas elas" items={['Integração com a maior comunidade de corrida do DF', '+5.000 membros', 'Influenciadores', 'Eventos próprios']} />
-        <Panel variant="muted" title="E ainda" items={['Ecossistema próprio', 'Check-in próprio', 'Conteúdo próprio', 'Base de relacionamento própria']} />
-      </div>
-      <div data-anim className="rounded-2xl border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10] p-5 text-center">
-        <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-3xl">A Evolve pode ser a <O>única</O>.</p>
-      </div>
-    </>),
-  },
-
-  // 13 — O conceito
-  {
-    section: 'O conceito', center: true,
-    node: (
-      <div>
-        <Eyebrow>11 · O conceito</Eyebrow>
-        <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-none tracking-tight text-[rgb(var(--fg))] text-6xl sm:text-8xl lg:text-[8rem]" style={{ animation: 'glowText 3s ease-in-out infinite' }}>
-          Evolve<span className="text-[#FF2C03]">+</span>
-        </p>
-        <p data-anim className="mt-6 text-sm font-bold uppercase tracking-[0.25em] text-[rgb(var(--fg)_/_0.7)] sm:text-base">Official Performance Partner of Somma Club</p>
-        <p data-anim className="mt-1 text-xs font-semibold uppercase tracking-[0.25em] text-[rgb(var(--fg)_/_0.35)]">Powered by Evolve</p>
-        <p data-anim className="mx-auto mt-8 max-w-xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-lg">
-          Não é naming rights tradicional. É uma associação estratégica.
-        </p>
-      </div>
-    ),
-  },
-
-  // 14 — Ativos disponíveis (tabela didática)
-  {
-    section: 'Ativos disponíveis',
-    node: (<>
-      <Head k="12 · O que entra" title="Ativos disponíveis" sub="Tudo o que a parceria coloca na mesa." />
-      <DataTable heads={['Ativo', 'O que ele entrega']} rows={[
-        ['Comunidade', '+5.000 membros engajados'],
-        ['Eventos', 'palco recorrente da marca'],
-        ['Conteúdo', 'mídia própria toda semana'],
-        ['Influenciadores', 'vozes em que a galera confia'],
-        ['Assessoria', 'canal direto de novos alunos'],
-        ['CRM e check-ins', 'dados reais de quem aparece'],
-        ['Site e landing pages', 'captação e conversão'],
-        ['Loja e base de membros', 'relacionamento contínuo'],
-      ]} />
-    </>),
-  },
-
-  // 15 — Somma Creators
-  {
-    section: 'Somma Creators',
-    node: (<>
-      <Head k="13 · Programa" title="Somma Creators" sub="O programa oficial de criadores." />
-      <Lead>Transformar a Evolve+ em assunto recorrente.</Lead>
-      <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
-        { emoji: '🎬', t: 'Conteúdo', d: 'produção constante.' },
-        { emoji: '🔥', t: 'Desejo', d: 'gente querendo entrar.' },
-        { emoji: '📡', t: 'Alcance', d: 'a marca em todo feed.' },
-        { emoji: '👑', t: 'Autoridade', d: 'referência no assunto.' },
-      ]} />
-    </>),
-  },
-
-  // 16 — Somma Leaders
-  {
-    section: 'Somma Leaders',
-    node: (<>
-      <Head k="14 · Programa" title="Somma Leaders" sub="Evento mensal, tudo dentro da Evolve+." />
-      <Chips items={['Empresários', 'Executivos', 'Médicos', 'Advogados', 'Influenciadores']} />
-      <Chips items={['Networking', 'Treino', 'Café', 'Relacionamento']} />
-      <Note>O público que toda academia premium quer ter dentro de casa.</Note>
-    </>),
-  },
-
-  // 17 — Performance Lab
-  {
-    section: 'Performance Lab',
-    node: (<>
-      <Head k="15 · Programa" title="Somma Performance Lab" sub="Local: Evolve+." />
-      <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
-        { emoji: '🏃', t: 'Corrida', d: 'no centro de tudo.' },
-        { emoji: '⏱️', t: 'Performance', d: 'evoluir de verdade.' },
-        { emoji: '🥗', t: 'Nutrição', d: 'combustível certo.' },
-        { emoji: '🧘', t: 'Mobilidade', d: 'corpo solto.' },
-        { emoji: '🧊', t: 'Recuperação', d: 'voltar mais forte.' },
-        { emoji: '🏋️', t: 'Treinamento', d: 'método e constância.' },
-      ]} />
-    </>),
-  },
-
-  // 18 — Recovery Day
-  {
-    section: 'Recovery Day',
-    node: (<>
-      <Head k="16 · Programa" title="Somma Recovery Day" sub="Uma experiência premium." />
-      <Chips items={['Bem-estar', 'Recuperação', 'Longevidade', 'Saúde']} />
-      <Note>O lado que fideliza: cuidar da pessoa inteira, não só do treino.</Note>
-    </>),
-  },
-
-  // 19 — Evolve+ Challenge
-  {
-    section: 'Evolve+ Challenge',
-    node: (<>
-      <Head k="17 · Programa" title="Evolve+ Challenge" sub="Um programa de desafios." />
-      <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
-        { emoji: '📅', t: 'Frequência', d: 'hábito que gruda.' },
-        { emoji: '✨', t: 'Transformação', d: 'antes e depois real.' },
-        { emoji: '⏱️', t: 'Performance', d: 'metas que engajam.' },
-        { emoji: '🤝', t: 'Engajamento', d: 'a base ativa.' },
-        { emoji: '🏆', t: 'Premiações', d: 'recompensa de verdade.' },
-        { emoji: '🎬', t: 'Conteúdo', d: 'histórias pra contar.' },
-      ]} />
-    </>),
-  },
-
-  // 20 — Programa de Bolsas
-  {
-    section: 'Programa de Bolsas',
-    node: (<>
-      <Head k="18 · Programa" title="Programa de Bolsas" sub="Patrocínio oficial Evolve+." />
-      <Stats cols="sm:grid-cols-3" items={[{ n: '5', l: 'bolsas integrais por semestre' }, { n: '10', l: 'bolsas por ano' }, { n: '100%', l: 'assessoria custeada' }]} />
-      <Note>Transformar vidas, gerar histórias reais, produzir conteúdo e atrair novos corredores.</Note>
-    </>),
-  },
-
-  // 21 — Calendário anual
-  {
-    section: 'Calendário anual',
-    node: (<>
-      <Head k="19 · O ano todo" title="Calendário anual" sub="O que roda durante o ano." />
-      <Stats cols="sm:grid-cols-3 lg:grid-cols-4" items={[
-        { n: '52', l: 'encontros Somma' },
-        { n: '12', l: 'ativações Evolve+' },
-        { n: '12', l: 'campanhas digitais' },
-        { n: '12', l: 'ações com criadores' },
-        { n: '4', l: 'eventos premium' },
-        { n: '2', l: 'grandes campanhas' },
-        { n: '10', l: 'bolsas distribuídas' },
-        { n: '365', l: 'dias de presença' },
-      ]} />
-    </>),
-  },
-
-  // 22 — Exclusividade
-  {
-    section: 'Exclusividade', center: true,
-    node: (
-      <div>
-        <Eyebrow>20 · O coração da proposta</Eyebrow>
-        <p data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.98] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.4rem]">
-          A Evolve será a <O>única</O> academia oficialmente associada ao Somma.
-        </p>
-        <p data-anim className="mx-auto mt-7 max-w-2xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-lg">
-          Sem concorrentes diretos dentro do ecossistema. A exclusividade é parte central da proposta.
-        </p>
-      </div>
-    ),
-  },
-
-  // 23 — Presença da marca
-  {
-    section: 'Presença da marca',
-    node: (<>
-      <Head k="21 · Onde aparece" title="Presença da marca" sub="A Evolve+ presente em cada ponto de contato." />
-      <Chips items={['Camisetas insiders', 'Uniformes', 'Site', 'Check-in', 'Backdrops', 'Eventos', 'Credenciais', 'Landing pages', 'Totens', 'Conteúdo']} />
-    </>),
-  },
-
-  // 24 — Funil de negócios
-  {
-    section: 'Funil de negócios',
-    node: (<>
-      <Head k="22 · Gera venda" title="Funil de negócios" sub="A parceria gera matrícula, não só marca." />
-      <VFlow items={['Comunidade', 'Experiência', 'Relacionamento', 'Day Pass', 'Teste', 'Matrícula', 'Retenção', 'Advocacy']} highlightFrom={5} />
-    </>),
-  },
-
-  // 25 — O que a Evolve ganha
-  {
-    section: 'O que a Evolve ganha',
-    node: (<>
-      <Head k="23 · Para a Evolve" title="O que a Evolve ganha" />
-      <Chips items={['Posicionamento', 'Comunidade', 'Autoridade', 'Exclusividade', 'Conteúdo', 'Influência', 'Leads', 'Matrículas', 'Relacionamento']} />
-    </>),
-  },
-
-  // 26 — O que o Somma ganha
-  {
-    section: 'O que o Somma ganha',
-    node: (<>
-      <Head k="24 · Para o Somma" title="O que o Somma ganha" />
-      <Chips items={['Estrutura', 'Investimento', 'Experiência', 'Comunidade mais forte', 'Ecossistema maior', 'Novas oportunidades']} />
-    </>),
-  },
-
-  // 27 — Visão 2030
-  {
-    section: 'Visão 2030',
-    node: (<>
-      <Head k="25 · O futuro" title="Visão 2030" />
-      <Lead>O Somma vira referência nacional. A Evolve vira a academia oficialmente ligada a esse movimento.</Lead>
-      <div data-anim className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10] p-5 text-center">
-        <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-2xl">
-          A gente não está criando uma campanha. Está construindo um <O>ativo</O>.
-        </p>
-      </div>
-    </>),
-  },
-
-  // 28 — Proposta de investimento
-  {
-    section: 'Investimento',
-    node: (<>
-      <Head k="26 · Proposta" title="Proposta de investimento" />
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        {[
-          { name: 'Start', price: 'R$ 10k', d: 'presença e ativações base', hot: false },
-          { name: 'Growth', price: 'R$ 15k', d: 'creators e eventos premium', hot: true },
-          { name: 'Performance', price: 'R$ 20k', d: 'bolsas e exclusividade total', hot: false },
-        ].map((p) => (
-          <div key={p.name} data-anim className={`rounded-2xl p-5 text-center ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
-            {p.hot && <span className="mb-2 inline-block rounded-full bg-[#FF2C03] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">Recomendado</span>}
-            <p className="text-[11px] font-bold uppercase tracking-widest text-[rgb(var(--fg)_/_0.4)]">Plano</p>
-            <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))]">{p.name}</p>
-            <p className="mt-2 font-[family-name:var(--font-display)] text-4xl tracking-tight text-[#FF2C03]">{p.price}<span className="text-base text-[rgb(var(--fg)_/_0.4)]">/mês</span></p>
-            <p className="mt-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{p.d}</p>
-          </div>
-        ))}
-      </div>
-      <Note>Contrato mínimo de 12 meses.</Note>
-    </>),
-  },
-
-  // 29 — Fecho
-  {
-    section: 'Fecho', center: true,
-    node: (
-      <ClosingCard
-        kicker="Somma Club + Evolve"
-        title={<>As melhores marcas não compram espaço. Elas constroem movimentos.</>}
-        sub="O futuro da comunidade fitness do Distrito Federal começa aqui."
-      />
-    ),
-  },
+      <p data-anim className="mx-auto mt-6 max-w-xl text-base font-medium text-[rgb(var(--fg)_/_0.6)] sm:text-lg">
+        Construindo o futuro da comunidade fitness do Distrito Federal.
+      </p>
+    </div>
+  ) },
 ]
 
 /* ============================================================================
@@ -755,8 +637,9 @@ export function PptEvolveClient() {
     : { '--bg': '#ffffff', '--fg': '23 23 23', '--panel': '15 15 15', '--badge': '#f1f1f1' }) as CSSProperties
 
   return (
-    <main style={themeVars} className="fixed inset-0 flex overflow-hidden overscroll-none bg-[var(--bg)] font-[family-name:var(--font-body)] text-[rgb(var(--fg))] [-webkit-tap-highlight-color:transparent] select-none">
+    <main style={themeVars} data-theme={theme} className="fixed inset-0 flex overflow-hidden overscroll-none bg-[var(--bg)] font-[family-name:var(--font-body)] text-[rgb(var(--fg))] [-webkit-tap-highlight-color:transparent] select-none">
       <style>{`
+        [data-theme="light"] .logo-adapt { filter: brightness(0); }
         @keyframes glowPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 5px rgba(255,44,3,.35) } }
         @keyframes glowText { 0%,100% { text-shadow: 0 0 0 rgba(255,44,3,0) } 50% { text-shadow: 0 0 28px rgba(255,44,3,.45) } }
         @media (prefers-reduced-motion: reduce) { [style*="animation"] { animation: none !important } }
