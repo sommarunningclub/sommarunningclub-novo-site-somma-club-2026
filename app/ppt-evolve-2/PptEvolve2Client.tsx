@@ -21,7 +21,7 @@ function Eyebrow({ children }: { children: ReactNode }) {
 
 function Title({ children }: { children: ReactNode }) {
   return (
-    <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.9] tracking-tight text-[rgb(var(--fg))] text-4xl sm:text-5xl lg:text-6xl">
+    <h2 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.95] tracking-tight text-[rgb(var(--fg))] text-[2rem] sm:text-5xl sm:leading-[0.9] lg:text-6xl">
       {children}
     </h2>
   )
@@ -29,16 +29,16 @@ function Title({ children }: { children: ReactNode }) {
 
 function Head({ k, title, sub }: { k: string; title: ReactNode; sub?: ReactNode }) {
   return (
-    <header className="space-y-3 border-l-2 border-[#FF2C03] pl-4 sm:pl-5">
+    <header className="space-y-3 border-l-2 border-[#FF2C03] pl-4 sm:space-y-4 sm:pl-6">
       <Eyebrow>{k}</Eyebrow>
       <Title>{title}</Title>
-      {sub && <p data-anim className="max-w-2xl text-sm leading-snug text-[rgb(var(--fg)_/_0.55)] sm:text-base lg:text-lg">{sub}</p>}
+      {sub && <p data-anim className="max-w-[60ch] text-[15px] leading-relaxed text-[rgb(var(--fg)_/_0.6)] sm:text-base lg:text-lg">{sub}</p>}
     </header>
   )
 }
 
 function Note({ children }: { children: ReactNode }) {
-  return <p data-anim className="text-sm leading-snug text-[rgb(var(--fg)_/_0.45)] sm:text-base">{children}</p>
+  return <p data-anim className="max-w-[60ch] text-[13px] leading-relaxed text-[rgb(var(--fg)_/_0.5)] sm:text-sm">{children}</p>
 }
 
 function Panel({ title, items, variant = 'plain' }: { title: string; items: ReactNode[]; variant?: 'muted' | 'accent' | 'plain' }) {
@@ -47,9 +47,9 @@ function Panel({ title, items, variant = 'plain' }: { title: string; items: Reac
   return (
     <div data-anim className={`rounded-2xl p-5 sm:p-6 ${accent ? 'border border-[#FF2C03]/40 bg-[#FF2C03]/[0.10]' : muted ? 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.03)]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.05)]'}`}>
       <p className={`text-[11px] font-bold uppercase tracking-[0.2em] ${accent ? 'text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.4)]'}`}>{title}</p>
-      <ul className="mt-3 space-y-2">
+      <ul className="mt-4 space-y-2.5">
         {items.map((it, i) => (
-          <li key={i} className="flex gap-2 text-sm leading-snug text-[rgb(var(--fg)_/_0.85)] sm:text-base"><span className="text-[#FF2C03]">▸</span><span>{it}</span></li>
+          <li key={i} className="flex gap-2.5 text-[15px] leading-relaxed text-[rgb(var(--fg)_/_0.85)] sm:text-base"><span className="mt-0.5 shrink-0 text-[#FF2C03]">▸</span><span>{it}</span></li>
         ))}
       </ul>
     </div>
@@ -59,12 +59,12 @@ function Panel({ title, items, variant = 'plain' }: { title: string; items: Reac
 type Tile = { icon: LucideIcon; t: string; d: string }
 function Tiles({ items, cols = 'sm:grid-cols-2 lg:grid-cols-4' }: { items: Tile[]; cols?: string }) {
   return (
-    <div className={`grid grid-cols-1 gap-3 ${cols}`}>
+    <div className={`grid grid-cols-1 gap-3 sm:gap-3.5 ${cols}`}>
       {items.map(({ icon: Icon, t, d }, i) => (
-        <div key={i} data-anim className="rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] p-4">
+        <div key={i} data-anim className="rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] p-5 transition-colors duration-200 hover:border-[#FF2C03]/40 hover:bg-[rgb(var(--panel)_/_0.07)]">
           <Icon className="h-6 w-6 text-[#FF2C03]" strokeWidth={2} />
-          <h3 className="mt-3 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">{t}</h3>
-          <p className="mt-1 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{d}</p>
+          <h3 className="mt-4 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">{t}</h3>
+          <p className="mt-1.5 text-[13.5px] leading-relaxed text-[rgb(var(--fg)_/_0.6)]">{d}</p>
         </div>
       ))}
     </div>
@@ -73,17 +73,17 @@ function Tiles({ items, cols = 'sm:grid-cols-2 lg:grid-cols-4' }: { items: Tile[
 
 function DataTable({ heads, rows }: { heads: string[]; rows: ReactNode[][] }) {
   return (
-    <div data-anim className="overflow-x-auto rounded-2xl border border-[rgb(var(--fg)_/_0.1)]">
-      <table className="w-full min-w-[560px] border-collapse text-left">
+    <div data-anim className="overflow-hidden rounded-2xl border border-[rgb(var(--fg)_/_0.1)]">
+      <table className="w-full table-fixed border-collapse text-left">
         <thead>
           <tr className="bg-[rgb(var(--panel)_/_0.07)]">
-            {heads.map((h, i) => <th key={i} className={`px-4 py-3 text-[10px] font-bold uppercase tracking-[0.14em] ${i === 0 ? 'text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.6)]'}`}>{h}</th>)}
+            {heads.map((h, i) => <th key={i} className={`px-4 py-3 text-[10px] font-bold uppercase tracking-[0.14em] sm:px-5 sm:py-3.5 ${i === 0 ? 'text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.6)]'}`}>{h}</th>)}
           </tr>
         </thead>
         <tbody>
           {rows.map((r, ri) => (
             <tr key={ri} className="border-t border-[rgb(var(--fg)_/_0.08)]">
-              {r.map((c, ci) => <td key={ci} className={`px-4 py-3 align-top text-[13px] sm:text-sm ${ci === 0 ? 'font-semibold text-[rgb(var(--fg))]' : 'text-[rgb(var(--fg)_/_0.6)]'}`}>{c}</td>)}
+              {r.map((c, ci) => <td key={ci} className={`px-4 py-3 align-top text-[13.5px] leading-snug sm:px-5 sm:py-4 sm:text-sm ${ci === 0 ? 'font-semibold text-[rgb(var(--fg))]' : 'text-[rgb(var(--fg)_/_0.6)]'}`}>{c}</td>)}
             </tr>
           ))}
         </tbody>
@@ -94,9 +94,9 @@ function DataTable({ heads, rows }: { heads: string[]; rows: ReactNode[][] }) {
 
 function Chips({ items }: { items: string[] }) {
   return (
-    <div data-anim className="flex flex-wrap gap-2">
+    <div data-anim className="flex flex-wrap gap-2 sm:gap-2.5">
       {items.map((c) => (
-        <span key={c} className="rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.05)] px-3.5 py-2 text-sm font-semibold text-[rgb(var(--fg)_/_0.8)]">{c}</span>
+        <span key={c} className="rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.05)] px-4 py-2.5 text-[13.5px] font-semibold text-[rgb(var(--fg)_/_0.8)] sm:text-sm">{c}</span>
       ))}
     </div>
   )
@@ -123,8 +123,8 @@ function Statement({ kicker, children, sub }: { kicker?: string; children: React
   return (
     <div>
       {kicker && <Eyebrow>{kicker}</Eyebrow>}
-      <h2 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[0.96] tracking-tight text-[rgb(var(--fg))] text-3xl sm:text-5xl lg:text-[3.4rem]">{children}</h2>
-      {sub && <p data-anim className="mx-auto mt-6 max-w-2xl text-base font-medium leading-snug text-[rgb(var(--fg)_/_0.6)] sm:text-lg">{sub}</p>}
+      <h2 data-anim className="mt-5 font-[family-name:var(--font-display)] uppercase leading-[1] tracking-tight text-[rgb(var(--fg))] text-[1.75rem] sm:text-5xl sm:leading-[0.96] lg:text-[3.4rem]">{children}</h2>
+      {sub && <p data-anim className="mx-auto mt-7 max-w-[55ch] text-[15px] font-medium leading-relaxed text-[rgb(var(--fg)_/_0.6)] sm:text-lg">{sub}</p>}
     </div>
   )
 }
@@ -142,16 +142,16 @@ function BrandStack() {
         const accent = tone === 'accent'
         return (
           <div key={t}>
-            <div data-anim className={`flex items-center gap-4 rounded-2xl p-4 sm:p-5 ${accent ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.12)] bg-[rgb(var(--panel)_/_0.04)]'}`}>
-              <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${accent ? 'bg-[#FF2C03] text-black' : 'bg-[rgb(var(--panel)_/_0.08)] text-[#FF2C03]'}`}>
+            <div data-anim className={`flex items-center gap-4 rounded-2xl p-5 sm:gap-5 sm:p-6 ${accent ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.12)] bg-[rgb(var(--panel)_/_0.04)]'}`}>
+              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${accent ? 'bg-[#FF2C03] text-black' : 'bg-[rgb(var(--panel)_/_0.08)] text-[#FF2C03]'}`}>
                 <Icon className="h-5 w-5" />
               </span>
               <div className="min-w-0">
                 <p className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-[rgb(var(--fg))] sm:text-xl">{t}</p>
-                <p className="text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)] sm:text-sm">{d}</p>
+                <p className="mt-0.5 text-[13.5px] leading-relaxed text-[rgb(var(--fg)_/_0.6)] sm:text-sm">{d}</p>
               </div>
             </div>
-            {i < layers.length - 1 && <div className="flex justify-center py-0.5 text-[rgb(var(--fg)_/_0.25)]">↓</div>}
+            {i < layers.length - 1 && <div className="flex justify-center py-1 text-[rgb(var(--fg)_/_0.3)]">↓</div>}
           </div>
         )
       })}
@@ -318,15 +318,15 @@ const SLIDES: Slide[] = [
         { name: 'Growth', price: 'R$ 15k', d: 'Mais alcance, conteúdo e eventos.', feats: ['Logo nos ativos oficiais (camisetas, faixas e banners)', 'Presença nos 52 encontros do ano', 'Somma Creators (rede de criadores ativando a marca)', '4 inserções digitais por mês + 1 reels colaborativo', 'Experiências Evolve exclusivas para a comunidade', 'Somma Intercity: 1 night run por trimestre saindo da unidade', 'Co-branding em 1 evento proprietário por trimestre'], hot: true },
         { name: 'Performance', price: 'R$ 20k', d: 'Parceria completa e exclusiva.', feats: ['Tudo do plano Growth', 'Programa de Bolsas (atletas patrocinados pela Evolve)', 'Exclusividade total na categoria academia', 'Naming em 1 evento proprietário por ano', 'Série de conteúdo dedicada (1 por mês) + relatório de resultados', 'Presença de marca em todas as unidades Evolve mapeadas'], hot: false },
       ].map((p) => (
-        <div key={p.name} data-anim className={`flex flex-col rounded-2xl p-5 ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
-          {p.hot && <span className="mb-2 inline-block self-start rounded-full bg-[#FF2C03] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">Recomendado</span>}
+        <div key={p.name} data-anim className={`flex flex-col rounded-2xl p-6 sm:p-7 ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
+          {p.hot && <span className="mb-3 inline-block self-start rounded-full bg-[#FF2C03] px-3 py-0.5 text-[10px] font-bold uppercase tracking-widest text-black">Recomendado</span>}
           <p className="text-[11px] font-bold uppercase tracking-widest text-[rgb(var(--fg)_/_0.4)]">Plano</p>
-          <p className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))]">{p.name}</p>
-          <p className="mt-2 font-[family-name:var(--font-display)] text-4xl leading-none tracking-tight text-[#FF2C03]">{p.price}<span className="text-base text-[rgb(var(--fg)_/_0.4)]">/mês</span></p>
-          <p className="mt-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.55)]">{p.d}</p>
-          <ul className="mt-3 space-y-1.5 border-t border-[rgb(var(--fg)_/_0.08)] pt-3">
+          <p className="mt-1 font-[family-name:var(--font-display)] text-2xl uppercase tracking-tight text-[rgb(var(--fg))]">{p.name}</p>
+          <p className="mt-3 font-[family-name:var(--font-display)] text-[2.75rem] leading-none tracking-tight text-[#FF2C03]">{p.price}<span className="text-base text-[rgb(var(--fg)_/_0.4)]">/mês</span></p>
+          <p className="mt-3 text-sm leading-relaxed text-[rgb(var(--fg)_/_0.6)]">{p.d}</p>
+          <ul className="mt-5 space-y-2.5 border-t border-[rgb(var(--fg)_/_0.08)] pt-5">
             {p.feats.map((f) => (
-              <li key={f} className="flex items-start gap-2 text-[13px] leading-snug text-[rgb(var(--fg)_/_0.8)]"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#FF2C03]" />{f}</li>
+              <li key={f} className="flex items-start gap-2.5 text-[13.5px] leading-relaxed text-[rgb(var(--fg)_/_0.82)]"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#FF2C03]" />{f}</li>
             ))}
           </ul>
         </div>
@@ -450,7 +450,7 @@ export function PptEvolve2Client() {
           key={i}
           ref={(el) => { navRefs.current[i] = el }}
           onClick={() => { go(i); onPick?.() }}
-          className={`flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-left text-[12px] transition ${
+          className={`flex cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-left text-[12.5px] transition-colors duration-200 ${
             i === active ? 'bg-[#FF2C03]/15 font-semibold text-[#FF2C03]' : 'text-[rgb(var(--fg)_/_0.55)] hover:bg-[rgb(var(--panel)_/_0.05)] hover:text-[rgb(var(--fg))]'
           }`}
         >
@@ -476,7 +476,7 @@ export function PptEvolve2Client() {
       <aside className={`hidden w-60 shrink-0 flex-col border-r border-[rgb(var(--fg)_/_0.1)] ${collapsed ? 'lg:hidden' : 'lg:flex'}`}>
         <div className="flex items-center justify-between gap-2 px-5 py-5">
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))]">SOMMA <span className="text-[#FF2C03]">× Evolve+</span></span>
-          <button onClick={() => setCollapsed(true)} className="flex h-7 w-7 items-center justify-center rounded-full text-[rgb(var(--fg)_/_0.5)] transition hover:bg-[rgb(var(--panel)_/_0.1)] hover:text-[#FF2C03]" aria-label="Recolher menu">
+          <button onClick={() => setCollapsed(true)} className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-[rgb(var(--fg)_/_0.5)] transition-colors duration-200 hover:bg-[rgb(var(--panel)_/_0.1)] hover:text-[#FF2C03]" aria-label="Recolher menu">
             <PanelLeftClose className="h-4 w-4" />
           </button>
         </div>
@@ -487,7 +487,7 @@ export function PptEvolve2Client() {
       </aside>
 
       {collapsed && (
-        <button onClick={() => setCollapsed(false)} className="absolute left-3 top-3 z-30 hidden h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)] text-[rgb(var(--fg)_/_0.7)] transition hover:text-[#FF2C03] lg:flex" aria-label="Expandir menu">
+        <button onClick={() => setCollapsed(false)} className="absolute left-3 top-3 z-30 hidden h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)] text-[rgb(var(--fg)_/_0.7)] transition-colors duration-200 hover:border-[#FF2C03]/40 hover:text-[#FF2C03] lg:flex" aria-label="Expandir menu">
           <PanelLeftOpen className="h-4 w-4" />
         </button>
       )}
@@ -497,7 +497,7 @@ export function PptEvolve2Client() {
           <span className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight">SOMMA <span className="text-[#FF2C03]">× Evolve+</span></span>
           <div className="flex items-center gap-3">
             <span className="text-[11px] font-bold tabular-nums text-[rgb(var(--fg)_/_0.45)]">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
-            <button onClick={() => setMenu(true)} className="flex h-10 w-10 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] active:bg-[rgb(var(--panel)_/_0.1)]" aria-label="Índice"><Menu className="h-4 w-4" /></button>
+            <button onClick={() => setMenu(true)} className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] active:bg-[rgb(var(--panel)_/_0.1)]" aria-label="Índice"><Menu className="h-[18px] w-[18px]" /></button>
           </div>
         </div>
         <div className="h-0.5 bg-[rgb(var(--panel)_/_0.1)] lg:hidden">
@@ -510,21 +510,21 @@ export function PptEvolve2Client() {
           </span>
         )}
 
-        <div key={active} ref={stageRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative z-10 h-full overflow-y-auto overscroll-contain px-5 pb-24 pt-6 sm:px-12 sm:pb-20 sm:pt-10">
-          <div className="mx-auto flex min-h-full max-w-4xl flex-col justify-center gap-4 sm:gap-5">{slide.node}</div>
+        <div key={active} ref={stageRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative z-10 h-full overflow-y-auto overscroll-contain px-5 pb-28 pt-8 sm:px-14 sm:pb-24 sm:pt-12 lg:px-20">
+          <div className="mx-auto flex min-h-full max-w-4xl flex-col justify-center gap-6 sm:gap-8">{slide.node}</div>
         </div>
 
-        <div className="absolute bottom-0 right-0 z-20 flex items-center gap-2 px-4 pb-[max(0.8rem,env(safe-area-inset-bottom))] sm:px-8">
-          <button onClick={toggleTheme} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] text-[rgb(var(--fg)_/_0.7)] transition hover:text-[#FF2C03]" aria-label="Alternar tema claro/escuro" title="Tema (T)">
-            {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        <div className="absolute bottom-0 right-0 z-20 flex items-center gap-2 px-4 pb-[max(0.9rem,env(safe-area-inset-bottom))] sm:px-8">
+          <button onClick={toggleTheme} className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)]/70 text-[rgb(var(--fg)_/_0.7)] backdrop-blur transition-colors duration-200 hover:border-[#FF2C03]/40 hover:text-[#FF2C03]" aria-label="Alternar tema claro/escuro" title="Tema (T)">
+            {theme === 'dark' ? <Sun className="h-[18px] w-[18px]" /> : <Moon className="h-[18px] w-[18px]" />}
           </button>
-          <button onClick={toggleFs} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] text-[rgb(var(--fg)_/_0.7)] transition hover:text-[#FF2C03]" aria-label="Tela cheia">
-            {fs ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+          <button onClick={toggleFs} className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)]/70 text-[rgb(var(--fg)_/_0.7)] backdrop-blur transition-colors duration-200 hover:border-[#FF2C03]/40 hover:text-[#FF2C03]" aria-label="Tela cheia">
+            {fs ? <Minimize className="h-[18px] w-[18px]" /> : <Maximize className="h-[18px] w-[18px]" />}
           </button>
-          <div className="flex items-center gap-1 rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[rgb(var(--panel)_/_0.04)] px-1.5 py-1">
-            <button onClick={prev} disabled={active === 0} className="flex h-8 w-8 items-center justify-center rounded-full text-[rgb(var(--fg)_/_0.8)] transition hover:bg-[rgb(var(--panel)_/_0.1)] disabled:opacity-25" aria-label="Anterior"><ArrowLeft className="h-4 w-4" /></button>
-            <span className="min-w-[3.2rem] text-center text-xs font-bold tabular-nums text-[rgb(var(--fg)_/_0.6)]">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
-            <button onClick={next} disabled={active === total - 1} className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF2C03] text-black transition hover:bg-[#ff4a28] disabled:opacity-25" aria-label="Próximo"><ArrowRight className="h-4 w-4" /></button>
+          <div className="flex items-center gap-1 rounded-full border border-[rgb(var(--fg)_/_0.15)] bg-[var(--bg)]/70 px-1.5 py-1 backdrop-blur">
+            <button onClick={prev} disabled={active === 0} className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-[rgb(var(--fg)_/_0.8)] transition-colors duration-200 hover:bg-[rgb(var(--panel)_/_0.1)] disabled:cursor-default disabled:opacity-25" aria-label="Anterior"><ArrowLeft className="h-[18px] w-[18px]" /></button>
+            <span className="min-w-[3.4rem] text-center text-xs font-bold tabular-nums text-[rgb(var(--fg)_/_0.6)]">{String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}</span>
+            <button onClick={next} disabled={active === total - 1} className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-[#FF2C03] text-black transition-colors duration-200 hover:bg-[#ff4a28] disabled:cursor-default disabled:opacity-25" aria-label="Próximo"><ArrowRight className="h-[18px] w-[18px]" /></button>
           </div>
         </div>
       </section>
@@ -533,7 +533,7 @@ export function PptEvolve2Client() {
         <div className="absolute inset-0 z-50 flex flex-col bg-[var(--bg)] backdrop-blur lg:hidden">
           <div className="flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
             <span className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight">Índice</span>
-            <button onClick={() => setMenu(false)} className="flex h-9 w-9 items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)]" aria-label="Fechar"><X className="h-4 w-4" /></button>
+            <button onClick={() => setMenu(false)} className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-[rgb(var(--fg)_/_0.15)]" aria-label="Fechar"><X className="h-[18px] w-[18px]" /></button>
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-6"><NavList onPick={() => setMenu(false)} /></div>
         </div>
