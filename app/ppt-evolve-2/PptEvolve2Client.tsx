@@ -450,13 +450,6 @@ const SLIDES: Slide[] = [
       <Panel variant="plain" title="O que é" items={['Estrutura física para um movimento que já existe', 'Experiências, ativações e teste de produtos em uso real', 'O ponto de encontro da comunidade no DF']} />
       <Panel variant="accent" title="Para a parceria" items={['Presença de marca Evolve+ no espaço', 'Base para ações exclusivas da assessoria', 'A próxima fase: do movimento à infraestrutura']} />
     </div>
-    <div data-anim className="flex flex-wrap items-center gap-3">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <a href="/estacao-somma-club" target="_blank" rel="noopener noreferrer" className="group inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#FF2C03]/50 px-6 py-3.5 text-sm font-bold uppercase tracking-wide text-[#FF2C03] transition-colors duration-200 hover:bg-[#FF2C03]/10">
-        Ver o projeto completo
-        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
-      </a>
-    </div>
   </>) },
 ]
 
