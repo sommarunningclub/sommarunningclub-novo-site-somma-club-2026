@@ -195,8 +195,8 @@ const SLIDES: Slide[] = [
 
   // 2 — A virada de posicionamento
   { section: 'A virada', center: true, node: (
-    <Statement kicker="O novo posicionamento" sub="Não é mídia. Não é exposição. É a Evolve+ assumindo um papel dentro da operação da assessoria.">
-      A Evolve+ não está patrocinando um running club.<br /><O>Está se tornando a academia oficial da assessoria.</O>
+    <Statement kicker="O novo posicionamento" sub="O running club é aberto a todos. Mas a experiência Evolve+ × Somma — treino, estrutura e comunidade — é exclusiva de quem está na assessoria. Um espaço só de quem está dentro.">
+      A Evolve+ não está patrocinando um running club.<br /><O>Agora ela tem uma assessoria pra chamar de sua.</O>
     </Statement>
   ) },
 
