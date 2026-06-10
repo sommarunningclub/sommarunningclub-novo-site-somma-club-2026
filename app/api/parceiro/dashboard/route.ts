@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { requireParceiroAuth } from '@/lib/auth/parceiro'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -7,6 +8,9 @@ const supabase = createClient(
 )
 
 export async function GET(req: Request) {
+  const auth = await requireParceiroAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const { searchParams } = new URL(req.url)
     const eventoId = searchParams.get('evento_id') || ''

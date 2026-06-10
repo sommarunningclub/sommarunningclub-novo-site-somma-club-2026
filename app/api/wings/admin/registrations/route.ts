@@ -1,23 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServiceClient } from '@/lib/wings/supabase'
+import { isWingsAdminAuthorized } from '@/lib/auth/wings-admin'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-function authorized(req: NextRequest) {
-  const expected = process.env.WINGS_ADMIN_KEY
-  if (!expected) return true // sem env var, libera (modo dev) — defina em prod
-  const provided =
-    req.headers.get('x-admin-key') ||
-    req.nextUrl.searchParams.get('key')
-  return provided === expected
-}
-
 export async function GET(req: NextRequest) {
-  if (!authorized(req)) {
+  if (!isWingsAdminAuthorized(req)) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   }
 
+  const { getServiceClient } = await import('@/lib/wings/supabase')
   const supabase = getServiceClient()
   const { data, error } = await supabase
     .from('wings_registrations')

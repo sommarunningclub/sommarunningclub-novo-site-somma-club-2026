@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -7,6 +8,9 @@ const supabase = createClient(
 )
 
 export async function POST(request: NextRequest) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const body = await request.json()
     const { inscricao_original_id, evento_id, dados_novo, admin_user_id } = body
@@ -115,7 +119,7 @@ export async function POST(request: NextRequest) {
           nome_origem: original.nome_completo,
           nome_destino: nome,
           origem: 'admin',
-          admin_user_id: admin_user_id || null,
+          admin_user_id: admin_user_id || auth.insider.nome,
         },
       ])
       .select()

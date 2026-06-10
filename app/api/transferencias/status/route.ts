@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -35,6 +36,9 @@ export async function GET(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const { evento_id, habilitada } = await req.json()
 

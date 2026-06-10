@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
 import { fisherYatesShuffle, gerarHashAuditoria } from '@/lib/sorteio/utils'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -8,6 +9,9 @@ const supabase = createClient(
 )
 
 export async function POST(req: Request) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const body = await req.json()
     const { evento_id, titulo, quantidade, filtros, criado_por } = body
@@ -76,7 +80,7 @@ export async function POST(req: Request) {
         titulo,
         filtros_aplicados: filtros || {},
         total_elegiveis: participantes.length,
-        criado_por: criado_por || null,
+        criado_por: criado_por || auth.insider.nome,
         audit_hash: auditHash,
       })
       .select()

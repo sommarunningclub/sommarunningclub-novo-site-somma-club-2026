@@ -3,7 +3,7 @@ import { getServiceClient } from '@/lib/wings/supabase'
 import { isStaffAuthorized } from '@/lib/wings-cronometragem/auth'
 
 export async function GET(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const { searchParams } = new URL(req.url)
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const body = await req.json().catch(() => null)
@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const { searchParams } = new URL(req.url)

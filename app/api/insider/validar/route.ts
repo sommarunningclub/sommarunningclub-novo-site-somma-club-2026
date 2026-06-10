@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -7,12 +8,14 @@ const supabase = createClient(
 )
 
 export async function GET(req: Request) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const { searchParams } = new URL(req.url)
     const busca = searchParams.get('busca') || ''
     const eventoId = searchParams.get('evento_id') || ''
 
-    // Buscar todos os eventos da tabela eventos
     const { data: eventos, error: eventosError } = await supabase
       .from('eventos')
       .select('id, titulo, data_evento, checkin_status')
@@ -22,7 +25,6 @@ export async function GET(req: Request) {
       return NextResponse.json({ checkins: [], evento: null, eventos: [] })
     }
 
-    // Se evento_id informado usa ele, senão pega o mais recente
     const eventoSelecionado = eventoId
       ? eventos.find(e => e.id === eventoId) || eventos[0]
       : eventos[0]
@@ -64,6 +66,9 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const { id, validacao_do_checkin } = await req.json()
     if (!id) return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 })

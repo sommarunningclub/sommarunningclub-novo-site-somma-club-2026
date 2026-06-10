@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 export async function PATCH(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const body = await req.json().catch(() => null)

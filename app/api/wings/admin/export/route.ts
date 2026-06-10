@@ -1,17 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceClient } from '@/lib/wings/supabase'
 import { GENDER_LABEL, CHECKIN_STATUS_LABEL } from '@/lib/wings/validations'
+import { isWingsAdminAuthorized } from '@/lib/auth/wings-admin'
 
 export const dynamic = 'force-dynamic'
-
-function authorized(req: NextRequest) {
-  const expected = process.env.WINGS_ADMIN_KEY
-  if (!expected) return true
-  const provided =
-    req.headers.get('x-admin-key') ||
-    req.nextUrl.searchParams.get('key')
-  return provided === expected
-}
 
 function csvEscape(v: unknown): string {
   if (v === null || v === undefined) return ''
@@ -21,7 +13,7 @@ function csvEscape(v: unknown): string {
 }
 
 export async function GET(req: NextRequest) {
-  if (!authorized(req)) {
+  if (!isWingsAdminAuthorized(req)) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   }
 

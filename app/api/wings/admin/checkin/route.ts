@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServiceClient } from '@/lib/wings/supabase'
+import { isWingsAdminAuthorized } from '@/lib/auth/wings-admin'
 
 export const dynamic = 'force-dynamic'
 
-function authorized(req: NextRequest) {
-  const expected = process.env.WINGS_ADMIN_KEY
-  if (!expected) return true
-  const provided = req.headers.get('x-admin-key')
-  return provided === expected
-}
-
 export async function POST(req: NextRequest) {
-  if (!authorized(req)) {
+  if (!isWingsAdminAuthorized(req)) {
     return NextResponse.json({ error: 'Não autorizado' }, { status: 401 })
   }
 

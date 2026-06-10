@@ -7,7 +7,7 @@ import { isStaffAuthorized } from '@/lib/wings-cronometragem/auth'
 //   - 'runs'  → apaga só as runs (mantém atléticas e atletas cadastrados)
 //   - 'tudo'  → apaga runs + atletas + atléticas (recomeça do zero)
 export async function POST(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
 

@@ -5,6 +5,10 @@ import { Lock, LogOut, RefreshCw, Users, CheckCircle, Clock, TrendingUp, Shield,
 
 type Parceiro = { id: string; nome: string }
 
+function parceiroFetch(input: RequestInfo | URL, init?: RequestInit) {
+  return fetch(input, { ...init, credentials: 'include' })
+}
+
 type EventoOption = {
   id: string
   titulo: string
@@ -42,7 +46,7 @@ function TelaLogin({ onLogin }: { onLogin: (p: Parceiro) => void }) {
     setLoading(true)
     setErro('')
     try {
-      const res = await fetch('/api/parceiro/login', {
+      const res = await parceiroFetch('/api/parceiro/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ codigo: codigo.trim() }),
@@ -222,7 +226,7 @@ function Dashboard({ parceiro, onLogout }: { parceiro: Parceiro; onLogout: () =>
     try {
       const params = new URLSearchParams()
       if (eventoId) params.set('evento_id', eventoId)
-      const res = await fetch(`/api/parceiro/dashboard?${params}`)
+      const res = await parceiroFetch(`/api/parceiro/dashboard?${params}`)
       const json = await res.json()
       if (!res.ok) {
         setErro(json.error || 'Erro ao carregar dados.')
@@ -453,6 +457,19 @@ function Dashboard({ parceiro, onLogout }: { parceiro: Parceiro; onLogout: () =>
 // ─── Página Principal ─────────────────────────────────────────────────────────
 export default function ParceiroPagina() {
   const [parceiro, setParceiro] = useState<Parceiro | null>(null)
+  const [carregado, setCarregado] = useState(false)
+
+  useEffect(() => {
+    parceiroFetch('/api/parceiro/session')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.parceiro) setParceiro(data.parceiro)
+      })
+      .catch(() => {})
+      .finally(() => setCarregado(true))
+  }, [])
+
+  if (!carregado) return null
 
   return parceiro ? (
     <Dashboard parceiro={parceiro} onLogout={() => setParceiro(null)} />

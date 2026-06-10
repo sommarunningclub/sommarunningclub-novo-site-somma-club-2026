@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -10,6 +11,9 @@ export async function PATCH(
   _req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const { id } = await params
 

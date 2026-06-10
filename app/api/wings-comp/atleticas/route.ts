@@ -14,7 +14,7 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const body = await req.json().catch(() => null)
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const body = await req.json().catch(() => null)
@@ -112,7 +112,7 @@ export async function PATCH(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const { searchParams } = new URL(req.url)

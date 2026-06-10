@@ -2,9 +2,10 @@ import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { fisherYatesShuffle, gerarHashAuditoria } from '@/lib/sorteio/utils'
 
+import { validateShakeoutCode, shakeoutAuthError } from '@/lib/auth/admin-codes'
+
 const ORIGEM = 'shakeout-centauro-somma-rj'
 const EVENTO = 'shakeout-centauro-somma-rj'
-const ADMIN_CODE = process.env.SHAKEOUT_ADMIN_CODE || 'somma@shakeout2026'
 
 const LEAD_COLS = 'id, nome_completo, email, telefone, cpf, sexo, uf, conhecia_somma, data_de_cadastro'
 
@@ -49,7 +50,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { action, code } = body as { action: string; code: string }
-    if (code !== ADMIN_CODE) return NextResponse.json({ error: 'Código de acesso inválido.' }, { status: 401 })
+    if (!process.env.SHAKEOUT_ADMIN_CODE) {
+      return NextResponse.json({ error: 'SHAKEOUT_ADMIN_CODE não configurada no servidor.' }, { status: 500 })
+    }
+    if (!validateShakeoutCode(code)) return shakeoutAuthError()
 
     const supabase = db()
 

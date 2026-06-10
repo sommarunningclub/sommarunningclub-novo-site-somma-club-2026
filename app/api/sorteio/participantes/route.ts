@@ -1,6 +1,7 @@
 // app/api/sorteio/participantes/route.ts
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -8,6 +9,9 @@ const supabase = createClient(
 )
 
 export async function GET(req: Request) {
+  const auth = await requireInsiderAuth()
+  if (!auth.ok) return auth.response
+
   try {
     const { searchParams } = new URL(req.url)
     const evento_id = searchParams.get('evento_id')

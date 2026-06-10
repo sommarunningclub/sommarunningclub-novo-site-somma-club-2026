@@ -1,17 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { computeScore, statusFromScore, buildDuplicateGroups, type InscritoFraud } from '@/lib/esplanada-fraud'
+import { validateEsplanadaCode, esplanadaAuthError } from '@/lib/auth/admin-codes'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-const ACCESS_CODE = 'somma@2026'
-
 export async function POST(request: NextRequest) {
   try {
     const { code } = await request.json()
-    if (code !== ACCESS_CODE) {
-      return NextResponse.json({ error: 'Código inválido' }, { status: 401 })
+    if (!process.env.ESPLANADA_ADMIN_SECRET) {
+      return NextResponse.json({ error: 'ESPLANADA_ADMIN_SECRET não configurada no servidor.' }, { status: 500 })
+    }
+    if (!validateEsplanadaCode(code)) {
+      return esplanadaAuthError()
     }
     const url = process.env.NEXT_PUBLIC_SUPABASE_URL
     const key = process.env.SUPABASE_SERVICE_ROLE_KEY

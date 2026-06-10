@@ -8,7 +8,7 @@ const TOP_N = 8
 // de barras e marca essas atléticas como classificada_final = true.
 // Empata? Mantém ordem do banco (created_at). Em produção raro empatar em ms.
 export async function POST(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const supabase = getServiceClient()
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 
 // Reabre a classificatória — desmarca todas as classificações
 export async function DELETE() {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const supabase = getServiceClient()

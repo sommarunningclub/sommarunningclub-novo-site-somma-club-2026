@@ -1,9 +1,10 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 import { isValidCPF } from '@/lib/cpf'
+import { validateShakeoutCode, shakeoutAuthError } from '@/lib/auth/admin-codes'
 
 const ORIGEM = 'shakeout-centauro-somma-rj'
-const ADMIN_CODE = process.env.SHAKEOUT_ADMIN_CODE || 'somma@shakeout2026'
+const ADMIN_CODE = process.env.SHAKEOUT_ADMIN_CODE
 const UFS = ['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO']
 const SEXOS = ['masculino', 'feminino', 'outro', 'prefiro-nao-dizer']
 
@@ -19,8 +20,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     const { action, code } = body as { action: string; code: string }
 
-    if (code !== ADMIN_CODE) {
-      return NextResponse.json({ error: 'Código de acesso inválido.' }, { status: 401 })
+    if (!ADMIN_CODE) {
+      return NextResponse.json({ error: 'SHAKEOUT_ADMIN_CODE não configurada no servidor.' }, { status: 500 })
+    }
+
+    if (!validateShakeoutCode(code)) {
+      return shakeoutAuthError()
     }
 
     const supabase = db()

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { setInsiderSessionCookie } from '@/lib/auth/insider'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -11,20 +12,20 @@ export async function POST(req: Request) {
     const { cpf } = await req.json()
     if (!cpf) return NextResponse.json({ error: 'CPF obrigatório' }, { status: 400 })
 
-    // Normaliza: remove tudo que não é dígito
-    const cpfLimpo = cpf.replace(/\D/g, '')
+    const cpfLimpo = String(cpf).replace(/\D/g, '')
+    if (cpfLimpo.length !== 11) {
+      return NextResponse.json({ error: 'CPF inválido.' }, { status: 400 })
+    }
 
-    // Busca todos os insiders e filtra no JS para comparar CPF normalizado
     const { data: insiders, error } = await supabase
       .from('dados_insiders')
       .select('id, nome, cpf')
 
     if (error) {
-      console.log('[v0] Erro ao buscar insiders:', error)
+      console.error('[insider/login] erro ao buscar insiders:', error)
       return NextResponse.json({ error: 'Erro ao consultar banco de dados.' }, { status: 500 })
     }
 
-    // Compara CPF removendo formatação de ambos os lados
     const insider = insiders?.find(
       (i) => i.cpf && i.cpf.replace(/\D/g, '') === cpfLimpo
     )
@@ -33,9 +34,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'CPF não encontrado. Acesso negado.' }, { status: 401 })
     }
 
-    return NextResponse.json({ success: true, insider: { id: insider.id, nome: insider.nome } })
+    const session = { id: insider.id, nome: insider.nome }
+    await setInsiderSessionCookie(session)
+
+    return NextResponse.json({ success: true, insider: session })
   } catch (err) {
-    console.log('[v0] Erro interno no login:', err)
+    console.error('[insider/login] erro interno:', err)
     return NextResponse.json({ error: 'Erro interno' }, { status: 500 })
   }
 }

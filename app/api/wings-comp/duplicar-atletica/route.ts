@@ -6,7 +6,7 @@ import { isStaffAuthorized } from '@/lib/wings-cronometragem/auth'
 // Cria uma cópia da atlética com sufixo "(2)", incluindo os atletas cadastrados.
 // Útil para baterias paralelas ou quando precisa de uma equipe espelho.
 export async function POST(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
   const body = await req.json().catch(() => null)

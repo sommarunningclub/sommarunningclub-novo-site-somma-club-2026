@@ -17,6 +17,10 @@ import type { Ganhador, Sorteio, EstatisticasSorteio } from '@/lib/sorteio/types
 
 type Insider = { id: string; nome: string }
 
+function insiderFetch(input: RequestInfo | URL, init?: RequestInit) {
+  return fetch(input, { ...init, credentials: 'include' })
+}
+
 type Membro = {
   id: number
   nome_completo: string
@@ -141,7 +145,7 @@ function LoginScreen({ onLogin }: { onLogin: (insider: Insider) => void }) {
     setErro('')
     setLoading(true)
     try {
-      const res = await fetch('/api/insider/login', {
+      const res = await insiderFetch('/api/insider/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ cpf: cpf.replace(/\D/g, '') }),
@@ -268,7 +272,7 @@ function ModuloMembros() {
   const buscarMembros = useCallback(async (q: string) => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/insider/membros?busca=${encodeURIComponent(q)}`)
+      const res = await insiderFetch(`/api/insider/membros?busca=${encodeURIComponent(q)}`)
       const data = await res.json()
       setMembros(data.membros || [])
     } finally {
@@ -404,7 +408,7 @@ function ModuloCheckins() {
       const params = new URLSearchParams()
       if (q) params.set('busca', q)
       if (eventoId) params.set('evento_id', eventoId)
-      const res = await fetch(`/api/insider/checkins?${params}`)
+      const res = await insiderFetch(`/api/insider/checkins?${params}`)
       const data = await res.json()
       setCheckins(data.checkins || [])
       if (data.eventos) setEventos(data.eventos)
@@ -518,7 +522,7 @@ function ModuloValidar() {
       const params = new URLSearchParams()
       if (q) params.set('busca', q)
       if (eventoId) params.set('evento_id', eventoId)
-      const res = await fetch(`/api/insider/validar?${params}`)
+      const res = await insiderFetch(`/api/insider/validar?${params}`)
       const data = await res.json()
       setCheckins(data.checkins || [])
       if (data.eventos) setEventos(data.eventos)
@@ -544,7 +548,7 @@ function ModuloValidar() {
   async function toggleValidacao(id: string, atual: boolean) {
     setValidando(id)
     try {
-      await fetch('/api/insider/validar', {
+      await insiderFetch('/api/insider/validar', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, validacao_do_checkin: !atual }),
@@ -652,7 +656,7 @@ function ModuloValidarShakeout() {
     try {
       const params = new URLSearchParams()
       if (q) params.set('busca', q)
-      const res = await fetch(`/api/leads-shakeout-centauro/validar?${params}`)
+      const res = await insiderFetch(`/api/leads-shakeout-centauro/validar?${params}`)
       const data = await res.json()
       setCheckins(data.checkins || [])
     } finally {
@@ -670,7 +674,7 @@ function ModuloValidarShakeout() {
   async function toggleValidacao(id: string, atual: boolean) {
     setValidando(id)
     try {
-      await fetch('/api/leads-shakeout-centauro/validar', {
+      await insiderFetch('/api/leads-shakeout-centauro/validar', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id, validacao_do_checkin: !atual }),
@@ -805,7 +809,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
   const carregarStatus = useCallback(async () => {
     if (!selectedEventoId) return
     try {
-      const res = await fetch(`/api/transferencias/status?evento_id=${selectedEventoId}`)
+      const res = await insiderFetch(`/api/transferencias/status?evento_id=${selectedEventoId}`)
       const data = await res.json()
       setHabilitada(!!data.habilitada)
     } catch {
@@ -816,7 +820,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
   const carregarStatusEncerrado = useCallback(async () => {
     if (!selectedEventoId) return
     try {
-      const res = await fetch(`/api/eventos/status?evento_id=${selectedEventoId}`)
+      const res = await insiderFetch(`/api/eventos/status?evento_id=${selectedEventoId}`)
       const data = await res.json()
       setEncerrado(!!data.encerrado)
     } catch {
@@ -828,7 +832,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
     if (!selectedEventoId || habilitada === null) return
     setTogglando(true)
     try {
-      const res = await fetch('/api/transferencias/status', {
+      const res = await insiderFetch('/api/transferencias/status', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ evento_id: selectedEventoId, habilitada: !habilitada }),
@@ -846,7 +850,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
     if (!selectedEventoId || encerrado === null) return
     setTogglando_encerrado(true)
     try {
-      const res = await fetch('/api/eventos/status', {
+      const res = await insiderFetch('/api/eventos/status', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ evento_id: selectedEventoId, encerrado: !encerrado }),
@@ -862,7 +866,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
 
   const carregarEventos = useCallback(async () => {
     try {
-      const res = await fetch('/api/insider/checkins?limit=1')
+      const res = await insiderFetch('/api/insider/checkins?limit=1')
       const data = await res.json()
       if (data.eventos?.length) {
         setEventos(data.eventos)
@@ -879,7 +883,7 @@ function ModuloTransferencias({ insiderNome }: { insiderNome: string }) {
     try {
       const params = new URLSearchParams({ evento_id: selectedEventoId })
       if (busca) params.set('busca', busca)
-      const res = await fetch(`/api/transferencias/listar?${params}`)
+      const res = await insiderFetch(`/api/transferencias/listar?${params}`)
       const data = await res.json()
       setTransferencias(data.transferencias || [])
     } catch (e) {
@@ -1059,7 +1063,7 @@ function ModalTransferenciaManual({
     setBuscando(true)
     setErro('')
     try {
-      const res = await fetch(`/api/insider/checkins?busca=${cpfLimpo}&evento_id=${eventoId}`)
+      const res = await insiderFetch(`/api/insider/checkins?busca=${cpfLimpo}&evento_id=${eventoId}`)
       const data = await res.json()
       const ativa = (data.checkins || []).find((c: CheckinBusca) => {
         const cpfC = (c.cpf || '').replace(/\D/g, '')
@@ -1090,7 +1094,7 @@ function ModalTransferenciaManual({
     setSalvando(true)
     setErro('')
     try {
-      const res = await fetch('/api/transferencias/admin', {
+      const res = await insiderFetch('/api/transferencias/admin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1304,7 +1308,7 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
   useEffect(() => {
     async function carregarEventos() {
       try {
-        const res = await fetch('/api/insider/checkins')
+        const res = await insiderFetch('/api/insider/checkins')
         const data = await res.json()
         if (data.eventos) setEventos(data.eventos)
         if (data.evento?.id) setSelectedEventoId(data.evento.id)
@@ -1324,7 +1328,7 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
       if (dataInscricao !== 'todos') params.set('data_inscricao', dataInscricao)
       if (validacao !== 'todos') params.set('validacao', validacao)
 
-      const res = await fetch(`/api/sorteio/participantes?${params}`)
+      const res = await insiderFetch(`/api/sorteio/participantes?${params}`)
       const data = await res.json()
       if (data.stats) setStats(data.stats)
       if (data.participantes) {
@@ -1348,7 +1352,7 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
     if (!selectedEventoId) return
     setLoadingHistorico(true)
     try {
-      const res = await fetch(`/api/sorteio/historico?evento_id=${selectedEventoId}`)
+      const res = await insiderFetch(`/api/sorteio/historico?evento_id=${selectedEventoId}`)
       const data = await res.json()
       if (data.sorteios) setHistorico(data.sorteios)
     } finally {
@@ -1378,7 +1382,7 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
     setAnimacaoCompleta(false)
 
     try {
-      const res = await fetch('/api/sorteio/sortear', {
+      const res = await insiderFetch('/api/sorteio/sortear', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1420,22 +1424,22 @@ function ModuloSorteio({ insiderNome }: { insiderNome: string }) {
 
   async function handleLimparHistorico() {
     if (!selectedEventoId) return
-    await fetch(`/api/sorteio/historico?evento_id=${selectedEventoId}`, { method: 'DELETE' })
+    await insiderFetch(`/api/sorteio/historico?evento_id=${selectedEventoId}`, { method: 'DELETE' })
     setHistorico([])
   }
 
   async function handleConfirmar(id: string) {
-    await fetch(`/api/sorteio/ganhadores/${id}/confirmar`, { method: 'PATCH' })
+    await insiderFetch(`/api/sorteio/ganhadores/${id}/confirmar`, { method: 'PATCH' })
     setGanhadores(prev => prev.map(g => g.id === id ? { ...g, status: 'confirmado' as const } : g))
   }
 
   async function handleAusente(id: string) {
-    await fetch(`/api/sorteio/ganhadores/${id}/ausente`, { method: 'PATCH' })
+    await insiderFetch(`/api/sorteio/ganhadores/${id}/ausente`, { method: 'PATCH' })
     setGanhadores(prev => prev.map(g => g.id === id ? { ...g, status: 'ausente' as const } : g))
   }
 
   async function handleResorteio(id: string): Promise<Ganhador | null> {
-    const res = await fetch(`/api/sorteio/ganhadores/${id}/resorteio`, { method: 'POST' })
+    const res = await insiderFetch(`/api/sorteio/ganhadores/${id}/resorteio`, { method: 'POST' })
     const data = await res.json()
     if (!res.ok) {
       alert(data.error || 'Erro no resorteio')
@@ -1800,25 +1804,22 @@ export default function InsiderConect() {
   const [carregado, setCarregado] = useState(false)
 
   useEffect(() => {
-    const insiderSalvo = localStorage.getItem('insider-conect-session')
-    if (insiderSalvo) {
-      try {
-        setInsider(JSON.parse(insiderSalvo))
-      } catch {
-        localStorage.removeItem('insider-conect-session')
-      }
-    }
-    setCarregado(true)
+    insiderFetch('/api/insider/session')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.insider) setInsider(data.insider)
+      })
+      .catch(() => {})
+      .finally(() => setCarregado(true))
   }, [])
 
   const handleLogin = (insiderData: Insider) => {
     setInsider(insiderData)
-    localStorage.setItem('insider-conect-session', JSON.stringify(insiderData))
   }
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await insiderFetch('/api/insider/logout', { method: 'POST' })
     setInsider(null)
-    localStorage.removeItem('insider-conect-session')
   }
 
   if (!carregado) return null

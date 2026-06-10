@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
+import { validateEsplanadaCode, esplanadaAuthError } from '@/lib/auth/admin-codes'
 
-const ACCESS_CODE = 'somma@2026'
+export const dynamic = 'force-dynamic'
 
 function getClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -28,8 +28,11 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const { code, aberto } = await request.json()
-    if (code !== ACCESS_CODE) {
-      return NextResponse.json({ error: 'Código inválido' }, { status: 401 })
+    if (!process.env.ESPLANADA_ADMIN_SECRET) {
+      return NextResponse.json({ error: 'ESPLANADA_ADMIN_SECRET não configurada no servidor.' }, { status: 500 })
+    }
+    if (!validateEsplanadaCode(code)) {
+      return esplanadaAuthError()
     }
     const supabase = getClient()
     if (!supabase) return NextResponse.json({ error: 'Erro de configuração' }, { status: 500 })

@@ -7,7 +7,7 @@ const ALLOWED = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/he
 const BUCKET = 'wings-equipes'
 
 export async function POST(req: NextRequest) {
-  if (!isStaffAuthorized()) {
+  if (!(await isStaffAuthorized())) {
     return NextResponse.json({ error: 'Não autorizado.' }, { status: 401 })
   }
 

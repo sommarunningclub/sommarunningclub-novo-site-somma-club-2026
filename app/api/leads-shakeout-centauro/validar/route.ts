@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { requireInsiderAuth } from '@/lib/auth/insider'
 
 const ORIGEM = 'shakeout-centauro-somma-rj'
 
@@ -12,6 +13,9 @@ function db() {
 
 // ─── Listagem dos check-ins do Shake Out (com busca por nome/CPF) ───
 export async function GET(req: Request) {
+  const insiderAuth = await requireInsiderAuth()
+  if (!insiderAuth.ok) return insiderAuth.response
+
   try {
     const { searchParams } = new URL(req.url)
     const busca = (searchParams.get('busca') || '').trim()
@@ -44,6 +48,9 @@ export async function GET(req: Request) {
 
 // ─── Validar / desvalidar um check-in (libera a entrada) ───
 export async function PATCH(req: Request) {
+  const insiderAuth = await requireInsiderAuth()
+  if (!insiderAuth.ok) return insiderAuth.response
+
   try {
     const { id, validacao_do_checkin } = await req.json()
     if (!id) return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 })
