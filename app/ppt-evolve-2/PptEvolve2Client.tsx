@@ -104,7 +104,7 @@ function Chips({ items }: { items: string[] }) {
 
 function LogoImg({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: string }) {
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt={alt} loading="lazy" className={`logo-adapt ${h} w-auto`} />
+  return <img src={src} alt={alt} loading="lazy" draggable={false} className={`logo-adapt ${h} w-auto select-none`} />
 }
 
 /** Logo "the simple gym" (wordmark) — herda a cor via currentColor */
@@ -151,11 +151,27 @@ function GoButton({ to, children }: { to: string; children: ReactNode }) {
   )
 }
 
-function SlideImg({ src, alt, ratio = 'aspect-[4/3]', position = 'object-center' }: { src: string; alt: string; ratio?: string; position?: string }) {
+function SlideImg({ src, alt, ratio = 'aspect-[4/3]', position = 'object-center', watermark }: { src: string; alt: string; ratio?: string; position?: string; watermark?: string }) {
   return (
     <div data-anim className={`group relative overflow-hidden rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] ${ratio}`}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={src} alt={alt} loading="lazy" className={`h-full w-full object-cover ${position} transition-transform duration-500 group-hover:scale-[1.03]`} />
+      <img
+        src={src}
+        alt={alt}
+        loading="lazy"
+        draggable={false}
+        onContextMenu={(e) => e.preventDefault()}
+        className={`pointer-events-none h-full w-full select-none object-cover ${position} transition-transform duration-500 group-hover:scale-[1.03]`}
+      />
+      {watermark && (
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div className="absolute left-1/2 top-1/2 flex h-[200%] w-[200%] -translate-x-1/2 -translate-y-1/2 flex-wrap content-center items-center justify-center gap-x-12 gap-y-10 opacity-[0.13] [transform:translate(-50%,-50%)_rotate(-24deg)]">
+            {Array.from({ length: 80 }).map((_, i) => (
+              <span key={i} className="whitespace-nowrap text-xs font-bold uppercase tracking-[0.25em] text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">{watermark}</span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -445,7 +461,7 @@ const SLIDES: Slide[] = [
   // 17 — Estação Somma
   { section: 'Estação Somma', node: (<>
     <Head k="O próximo passo" title="Estação Somma" sub="A casa física da comunidade. O ponto onde a parceria Evolve+ × Somma ganha vida em Brasília." />
-    <SlideImg src="/evolve2-estacao.png" alt="Estação Somma, espaço físico da comunidade" ratio="aspect-[3/2]" />
+    <SlideImg src="/evolve2-estacao.png" alt="Estação Somma, espaço físico da comunidade" ratio="aspect-[3/2]" watermark="Somma Club · Confidencial" />
     <div className="grid gap-3 sm:grid-cols-2 sm:gap-3.5">
       <Panel variant="plain" title="O que é" items={['Estrutura física para um movimento que já existe', 'Experiências, ativações e teste de produtos em uso real', 'O ponto de encontro da comunidade no DF']} />
       <Panel variant="accent" title="Para a parceria" items={['Presença de marca Evolve+ no espaço', 'Base para ações exclusivas da assessoria', 'A próxima fase: do movimento à infraestrutura']} />
@@ -576,7 +592,15 @@ export function PptEvolve2Client() {
     : { '--bg': '#ffffff', '--fg': '23 23 23', '--panel': '15 15 15', '--badge': '#f1f1f1' }) as CSSProperties
 
   return (
-    <main style={themeVars} data-theme={theme} className="fixed inset-0 flex overflow-hidden overscroll-none bg-[var(--bg)] font-[family-name:var(--font-body)] text-[rgb(var(--fg))] [-webkit-tap-highlight-color:transparent] select-none">
+    <main
+      style={themeVars}
+      data-theme={theme}
+      onContextMenu={(e) => e.preventDefault()}
+      onCopy={(e) => e.preventDefault()}
+      onCut={(e) => e.preventDefault()}
+      onDragStart={(e) => e.preventDefault()}
+      className="fixed inset-0 flex overflow-hidden overscroll-none bg-[var(--bg)] font-[family-name:var(--font-body)] text-[rgb(var(--fg))] [-webkit-tap-highlight-color:transparent] select-none"
+    >
       <style>{`
         [data-theme="light"] .logo-adapt { filter: brightness(0); }
         @keyframes glowPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,44,3,0) } 50% { box-shadow: 0 0 0 5px rgba(255,44,3,.35) } }
@@ -624,7 +648,7 @@ export function PptEvolve2Client() {
           {slide.bg && (
             <div className="pointer-events-none absolute inset-0 z-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={slide.bg} alt="" className="h-full w-full object-cover object-[center_25%] sm:object-[right_center]" />
+              <img src={slide.bg} alt="" draggable={false} className="h-full w-full select-none object-cover object-[center_25%] sm:object-[right_center]" />
               <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/85 to-[var(--bg)]/40 sm:bg-gradient-to-r sm:from-[var(--bg)] sm:via-[var(--bg)]/80 sm:to-[var(--bg)]/10" />
             </div>
           )}
