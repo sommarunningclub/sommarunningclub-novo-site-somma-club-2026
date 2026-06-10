@@ -107,6 +107,15 @@ function LogoImg({ src, alt, h = 'h-7' }: { src: string; alt: string; h?: string
   return <img src={src} alt={alt} loading="lazy" className={`logo-adapt ${h} w-auto`} />
 }
 
+function SlideImg({ src, alt, ratio = 'aspect-[4/3]', position = 'object-center' }: { src: string; alt: string; ratio?: string; position?: string }) {
+  return (
+    <div data-anim className={`group relative overflow-hidden rounded-2xl border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)] ${ratio}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} loading="lazy" className={`h-full w-full object-cover ${position} transition-transform duration-500 group-hover:scale-[1.03]`} />
+    </div>
+  )
+}
+
 /** Divisor de capítulo */
 function Divider({ num, chapter, title }: { num: string; chapter: string; title: ReactNode }) {
   return (
@@ -163,11 +172,11 @@ function BrandStack() {
  * Slides
  * ========================================================================== */
 
-type Slide = { section: string; node: ReactNode; center?: boolean }
+type Slide = { section: string; node: ReactNode; center?: boolean; bg?: string }
 
 const SLIDES: Slide[] = [
   // 1 — Capa
-  { section: 'Capa', center: true, node: (
+  { section: 'Capa', center: true, bg: '/evolve2-capa.jpg', node: (
     <div>
       <div data-anim className="mb-8 flex items-center gap-4 sm:gap-6">
         <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-10 sm:h-14" />
@@ -234,6 +243,10 @@ const SLIDES: Slide[] = [
   // 7 — Marca & identidade
   { section: '1 · Marca & identidade', node: (<>
     <Head k="Entregável 1" title="Marca & identidade visual" sub='Logo "powered by Evolve+" em cada ponto de contato da assessoria.' />
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3.5">
+      <SlideImg src="/evolve2-marca-1.png" alt="Aplicação da marca Evolve+ na identidade da assessoria" ratio="aspect-square" />
+      <SlideImg src="/evolve2-marca-2.png" alt="Uniformes e materiais com a marca powered by Evolve+" ratio="aspect-square" />
+    </div>
     <Tiles cols="sm:grid-cols-2 lg:grid-cols-4" items={[
       { icon: Shirt, t: 'Uniformes', d: 'treino, eventos, staff e insiders.' },
       { icon: ShoppingBag, t: 'Kits físicos', d: 'ecobags e materiais do aluno.' },
@@ -245,9 +258,12 @@ const SLIDES: Slide[] = [
   // 8 — Experiência presencial
   { section: '2 · Experiência presencial', node: (<>
     <Head k="Entregável 2" title="Experiência presencial" sub="Estrutura física dedicada à parceria nos encontros e provas." />
-    <div className="grid gap-3 sm:grid-cols-2">
-      <Panel variant="accent" title="Tenda oficial" items={['Assessoria Somma Club × Evolve+', 'Estrutura dedicada nos encontros', 'Experiência premium para o aluno']} />
-      <Panel variant="muted" title="Nova tenda Evolve+" items={['Produção e personalização pela Evolve', 'Uso em eventos, provas e ativações']} />
+    <div className="grid gap-3 sm:gap-3.5 lg:grid-cols-[0.85fr_1.15fr] lg:items-stretch">
+      <SlideImg src="/evolve2-experiencia.png" alt="Tenda e ativação presencial Assessoria Somma Club × Evolve+" ratio="aspect-[3/4] lg:aspect-auto lg:min-h-full" />
+      <div className="grid content-start gap-3 sm:grid-cols-2 sm:gap-3.5 lg:grid-cols-1">
+        <Panel variant="accent" title="Tenda oficial" items={['Assessoria Somma Club × Evolve+', 'Estrutura dedicada nos encontros', 'Experiência premium para o aluno']} />
+        <Panel variant="muted" title="Nova tenda Evolve+" items={['Produção e personalização pela Evolve', 'Uso em eventos, provas e ativações']} />
+      </div>
     </div>
   </>) },
 
@@ -511,7 +527,14 @@ export function PptEvolve2Client() {
         )}
 
         <div key={active} ref={stageRef} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} className="relative z-10 h-full overflow-y-auto overscroll-contain px-5 pb-28 pt-8 sm:px-14 sm:pb-24 sm:pt-12 lg:px-20">
-          <div className="mx-auto flex min-h-full max-w-4xl flex-col justify-center gap-6 sm:gap-8">{slide.node}</div>
+          {slide.bg && (
+            <div className="pointer-events-none absolute inset-0 z-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={slide.bg} alt="" className="h-full w-full object-cover object-[center_25%] sm:object-[right_center]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg)] via-[var(--bg)]/85 to-[var(--bg)]/40 sm:bg-gradient-to-r sm:from-[var(--bg)] sm:via-[var(--bg)]/80 sm:to-[var(--bg)]/10" />
+            </div>
+          )}
+          <div className="relative z-10 mx-auto flex min-h-full max-w-4xl flex-col justify-center gap-6 sm:gap-8">{slide.node}</div>
         </div>
 
         <div className="absolute bottom-0 right-0 z-20 flex items-center gap-2 px-4 pb-[max(0.9rem,env(safe-area-inset-bottom))] sm:px-8">
