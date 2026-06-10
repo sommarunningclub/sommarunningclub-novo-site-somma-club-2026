@@ -172,7 +172,7 @@ const SLIDES: Slide[] = [
       <div data-anim className="mb-8 flex items-center gap-4 sm:gap-6">
         <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-10 sm:h-14" />
         <span className="text-2xl font-light text-[rgb(var(--fg)_/_0.25)]">×</span>
-        <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-7 sm:h-9" />
+        <LogoImg src="/Evolve+_ElementoPrincipal_Branca.png" alt="Evolve+" h="h-12 sm:h-16" />
       </div>
       <h1 data-anim className="font-[family-name:var(--font-display)] uppercase leading-[0.86] tracking-tight text-[rgb(var(--fg))] text-[2.4rem] sm:text-6xl lg:text-[5.4rem]">
         Assessoria Somma Club<br /><span className="text-[#FF2C03]">powered by Evolve+</span>
@@ -344,7 +344,7 @@ const SLIDES: Slide[] = [
       <div data-anim className="mx-auto mt-9 flex items-center justify-center gap-4 sm:gap-6">
         <LogoImg src="/Logo_Nova_Somma_Branca_Laranja.svg" alt="Somma Club" h="h-8 sm:h-11" />
         <span className="text-xl font-light text-[rgb(var(--fg)_/_0.3)]">×</span>
-        <LogoImg src="/logo-evolve.png" alt="Evolve" h="h-6 sm:h-8" />
+        <LogoImg src="/Evolve+_ElementoPrincipal_Branca.png" alt="Evolve+" h="h-10 sm:h-12" />
       </div>
       <p data-anim className="mx-auto mt-6 max-w-xl text-base font-medium text-[rgb(var(--fg)_/_0.6)] sm:text-lg">
         Assessoria Somma Club powered by Evolve+.
