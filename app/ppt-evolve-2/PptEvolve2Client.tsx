@@ -5,7 +5,7 @@ import gsap from 'gsap'
 import {
   ArrowLeft, ArrowRight, Maximize, Minimize, Menu, X, PanelLeftClose, PanelLeftOpen, Sun, Moon,
   Users, TrendingUp, Dumbbell, Shirt, ShoppingBag, Tent, Ticket, BadgePercent, Globe, MonitorSmartphone,
-  Gauge, Scale, FlaskConical, PartyPopper, Snowflake, Move, Medal, CheckCircle2, type LucideIcon,
+  Gauge, Scale, FlaskConical, PartyPopper, Snowflake, Move, Medal, CheckCircle2, Handshake, Link2, type LucideIcon,
 } from 'lucide-react'
 import { EvolveMap } from '@/components/evolve/evolve-map'
 
@@ -182,32 +182,54 @@ function Statement({ kicker, children, sub }: { kicker?: string; children: React
   )
 }
 
-/** Arquitetura de marca em 3 camadas empilhadas */
-function BrandStack() {
-  const layers = [
-    { icon: Users, t: 'Somma Club', d: 'A comunidade. A marca-mãe, preservada.', tone: 'plain' as const },
-    { icon: TrendingUp, t: 'Assessoria Somma Club', d: 'A vertical de treino e performance.', tone: 'plain' as const },
-    { icon: Dumbbell, t: 'Evolve+', d: 'Academia oficial e parceira de performance da assessoria.', tone: 'accent' as const },
-  ]
+/** Card de uma marca da arquitetura */
+function ArchCard({ icon: Icon, t, d }: { icon: LucideIcon; t: string; d: string }) {
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-2">
-      {layers.map(({ icon: Icon, t, d, tone }, i) => {
-        const accent = tone === 'accent'
-        return (
-          <div key={t}>
-            <div data-anim className={`flex items-center gap-4 rounded-2xl p-5 sm:gap-5 sm:p-6 ${accent ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.12)] bg-[rgb(var(--panel)_/_0.04)]'}`}>
-              <span className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${accent ? 'bg-[#FF2C03] text-black' : 'bg-[rgb(var(--panel)_/_0.08)] text-[#FF2C03]'}`}>
-                <Icon className="h-5 w-5" />
-              </span>
-              <div className="min-w-0">
-                <p className="font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-[rgb(var(--fg))] sm:text-xl">{t}</p>
-                <p className="mt-0.5 text-[13.5px] leading-relaxed text-[rgb(var(--fg)_/_0.6)] sm:text-sm">{d}</p>
-              </div>
-            </div>
-            {i < layers.length - 1 && <div className="flex justify-center py-1 text-[rgb(var(--fg)_/_0.3)]">↓</div>}
+    <div data-anim className="flex items-center gap-4 rounded-2xl border border-[rgb(var(--fg)_/_0.12)] bg-[rgb(var(--panel)_/_0.04)] p-5">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[rgb(var(--panel)_/_0.08)] text-[#FF2C03]"><Icon className="h-5 w-5" /></span>
+      <div className="min-w-0">
+        <p className="font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-[rgb(var(--fg))] sm:text-lg">{t}</p>
+        <p className="mt-0.5 text-[13px] leading-relaxed text-[rgb(var(--fg)_/_0.6)] sm:text-sm">{d}</p>
+      </div>
+    </div>
+  )
+}
+
+/** Arquitetura de marca — Evolve+ como elo que vincula tudo */
+function BrandStack() {
+  return (
+    <div className="mx-auto w-full max-w-2xl space-y-3 sm:space-y-3.5">
+      {/* O que o Somma traz */}
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-3.5">
+        <ArchCard icon={Users} t="Somma Club" d="A comunidade. A marca-mãe, preservada." />
+        <ArchCard icon={TrendingUp} t="Assessoria Somma Club" d="A vertical de treino e performance." />
+      </div>
+
+      <div data-anim className="flex items-center justify-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] text-[rgb(var(--fg)_/_0.4)]">
+        <span className="h-px w-10 bg-[rgb(var(--fg)_/_0.15)]" />tudo passa pela<span className="h-px w-10 bg-[rgb(var(--fg)_/_0.15)]" />
+      </div>
+
+      {/* Evolve+ como elo */}
+      <div data-anim className="rounded-2xl border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10] p-5 sm:p-6" style={{ animation: 'glowPulse 3s ease-in-out infinite' }}>
+        <div className="flex items-center gap-4 sm:gap-5">
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#FF2C03] text-black"><Link2 className="h-5 w-5" /></span>
+          <div className="min-w-0">
+            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#FF2C03]">O elo</p>
+            <p className="font-[family-name:var(--font-display)] text-xl uppercase tracking-tight text-[rgb(var(--fg))] sm:text-2xl">Evolve+</p>
           </div>
-        )
-      })}
+        </div>
+        <p className="mt-4 text-[15px] leading-relaxed text-[rgb(var(--fg)_/_0.82)] sm:text-base">
+          A Evolve+ não é só a academia oficial — ela entra no <span className="font-semibold text-[rgb(var(--fg))]">centro de tudo</span>. A partir de agora, cada ativação, evento, experiência e comunicação da assessoria carrega a marca junto.
+        </p>
+      </div>
+
+      {/* Contrato que vincula */}
+      <div data-anim className="flex items-start gap-3 rounded-2xl border border-[rgb(var(--fg)_/_0.12)] bg-[rgb(var(--panel)_/_0.04)] p-4 sm:p-5">
+        <Handshake className="mt-0.5 h-5 w-5 shrink-0 text-[#FF2C03]" />
+        <p className="text-[13.5px] leading-relaxed text-[rgb(var(--fg)_/_0.7)] sm:text-sm">
+          Um <span className="font-semibold text-[rgb(var(--fg))]">contrato de 12 meses</span> que une e vincula a Evolve+ à assessoria — o mesmo modelo que já bomba em running clubs de outros estados.
+        </p>
+      </div>
     </div>
   )
 }
@@ -263,7 +285,7 @@ const SLIDES: Slide[] = [
 
   // 4 — Arquitetura de marca
   { section: 'Arquitetura de marca', node: (<>
-    <Head k="Como a marca se organiza" title="Três camadas, uma só experiência" sub="A marca Somma é preservada. A Evolve+ entra como academia oficial da vertical de assessoria." />
+    <Head k="Como a marca se organiza" title="A Evolve+ vira o elo" sub="A marca Somma é preservada. A Evolve+ deixa de ser só academia e passa a ser o elo que conecta tudo — presente em cada movimento da assessoria." />
     <BrandStack />
   </>) },
 
