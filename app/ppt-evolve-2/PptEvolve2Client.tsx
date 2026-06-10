@@ -219,7 +219,7 @@ function BrandStack() {
           </div>
         </div>
         <p className="mt-4 text-[15px] leading-relaxed text-[rgb(var(--fg)_/_0.82)] sm:text-base">
-          A Evolve+ não é só a academia oficial — ela entra no <span className="font-semibold text-[rgb(var(--fg))]">centro de tudo</span>. A partir de agora, cada ativação, evento, experiência e comunicação da assessoria carrega a marca junto.
+          A Evolve+ não é só a academia oficial. Ela entra no <span className="font-semibold text-[rgb(var(--fg))]">centro de tudo</span>. A partir de agora, cada ativação, evento, experiência e comunicação da assessoria carrega a marca junto.
         </p>
       </div>
 
@@ -227,7 +227,7 @@ function BrandStack() {
       <div data-anim className="flex items-start gap-3 rounded-2xl border border-[rgb(var(--fg)_/_0.12)] bg-[rgb(var(--panel)_/_0.04)] p-4 sm:p-5">
         <Handshake className="mt-0.5 h-5 w-5 shrink-0 text-[#FF2C03]" />
         <p className="text-[13.5px] leading-relaxed text-[rgb(var(--fg)_/_0.7)] sm:text-sm">
-          Um <span className="font-semibold text-[rgb(var(--fg))]">contrato de 12 meses</span> que une e vincula a Evolve+ à assessoria — o mesmo modelo que já bomba em running clubs de outros estados.
+          Um <span className="font-semibold text-[rgb(var(--fg))]">contrato de 12 meses</span> que une e vincula a Evolve+ à assessoria. O mesmo modelo que já bomba em running clubs de outros estados.
         </p>
       </div>
     </div>
@@ -261,7 +261,7 @@ const SLIDES: Slide[] = [
 
   // 2 — A virada de posicionamento
   { section: 'A virada', center: true, node: (
-    <Statement kicker="O novo posicionamento" sub="O running club é aberto a todos. Mas a experiência Evolve+ × Somma — treino, estrutura e comunidade — é exclusiva de quem está na assessoria. Um espaço só de quem está dentro.">
+    <Statement kicker="O novo posicionamento" sub="O running club é aberto a todos. Mas a experiência Evolve+ × Somma (treino, estrutura e comunidade) é exclusiva de quem está na assessoria. Um espaço só de quem está dentro.">
       A Evolve+ não está patrocinando um running club.<br /><O>Agora ela tem uma assessoria pra chamar de sua.</O>
     </Statement>
   ) },
@@ -285,7 +285,7 @@ const SLIDES: Slide[] = [
 
   // 4 — Arquitetura de marca
   { section: 'Arquitetura de marca', node: (<>
-    <Head k="Como a marca se organiza" title="A Evolve+ vira o elo" sub="A marca Somma é preservada. A Evolve+ deixa de ser só academia e passa a ser o elo que conecta tudo — presente em cada movimento da assessoria." />
+    <Head k="Como a marca se organiza" title="A Evolve+ vira o elo" sub="A marca Somma é preservada. A Evolve+ deixa de ser só academia e passa a ser o elo que conecta tudo, presente em cada movimento da assessoria." />
     <BrandStack />
   </>) },
 
@@ -309,7 +309,7 @@ const SLIDES: Slide[] = [
   ) },
 
   // — Capítulo: Entregáveis
-  { section: '— Entregáveis', center: true, node: <Divider num="·" chapter="A proposta executiva" title="Os entregáveis do naming rights" /> },
+  { section: 'Entregáveis', center: true, node: <Divider num="·" chapter="A proposta executiva" title="Os entregáveis do naming rights" /> },
 
   // 7 — Marca & identidade
   { section: '1 · Marca & identidade', node: (<>
@@ -361,7 +361,7 @@ const SLIDES: Slide[] = [
     <Head k="Entregável 5" title="Performance & saúde" sub="Tecnologia e dados para treinar a base da assessoria em escala." />
     <Tiles cols="sm:grid-cols-2 lg:grid-cols-3" items={[
       { icon: Gauge, t: 'Treinamento exclusivo', d: 'sistema que identifica o perfil do aluno.' },
-      { icon: FlaskConical, t: 'Segmentação', d: 'por objetivo, nível e frequência — aplicada em massa.' },
+      { icon: FlaskConical, t: 'Segmentação', d: 'por objetivo, nível e frequência, aplicada em massa.' },
       { icon: Scale, t: 'Balança de bioimpedância', d: 'cedida pela Evolve para avaliações da comunidade.' },
     ]} />
   </>) },
@@ -445,7 +445,7 @@ const SLIDES: Slide[] = [
   // 17 — Estação Somma
   { section: 'Estação Somma', node: (<>
     <Head k="O próximo passo" title="Estação Somma" sub="A casa física da comunidade. O ponto onde a parceria Evolve+ × Somma ganha vida em Brasília." />
-    <SlideImg src="/evolve2-estacao.png" alt="Estação Somma — espaço físico da comunidade" ratio="aspect-[3/2]" />
+    <SlideImg src="/evolve2-estacao.png" alt="Estação Somma, espaço físico da comunidade" ratio="aspect-[3/2]" />
     <div className="grid gap-3 sm:grid-cols-2 sm:gap-3.5">
       <Panel variant="plain" title="O que é" items={['Estrutura física para um movimento que já existe', 'Experiências, ativações e teste de produtos em uso real', 'O ponto de encontro da comunidade no DF']} />
       <Panel variant="accent" title="Para a parceria" items={['Presença de marca Evolve+ no espaço', 'Base para ações exclusivas da assessoria', 'A próxima fase: do movimento à infraestrutura']} />
