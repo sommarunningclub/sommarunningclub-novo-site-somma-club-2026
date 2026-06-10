@@ -312,11 +312,10 @@ const SLIDES: Slide[] = [
 
   // 15 — Investimento (mesmos planos da v1)
   { section: 'Proposta de investimento', node: (<>
-    <Head k="Investimento" title="Proposta de investimento" sub="Três níveis de parceria. O Growth é o ponto de equilíbrio entre alcance e ativação." />
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <Head k="Investimento" title="Proposta de investimento" sub="Dois níveis de parceria, ambos com exclusividade. O Growth é o ponto de equilíbrio entre alcance e ativação." />
+    <div className="mx-auto grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
       {[
-        { name: 'Start', price: 'R$ 10k', d: 'Presença de marca e ativações base.', feats: ['Logo nos ativos oficiais (camisetas, faixas e banners)', 'Presença nos 52 encontros do ano', '2 inserções digitais por mês (stories e feed)', 'Menção como parceiro nas comunicações', '1 ativação de produto nos eventos por mês'], hot: false },
-        { name: 'Growth', price: 'R$ 15k', d: 'Mais alcance, conteúdo e eventos.', feats: ['Tudo do plano Start', 'Somma Creators (rede de criadores ativando a marca)', '4 inserções digitais por mês + 1 reels colaborativo', 'Experiências Evolve exclusivas para a comunidade', 'Somma Intercity: 1 night run por trimestre saindo da unidade', 'Co-branding em 1 evento proprietário por trimestre'], hot: true },
+        { name: 'Growth', price: 'R$ 15k', d: 'Mais alcance, conteúdo e eventos.', feats: ['Logo nos ativos oficiais (camisetas, faixas e banners)', 'Presença nos 52 encontros do ano', 'Somma Creators (rede de criadores ativando a marca)', '4 inserções digitais por mês + 1 reels colaborativo', 'Experiências Evolve exclusivas para a comunidade', 'Somma Intercity: 1 night run por trimestre saindo da unidade', 'Co-branding em 1 evento proprietário por trimestre'], hot: true },
         { name: 'Performance', price: 'R$ 20k', d: 'Parceria completa e exclusiva.', feats: ['Tudo do plano Growth', 'Programa de Bolsas (atletas patrocinados pela Evolve)', 'Exclusividade total na categoria academia', 'Naming em 1 evento proprietário por ano', 'Série de conteúdo dedicada (1 por mês) + relatório de resultados', 'Presença de marca em todas as unidades Evolve mapeadas'], hot: false },
       ].map((p) => (
         <div key={p.name} data-anim className={`flex flex-col rounded-2xl p-5 ${p.hot ? 'border-2 border-[#FF2C03] bg-[#FF2C03]/[0.10]' : 'border border-[rgb(var(--fg)_/_0.1)] bg-[rgb(var(--panel)_/_0.04)]'}`} style={p.hot ? { animation: 'glowPulse 3s ease-in-out infinite' } : undefined}>
