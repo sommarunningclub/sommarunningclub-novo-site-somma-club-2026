@@ -85,13 +85,9 @@ function Arrow() {
   return <div className="flex justify-center text-base text-white/25">↓</div>
 }
 
-/** Seta animada (fluxo descendo) — para o organograma em loop */
-function FlowArrow() {
-  return (
-    <div className="flex justify-center">
-      <span style={{ animation: 'orgFlow 1.8s ease-in-out infinite' }} className="text-lg text-[#FF2C03]">↓</span>
-    </div>
-  )
+/** Conector vertical do organograma (estilo árvore) */
+function Stem({ h = 'h-4' }: { h?: string }) {
+  return <div className={`mx-auto w-px ${h} bg-gradient-to-b from-[#FF2C03]/60 to-white/15`} />
 }
 
 function RoleCard({ area, cargo, person, missao, resp, kpis, team }: {
@@ -1005,34 +1001,56 @@ const SLIDES: Slide[] = [
     node: (
       <>
         <Head k="05 · A estrutura" title="O organograma do Somma" />
-        <div className="space-y-2">
-          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0s infinite' }} className="rounded-2xl border border-white/15 bg-white/[0.05] p-3 text-center">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Conselho de Sócios</p>
-            <p className="mt-1 font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-white">Alexandre · João Victor · Diogo</p>
-          </div>
-          <FlowArrow />
-          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0.5s infinite' }} className="mx-auto max-w-[16rem] rounded-xl"><Person name="Alexandre Alves" role="CEO" tone="ceo" /></div>
-          <FlowArrow />
-          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 1s infinite' }} className="mx-auto max-w-[16rem] rounded-xl"><Person name="Alex Rodrigues" role="COO" tone="coo" /></div>
-          <FlowArrow />
-          <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 1.5s infinite' }} className="grid grid-cols-2 gap-2 rounded-2xl sm:grid-cols-3">
-            <Person name="Camilla" role="Head Comercial e Parcerias" tone="head" />
-            <Person name="Diogo" role="Head de Produto e Retail" tone="head" />
-            <Person name="João Victor" role="Head de Conteúdo Visual" tone="head" />
-            <Person name="Cristina" role="Coord. Comunicação" />
-            <Person name="Yas" role="Coord. Eventos" />
-            <Person name="Priscila" role="Coord. Atendimento e Operações" />
-          </div>
-          <div data-anim className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] p-2.5 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Design · sob Comunicação</p>
-              <p className="text-[13px] font-semibold text-white/80">Gustavo Firmino</p>
+        <div className="grid gap-4 lg:grid-cols-[1fr_15rem] lg:items-start lg:gap-6">
+          {/* Coluna central — cadeia de comando */}
+          <div>
+            <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0s infinite' }} className="rounded-2xl border border-white/15 bg-white/[0.05] p-3 text-center">
+              <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">Conselho de Sócios</p>
+              <p className="mt-1 font-[family-name:var(--font-display)] text-lg uppercase tracking-tight text-white">Alexandre · João Victor · Diogo</p>
             </div>
-            <div className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] p-2.5 text-center">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Assessoria · Dir. Técnico Alexandre</p>
-              <p className="text-[13px] font-semibold text-white/80">Professores: Joseph · Mateus</p>
+            <Stem />
+            <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0.5s infinite' }} className="mx-auto max-w-[16rem] rounded-xl"><Person name="Alexandre Alves" role="CEO" tone="ceo" /></div>
+            <Stem />
+            <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 1s infinite' }} className="mx-auto max-w-[16rem] rounded-xl"><Person name="Alex Rodrigues" role="COO" tone="coo" /></div>
+            <Stem />
+            {/* Bifurcação para os heads/coordenações */}
+            <div className="mx-auto h-px w-[88%] bg-white/15" />
+            <div data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 1.5s infinite' }} className="mt-3 grid grid-cols-2 gap-2 rounded-2xl sm:grid-cols-3">
+              <Person name="Camilla" role="Head Comercial e Parcerias" tone="head" />
+              <Person name="Diogo" role="Head de Produto e Retail" tone="head" />
+              <Person name="João Victor" role="Head de Conteúdo Visual" tone="head" />
+              <Person name="Cristina" role="Coord. Comunicação" />
+              <Person name="Yas" role="Coord. Eventos" />
+              <Person name="Priscila" role="Coord. Atendimento e Operações" />
+            </div>
+            <div data-anim className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] p-2.5 text-center">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Design · sob Comunicação</p>
+                <p className="text-[13px] font-semibold text-white/80">Gustavo Firmino</p>
+              </div>
+              <div className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] p-2.5 text-center">
+                <p className="text-[10px] font-bold uppercase tracking-widest text-white/40">Assessoria · Dir. Técnico Alexandre</p>
+                <p className="text-[13px] font-semibold text-white/80">Professores: Joseph · Mateus</p>
+              </div>
             </div>
           </div>
+
+          {/* Coluna lateral — Head of Finance (reporta a Conselho · CEO · COO) */}
+          <aside data-anim style={{ animation: 'orgGlow 3.2s ease-in-out 0.75s infinite' }} className="relative lg:mt-14">
+            {/* conector tracejado ligando à cadeia de comando (somente desktop) */}
+            <div className="absolute right-full top-9 hidden h-px w-6 border-t-2 border-dashed border-[#FF2C03]/50 lg:block" />
+            <div className="rounded-2xl border border-[#FF2C03]/40 bg-[#FF2C03]/[0.08] p-3 text-center">
+              <p className="text-[9px] font-bold uppercase leading-tight tracking-[0.18em] text-[#FF2C03]">Reporta a · Conselho · CEO · COO</p>
+              <p className="mt-2 font-[family-name:var(--font-display)] text-base uppercase tracking-tight text-white">Anderson Almeida</p>
+              <p className="text-[10px] font-medium text-white/45">Head of Finance</p>
+              <p className="mt-2 text-[10px] leading-snug text-white/55">Clareza financeira do Somma nas reuniões mensais.</p>
+              <Stem h="h-3" />
+              <div className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] p-2">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-white/40">Contabilidade interna</p>
+                <p className="text-[12px] font-semibold text-white/80">Gislayne Lisboa</p>
+              </div>
+            </div>
+          </aside>
         </div>
       </>
     ),
@@ -1073,6 +1091,32 @@ const SLIDES: Slide[] = [
         <RoleCard area="Operações" cargo="COO" person="Alex Rodrigues" missao="Garantir que toda a operação corporativa funcione."
           resp={['Operação geral · Processos · Planejamento', 'Tecnologia e e-commerce', 'Assessoria', 'Indicadores e governança', 'Novos negócios', 'Integração entre áreas']}
           kpis={['Receita total do corporativo', 'Receita de assessoria, loja, eventos e mídia', 'Cumprimento de projetos e cronogramas', 'Margem operacional']} />
+      </>
+    ),
+  },
+
+  // 11.5 — Head of Finance
+  {
+    section: 'Head of Finance',
+    node: (
+      <>
+        <Head k="06 · Liderança" title="Head of Finance" sub="Subordinado ao Conselho, ao CEO e ao COO." />
+        <RoleCard area="Financeiro · Estratégia" cargo="Head of Finance" person="Anderson Almeida" team="Contabilidade interna: Gislayne Lisboa"
+          missao="Trazer clareza financeira e sustentar, com dados, as decisões estratégicas do Somma."
+          resp={[
+            'DRE gerencial: estruturar, acompanhar e otimizar',
+            'Fluxo de caixa: gestão e projeção (curto, médio e longo prazo)',
+            'Modelos de precificação com foco em margem e competitividade',
+            'KPIs financeiros e dashboards executivos',
+            'Planejamento financeiro e orçamentário (budget e forecast)',
+            'Estratégia de crescimento e expansão · análise de viabilidade econômica',
+            'Controle de custos e eficiência operacional',
+            'Lucratividade por unidade de negócio, evento e canal',
+            'Governança financeira: processos, rotinas e compliance básico',
+            'Interface com comercial, operações e jurídico',
+            'Participação ativa nas decisões do negócio (reuniões mensais com os sócios)',
+          ]}
+          kpis={['Acurácia do forecast vs. realizado', 'Margem operacional do Somma', 'Saúde do fluxo de caixa (runway)', 'Cumprimento do orçamento (budget)', 'Lucratividade por unidade de negócio', 'Redução de custos e ganho de eficiência']} />
       </>
     ),
   },
