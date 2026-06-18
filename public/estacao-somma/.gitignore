@@ -1,0 +1,4 @@
+# Originais (HEIC/MOV/JPG da câmera) ficam só local; só as otimizadas vão pro deploy
+*
+!.gitignore
+!estacao-*.jpg

@@ -488,14 +488,16 @@ const ESTACAO_SLIDES: Slide[] = [
     </>),
   },
   {
-    section: '05 · Como será',
+    section: '05 · O local',
     node: (<>
-      <Head k="Capítulo 5" title="Como será a Estação" sub="O conceito visual da Estação Somma no Parque da Cidade." />
+      <Head k="Capítulo 5" title="O local da Estação" sub="O Parque da Cidade, em Brasília — onde a Estação Somma será implantada." />
       <Gallery images={[
-        { src: '/estacao-somma/render-fachada.jpg', cap: 'Fachada · Café, Loja, Decathlon Experience, Guarda-volumes e Recovery' },
-        { src: '/estacao-somma/render-aerea.jpg', cap: 'Vista aérea · Estação Somma + Praça Evolve (academia outdoor)' },
-        { src: '/estacao-somma/render-rooftop.jpg', cap: 'Rooftop · convivência, eventos e experiência premium' },
-        { src: '/estacao-somma/render-treinao.jpg', cap: 'Treinão · a comunidade reunida ao entardecer' },
+        { src: '/estacao-somma/estacao-01.jpg', cap: 'A ampla área verde do Parque da Cidade — espaço da futura Estação' },
+        { src: '/estacao-somma/estacao-02.jpg', cap: 'O parque já recebe ativações e eventos esportivos' },
+        { src: '/estacao-somma/estacao-03.jpg', cap: 'Extensa área gramada e arborizada para treinos e convivência' },
+        { src: '/estacao-somma/estacao-04.jpg', cap: 'Alamedas e caminhos arborizados no entorno' },
+        { src: '/estacao-somma/estacao-05.jpg', cap: 'Fluxo diário de corredores no Parque da Cidade' },
+        { src: '/estacao-somma/estacao-06.jpg', cap: 'A comunidade reunida no parque' },
       ]} />
     </>),
   },
