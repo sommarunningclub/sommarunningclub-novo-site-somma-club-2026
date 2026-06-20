@@ -30,6 +30,7 @@ export function JoinClubForm() {
       const cpf = formData.get('cpf') as string
       const whatsapp = formData.get('whatsapp') as string
       const data_nascimento = formData.get('data') as string
+      const cep = formData.get('cep') as string
 
       const response = await fetch('/api/cadastro-site', {
         method: 'POST',
@@ -40,6 +41,7 @@ export function JoinClubForm() {
           cpf,
           whatsapp,
           data_nascimento,
+          cep,
           sexo: formData.get('sexo'),
         }),
       })

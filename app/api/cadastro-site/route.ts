@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    const { nome_completo, email, cpf, whatsapp, data_nascimento, sexo } = await request.json()
+    const { nome_completo, email, cpf, whatsapp, data_nascimento, sexo, cep } = await request.json()
 
     // Validação básica
     if (!nome_completo || !email || !cpf || !whatsapp) {
@@ -22,9 +22,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Criar cliente Supabase
+    // Criar cliente Supabase (rota de servidor: usa service role, bypassa RLS — igual às demais APIs)
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
     if (!supabaseUrl || !supabaseKey) {
       console.error('[v0] Variáveis de ambiente Supabase não configuradas')
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
           whatsapp,
           data_nascimento: data_nascimento || null,
           sexo: sexo || null,
-          cep: null,
+          cep: (cep && String(cep).replace(/\D/g, '')) || null,
           data_de_cadastro: new Date().toLocaleString('sv-SE', { timeZone: 'America/Sao_Paulo' }).replace(' ', 'T') + '-03:00',
         },
       ])
