@@ -476,6 +476,10 @@ const ESTACAO_SLIDES: Slide[] = [
     section: '05 · Estação Somma',
     node: (<>
       <Head k="Capítulo 5" title="O projeto e a localização" />
+      <figure data-anim className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
+        <img src="/evolve2-estacao.png" alt="Estação Somma — render do espaço físico da comunidade" loading="lazy" className="aspect-[3/2] w-full object-cover" />
+        <figcaption className="px-4 py-2 text-[11px] text-white/40">Render conceitual da Estação Somma — a casa física da comunidade em Brasília.</figcaption>
+      </figure>
       <div data-anim className="rounded-2xl border border-white/10 bg-white/[0.04] p-5">
         <p className="text-[11px] font-bold uppercase tracking-widest text-[#FF2C03]">Localização</p>
         <p className="mt-1 text-lg font-semibold text-white">Parque da Cidade · Brasília–DF</p>
